@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCPSLGamemodes", "SCPSLGamemodes\SCPSLGamemodes.csproj", "{F76DA7D6-D71C-4627-BD7E-C8A244805F9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JuggernautGamemode", "JuggernautGamemode\JuggernautGamemode.csproj", "{E60E88F4-6174-4E4C-8E11-B7BB66DED22D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0F489A9C-9265-4800-9430-EDD303AE28CA}"
+	ProjectSection(SolutionItems) = preProject
+		GamemodeTemplate.cs = GamemodeTemplate.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +16,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F76DA7D6-D71C-4627-BD7E-C8A244805F9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F76DA7D6-D71C-4627-BD7E-C8A244805F9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F76DA7D6-D71C-4627-BD7E-C8A244805F9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F76DA7D6-D71C-4627-BD7E-C8A244805F9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E60E88F4-6174-4E4C-8E11-B7BB66DED22D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E60E88F4-6174-4E4C-8E11-B7BB66DED22D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E60E88F4-6174-4E4C-8E11-B7BB66DED22D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E60E88F4-6174-4E4C-8E11-B7BB66DED22D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

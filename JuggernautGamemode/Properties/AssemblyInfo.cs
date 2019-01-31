@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SCPSLGamemodes")]
+[assembly: AssemblyTitle("JuggernautGamemode")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SCPSLGamemodes")]
+[assembly: AssemblyProduct("JuggernautGamemode")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f76da7d6-d71c-4627-bd7e-c8a244805f9d")]
+[assembly: Guid("e60e88f4-6174-4e4c-8e11-b7bb66ded22d")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>f76da7d6-d71c-4627-bd7e-c8a244805f9d</ProjectGuid>
+    <ProjectGuid>{E60E88F4-6174-4E4C-8E11-B7BB66DED22D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SCPSLGamemodes</RootNamespace>
-    <AssemblyName>SCPSLGamemodes</AssemblyName>
+    <RootNamespace>JuggernautGamemode</RootNamespace>
+    <AssemblyName>JuggernautGamemode</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,24 +31,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System"/>
-    
-    <Reference Include="System.Core"/>
-    <Reference Include="System.Xml.Linq"/>
-    <Reference Include="System.Data.DataSetExtensions"/>
-    
-    
-    <Reference Include="Microsoft.CSharp"/>
-    
-    <Reference Include="System.Data"/>
-    
-    <Reference Include="System.Net.Http"/>
-    
-    <Reference Include="System.Xml"/>
+    <Reference Include="AdminToolbox %282%29">
+      <HintPath>..\..\..\..\Downloads\AdminToolbox (2).dll</HintPath>
+    </Reference>
+    <Reference Include="Smod2">
+      <HintPath>..\..\..\..\Downloads\Smod2.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="EventsHandler.cs" />
+    <Compile Include="GetPlayerFromString.cs" />
+    <Compile Include="Juggernaut.cs" />
+    <Compile Include="JuggernautCommand.cs" />
+    <Compile Include="LevenshteinDistance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
- </Project>
+  <PropertyGroup>
+    <PreBuildEvent>Taskkill /IM SCPSL.exe /F &gt;nul 2&gt; nul
+Taskkill /IM MultiAdmin.exe /F &gt;nul 2&gt; nul
+Exit 0</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetPath)" "E:\Program Files\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\sm_plugins\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>
