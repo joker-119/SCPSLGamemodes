@@ -10,7 +10,7 @@ using System.Text;
 
 namespace JuggernautGamemode
 {
-    internal class EventsHandler : IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerHandcuffed, IEventHandlerPlayerHurt, IEventHandlerDecideTeamRespawnQueue,
+    internal class EventsHandler : IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerDecideTeamRespawnQueue,
         IEventHandlerSetRoleMaxHP, IEventHandlerSetRole
     {
         private readonly Juggernaut plugin;
@@ -52,25 +52,25 @@ namespace JuggernautGamemode
 
         public void OnSetRole(PlayerSetRoleEvent ev)
         {
-            //if (Juggernaut.enabled)
-            //{
-            //    if (IsJuggernaut(ev.Player))
-            //    {
-            //        if (ev.TeamRole.Team != Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Team.SPECTATOR)
-            //        {
-            //            ResetJuggernaut(ev.Player);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (ev.TeamRole.Team != Team.NINETAILFOX && ev.TeamRole.Team != Team.SPECTATOR)
-            //        {
-            //            SpawnAsNTFCommander(ev.Player);
-            //        }
-            //        //else if (ev.TeamRole.Role == Role.FACILITY_GUARD)
-            //        //    SpawnAsNTFCommander(ev.Player);
-            //    }
-            //}
+            if (Juggernaut.enabled)
+            {
+                if (IsJuggernaut(ev.Player))
+                {
+                    if (ev.TeamRole.Team != Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Team.SPECTATOR)
+                    {
+                        ResetJuggernaut(ev.Player);
+                    }
+                }
+                else
+                {
+                    if (ev.TeamRole.Team != Team.NINETAILFOX && ev.TeamRole.Team != Team.SPECTATOR)
+                    {
+                        SpawnAsNTFCommander(ev.Player);
+                    }
+                    else if (ev.TeamRole.Role == Role.FACILITY_GUARD)
+                        SpawnAsNTFCommander(ev.Player);
+                }
+            }
         }
 
         public void OnRoundStart(RoundStartEvent ev)
@@ -85,10 +85,13 @@ namespace JuggernautGamemode
                 {
                     int chosenJuggernaut = new Random().Next(players.Count);
 
+                    juggernaut = players[chosenJuggernaut];
+
                     foreach (Player player in players)
                     {
                         // Selected random Juggernaut
-                        if (players.IndexOf(player) == chosenJuggernaut)
+                        //if (players.IndexOf(player) == chosenJuggernaut)
+                        if (IsJuggernaut(player))
                         {
                             plugin.Info("" + player.Name + " Chosen as the Juggernaut");
                             SpawnAsJuggernaut(player);
@@ -144,18 +147,20 @@ namespace JuggernautGamemode
                     else if (player.TeamRole.Team == Team.NINETAILFOX)
                         mtfAllive = true;
                 }
-
-                if (juggernaut != null && juggernautAlive && mtfAllive)
+                if (ev.Server.GetPlayers().Count > 1)
                 {
-                    ev.Status = ROUND_END_STATUS.ON_GOING;
-                }
-                else if (juggernaut != null && juggernautAlive && mtfAllive == false)
-                {
-                    ev.Status = ROUND_END_STATUS.CI_VICTORY; EndGamemodeRound();
-                }
-                else if (juggernaut == null && juggernautAlive == false && mtfAllive)
-                {
-                    ev.Status = ROUND_END_STATUS.MTF_VICTORY; EndGamemodeRound();
+                    if (juggernaut != null && juggernautAlive && mtfAllive)
+                    {
+                        ev.Status = ROUND_END_STATUS.ON_GOING;
+                    }
+                    else if (juggernaut != null && juggernautAlive && mtfAllive == false)
+                    {
+                        ev.Status = ROUND_END_STATUS.CI_VICTORY; EndGamemodeRound();
+                    }
+                    else if (juggernaut == null && juggernautAlive == false && mtfAllive)
+                    {
+                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; EndGamemodeRound();
+                    }
                 }
             }
         }
@@ -181,10 +186,10 @@ namespace JuggernautGamemode
                 {
                     juggernaut_healh = (juggernaut_healh > ev.Player.GetHealth()) ? juggernaut_healh : ev.Player.GetHealth();
                     plugin.pluginManager.Server.Map.ClearBroadcasts();
-                    plugin.pluginManager.Server.Map.Broadcast(3, "<color=#228B22>Juggernaut " + juggernaut.Name + "</color> HP : <color=#ff0000>" + (juggernaut.GetHealth() - ev.Damage) + "/" + juggernaut_healh + "</color>", false);
+                    plugin.pluginManager.Server.Map.Broadcast(3, "<color=#228B22>Juggernaut " + juggernaut.Name + "</color> HP : <color=#ff0000>" + (Convert.ToInt32(juggernaut.GetHealth() - ev.Damage)) + "/" + juggernaut_healh + "</color>", false);
 
-                    if (ev.Attacker != ev.Player && ev.DamageType == DamageType.FRAG)
-                        CriticalHitJuggernaut(ev.Player);
+                    //if (ev.Attacker != ev.Player && ev.DamageType == DamageType.FRAG)
+                    //    CriticalHitJuggernaut(ev.Player);
                 }
             }
         }
@@ -209,30 +214,6 @@ namespace JuggernautGamemode
                 ev.SpawnChaos = false;
         }
 
-        public void OnHandcuffed(PlayerHandcuffedEvent ev)
-        {
-            //if (Juggernaut.enabled)
-            //{
-            //    plugin.Debug("OnHandCuffed Called");
-            //    //if (juggernaut != null && ev.Player == juggernaut)
-            //    if (IsJuggernaut(ev.Player))
-            //    {
-            //        plugin.Debug("Player is Juggernaut");
-            //        ev.Handcuffed = false;
-
-            //        List<PocketDimensionExit> exits = plugin.pluginManager.Server.Map.GetPocketDimensionExits();
-
-            //        int chosenExit = new Random().Next(exits.Count);
-
-            //        ev.Player.Teleport(exits[chosenExit].Position);
-            //        ev.Player.SetHealth(ev.Player.GetHealth() - 1000);
-
-            //        plugin.pluginManager.Server.Map.Broadcast(6, "The <color=#228B22>Juggernaut</color> took a <b>critical hit <i><color=#ff0000> - 100 HP</color></i></b> and has been <b>transported</b> across the facility!", false);
-            //        plugin.Debug("Juggernaut Disarmed & Teleported");
-            //    }
-            //}
-        }
-
         public bool IsJuggernaut(Player player)
         {
             if (juggernaut != null)
@@ -248,15 +229,15 @@ namespace JuggernautGamemode
 
         public void CriticalHitJuggernaut(Player player)
         {
-            List<PocketDimensionExit> exits = plugin.pluginManager.Server.Map.GetPocketDimensionExits();
+            //List<PocketDimensionExit> exits = plugin.pluginManager.Server.Map.GetPocketDimensionExits();
 
-            int chosenExit = new Random().Next(exits.Count);
+            //int chosenExit = new Random().Next(exits.Count);
 
-            player.Teleport(exits[chosenExit].Position);
-            player.Damage(1000, DamageType.FRAG);
+            //player.Teleport(exits[chosenExit].Position);
+            //player.Damage(1000, DamageType.FRAG);
 
-            plugin.pluginManager.Server.Map.Broadcast(6, "The <color=#228B22>Juggernaut</color> took a <b>critical hit <i><color=#ff0000> - 100 HP</color></i></b> and has been <b>transported</b> across the facility!", false);
-            plugin.Debug("Juggernaut Disarmed & Teleported");
+            //plugin.pluginManager.Server.Map.Broadcast(6, "The <color=#228B22>Juggernaut</color> took a <b>critical hit <i><color=#ff0000> - 100 HP</color></i></b> and has been <b>transported</b> across the facility!", false);
+            //plugin.Debug("Juggernaut Disarmed & Teleported");
         }
 
         public void ResetJuggernaut(Player player)
@@ -265,9 +246,7 @@ namespace JuggernautGamemode
                 player.SetRank(juggernaut_prevRank[0], juggernaut_prevRank[1]);
             else
                 juggernaut.SetRank();
-            juggernaut = null;
-            juggernaut_prevRank = null;
-            juggernaut_healh = 0;
+            ResetJuggernaut();
         }
 
         public void ResetJuggernaut()
@@ -281,19 +260,22 @@ namespace JuggernautGamemode
         {
             ResetJuggernaut();
             Juggernaut.roundstarted = false;
-            //plugin.Server.Round.EndRound();
+            plugin.Server.Round.EndRound();
 
         }
 
         public void SpawnAsNTFCommander(Player player)
         {
-            //// Clear Inventory
-            //foreach (Item item in player.GetInventory())
-            //    item.Remove();
+            // Clear Inventory
+            foreach (Item item in player.GetInventory())
+                item.Remove();
 
             player.ChangeRole(Role.NTF_COMMANDER, true, true, true, true);
             player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(15, "You are an <color=#002DB3>NTF Commander</color> Work with others to eliminate the <color=#228B22>Juggernaut " + juggernaut.Name + "</color>", false);
+            if (juggernaut != null)
+                player.PersonalBroadcast(15, "You are an <color=#002DB3>NTF Commander</color> Work with others to eliminate the <color=#228B22>Juggernaut " + juggernaut.Name + "</color>", false);
+            else
+                player.PersonalBroadcast(15, "You are an <color=#002DB3>NTF Commander</color> Work with others to eliminate the <color=#228B22>Juggernaut</color>", false);
         }
 
         public void SpawnAsJuggernaut(Player player)
