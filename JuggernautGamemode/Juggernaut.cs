@@ -56,6 +56,7 @@ namespace JuggernautGamemode
         public static void DisableGamemode()
         {
             enabled = false;
+            plugin.pluginManager.Server.Map.ClearBroadcasts();
         }
     }
 }

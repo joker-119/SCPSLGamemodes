@@ -161,7 +161,7 @@ namespace JuggernautGamemode
         {
             player.ChangeRole(Role.NTF_COMMANDER, true, true, true, true);
             player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(15, "<color=#002DB3>You are an NTF Commander.</color> Work with others to eliminate the <color=#228B22>Juggernaut</color>", false);
+            player.PersonalBroadcast(15, "You are an <color=#002DB3>NTF Commander</color> Work with others to eliminate the <color=#228B22>Juggernaut</color>", false);
         }
 
         public void SpawnAsJuggernaut(Player player)
@@ -203,7 +203,7 @@ namespace JuggernautGamemode
             player.SetAmmo(AmmoType.DROPPED_7, 4000);
 
             player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(15, "You are the <color=#228B22>Juggernaut.</color> Eliminate all <color=#002DB3>NTF Commanders</color>", false);
+            player.PersonalBroadcast(15, "You are the <color=#228B22>Juggernaut</color> Eliminate all <color=#002DB3>NTF Commanders</color>", false);
         }
     }
 }
