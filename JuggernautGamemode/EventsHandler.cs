@@ -10,14 +10,22 @@ using System.Text;
 
 namespace JuggernautGamemode
 {
-    internal class EventsHandler : IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd
+    internal class EventsHandler : IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerHandcuffed, IEventHandlerPlayerHurt, IEventHandlerDecideTeamRespawnQueue,
+        IEventHandlerSetRoleMaxHP
     {
         private readonly Juggernaut plugin;
 
         public EventsHandler(Juggernaut plugin) => this.plugin = plugin;
 
         public Player juggernaut;
+        private int juggernaut_healh;
         public static Player selectedJuggernaut = null;
+
+        public void OnDecideTeamRespawnQueue(DecideRespawnQueueEvent ev)
+        {
+            if (Juggernaut.enabled)
+                ev.Teams = new Team[] { Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX };
+        }
 
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
@@ -29,6 +37,15 @@ namespace JuggernautGamemode
                     server.Map.ClearBroadcasts();
                     server.Map.Broadcast(25, "<color=#228B22>Juggernaut Gamemode</color> is starting...", false);
                 }
+            }
+        }
+
+        public void OnSetRoleMaxHP(SetRoleMaxHPEvent ev)
+        {
+            if (Juggernaut.enabled)
+            {
+                if (ev.Role == Role.CHAOS_INSURGENCY)
+                    ev.MaxHP = juggernaut_healh;
             }
         }
 
@@ -130,6 +147,19 @@ namespace JuggernautGamemode
             }
         }
 
+        public void OnPlayerHurt(PlayerHurtEvent ev)
+        {
+            if (Juggernaut.enabled)
+            {
+                if (IsJuggernaut(ev.Player))
+                {
+                    juggernaut_healh = (juggernaut_healh > ev.Player.GetHealth()) ? juggernaut_healh : ev.Player.GetHealth();
+                    plugin.pluginManager.Server.Map.ClearBroadcasts();
+                    plugin.pluginManager.Server.Map.Broadcast(3, "<color=#228B22>Juggernaut " + juggernaut.Name + "</color> HP : <color=#ff0000>" + (juggernaut.GetHealth() - ev.Damage) + "/" + juggernaut_healh + "</color>", false);
+                }
+            }
+        }
+
         public void OnSetSCPConfig(SetSCPConfigEvent ev)
         {
             if (Juggernaut.enabled)
@@ -150,9 +180,47 @@ namespace JuggernautGamemode
                 ev.SpawnChaos = false;
         }
 
+        public void OnHandcuffed(PlayerHandcuffedEvent ev)
+        {
+            //if (Juggernaut.enabled)
+            //{
+            //    plugin.Debug("OnHandCuffed Called");
+            //    //if (juggernaut != null && ev.Player == juggernaut)
+            //    if (IsJuggernaut(ev.Player))
+            //    {
+            //        plugin.Debug("Player is Juggernaut");
+            //        ev.Handcuffed = false;
+
+            //        List<PocketDimensionExit> exits = plugin.pluginManager.Server.Map.GetPocketDimensionExits();
+
+            //        int chosenExit = new Random().Next(exits.Count);
+
+            //        ev.Player.Teleport(exits[chosenExit].Position);
+            //        ev.Player.SetHealth(ev.Player.GetHealth() - 1000);
+
+            //        plugin.pluginManager.Server.Map.Broadcast(6, "The <color=#228B22>Juggernaut</color> took a <b>critical hit <i><color=#ff0000> - 100 HP</color></i></b> and has been <b>transported</b> across the facility!", false);
+            //        plugin.Debug("Juggernaut Disarmed & Teleported");
+            //    }
+            //}
+        }
+
+        public bool IsJuggernaut(Player player)
+        {
+            if (juggernaut != null)
+            {
+                if (player.Name == juggernaut.SteamId || player.SteamId == juggernaut.SteamId)
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+
         public void EndGamemodeRound()
         {
             juggernaut = null;
+            juggernaut_healh = 0;
             Juggernaut.roundstarted = false;
 
         }
@@ -179,6 +247,7 @@ namespace JuggernautGamemode
             // Health scales with amount of players in round
             int health = 500 * plugin.Server.NumPlayers;
             player.SetHealth(health);
+            juggernaut_healh = health;
 
             // Clear Inventory
             foreach (Item item in player.GetInventory())
