@@ -52,23 +52,25 @@ namespace JuggernautGamemode
 
         public void OnSetRole(PlayerSetRoleEvent ev)
         {
-            if (Juggernaut.enabled)
-            {
-                if (IsJuggernaut(ev.Player))
-                {
-                    if (ev.TeamRole.Team != Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Team.SPECTATOR)
-                    {
-                        ResetJuggernaut(ev.Player);
-                    }
-                }
-                else
-                {
-                    if (ev.TeamRole.Team != Team.NINETAILFOX && ev.TeamRole.Team != Team.SPECTATOR)
-                    {
-                        SpawnAsNTFCommander(ev.Player);
-                    }
-                }
-            }
+            //if (Juggernaut.enabled)
+            //{
+            //    if (IsJuggernaut(ev.Player))
+            //    {
+            //        if (ev.TeamRole.Team != Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Team.SPECTATOR)
+            //        {
+            //            ResetJuggernaut(ev.Player);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (ev.TeamRole.Team != Team.NINETAILFOX && ev.TeamRole.Team != Team.SPECTATOR)
+            //        {
+            //            SpawnAsNTFCommander(ev.Player);
+            //        }
+            //        //else if (ev.TeamRole.Role == Role.FACILITY_GUARD)
+            //        //    SpawnAsNTFCommander(ev.Player);
+            //    }
+            //}
         }
 
         public void OnRoundStart(RoundStartEvent ev)
@@ -79,7 +81,6 @@ namespace JuggernautGamemode
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Juggernaut Gamemode Started!");
                 List<Player> players = ev.Server.GetPlayers();
-                plugin.Debug("Selected Juggernaut" + selectedJuggernaut);
                 if (selectedJuggernaut == null)
                 {
                     int chosenJuggernaut = new Random().Next(players.Count);
@@ -104,9 +105,9 @@ namespace JuggernautGamemode
                 {
                     foreach (Player player in players)
                     {
-                        if (player.SteamId == selectedJuggernaut.SteamId)
+                        if (player.SteamId == selectedJuggernaut.SteamId || player.Name == selectedJuggernaut.Name)
                         {
-                            plugin.Debug("Selected " + selectedJuggernaut.Name + " as the Juggernaut");
+                            plugin.Info("Selected " + selectedJuggernaut.Name + " as the Juggernaut");
                             SpawnAsJuggernaut(player);
                             selectedJuggernaut = null;
                         }
@@ -167,7 +168,7 @@ namespace JuggernautGamemode
                 {
                     plugin.pluginManager.Server.Map.ClearBroadcasts();
                     plugin.pluginManager.Server.Map.Broadcast(20, "<color=#228B22>Juggernaut " + juggernaut.Name + "</color> has died!", false);
-                    juggernaut = null;
+                    ResetJuggernaut(ev.Player);
                 }   
             }
         }
@@ -280,19 +281,19 @@ namespace JuggernautGamemode
         {
             ResetJuggernaut();
             Juggernaut.roundstarted = false;
-            plugin.Server.Round.EndRound();
+            //plugin.Server.Round.EndRound();
 
         }
 
         public void SpawnAsNTFCommander(Player player)
         {
-            // Clear Inventory
-            foreach (Item item in player.GetInventory())
-                item.Remove();
+            //// Clear Inventory
+            //foreach (Item item in player.GetInventory())
+            //    item.Remove();
 
             player.ChangeRole(Role.NTF_COMMANDER, true, true, true, true);
             player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(15, "You are an <color=#002DB3>NTF Commander</color> Work with others to eliminate the <color=#228B22>Juggernaut</color>", false);
+            player.PersonalBroadcast(15, "You are an <color=#002DB3>NTF Commander</color> Work with others to eliminate the <color=#228B22>Juggernaut " + juggernaut.Name + "</color>", false);
         }
 
         public void SpawnAsJuggernaut(Player player)
