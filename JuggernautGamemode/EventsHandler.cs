@@ -75,6 +75,16 @@ namespace JuggernautGamemode
 
         public void OnRoundStart(RoundStartEvent ev)
         {
+            Juggernaut.Jugg_ammo = this.plugin.GetConfigInt("Jugg_ammo");
+            Juggernaut.Jugg_base = this.plugin.GetConfigInt("Jugg_base_hp");
+            Juggernaut.Jugg_increase = this.plugin.GetConfigInt("Jugg_increase_amount");
+            Juggernaut.NTF_ammo = this.plugin.GetConfigInt("NTF_ammo");
+            Juggernaut.NTF_Disarmer = this.plugin.GetConfigBool("NTF_Disarmer");
+            Juggernaut.Jugg_grenade = this.plugin.GetConfigInt("Jugg_grenades");
+
+
+
+
             if (Juggernaut.enabled)
             {
                 Juggernaut.roundstarted = true;
@@ -271,11 +281,21 @@ namespace JuggernautGamemode
                 item.Remove();
 
             player.ChangeRole(Role.NTF_COMMANDER, true, true, true, true);
-            player.PersonalClearBroadcasts();
+           player.PersonalClearBroadcasts();
             if (juggernaut != null)
                 player.PersonalBroadcast(15, "You are an <color=#002DB3>NTF Commander</color> Work with others to eliminate the <color=#228B22>Juggernaut " + juggernaut.Name + "</color>", false);
             else
                 player.PersonalBroadcast(15, "You are an <color=#002DB3>NTF Commander</color> Work with others to eliminate the <color=#228B22>Juggernaut</color>", false);
+            if (!Juggernaut.NTF_Disarmer)
+            {
+                foreach (Player p in PluginManager.Manager.Server.GetPlayers())
+                    if (p.HasItem(ItemType.DISARMER))
+                    {
+                        foreach (Item item in player.GetInventory())
+                            if (item.ItemType == ItemType.DISARMER)
+                                item.Remove();
+                    }
+            }
         }
 
         public void SpawnAsJuggernaut(Player player)
@@ -293,7 +313,7 @@ namespace JuggernautGamemode
             player.SetRank("silver", "Juggernaut");
 
             // Health scales with amount of players in round
-            int health = 500 * plugin.Server.NumPlayers;
+            int health = Juggernaut.Jugg_base + (Juggernaut.Jugg_increase * (plugin.Server.NumPlayers - 1));
             player.SetHealth(health);
             juggernaut_healh = health;
 
@@ -309,15 +329,13 @@ namespace JuggernautGamemode
             player.GiveItem(ItemType.O5_LEVEL_KEYCARD);
 
             // 6 Frag Grenades
-            player.GiveItem(ItemType.FRAG_GRENADE);
-            player.GiveItem(ItemType.FRAG_GRENADE);
-            player.GiveItem(ItemType.FRAG_GRENADE);
-            player.GiveItem(ItemType.FRAG_GRENADE);
-            player.GiveItem(ItemType.FRAG_GRENADE);
-            player.GiveItem(ItemType.FRAG_GRENADE);
+            for (int i = 0; i < Juggernaut.Jugg_grenade; i++)
+            {
+                player.GiveItem(ItemType.FRAG_GRENADE);
+            }
 
             // 4,000 Reserve 7.72 Ammo
-            player.SetAmmo(AmmoType.DROPPED_7, 4000);
+            player.SetAmmo(AmmoType.DROPPED_7, Juggernaut.Jugg_ammo);
 
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(15, "You are the <color=#228B22>Juggernaut</color> Eliminate all <color=#002DB3>NTF Commanders</color>", false);
