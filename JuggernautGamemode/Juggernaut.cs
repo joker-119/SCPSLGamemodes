@@ -27,7 +27,6 @@ namespace JuggernautGamemode
         public static int Jugg_grenade;
         public static int NTF_ammo;
         public static int NTF_Health;
-        public static int max_players;
 
 
         public static bool
@@ -58,7 +57,6 @@ namespace JuggernautGamemode
             this.AddConfig(new ConfigSetting("NTF_Disarmer", false, SettingType.BOOL, true, "Wether or not NTF should spawn with Disarmers." ));
             this.AddConfig(new ConfigSetting("NTF_ammo", 272, SettingType.NUMERIC, true, "The amount of ammo NTF Commanders should spawn with."));
             this.AddConfig(new ConfigSetting("NTF_Health", 150, SettingType.NUMERIC, true, "The amount of health the first wave of NTF should have."));
-            this.AddConfig(new ConfigSetting("max_players", 20, SettingType.NUMERIC, true, "The number of max players on the server"));
             
             //GamemodeManager.GamemodeManager.RegisterMode(this, "21111111111111111111");
         }
