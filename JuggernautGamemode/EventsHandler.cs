@@ -53,7 +53,6 @@ namespace JuggernautGamemode
                 {
                     if (ev.TeamRole.Team != Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Team.SPECTATOR)
                     {
-                        plugin.Info("Spawining " + ev.Player.Name + " as Juggernaut.");
                         ResetJuggernaut(ev.Player);
                     }
                 }
