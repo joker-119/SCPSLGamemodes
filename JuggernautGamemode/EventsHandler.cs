@@ -300,8 +300,7 @@ namespace JuggernautGamemode
 
         public void SpawnAsNTFCommander(Player player)
         {
-            Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.NTF_COMMANDER);
-            player.ChangeRole(Role.NTF_COMMANDER, false, false, true, true);
+            player.ChangeRole(Role.NTF_COMMANDER, false, true, true, true);
             player.Teleport(spawn);
 
 
