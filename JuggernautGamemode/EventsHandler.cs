@@ -10,8 +10,7 @@ using System.Text;
 
 namespace JuggernautGamemode
 {
-    internal class EventsHandler : IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerDecideTeamRespawnQueue,
-        IEventHandlerSetRoleMaxHP, IEventHandlerSetRole
+    internal class EventsHandler : IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerSetRoleMaxHP, IEventHandlerSetRole
     {
         private readonly Juggernaut plugin;
 
@@ -19,14 +18,9 @@ namespace JuggernautGamemode
 
         public Player juggernaut;
         private int juggernaut_healh;
+        private int ntf_health;
         private string[] juggernaut_prevRank = new string[2];
         public static Player selectedJuggernaut = null;
-
-        public void OnDecideTeamRespawnQueue(DecideRespawnQueueEvent ev)
-        {
-            if (Juggernaut.enabled)
-                ev.Teams = new Team[] { Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX, Team.NINETAILFOX };
-        }
 
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
@@ -54,33 +48,61 @@ namespace JuggernautGamemode
         {
             if (Juggernaut.enabled)
             {
+                    
                 if (IsJuggernaut(ev.Player))
                 {
                     if (ev.TeamRole.Team != Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Team.SPECTATOR)
                     {
+                        plugin.Info("Spawining " + ev.Player.Name + " as Juggernaut.");
                         ResetJuggernaut(ev.Player);
                     }
                 }
                 else
                 {
-                    if (ev.TeamRole.Team != Team.NINETAILFOX && ev.TeamRole.Team != Team.SPECTATOR)
+                     // Set NTF Inventory
+                    plugin.Info("Setting NTF items..");
+                    List<ItemType> items = new List<ItemType>();
+                        items.Add(ItemType.MICROHID);
+                        items.Add(ItemType.E11_STANDARD_RIFLE);
+                        items.Add(ItemType.MTF_COMMANDER_KEYCARD);
+                        items.Add(ItemType.FRAG_GRENADE);
+                        items.Add(ItemType.FLASHBANG);
+                        items.Add(ItemType.RADIO);
+                        items.Add(ItemType.MEDKIT);
+
+                    if (Juggernaut.NTF_Disarmer)
                     {
-                        SpawnAsNTFCommander(ev.Player);
+                        items.Add(ItemType.DISARMER);
                     }
-                    else if (ev.TeamRole.Role == Role.FACILITY_GUARD)
-                        SpawnAsNTFCommander(ev.Player);
+                    else
+                    {
+                        items.Add(ItemType.FRAG_GRENADE);
+                    }
+
+                    if (ev.TeamRole.Team != Team.SPECTATOR)
+                    {
+                        if (ev.TeamRole.Team != Team.NINETAILFOX)
+                        {   
+                            plugin.Info("Spawning " + ev.Player.Name + " as NTF Commander, and setting inventory.");
+                            ev.Items = items;
+                            SpawnAsNTFCommander(ev.Player);
+                        }
+                        else if (ev.TeamRole.Role == Role.FACILITY_GUARD || ev.TeamRole.Role == Role.NTF_LIEUTENANT || ev.TeamRole.Role == Role.NTF_SCIENTIST || ev.TeamRole.Role == Role.NTF_CADET)
+                            ev.Items = items;
+                            SpawnAsNTFCommander(ev.Player);
+                    }
                 }
             }
         }
 
         public void OnRoundStart(RoundStartEvent ev)
         {
-            Juggernaut.Jugg_ammo = this.plugin.GetConfigInt("Jugg_ammo");
             Juggernaut.Jugg_base = this.plugin.GetConfigInt("Jugg_base_hp");
             Juggernaut.Jugg_increase = this.plugin.GetConfigInt("Jugg_increase_amount");
             Juggernaut.NTF_ammo = this.plugin.GetConfigInt("NTF_ammo");
             Juggernaut.NTF_Disarmer = this.plugin.GetConfigBool("NTF_Disarmer");
             Juggernaut.Jugg_grenade = this.plugin.GetConfigInt("Jugg_grenades");
+            Juggernaut.NTF_Health = this.plugin.GetConfigInt("NTF_Health");
 
 
 
@@ -137,6 +159,7 @@ namespace JuggernautGamemode
         public void OnRoundEnd(RoundEndEvent ev)
         {
             if (Juggernaut.enabled)
+                plugin.Info("Round Ended!");
                 EndGamemodeRound();
         }
 
@@ -261,6 +284,7 @@ namespace JuggernautGamemode
 
         public void ResetJuggernaut()
         {
+            plugin.Info("Resetting Juggernaut.");
             juggernaut = null;
             juggernaut_prevRank = null;
             juggernaut_healh = 0;
@@ -268,6 +292,7 @@ namespace JuggernautGamemode
 
         public void EndGamemodeRound()
         {
+            plugin.Info("EndgameRound Function");
             ResetJuggernaut();
             Juggernaut.roundstarted = false;
             plugin.Server.Round.EndRound();
@@ -276,31 +301,26 @@ namespace JuggernautGamemode
 
         public void SpawnAsNTFCommander(Player player)
         {
-            // Clear Inventory
-            foreach (Item item in player.GetInventory())
-                item.Remove();
+            Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.NTF_COMMANDER);
+            player.ChangeRole(Role.NTF_COMMANDER, false, false, true, true);
+            player.Teleport(spawn);
 
-            player.ChangeRole(Role.NTF_COMMANDER, true, true, true, true);
+
+            ntf_health = Juggernaut.NTF_Health;
+            plugin.Info("SpawnNTF Health");
+            player.SetHealth(ntf_health);
+
            player.PersonalClearBroadcasts();
             if (juggernaut != null)
                 player.PersonalBroadcast(15, "You are an <color=#002DB3>NTF Commander</color> Work with others to eliminate the <color=#228B22>Juggernaut " + juggernaut.Name + "</color>", false);
             else
                 player.PersonalBroadcast(15, "You are an <color=#002DB3>NTF Commander</color> Work with others to eliminate the <color=#228B22>Juggernaut</color>", false);
-            if (!Juggernaut.NTF_Disarmer)
-            {
-                foreach (Player p in PluginManager.Manager.Server.GetPlayers())
-                    if (p.HasItem(ItemType.DISARMER))
-                    {
-                        foreach (Item item in player.GetInventory())
-                            if (item.ItemType == ItemType.DISARMER)
-                                item.Remove();
-                    }
-            }
         }
 
         public void SpawnAsJuggernaut(Player player)
         {
             juggernaut = player;
+            Juggernaut.Jugg_ammo = this.plugin.GetConfigInt("Jugg_ammo");
 
             //Spawned as Juggernaut in 939s spawn location
             Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_939_53);
@@ -313,7 +333,7 @@ namespace JuggernautGamemode
             player.SetRank("silver", "Juggernaut");
 
             // Health scales with amount of players in round
-            int health = Juggernaut.Jugg_base + (Juggernaut.Jugg_increase * (plugin.Server.NumPlayers - 1));
+            int health = Juggernaut.Jugg_base + (Juggernaut.Jugg_increase * plugin.Server.NumPlayers ) - 500;
             player.SetHealth(health);
             juggernaut_healh = health;
 
@@ -328,7 +348,7 @@ namespace JuggernautGamemode
             // 1 O5 Keycard
             player.GiveItem(ItemType.O5_LEVEL_KEYCARD);
 
-            // 6 Frag Grenades
+            // Frag Grenades
             for (int i = 0; i < Juggernaut.Jugg_grenade; i++)
             {
                 player.GiveItem(ItemType.FRAG_GRENADE);
