@@ -301,7 +301,6 @@ namespace JuggernautGamemode
         public void SpawnAsNTFCommander(Player player)
         {
             player.ChangeRole(Role.NTF_COMMANDER, false, true, true, true);
-            player.Teleport(spawn);
 
 
             ntf_health = Juggernaut.NTF_Health;
