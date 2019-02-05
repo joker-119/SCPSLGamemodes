@@ -13,10 +13,11 @@ using scp4aiur;
 
 namespace SurvivalGamemode
 {
-    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerSetRole
+    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd
     {
         private readonly Survival plugin;
         public static Timer timer;
+        public static bool blackouts;
 
         public EventsHandler(Survival plugin) => this.plugin = plugin;
         public void OnPlayerJoin(PlayerJoinEvent ev)
@@ -35,15 +36,19 @@ namespace SurvivalGamemode
         {
             if (Survival.enabled)
             {
-               if (ev.TeamRole.Team == Team.SCP)
+               if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role != Role.SCP_173)
                {
                    SpawnNut(ev.Player);
                }
-               else if (ev.TeamRole.Team != Team.SPECTATOR)
+               else if (ev.TeamRole.Team != Team.SPECTATOR && ev.TeamRole.Team != Team.SCP)
+               {
                     SpawnDboi(ev.Player);
+               }
                else if (ev.TeamRole.Team == Team.SPECTATOR)
+               {
                     ev.Player.PersonalBroadcast(25, "You are dead! But don't worry, now you get to relax and watch your friends die!", false);
-            }
+               }
+           }
         }
 
         public void OnRoundStart(RoundStartEvent ev)
@@ -51,6 +56,26 @@ namespace SurvivalGamemode
             if (Survival.enabled)
             {
                 Survival.nut_delay = this.plugin.GetConfigInt("Surival_peanut_delay");
+
+                foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
+                {
+                    if (p.Details.id == "Blackout" && p is Blackout.Plugin)
+                    {
+                        if (Blackout.Plugin.enabled)
+                        {
+                            Blackout.Plugin.DisableBlackouts();
+                            blackouts = true;
+                        }
+                    }
+                }
+                int nut_delay = Survival.nut_delay;
+                timer = new System.Timers.Timer();
+                timer.Interval = 120000;
+                timer.Elapsed += OnTimedEvent;
+                timer.AutoReset = false;
+                timer.Enabled = true;
+                plugin.Info("Timer Initialized..");
+                plugin.Info("Timer set to " + nut_delay + " ms.");
 
                 Survival.roundstarted = true;
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
@@ -70,10 +95,17 @@ namespace SurvivalGamemode
                     }
                 }
 
+
                 foreach (Player player in ev.Server.GetPlayers())
                 {
                     if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR)
-                        player.PersonalBroadcast(15, "You are a <color=#ffa41a>D-Boi</color>! Find a hiding place and survive from the peanuts!", false);
+                    {
+                        SpawnDboi(player);
+                    }
+                    else if (player.TeamRole.Team == Team.SCP)
+                    {
+                        SpawnNut(player);
+                    }
                 }
             }
         }
@@ -125,14 +157,19 @@ namespace SurvivalGamemode
             if (Survival.enabled)
             {
                 if (ev.Player.TeamRole.Team != Team.SCP)
+                {
                     SpawnDboi(ev.Player);
+                }
             }
         }
 
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
             if (Survival.enabled)
+            {
                 ev.SpawnChaos = true;
+                ev.PlayerList = new List<Player>();
+            }
         }
 
         public void EndGamemodeRound()
@@ -140,8 +177,26 @@ namespace SurvivalGamemode
             plugin.Info("EndgameRound Function");
             Survival.roundstarted = false;
             plugin.Server.Round.EndRound();
+            
+            foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
+            {
+                if (p.Details.id == "Blackout" && p is Blackout.Plugin)
+                {
+                    Blackout.Plugin.ToggleBlackout();
+                    if (blackouts)
+                    {
+                        Blackout.Plugin.EnableBlackouts();
+                    }
+                }
+            }
             if (Blackout.Plugin.enabled)
+            {
                 Blackout.Plugin.ToggleBlackout();
+                if (blackouts)
+                {
+                    Blackout.Plugin.EnableBlackouts();
+                }
+            }
 
         }
 
@@ -157,23 +212,21 @@ namespace SurvivalGamemode
 
         public void SpawnNut(Player player)
         {
-            int nut_delay = Survival.nut_delay;
-            Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_939_53);
             player.ChangeRole(Role.SCP_173, true, true, true, true);
-            timer = new System.Timers.Timer();
-            timer.Interval = nut_delay;
-            timer.Elapsed += OnTimedEvent;
-            timer.AutoReset = false;
-            timer.Enabled = true;
-
+            plugin.Info("Spawned " + player.Name + " as SCP-173");
             player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(15, "You will be teleported into the game arena when adequate time has passed for other players to hide...", false);
+            player.PersonalBroadcast(35, "You will be teleported into the game arena when adequate time has passed for other players to hide...", false);
         }
         public void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
-            if (Blackout.Plugin.enabled)
-                Blackout.Plugin.ToggleBlackout();
-                
+            plugin.Info("Timer completed!");
+            foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
+            {
+                if (p.Details.id == "Blackout" && p is Blackout.Plugin)
+                {
+                    Blackout.Plugin.ToggleBlackout();
+                }
+            }
             Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_939_53);
             foreach (Player player in plugin.Server.GetPlayers())
             {

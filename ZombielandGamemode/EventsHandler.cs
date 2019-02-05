@@ -39,10 +39,18 @@ namespace ZombielandGamemode
                {
                    SpawnZombie(ev.Player);
                }
+               else if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role == Role.SCP_049_2)
+               {
+                   SpawnChild(ev.Player);
+               }
                else if (ev.TeamRole.Team != Team.SPECTATOR)
+               {
                     ev.Player.PersonalBroadcast(25, "You are a human! You must escape the zombie outbreak! Any human deaths from any cause will result in more zombies! When killed, zombies respawn as Chaos! Good Luck!", false);
+               }
                else if (ev.TeamRole.Team == Team.SPECTATOR)
+               {
                     ev.Player.PersonalBroadcast(25, "You are dead! But don't worry, you'll respawn as Chaos soon to fight the zombies!", false);
+               }
             }
         }
 
@@ -134,8 +142,8 @@ namespace ZombielandGamemode
             child_health = Zombieland.child_health;
             player.SetHealth(child_health);
 
-           player.PersonalClearBroadcasts();
-           player.PersonalBroadcast(15, "You died and became a <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);
+            player.PersonalClearBroadcasts();
+            player.PersonalBroadcast(15, "You died and became a <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);
         }
 
         public void SpawnZombie(Player player)

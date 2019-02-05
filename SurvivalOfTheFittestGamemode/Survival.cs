@@ -43,7 +43,7 @@ namespace SurvivalGamemode
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "survival", "sotf", "surv" }, new SurvivalCommand());
 
-            this.AddConfig(new ConfigSetting("Survial_peanut_delay", 120, SettingType.NUMERIC, true, "The amount of time to wait before unleading peanuts."));
+            this.AddConfig(new ConfigSetting("Survial_peanut_delay", 120000, SettingType.NUMERIC, true, "The amount of time to wait before unleading peanuts."));
         }
 
         public static void EnableGamemode()

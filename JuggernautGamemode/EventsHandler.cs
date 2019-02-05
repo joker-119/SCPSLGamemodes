@@ -113,10 +113,17 @@ namespace JuggernautGamemode
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Juggernaut Gamemode Started!");
                 List<Player> players = ev.Server.GetPlayers();
-                if (Blackout.Plugin.enabled)
+
+                foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
                 {
-                    Blackout.Plugin.DisableBlackouts();
-                    blackouts = true;
+                    if (p.Details.id == "Blackout" && p is Blackout.Plugin)
+                    {
+                        if (Blackout.Plugin.enabled)
+                        {
+                            Blackout.Plugin.DisableBlackouts();
+                            blackouts = true;
+                        }
+                    }
                 }
 
                 if (selectedJuggernaut == null)
