@@ -19,6 +19,7 @@ namespace JuggernautGamemode
         public Player juggernaut;
         private int juggernaut_healh;
         private int ntf_health;
+        private bool blackouts = false;
         private string[] juggernaut_prevRank = new string[2];
         public static Player selectedJuggernaut = null;
 
@@ -113,7 +114,10 @@ namespace JuggernautGamemode
                 plugin.Info("Juggernaut Gamemode Started!");
                 List<Player> players = ev.Server.GetPlayers();
                 if (Blackout.Plugin.enabled)
-                    Blackout.Plugin.ToggleBlackout();
+                {
+                    Blackout.Plugin.DisableBlackouts();
+                    blackouts = true;
+                }
 
                 if (selectedJuggernaut == null)
                 {
@@ -298,8 +302,8 @@ namespace JuggernautGamemode
             ResetJuggernaut();
             Juggernaut.roundstarted = false;
             plugin.Server.Round.EndRound();
-            if (Blackout.Plugin.enabled)
-                Blackout.Plugin.ToggleBlackout();
+            if (blackouts)
+                Blackout.Plugin.EnableBlackouts();
 
         }
 
