@@ -112,6 +112,9 @@ namespace JuggernautGamemode
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Juggernaut Gamemode Started!");
                 List<Player> players = ev.Server.GetPlayers();
+                if (Blackout.Plugin.enabled)
+                    Blackout.Plugin.ToggleBlackout();
+
                 if (selectedJuggernaut == null)
                 {
                     int chosenJuggernaut = new Random().Next(players.Count);
@@ -295,6 +298,8 @@ namespace JuggernautGamemode
             ResetJuggernaut();
             Juggernaut.roundstarted = false;
             plugin.Server.Round.EndRound();
+            if (Blackout.Plugin.enabled)
+                Blackout.Plugin.ToggleBlackout();
 
         }
 

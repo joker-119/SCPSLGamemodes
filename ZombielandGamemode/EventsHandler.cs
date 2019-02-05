@@ -27,7 +27,7 @@ namespace ZombielandGamemode
                 {
                     Server server = plugin.pluginManager.Server;
                     server.Map.ClearBroadcasts();
-                    server.Map.Broadcast(25, "<color=#50c878>zombieland Gamemode</color> is starting...", false);
+                    server.Map.Broadcast(25, "<color=#50c878>Zombieland Gamemode</color> is starting...", false);
                 }
             }
         }
@@ -35,7 +35,7 @@ namespace ZombielandGamemode
         {
             if (Zombieland.enabled)
             {
-               if (ev.TeamRole.Team == Team.SCP)
+               if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role != Role.SCP_049_2)
                {
                    SpawnZombie(ev.Player);
                }
@@ -97,7 +97,7 @@ namespace ZombielandGamemode
                     }
                     else if (zombieAlive == false && humanAlive)
                     {
-                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.CI_VICTORY; EndGamemodeRound();
                     }
                 }
             }
