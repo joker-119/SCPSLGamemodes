@@ -1,7 +1,5 @@
 Juggernaut Gamemode
 ======
-Suggested by Joker119
-
 ## Description
  One player is selected randomly to spawn as the Juggernaut, a Chaos Insurgency, with the objective of eliminating all NTF Personnel.
  Rest of the server is spawned in as NTF Commanders initialy, and respawned through natural NTF Waves.
