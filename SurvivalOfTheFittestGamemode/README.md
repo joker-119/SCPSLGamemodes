@@ -17,6 +17,6 @@ Friendly Fire is on. Auto Nuke is enabled. Ent Zone and both LCZ gates are locke
   Command |  |  | Description
 :---: | :---: | :---: | :------
 **Aliases** | **Survival** | **Surv** | **SOTF**
-Juggernaut Enable | ~~ | ~~ | Enable SOTF for the next round
-Juggernaut Disable | ~~ | ~~ | Disable SOTF this and following rounds
+Survival Enable | ~~ | ~~ | Enable SOTF for the next round
+Survival Disable | ~~ | ~~ | Disable SOTF this and following rounds
 
