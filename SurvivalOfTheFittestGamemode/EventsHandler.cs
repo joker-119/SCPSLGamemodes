@@ -13,7 +13,7 @@ using scp4aiur;
 
 namespace SurvivalGamemode
 {
-    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd
+    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd
     {
         private readonly Survival plugin;
         public static Timer timer;
@@ -64,6 +64,7 @@ namespace SurvivalGamemode
                         if (Blackout.Plugin.enabled)
                         {
                             Blackout.Plugin.DisableBlackouts();
+                            plugin.Info("Disabling timed blackouts.");
                             blackouts = true;
                         }
                     }
@@ -81,7 +82,7 @@ namespace SurvivalGamemode
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Survival of the Fittest Gamemode Started!");
 
-                string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT" };
+                string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173" };
                 
                 foreach (string d in dlist)
                 {
@@ -89,6 +90,7 @@ namespace SurvivalGamemode
                     {
                         if ( d == door.Name)
                         {
+                            plugin.Info("Locking " + door.Name + ".");
                             door.Open = false;
                             door.Locked = true;
                         }
@@ -123,6 +125,7 @@ namespace SurvivalGamemode
             {
                 bool peanutAlive = false;
                 bool humanAlive = false;
+                int humanCount = 0;
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
@@ -132,13 +135,21 @@ namespace SurvivalGamemode
                     }
 
                     else if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR)
+                    {
                         humanAlive = true;
+                        humanCount = humanCount + 1;
+                    }
+
                 }
                 if (ev.Server.GetPlayers().Count > 1)
                 {
-                    if (peanutAlive && humanAlive)
+                    if (peanutAlive && humanAlive && humanCount > 1)
                     {
                         ev.Status = ROUND_END_STATUS.ON_GOING;
+                    }
+                    else if (peanutAlive && humanAlive && humanCount == 1)
+                    {
+                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; EndGamemodeRound();
                     }
                     else if (peanutAlive && humanAlive == false)
                     {
@@ -148,17 +159,6 @@ namespace SurvivalGamemode
                     {
                         ev.Status = ROUND_END_STATUS.CI_VICTORY; EndGamemodeRound();
                     }
-                }
-            }
-        }
-
-        public void OnPlayerDie(PlayerDeathEvent ev)
-        {
-            if (Survival.enabled)
-            {
-                if (ev.Player.TeamRole.Team != Team.SCP)
-                {
-                    SpawnDboi(ev.Player);
                 }
             }
         }
@@ -182,22 +182,15 @@ namespace SurvivalGamemode
             {
                 if (p.Details.id == "Blackout" && p is Blackout.Plugin)
                 {
+                    plugin.Info("Toggling Blackout off.");
                     Blackout.Plugin.ToggleBlackout();
                     if (blackouts)
                     {
+                        plugin.Info("Enabling timed Blackouts.");
                         Blackout.Plugin.EnableBlackouts();
                     }
                 }
             }
-            if (Blackout.Plugin.enabled)
-            {
-                Blackout.Plugin.ToggleBlackout();
-                if (blackouts)
-                {
-                    Blackout.Plugin.EnableBlackouts();
-                }
-            }
-
         }
 
         public void SpawnDboi(Player player)
@@ -224,6 +217,7 @@ namespace SurvivalGamemode
             {
                 if (p.Details.id == "Blackout" && p is Blackout.Plugin)
                 {
+                    plugin.Info("Toggling Blackout on.");
                     Blackout.Plugin.ToggleBlackout();
                 }
             }

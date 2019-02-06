@@ -10,7 +10,7 @@ using System.Text;
 
 namespace JuggernautGamemode
 {
-    internal class EventsHandler : IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerSetRoleMaxHP, IEventHandlerSetRole
+    internal class EventsHandler : IEventHandlerReload, IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerSetRoleMaxHP, IEventHandlerSetRole
     {
         private readonly Juggernaut plugin;
 
@@ -91,6 +91,17 @@ namespace JuggernautGamemode
                             ev.Items = items;
                             SpawnAsNTFCommander(ev.Player);
                     }
+                }
+            }
+        }
+
+        public void OnReload(PlayerReloadEvent ev)
+        {
+            if (Juggernaut.enabled)
+            {
+                if (ev.Player.Name == selectedJuggernaut.Name || ev.Player.SteamId == selectedJuggernaut.SteamId)
+                {
+                    ev.Player.SetAmmo(AmmoType.DROPPED_7, 2000);
                 }
             }
         }
