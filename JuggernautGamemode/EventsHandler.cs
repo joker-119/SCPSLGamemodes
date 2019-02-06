@@ -71,11 +71,13 @@ namespace JuggernautGamemode
                         items.Add(ItemType.MEDKIT);
 
                     if (Juggernaut.NTF_Disarmer)
+
                     {
                         items.Add(ItemType.DISARMER);
                     }
                     else
                     {
+
                         items.Add(ItemType.FRAG_GRENADE);
                     }
 
