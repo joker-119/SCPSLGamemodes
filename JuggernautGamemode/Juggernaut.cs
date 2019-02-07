@@ -50,7 +50,6 @@ namespace JuggernautGamemode
 
             this.AddConfig(new ConfigSetting("Jugg_base_hp", 500, SettingType.NUMERIC, true, "The amount of base health the Juggernaut starts with."));
             this.AddConfig(new ConfigSetting("Jugg_increase_amount", 500, SettingType.NUMERIC, true, "The amount of extra HP a Jugg gets for each additional player."));
-            this.AddConfig(new ConfigSetting("Jugg_ammo", 10000, SettingType.NUMERIC, true, "The amount of Logicer ammo the Jugg should start with."));
             this.AddConfig(new ConfigSetting("Jugg_grenades", 6, SettingType.NUMERIC, true, "The number of grenades the Jugg should start with."));
             this.AddConfig(new ConfigSetting("NTF_Disarmer", false, SettingType.BOOL, true, "Wether or not NTF should spawn with Disarmers." ));
             this.AddConfig(new ConfigSetting("NTF_ammo", 272, SettingType.NUMERIC, true, "The amount of ammo NTF Commanders should spawn with."));

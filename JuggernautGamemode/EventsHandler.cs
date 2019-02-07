@@ -375,8 +375,6 @@ namespace JuggernautGamemode
             {
                 player.GiveItem(ItemType.FRAG_GRENADE);
             }
-            // 4,000 Reserve 7.72 Ammo
-            player.SetAmmo(AmmoType.DROPPED_7, Juggernaut.Jugg_ammo);
 
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(15, "You are the <color=#228B22>Juggernaut</color> Eliminate all <color=#002DB3>NTF Commanders</color>", false);
