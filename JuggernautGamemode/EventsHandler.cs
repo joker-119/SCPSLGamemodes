@@ -1,18 +1,15 @@
-﻿using Smod2;
-using Smod2.API;
+﻿using Smod2.API;
 using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
 using System;
-using System.Linq;
-using System.Text;
 using System.Timers;
 using UnityEngine;
 
 namespace JuggernautGamemode
 {
-    internal class EventsHandler : IEventHandlerWaitingForPlayers, IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerSetRoleMaxHP, IEventHandlerSetRole,
+    internal class EventsHandler : IEventHandlerReload, IEventHandlerWaitingForPlayers, IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerSetRoleMaxHP, IEventHandlerSetRole,
         IEventHandlerLure, IEventHandlerContain106
     {
         private readonly Juggernaut plugin;
@@ -98,6 +95,17 @@ namespace JuggernautGamemode
                             ev.Items = items;
                         SpawnAsNTFCommander(ev.Player);
                     }
+                }
+            }
+        }
+
+        public void OnReload(PlayerReloadEvent ev)
+        {
+            if (Juggernaut.enabled)
+            {
+                if (ev.Player.Name == juggernaut.Name || ev.Player.SteamId == juggernaut.SteamId)
+                {
+                    ev.Player.SetAmmo(AmmoType.DROPPED_7, 2000);
                 }
             }
         }
