@@ -1,5 +1,6 @@
 Zombieland
 ======
+made by Joker119
 ## Description
 Normal round except all SCP's spawn as Zombies with 3k hp
 
