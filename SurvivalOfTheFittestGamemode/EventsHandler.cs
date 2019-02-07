@@ -97,6 +97,21 @@ namespace SurvivalGamemode
                     }
                 }
 
+                string[] olist = new string[] { "HID", "106_BOTTOM", "106_PRIMARY", "106_SECONDARY", "HCZ_ARMORY", "079_FIRST", "079_SECOND", "049_ARMORY", "096" };
+
+                foreach (string o in olist)
+                {
+                    foreach (Door door in ev.Server.Map.GetDoors())
+                    {
+                        if (o == door.Name)
+                        {
+                            plugin.Info("Opening " + door.Name + ".");
+                            door.Open = true;
+                            door.Locked = true;
+                        }
+                    }
+                }
+
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
@@ -199,14 +214,28 @@ namespace SurvivalGamemode
             player.ChangeRole(Role.CLASSD, false, false, false, true);
             player.Teleport(spawn);
 
-           player.PersonalClearBroadcasts();
-           player.PersonalBroadcast(15, "You are a <color=#ffa41a>D-Boi</color>! Find a hiding place and survive from the peanuts!", false);
+            foreach (Item item in player.GetInventory())
+            {
+                item.Remove();
+            }
+
+            player.GiveItem(ItemType.FLASHLIGHT);
+            player.GiveItem(ItemType.COM15);
+            player.GiveItem(ItemType.CUP);
+
+            player.PersonalClearBroadcasts();
+            player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Find a hiding place and survive from the peanuts! They will spawn in 939's area when the lights go off!", false);
         }
 
         public void SpawnNut(Player player)
         {
+            
+            Survival.nut_health = this.plugin.GetConfigInt("Survival_peanut_health");
+            int nut_health = Survival.nut_health;
+
             player.ChangeRole(Role.SCP_173, true, true, true, true);
             plugin.Info("Spawned " + player.Name + " as SCP-173");
+            player.SetHealth(nut_health);
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(35, "You will be teleported into the game arena when adequate time has passed for other players to hide...", false);
         }
@@ -225,8 +254,10 @@ namespace SurvivalGamemode
             foreach (Player player in plugin.Server.GetPlayers())
             {
                 if (player.TeamRole.Role == Role.SCP_173)
+                {
                     player.Teleport(spawn);
                     player.PersonalBroadcast(15, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the Class-D before the auto-nuke goes off!", false);
+                }
             }
         }
     }

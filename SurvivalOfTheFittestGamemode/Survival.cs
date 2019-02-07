@@ -26,6 +26,8 @@ namespace SurvivalGamemode
             roundstarted = false;
 
         public static int nut_delay;
+
+        public static int nut_health;
         
         public override void OnDisable()
         {
@@ -44,6 +46,7 @@ namespace SurvivalGamemode
             this.AddCommands(new string[] { "survival", "sotf", "surv" }, new SurvivalCommand());
 
             this.AddConfig(new ConfigSetting("Survial_peanut_delay", 120000, SettingType.NUMERIC, true, "The amount of time to wait before unleading peanuts."));
+            this.AddConfig(new ConfigSetting("Survival_peanut_health", 173, SettingType.NUMERIC, true, "The amount of health peanuts should have (lower values move faster"));
         }
 
         public static void EnableGamemode()

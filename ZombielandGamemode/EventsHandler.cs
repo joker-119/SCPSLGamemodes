@@ -115,8 +115,15 @@ namespace ZombielandGamemode
         {
             if (Zombieland.enabled && ev.Player.TeamRole.Team != Team.SCP && ev.Damage > ev.Player.GetHealth())
             {
-                ev.Damage = 0;
-                SpawnChild(ev.Player);
+                if (ev.Attacker == ev.Player && ev.DamageType == DamageType.TESLA)
+                {
+                    ev.Player.ChangeRole(Role.SPECTATOR);
+                }
+                else
+                {
+                    ev.Damage = 0;
+                    SpawnChild(ev.Player);
+                }
             }   
         }
 
