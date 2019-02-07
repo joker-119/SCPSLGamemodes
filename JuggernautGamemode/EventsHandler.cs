@@ -10,7 +10,8 @@ using System.Text;
 
 namespace JuggernautGamemode
 {
-    internal class EventsHandler : IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerSetRoleMaxHP, IEventHandlerSetRole
+    internal class EventsHandler : IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerSetRoleMaxHP, IEventHandlerSetRole,
+        IEventHandlerLure
     {
         private readonly Juggernaut plugin;
 
@@ -105,9 +106,6 @@ namespace JuggernautGamemode
             Juggernaut.NTF_Disarmer = this.plugin.GetConfigBool("NTF_Disarmer");
             Juggernaut.Jugg_grenade = this.plugin.GetConfigInt("Jugg_grenades");
             Juggernaut.NTF_Health = this.plugin.GetConfigInt("NTF_Health");
-
-
-
 
             if (Juggernaut.enabled)
             {
@@ -239,6 +237,14 @@ namespace JuggernautGamemode
                     //if (ev.Attacker != ev.Player && ev.DamageType == DamageType.FRAG)
                     //    CriticalHitJuggernaut(ev.Player);
                 }
+            }
+        }
+
+        public void OnLure(PlayerLureEvent ev)
+        {
+            if (Juggernaut.enabled)
+            {
+                //
             }
         }
 
