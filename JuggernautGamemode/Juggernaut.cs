@@ -1,5 +1,7 @@
 ﻿using Smod2;
+using Smod2.API;
 using Smod2.Events;
+using Smod2.EventHandlers;
 using Smod2.Attributes;
 using Smod2.Config;
 
@@ -47,14 +49,14 @@ namespace JuggernautGamemode
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "jug", "jugg", "juggernaut" }, new JuggernautCommand());
 
-            this.AddConfig(new ConfigSetting("Jugg_base_hp", 500, SettingType.NUMERIC, true, "The amount of base health the Juggernaut starts with."));
-            this.AddConfig(new ConfigSetting("Jugg_increase_amount", 500, SettingType.NUMERIC, true, "The amount of extra HP a Jugg gets for each additional player."));
-            this.AddConfig(new ConfigSetting("Jugg_grenades", 6, SettingType.NUMERIC, true, "The number of grenades the Jugg should start with."));
-            this.AddConfig(new ConfigSetting("Jugg_NTF_Disarmer", false, SettingType.BOOL, true, "Wether or not NTF should spawn with Disarmers." ));
-            this.AddConfig(new ConfigSetting("Jugg_NTF_ammo", 272, SettingType.NUMERIC, true, "The amount of ammo NTF Commanders should spawn with."));
-            this.AddConfig(new ConfigSetting("Jugg_NTF_Health", 150, SettingType.NUMERIC, true, "The amount of health the first wave of NTF should have."));
-            
-            //GamemodeManager.GamemodeManager.RegisterMode(this, "21111111111111111111");
+            // Register Configs
+            this.AddConfig(new ConfigSetting("juggernaut_base_health", 500, SettingType.NUMERIC, true, "The amoutn of base health the Juggernaut starts with."));
+            this.AddConfig(new ConfigSetting("juggernaut_increase_amount", 500, SettingType.NUMERIC, true, "The amount of extra HP a Jugg gets for each additional player."));
+            this.AddConfig(new ConfigSetting("juggernaut_jugg_grenades", 6, SettingType.NUMERIC, true, "The number of grenades the Jugg should start with."));
+            this.AddConfig(new ConfigSetting("juggernaut_ntf_disarmer", false, SettingType.BOOL, true, "Wether or not NTF should spawn with Disarmers." ));
+            this.AddConfig(new ConfigSetting("juggernaut_ntf_ammo", 272, SettingType.NUMERIC, true, "The amount of ammo NTF Commanders should spawn with."));
+            this.AddConfig(new ConfigSetting("juggernaut_ntf_health", 150, SettingType.NUMERIC, true, "The amount of health the first wave of NTF should have."));
+            this.AddConfig(new ConfigSetting("juggernaut_critical_damage", (float)0.15, SettingType.FLOAT, true, "The amount of critical damage the Juggernaut should recieve."));
         }
 
         public static void EnableGamemode()
