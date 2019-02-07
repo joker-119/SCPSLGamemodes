@@ -6,10 +6,6 @@ using System.Collections.Generic;
 using Smod2.Events;
 using System;
 using System.Timers;
-using System.Linq;
-using System.Text;
-using Blackout;
-using scp4aiur;
 
 namespace SurvivalGamemode
 {

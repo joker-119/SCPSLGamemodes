@@ -1,7 +1,5 @@
 ﻿using Smod2;
-using Smod2.API;
 using Smod2.Events;
-using Smod2.EventHandlers;
 using Smod2.Attributes;
 using Smod2.Config;
 
@@ -50,7 +48,7 @@ namespace JuggernautGamemode
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "jug", "jugg", "juggernaut" }, new JuggernautCommand());
 
-            this.AddConfig(new ConfigSetting("Jugg_base_hp", 500, SettingType.NUMERIC, true, "The amoutn of base health the Juggernaut starts with."));
+            this.AddConfig(new ConfigSetting("Jugg_base_hp", 500, SettingType.NUMERIC, true, "The amount of base health the Juggernaut starts with."));
             this.AddConfig(new ConfigSetting("Jugg_increase_amount", 500, SettingType.NUMERIC, true, "The amount of extra HP a Jugg gets for each additional player."));
             this.AddConfig(new ConfigSetting("Jugg_ammo", 10000, SettingType.NUMERIC, true, "The amount of Logicer ammo the Jugg should start with."));
             this.AddConfig(new ConfigSetting("Jugg_grenades", 6, SettingType.NUMERIC, true, "The number of grenades the Jugg should start with."));

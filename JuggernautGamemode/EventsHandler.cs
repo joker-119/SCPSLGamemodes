@@ -5,8 +5,6 @@ using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
 using System;
-using System.Linq;
-using System.Text;
 
 namespace JuggernautGamemode
 {
@@ -116,8 +114,6 @@ namespace JuggernautGamemode
             Juggernaut.NTF_Disarmer = this.plugin.GetConfigBool("NTF_Disarmer");
             Juggernaut.Jugg_grenade = this.plugin.GetConfigInt("Jugg_grenades");
             Juggernaut.NTF_Health = this.plugin.GetConfigInt("NTF_Health");
-
-
 
 
             if (Juggernaut.enabled)
@@ -379,7 +375,6 @@ namespace JuggernautGamemode
             {
                 player.GiveItem(ItemType.FRAG_GRENADE);
             }
-
             // 4,000 Reserve 7.72 Ammo
             player.SetAmmo(AmmoType.DROPPED_7, Juggernaut.Jugg_ammo);
 

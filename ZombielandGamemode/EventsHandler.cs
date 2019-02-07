@@ -1,12 +1,8 @@
-using Smod2;
 using Smod2.API;
 using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
-using System.Collections.Generic;
 using Smod2.Events;
-using System;
-using System.Linq;
-using System.Text;
+
 
 namespace ZombielandGamemode
 {
@@ -58,7 +54,6 @@ namespace ZombielandGamemode
         {
             Zombieland.zombie_health = this.plugin.GetConfigInt("Zombieland_zombie_health");
             Zombieland.child_health = this.plugin.GetConfigInt("Zombieland_child_health");
-
 
 
             if (Zombieland.enabled)

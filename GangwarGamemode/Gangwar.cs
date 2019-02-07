@@ -3,33 +3,32 @@ using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
 
-namespace SurvivalGamemode
+namespace GangwarGamemode
 {
     [PluginDetails(
         author = "Joker119",
-        name = "Survival of the Fittest Gamemode",
-        description = "Gamemode Template",
-        id = "gamemode.survival",
+        name = "Gangwar Gamemode",
+        description = "Gangwar Gamemode",
+        id = "gamemode.gangwar",
         version = "1.0",
         SmodMajor = 3,
         SmodMinor = 2,
         SmodRevision = 2
     )]
-    public class Survival : Plugin
+
+    public class Gangwar : Plugin
     {
-        internal static Survival plugin;
-        
-        public static bool
+        internal static Gangwar plugin;
+        public static bool 
             enabled = false,
             roundstarted = false;
 
-        public static int nut_delay;
+        public static int ci_health;
+        public static int ntf_health;
 
-        public static int nut_health;
-        
         public override void OnDisable()
         {
-            plugin.Info(plugin.Details.name + " v." + plugin.Details.version + " has been disabled.");
+            plugin.Info(plugin.Details.name + " v." + plugin.Details.version + " has been diisabled.");
         }
 
         public override void OnEnable()
@@ -41,10 +40,9 @@ namespace SurvivalGamemode
         public override void Register()
         {
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
-            this.AddCommands(new string[] { "survival", "sotf", "surv" }, new SurvivalCommand());
-
-            this.AddConfig(new ConfigSetting("Survial_peanut_delay", 120000, SettingType.NUMERIC, true, "The amount of time to wait before unleading peanuts."));
-            this.AddConfig(new ConfigSetting("Survival_peanut_health", 173, SettingType.NUMERIC, true, "The amount of health peanuts should have (lower values move faster"));
+            this.AddCommands(new string[] { "gangwar", "gang", "gw" }, new GangwarCommand());
+            this.AddConfig(new ConfigSetting("Gangwar_ci_health", 120, SettingType.NUMERIC, true, "The amount of health CI have."));
+            this.AddConfig(new ConfigSetting("Gangwar_ntf_health", 150, SettingType.NUMERIC, true, "The amount of health NTF have."));
         }
 
         public static void EnableGamemode()
@@ -53,9 +51,10 @@ namespace SurvivalGamemode
             if (!roundstarted)
             {
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
-                plugin.pluginManager.Server.Map.Broadcast(25, "<color=#50c878>Survival of the Fittest Gamemode</color> is starting..", false);
+                plugin.pluginManager.Server.Map.Broadcast(25, "<color=#00ffff> Gangwar Gamemode is starting..", false);
             }
         }
+
         public static void DisableGamemode()
         {
             enabled = false;
