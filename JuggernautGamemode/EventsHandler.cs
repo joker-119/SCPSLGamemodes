@@ -110,10 +110,10 @@ namespace JuggernautGamemode
         {
             Juggernaut.Jugg_base = this.plugin.GetConfigInt("Jugg_base_hp");
             Juggernaut.Jugg_increase = this.plugin.GetConfigInt("Jugg_increase_amount");
-            Juggernaut.NTF_ammo = this.plugin.GetConfigInt("NTF_ammo");
-            Juggernaut.NTF_Disarmer = this.plugin.GetConfigBool("NTF_Disarmer");
+            Juggernaut.NTF_ammo = this.plugin.GetConfigInt("Jugg_NTF_ammo");
+            Juggernaut.NTF_Disarmer = this.plugin.GetConfigBool("Jugg_NTF_Disarmer");
             Juggernaut.Jugg_grenade = this.plugin.GetConfigInt("Jugg_grenades");
-            Juggernaut.NTF_Health = this.plugin.GetConfigInt("NTF_Health");
+            Juggernaut.NTF_Health = this.plugin.GetConfigInt("Jugg_NTF_Health");
 
 
             if (Juggernaut.enabled)
@@ -342,7 +342,6 @@ namespace JuggernautGamemode
         public void SpawnAsJuggernaut(Player player)
         {
             juggernaut = player;
-            Juggernaut.Jugg_ammo = this.plugin.GetConfigInt("Jugg_ammo");
 
             //Spawned as Juggernaut in 939s spawn location
             Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_939_53);
