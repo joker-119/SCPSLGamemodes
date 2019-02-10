@@ -6,14 +6,10 @@ using System.Collections.Generic;
 using Smod2.Events;
 using System;
 using System.Timers;
-using System.Linq;
-using System.Text;
-using Blackout;
-using scp4aiur;
 
 namespace SurvivalGamemode
 {
-    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd
+    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd
     {
         private readonly Survival plugin;
         public static Timer timer;
@@ -64,6 +60,7 @@ namespace SurvivalGamemode
                         if (Blackout.Plugin.enabled)
                         {
                             Blackout.Plugin.DisableBlackouts();
+                            plugin.Info("Disabling timed blackouts.");
                             blackouts = true;
                         }
                     }
@@ -81,7 +78,7 @@ namespace SurvivalGamemode
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Survival of the Fittest Gamemode Started!");
 
-                string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT" };
+                string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173" };
                 
                 foreach (string d in dlist)
                 {
@@ -89,7 +86,23 @@ namespace SurvivalGamemode
                     {
                         if ( d == door.Name)
                         {
+                            plugin.Info("Locking " + door.Name + ".");
                             door.Open = false;
+                            door.Locked = true;
+                        }
+                    }
+                }
+
+                string[] olist = new string[] { "HID", "106_BOTTOM", "106_PRIMARY", "106_SECONDARY", "HCZ_ARMORY", "079_FIRST", "079_SECOND", "049_ARMORY", "096" };
+
+                foreach (string o in olist)
+                {
+                    foreach (Door door in ev.Server.Map.GetDoors())
+                    {
+                        if (o == door.Name)
+                        {
+                            plugin.Info("Opening " + door.Name + ".");
+                            door.Open = true;
                             door.Locked = true;
                         }
                     }
@@ -123,6 +136,7 @@ namespace SurvivalGamemode
             {
                 bool peanutAlive = false;
                 bool humanAlive = false;
+                int humanCount = 0;
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
@@ -132,13 +146,21 @@ namespace SurvivalGamemode
                     }
 
                     else if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR)
+                    {
                         humanAlive = true;
+                        humanCount = humanCount + 1;
+                    }
+
                 }
                 if (ev.Server.GetPlayers().Count > 1)
                 {
-                    if (peanutAlive && humanAlive)
+                    if (peanutAlive && humanAlive && humanCount > 1)
                     {
                         ev.Status = ROUND_END_STATUS.ON_GOING;
+                    }
+                    else if (peanutAlive && humanAlive && humanCount == 1)
+                    {
+                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; EndGamemodeRound();
                     }
                     else if (peanutAlive && humanAlive == false)
                     {
@@ -148,17 +170,6 @@ namespace SurvivalGamemode
                     {
                         ev.Status = ROUND_END_STATUS.CI_VICTORY; EndGamemodeRound();
                     }
-                }
-            }
-        }
-
-        public void OnPlayerDie(PlayerDeathEvent ev)
-        {
-            if (Survival.enabled)
-            {
-                if (ev.Player.TeamRole.Team != Team.SCP)
-                {
-                    SpawnDboi(ev.Player);
                 }
             }
         }
@@ -182,22 +193,15 @@ namespace SurvivalGamemode
             {
                 if (p.Details.id == "Blackout" && p is Blackout.Plugin)
                 {
+                    plugin.Info("Toggling Blackout off.");
                     Blackout.Plugin.ToggleBlackout();
                     if (blackouts)
                     {
+                        plugin.Info("Enabling timed Blackouts.");
                         Blackout.Plugin.EnableBlackouts();
                     }
                 }
             }
-            if (Blackout.Plugin.enabled)
-            {
-                Blackout.Plugin.ToggleBlackout();
-                if (blackouts)
-                {
-                    Blackout.Plugin.EnableBlackouts();
-                }
-            }
-
         }
 
         public void SpawnDboi(Player player)
@@ -206,14 +210,28 @@ namespace SurvivalGamemode
             player.ChangeRole(Role.CLASSD, false, false, false, true);
             player.Teleport(spawn);
 
-           player.PersonalClearBroadcasts();
-           player.PersonalBroadcast(15, "You are a <color=#ffa41a>D-Boi</color>! Find a hiding place and survive from the peanuts!", false);
+            foreach (Item item in player.GetInventory())
+            {
+                item.Remove();
+            }
+
+            player.GiveItem(ItemType.FLASHLIGHT);
+            player.GiveItem(ItemType.COM15);
+            player.GiveItem(ItemType.CUP);
+
+            player.PersonalClearBroadcasts();
+            player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Find a hiding place and survive from the peanuts! They will spawn in 939's area when the lights go off!", false);
         }
 
         public void SpawnNut(Player player)
         {
+            
+            Survival.nut_health = this.plugin.GetConfigInt("Survival_peanut_health");
+            int nut_health = Survival.nut_health;
+
             player.ChangeRole(Role.SCP_173, true, true, true, true);
             plugin.Info("Spawned " + player.Name + " as SCP-173");
+            player.SetHealth(nut_health);
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(35, "You will be teleported into the game arena when adequate time has passed for other players to hide...", false);
         }
@@ -224,6 +242,7 @@ namespace SurvivalGamemode
             {
                 if (p.Details.id == "Blackout" && p is Blackout.Plugin)
                 {
+                    plugin.Info("Toggling Blackout on.");
                     Blackout.Plugin.ToggleBlackout();
                 }
             }
@@ -231,8 +250,10 @@ namespace SurvivalGamemode
             foreach (Player player in plugin.Server.GetPlayers())
             {
                 if (player.TeamRole.Role == Role.SCP_173)
+                {
                     player.Teleport(spawn);
                     player.PersonalBroadcast(15, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the Class-D before the auto-nuke goes off!", false);
+                }
             }
         }
     }
