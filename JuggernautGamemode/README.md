@@ -9,7 +9,7 @@ Juggernaut Gamemode
  - Players who join before the round has started will be notified that Juggernaut Gamemode is starting.
  - All players will be given a broadcast of their role and their objective.
  - Juggernaut gains 500 HP for every player at round start.
- - If Juggernaut is disarmed, they will be teleported to a random location and take massive damage as a critical hit.
+ - Using the femur breaker and the 106 recontainment prodecure will cause the Juggernaut to be teleported to a random location and take massive damage as a critical hit.
  - Juggernaut spawns with a Logicer, O5 Keycard, and 6 Frag Grenades. Increased 7.62mm Ammo.
 
 ### Config Settings
