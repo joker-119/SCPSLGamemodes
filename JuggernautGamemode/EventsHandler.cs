@@ -357,7 +357,7 @@ namespace JuggernautGamemode
         {
             //Vector position = PluginManager.Manager.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
             Vector position = GetRandomPDExit();
-            int damage = (int)(player.GetHealth() * critical_damage);
+            int damage = (int)(juggernaut_healh * critical_damage);
             player.Damage(damage, DamageType.FRAG);
             player.Teleport(position);
             plugin.pluginManager.Server.Map.Broadcast(10, "The <color=#228B22>Juggernaut</color> take a <b>critical hit <i><color=#ff0000> -" + damage + "</color></i></b> and has been <b>transported</b> across the facility!", false);
@@ -368,7 +368,7 @@ namespace JuggernautGamemode
         {
             //Vector position = PluginManager.Manager.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
             Vector position = GetRandomPDExit();
-            int damage = (int)(player.GetHealth() * critical_damage);
+            int damage = (int)(juggernaut_healh * critical_damage);
             player.Damage(damage, DamageType.FRAG);
             player.Teleport(position);
             plugin.pluginManager.Server.Map.Broadcast(10, "" + activator.Name + " has sacrifieced themselves and made the <color=#228B22>Juggernaut</color> take a <b>critical hit <i><color=#ff0000> -" + damage + "</color></i></b> and has been <b>transported</b> across the facility!", false);
