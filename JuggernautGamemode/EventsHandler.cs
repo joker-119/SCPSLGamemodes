@@ -332,10 +332,11 @@ namespace JuggernautGamemode
         public Vector GetRandomPDExit()
         {
             List<Vector3> list = new List<Vector3>();
-            GameObject[] exits_array = GameObject.FindGameObjectsWithTag("PD_EXIT");
+            GameObject[] exits_array = GameObject.FindGameObjectsWithTag("RoomID");
             foreach (GameObject exit in exits_array)
             {
-                list.Add(exit.transform.position);
+                if (exit.GetComponent<Rid>() != null)
+                    list.Add(exit.transform.position);
             }
 
             Vector3 chosenExit = list[UnityEngine.Random.Range(0, list.Count)];
