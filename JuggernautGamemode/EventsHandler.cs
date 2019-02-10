@@ -441,6 +441,10 @@ namespace JuggernautGamemode
             foreach (Smod2.API.Item item in player.GetInventory())
                 item.Remove();
 
+            //Increased Ammo
+            player.SetAmmo(AmmoType.DROPPED_7, 2000);
+            player.SetAmmo(AmmoType.DROPPED_5, 2000);
+            player.SetAmmo(AmmoType.DROPPED_9, 2000);
 
             // 1 Logicer
             player.GiveItem(ItemType.LOGICER);
