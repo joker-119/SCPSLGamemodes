@@ -394,12 +394,15 @@ namespace JuggernautGamemode
 
         public void EndGamemodeRound()
         {
-            plugin.Info("EndgameRound Function");
-            ResetJuggernaut();
-            Juggernaut.roundstarted = false;
-            plugin.Server.Round.EndRound();
-            //if (blackouts)
-            //    Blackout.Plugin.EnableBlackouts();
+            if (Juggernaut.enabled)
+            {
+                plugin.Info("EndgameRound Function");
+                ResetJuggernaut();
+                Juggernaut.roundstarted = false;
+                plugin.Server.Round.EndRound();
+                //if (blackouts)
+                //    Blackout.Plugin.EnableBlackouts();
+            }
 
         }
 

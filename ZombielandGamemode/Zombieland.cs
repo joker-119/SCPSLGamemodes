@@ -41,8 +41,8 @@ namespace ZombielandGamemode
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "zombie", "zombieland", "zl" }, new ZombielandCommand());
 
-            this.AddConfig(new ConfigSetting("Zombieland_zombie_health", 3000, SettingType.NUMERIC, true, "The amount of health the starting zombies have."));
-            this.AddConfig(new ConfigSetting("Zombieland_child_health", 500, SettingType.NUMERIC, true, "The amoutn of health child zombies should have."));
+            this.AddConfig(new ConfigSetting("zombieland_zombie_health", 3000, SettingType.NUMERIC, true, "The amount of health the starting zombies have."));
+            this.AddConfig(new ConfigSetting("zombieland_child_health", 500, SettingType.NUMERIC, true, "The amoutn of health child zombies should have."));
         }
 
         public static void EnableGamemode()

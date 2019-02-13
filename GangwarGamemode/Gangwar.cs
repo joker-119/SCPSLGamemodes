@@ -41,8 +41,8 @@ namespace GangwarGamemode
         {
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "gangwar", "gang", "gw" }, new GangwarCommand());
-            this.AddConfig(new ConfigSetting("Gangwar_ci_health", 120, SettingType.NUMERIC, true, "The amount of health CI have."));
-            this.AddConfig(new ConfigSetting("Gangwar_ntf_health", 150, SettingType.NUMERIC, true, "The amount of health NTF have."));
+            this.AddConfig(new ConfigSetting("gangwar_ci_health", 120, SettingType.NUMERIC, true, "The amount of health CI have."));
+            this.AddConfig(new ConfigSetting("gangwar_ntf_health", 150, SettingType.NUMERIC, true, "The amount of health NTF have."));
         }
 
         public static void EnableGamemode()
@@ -51,7 +51,7 @@ namespace GangwarGamemode
             if (!roundstarted)
             {
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
-                plugin.pluginManager.Server.Map.Broadcast(25, "<color=#00ffff> Gangwar Gamemode is starting..", false);
+                plugin.pluginManager.Server.Map.Broadcast(25, "<color=#00ffff> Gangwar Gamemode is starting..</color>", false);
             }
         }
 

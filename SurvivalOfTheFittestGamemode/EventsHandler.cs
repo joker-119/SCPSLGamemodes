@@ -9,7 +9,7 @@ using System.Timers;
 
 namespace SurvivalGamemode
 {
-    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd
+    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers
     {
         private readonly Survival plugin;
         public static Timer timer;
@@ -47,11 +47,16 @@ namespace SurvivalGamemode
            }
         }
 
+        public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
+        {
+            Survival.nut_delay = this.plugin.GetConfigInt("surival_peanut_delay");
+            Survival.nut_health = this.plugin.GetConfigInt("survival_peanut_health");
+        }
+
         public void OnRoundStart(RoundStartEvent ev)
         {
             if (Survival.enabled)
             {
-                Survival.nut_delay = this.plugin.GetConfigInt("Surival_peanut_delay");
 
                 foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
                 {
@@ -78,7 +83,7 @@ namespace SurvivalGamemode
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Survival of the Fittest Gamemode Started!");
 
-                string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173" };
+                string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173", "106_BOTTOM", "106_PRIMARY", "106_SECONDARY", "HCZ_ARMORY", "079_FIRST", "079_SECOND", "049_ARMORY", "096"};
                 
                 foreach (string d in dlist)
                 {
@@ -93,7 +98,7 @@ namespace SurvivalGamemode
                     }
                 }
 
-                string[] olist = new string[] { "HID", "106_BOTTOM", "106_PRIMARY", "106_SECONDARY", "HCZ_ARMORY", "079_FIRST", "079_SECOND", "049_ARMORY", "096" };
+                string[] olist = new string[] { "HID" };
 
                 foreach (string o in olist)
                 {
@@ -185,20 +190,23 @@ namespace SurvivalGamemode
 
         public void EndGamemodeRound()
         {
-            plugin.Info("EndgameRound Function");
-            Survival.roundstarted = false;
-            plugin.Server.Round.EndRound();
-            
-            foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
+            if (Survival.enabled)
             {
-                if (p.Details.id == "Blackout" && p is Blackout.Plugin)
+                plugin.Info("EndgameRound Function");
+                Survival.roundstarted = false;
+                plugin.Server.Round.EndRound();
+
+                foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
                 {
-                    plugin.Info("Toggling Blackout off.");
-                    Blackout.Plugin.ToggleBlackout();
-                    if (blackouts)
+                    if (p.Details.id == "Blackout" && p is Blackout.Plugin)
                     {
-                        plugin.Info("Enabling timed Blackouts.");
-                        Blackout.Plugin.EnableBlackouts();
+                        plugin.Info("Toggling Blackout off.");
+                        Blackout.Plugin.ToggleBlackout();
+                        if (blackouts)
+                        {
+                            plugin.Info("Enabling timed Blackouts.");
+                            Blackout.Plugin.EnableBlackouts();
+                        }
                     }
                 }
             }
@@ -216,7 +224,6 @@ namespace SurvivalGamemode
             }
 
             player.GiveItem(ItemType.FLASHLIGHT);
-            player.GiveItem(ItemType.COM15);
             player.GiveItem(ItemType.CUP);
 
             player.PersonalClearBroadcasts();
@@ -225,11 +232,9 @@ namespace SurvivalGamemode
 
         public void SpawnNut(Player player)
         {
-            
-            Survival.nut_health = this.plugin.GetConfigInt("Survival_peanut_health");
             int nut_health = Survival.nut_health;
 
-            player.ChangeRole(Role.SCP_173, true, true, true, true);
+            player.ChangeRole(Role.SCP_173, false, true, true, true);
             plugin.Info("Spawned " + player.Name + " as SCP-173");
             player.SetHealth(nut_health);
             player.PersonalClearBroadcasts();

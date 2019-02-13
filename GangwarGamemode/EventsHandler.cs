@@ -6,7 +6,7 @@ using Smod2.Events;
 
 namespace GangwarGamemode
 {
-    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerPlayerJoin
+    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerPlayerJoin, IEventHandlerWaitingForPlayers
     {
         private readonly Gangwar plugin;
 
@@ -43,12 +43,16 @@ namespace GangwarGamemode
             }
         }
 
+        public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
+        {
+            Gangwar.ci_health = this.plugin.GetConfigInt("gangwar_ci_health");
+            Gangwar.ntf_health = this.plugin.GetConfigInt("gangwar_ntf_health");
+        }
+
         public void OnRoundStart(RoundStartEvent ev)
         {
             if (Gangwar.enabled)
             {
-                Gangwar.ci_health = this.plugin.GetConfigInt("Gangwar_ci_health");
-                Gangwar.ntf_health = this.plugin.GetConfigInt("Gangwar_ntf_health");
 
                 PluginManager.Manager.Server.Map.DetonateWarhead();
 
@@ -145,9 +149,12 @@ namespace GangwarGamemode
 
         public void EndGamemodeRound()
         {
-            plugin.Info("EndgameRound Function.");
-            Gangwar.roundstarted = false;
-            plugin.Server.Round.EndRound();
+            if (Gangwar.enabled)
+            {
+                plugin.Info("EndgameRound Function.");
+                Gangwar.roundstarted = false;
+                plugin.Server.Round.EndRound();
+            }
         }
 
         public void SpawnChaos(Player player)

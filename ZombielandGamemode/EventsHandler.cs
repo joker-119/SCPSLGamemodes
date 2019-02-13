@@ -6,7 +6,7 @@ using Smod2.Events;
 
 namespace ZombielandGamemode
 {
-    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerHurt, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerSetRole
+    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerHurt, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerSetRole, IEventHandlerWaitingForPlayers
     {
         private readonly Zombieland plugin;
 
@@ -35,10 +35,6 @@ namespace ZombielandGamemode
                {
                    SpawnZombie(ev.Player);
                }
-               else if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role == Role.SCP_049_2)
-               {
-                   SpawnChild(ev.Player);
-               }
                else if (ev.TeamRole.Team != Team.SPECTATOR)
                {
                     ev.Player.PersonalBroadcast(25, "You are a human! You must escape the zombie outbreak! Any human deaths from any cause will result in more zombies! When killed, zombies respawn as Chaos! Good Luck!", false);
@@ -50,17 +46,20 @@ namespace ZombielandGamemode
             }
         }
 
+        public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
+        {
+            Zombieland.zombie_health = this.plugin.GetConfigInt("zombieland_zombie_health");
+            Zombieland.child_health = this.plugin.GetConfigInt("zombieland_child_health");
+        }
+
         public void OnRoundStart(RoundStartEvent ev)
         {
-            Zombieland.zombie_health = this.plugin.GetConfigInt("Zombieland_zombie_health");
-            Zombieland.child_health = this.plugin.GetConfigInt("Zombieland_child_health");
-
 
             if (Zombieland.enabled)
             {
                 Zombieland.roundstarted = true;
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
-                plugin.Info("zombieland Gamemode Started!");
+                plugin.Info("Zombieland Gamemode Started!");
             }
         }
 
@@ -132,9 +131,12 @@ namespace ZombielandGamemode
 
         public void EndGamemodeRound()
         {
-            plugin.Info("EndgameRound Function");
-            Zombieland.roundstarted = false;
-            plugin.Server.Round.EndRound();
+            if (Zombieland.enabled)
+            {
+                plugin.Info("EndgameRound Function");
+                Zombieland.roundstarted = false;
+                plugin.Server.Round.EndRound();
+            }
 
         }
 

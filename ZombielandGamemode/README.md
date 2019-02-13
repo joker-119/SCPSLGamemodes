@@ -11,7 +11,8 @@ Normal round except all SCP's spawn as Zombies with 3k hp
  - Non SCP players that die will become a child zombie with less health.
 
 ### Config Settings
-  (To Be Added)
+zombieland_zombie_health | ~~ | ~~ | Int - The amount of health the starting 'Alpha' zombies should spawn with. [Default: 3000]
+zombieland_child_health | ~~ | ~~ | Int - The amount of health new 'child' zombies should have when they transform. [Default: 500]
 
 ### Commands
   Command |  |  | Description
