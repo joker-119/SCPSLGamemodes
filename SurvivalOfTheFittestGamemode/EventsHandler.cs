@@ -131,8 +131,10 @@ namespace SurvivalGamemode
         public void OnRoundEnd(RoundEndEvent ev)
         {
             if (Survival.enabled)
+            {
                 plugin.Info("Round Ended!");
                 EndGamemodeRound();
+            }
         }
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
