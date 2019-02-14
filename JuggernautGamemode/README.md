@@ -13,6 +13,8 @@ Juggernaut Gamemode
  - Juggernaut spawns with a Logicer, O5 Keycard, and 6 Frag Grenades. Increased 7.62mm Ammo.
 
 ### Config Settings
+Config option | | Config Type | Description
+:---: | :---: | :---: | :------
 juggernaut_base_health | ~~ | ~~ | Int - The amount of starting health the Juggernaut should spawn with. [Default: 500]
 juggernaut_increase_amount | ~~ | ~~ | Int - The amount of additional health the Juggernaut gets per player on the server. [Default: 500]
 juggernaut_jugg_grenades | ~~ | ~~ | Int - The amount of grenades (0-6) the Juggernaut should spawn with. [Default: 6]
