@@ -8,5 +8,5 @@ Gamemodes for SCP:SL. Requires Smod
  - Gangwar [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/GangwarGamemode#gangwar)]
  - What Lurks in the Dark [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/LurkingGamemode#lurking)] *
 
- * - Indicates the [[Blackout Plugin](https://github.com/galaxy119/Blackout/releases)] is required to use this gamemode.
+ `*` Indicates the [[Blackout Plugin](https://github.com/galaxy119/Blackout/releases)] is required to use this gamemode.
  
