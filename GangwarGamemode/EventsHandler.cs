@@ -93,8 +93,8 @@ namespace GangwarGamemode
                 {
                     if(player.TeamRole.Team == Smod2.API.Team.CHAOS_INSURGENCY)
                     {
-                        ciAlive = true; continue;
                         ci_count = ci_count + 1;
+                        ciAlive = true; continue;
                     }
                     else if (player.TeamRole.Team == Smod2.API.Team.NINETAILFOX)
                     {

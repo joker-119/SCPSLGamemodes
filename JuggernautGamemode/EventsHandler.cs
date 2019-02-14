@@ -26,6 +26,7 @@ namespace JuggernautGamemode
         private float critical_damage;
         public static Timer timer;
         public static Player jugg_killer = null;
+        public static int mtf_count = 0;
 
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
@@ -220,7 +221,6 @@ namespace JuggernautGamemode
             {
                 bool juggernautAlive = false;
                 bool mtfAllive = false;
-                int mtf_count = 0;
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
@@ -238,7 +238,6 @@ namespace JuggernautGamemode
                     if (juggernaut != null && juggernautAlive && mtfAllive)
                     {
                         ev.Status = ROUND_END_STATUS.ON_GOING;
-                        plugin.Server.Map.Broadcast(15, "There are " + mtf_count + " NTF remaining.", false);
                     }
                     else if (juggernaut != null && juggernautAlive && mtfAllive == false)
                     {
@@ -262,6 +261,11 @@ namespace JuggernautGamemode
                     plugin.pluginManager.Server.Map.Broadcast(20, "<color=#228B22>Juggernaut " + juggernaut.Name + "</color> has been killed by" + ev.Killer.Name + "!", false);
                     ResetJuggernaut(ev.Player);
                     jugg_killer = ev.Killer;
+                }
+                else
+                {
+                    plugin.Server.Map.ClearBroadcasts();
+                    plugin.Server.Map.Broadcast(15, "There are " + mtf_count + " NTF remaining.", false);
                 }   
             }
         }
