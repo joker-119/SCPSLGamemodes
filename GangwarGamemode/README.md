@@ -10,7 +10,7 @@ half the server are NTF and the other half are Chaos. Their only goal: Kill each
 
 ### Config Settings
 Config option | Config Type | Default Value | Description
-:---: | :---: | :------
+:---: | :---: | :---: | :------
 gangwar_ci_health | Int | 120 | The amount of health Chaos spawns with.
 gangwar_ntf_health | Int | 150 | The amount of health NTF spawns with.
 

@@ -14,7 +14,7 @@ Juggernaut Gamemode
 
 ### Config Settings
 Config option | Config Type | Default Value | Description
-:---: | :---: | :------
+:---: | :---: | :---: | :------
 juggernaut_base_health | Int | 500 | The amount of starting health the Juggernaut should spawn with.
 juggernaut_increase_amount |Int | 500 | The amount of additional health the Juggernaut gets per player on the server.
 juggernaut_jugg_grenades | Int | 6 | The amount of grenades (0-6) the Juggernaut should spawn with.

@@ -1,23 +1,25 @@
 Zombieland
 ======
-made by Joker119
+made by Joker 119
 ## Description
-Normal round except all SCP's spawn as Zombies with 3k hp
+Everyone spawns normally except all the SCP's spawn as Alpha Zombies with large health pools. 
+Any human deaths will result in them turning into a zombie, zombies that die will respawn normally as Chaos Insurgency.
+
+The round ends when all Zombies or Humans are eliminated.
 
 ### Features
- - Players who join before the round has started will be notified that Zombieland Gamemode is starting.
- - All players will be given a broadcast of their role and their objective.
- - Patient Zero zombies will spawn at the beginning of the round with 3000 HP.
- - Non SCP players that die will become a child zombie with less health.
+ - There is a text broadcast indicating how many of each role are alive every few minutes.
 
 ### Config Settings
-zombieland_zombie_health | ~~ | ~~ | Int - The amount of health the starting 'Alpha' zombies should spawn with. [Default: 3000]
-zombieland_child_health | ~~ | ~~ | Int - The amount of health new 'child' zombies should have when they transform. [Default: 500]
+Config option | Config Type | Default Value | Description
+:---: | :---: | :---: | :------
+zombieland_zombie_health | Int | 3000 | The amount of health Alpha Zombies have.
+ zombieland_child_health | Int | 500 | The amount of health child zombies have.
 
 ### Commands
   Command |  |  | Description
 :---: | :---: | :---: | :------
-**Aliases** | **Zombieland** | **Zombie** | **ZL**
-Zombieland Enable | ~~ | ~~ | Enable Zombieland for the next round
-Zombieland Disable | ~~ | ~~ | Disable Zombieland this and following rounds
+**Aliases** | **zombieland** | **zombie**
+zombie Enable | ~~ | ~~ | Enable Zombieland for the next round
+zombie Disable | ~~ | ~~ | Disable Zombieland this and following rounds
 

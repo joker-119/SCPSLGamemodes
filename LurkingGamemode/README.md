@@ -11,7 +11,7 @@ The Scientists must escape and kill the SCP's, the Guards must protect the Scien
 
 ### Config Settings
 Config option | Config Type | Default Value | Description
-:---: | :---: | :------
+:---: | :---: | :---: | :------
 lurking_106_num | Int | 2 | The number of SCP-106 that should spawn.
 lurking_939_num | Int | 2 | The number of SCP-939 that should spawn.
 lurking_106_health | Int | 750 | The amount of health SCP-106 has.
