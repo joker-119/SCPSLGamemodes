@@ -70,14 +70,13 @@ namespace SurvivalGamemode
                         }
                     }
                 }
-                int nut_delay = Survival.nut_delay;
                 timer = new System.Timers.Timer();
-                timer.Interval = 120000;
+                timer.Interval = Survival.nut_delay * 1000;
                 timer.Elapsed += OnTimedEvent;
                 timer.AutoReset = false;
                 timer.Enabled = true;
                 plugin.Info("Timer Initialized..");
-                plugin.Info("Timer set to " + nut_delay + " ms.");
+                plugin.Info("Timer set to " + Survival.nut_delay + " ms.");
 
                 Survival.roundstarted = true;
                 plugin.pluginManager.Server.Map.ClearBroadcasts();

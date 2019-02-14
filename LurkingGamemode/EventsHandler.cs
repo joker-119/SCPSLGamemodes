@@ -9,7 +9,7 @@ using System.Timers;
 
 namespace LurkingGamemode
 {
-    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers
+    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers
     {
         public readonly Lurking plugin;
         public static bool blackouts;
@@ -27,24 +27,6 @@ namespace LurkingGamemode
                     server.Map.Broadcast(25, "<color=2D2B2B> Lurking in the dark</color> gamemode starting..", false);
                 }
             }
-        }
-
-        public void OnSetRole(PlayerSetRoleEvent ev)
-        {
-            // if (Lurking.enabled)
-            // {
-            //     if (ev.TeamRole.Team == Team.SCP)
-            //     {
-            //         for (int i = 0; i < Lurking.larry_count; i++)
-            //         {
-            //             SpawnLarry(ev.Player);
-            //         }
-            //         for (int i = 0; i < Lurking.doggo_count; i++)
-            //         {
-            //             SpawnDoggo(ev.Player);
-            //         }
-            //     }
-            // }
         }
 
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
@@ -89,6 +71,16 @@ namespace LurkingGamemode
                         {
                             SpawnDoggo(player);
                         }
+                    }
+                    else if (player.TeamRole.Team == Team.NINETAILFOX || player.TeamRole.Team == Team.CHAOS_INSURGENCY)
+                    {
+                        player.ChangeRole(Role.FACILITY_GUARD, true, true, true, true);
+                        player.PersonalBroadcast(25, "You are a <color=#2D2B2B> Facility Guard</color>, your job is to protect the scientists and get them outside safely.", false);
+                    }
+                    else if (player.TeamRole.Team == Team.CLASSD)
+                    {
+                        player.ChangeRole(Role.SCIENTIST, true, true, true, true);
+                        player.PersonalBroadcast(25, "You are a <color=#C3DA30> Scientist</color>, your job is to escape the facility and terminate the SCP's.", false);
                     }
                 }
             }
@@ -146,6 +138,7 @@ namespace LurkingGamemode
             if (Lurking.enabled)
             {
                 ev.SpawnChaos = false;
+                ev.PlayerList = new List<Player>();
             }
         }
 
@@ -170,11 +163,13 @@ namespace LurkingGamemode
         {
             player.ChangeRole(Role.SCP_106, false, true, false, false);
             player.SetHealth(Lurking.larry_health);
+            player.PersonalBroadcast(25, "You are <color=#2D2B2B> what lurks in the dark</color>, your job is to kill the Scientists before they escape.", false);
         }
         public void SpawnDoggo(Player player)
         {
             player.ChangeRole(Role.SCP_939_53, false, true, false, false);
             player.SetHealth(Lurking.doggo_health);
+            player.PersonalBroadcast(25, "You are <color=#2D2B2B> what lurks in the dark</color>, your job is to kill the Scientists before they escape.", false);
         }
     }
 }
