@@ -49,7 +49,7 @@ namespace SurvivalGamemode
 
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
-            Survival.nut_delay = this.plugin.GetConfigInt("surival_peanut_delay");
+            Survival.nut_delay = this.plugin.GetConfigInt("survival_peanut_delay");
             Survival.nut_health = this.plugin.GetConfigInt("survival_peanut_health");
         }
 

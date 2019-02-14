@@ -24,8 +24,9 @@ namespace LurkingGamemode
                 {
                     Server server = plugin.pluginManager.Server;
                     server.Map.ClearBroadcasts();
-                    server.Map.Broadcast(25, "<color=2D2B2B> Lurking in the dark</color> gamemode starting..", false);
+                    server.Map.Broadcast(25, "<color=#2D2B2B> Lurking in the dark</color> gamemode starting..", false);
                 }
+                blackouts = Blackout.Plugin.enabled;
             }
         }
 
@@ -75,11 +76,13 @@ namespace LurkingGamemode
                     else if (player.TeamRole.Team == Team.NINETAILFOX || player.TeamRole.Team == Team.CHAOS_INSURGENCY)
                     {
                         player.ChangeRole(Role.FACILITY_GUARD, true, true, true, true);
+                        player.PersonalClearBroadcasts();
                         player.PersonalBroadcast(25, "You are a <color=#2D2B2B> Facility Guard</color>, your job is to protect the scientists and get them outside safely.", false);
                     }
                     else if (player.TeamRole.Team == Team.CLASSD)
                     {
                         player.ChangeRole(Role.SCIENTIST, true, true, true, true);
+                        player.PersonalClearBroadcasts();
                         player.PersonalBroadcast(25, "You are a <color=#C3DA30> Scientist</color>, your job is to escape the facility and terminate the SCP's.", false);
                     }
                 }
@@ -163,13 +166,18 @@ namespace LurkingGamemode
         {
             player.ChangeRole(Role.SCP_106, false, true, false, false);
             player.SetHealth(Lurking.larry_health);
+            player.PersonalClearBroadcasts();
             player.PersonalBroadcast(25, "You are <color=#2D2B2B> what lurks in the dark</color>, your job is to kill the Scientists before they escape.", false);
         }
         public void SpawnDoggo(Player player)
         {
-            player.ChangeRole(Role.SCP_939_53, false, true, false, false);
-            player.SetHealth(Lurking.doggo_health);
-            player.PersonalBroadcast(25, "You are <color=#2D2B2B> what lurks in the dark</color>, your job is to kill the Scientists before they escape.", false);
+            if (player.TeamRole.Role != Role.SCP_106)
+            {
+                player.ChangeRole(Role.SCP_939_53, false, true, false, false);
+                player.SetHealth(Lurking.doggo_health);
+                player.PersonalClearBroadcasts();
+                player.PersonalBroadcast(25, "You are <color=#2D2B2B> what lurks in the dark</color>, your job is to kill the Scientists before they escape.", false);
+            }
         }
     }
 }
