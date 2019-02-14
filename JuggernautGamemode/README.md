@@ -13,14 +13,15 @@ Juggernaut Gamemode
  - Juggernaut spawns with a Logicer, O5 Keycard, and 6 Frag Grenades. Increased 7.62mm Ammo.
 
 ### Config Settings
-Config option | | Config Type | Description
-:---: | :---: | :---: | :------
-juggernaut_base_health | ~~ | ~~ | Int - The amount of starting health the Juggernaut should spawn with. [Default: 500]
-juggernaut_increase_amount | ~~ | ~~ | Int - The amount of additional health the Juggernaut gets per player on the server. [Default: 500]
-juggernaut_jugg_grenades | ~~ | ~~ | Int - The amount of grenades (0-6) the Juggernaut should spawn with. [Default: 6]
-juggernaut_ntf_disarmer | ~~ | ~~ | Bool - Wether or not the NTF should spawn with Disarmers in place of their second Frag Grenade. [Default: false]
-juggernaut_ntf_health | ~~ | ~~ | Int - The amount of health NTF should spawn with. [Default: 150]
-juggernaut_critical_damage | ~~ | ~~ | Float - The % of the Juggernaut's current health the Femur Breaker should deal in damage to the Jugg. (0-1) [Default: 0.15]
+Config option | Config Type | Default Value | Description
+:---: | :---: | :------
+juggernaut_base_health | Int | 500 | The amount of starting health the Juggernaut should spawn with.
+juggernaut_increase_amount |Int | 500 | The amount of additional health the Juggernaut gets per player on the server.
+juggernaut_jugg_grenades | Int | 6 | The amount of grenades (0-6) the Juggernaut should spawn with.
+juggernaut_ntf_disarmer | Bool | false | Wether or not the NTF should spawn with Disarmers in place of their second Frag Grenade.
+juggernaut_ntf_health | Int | 150 | The amount of health NTF should spawn with.
+juggernaut_critical_damage | Float | 0.15 | The % of the Juggernaut's current health the Femur Breaker should deal in damage to the Jugg. (0-1)
+juggernaut_jugg_infinite_nades | Bool | true | If the Juggernaut should have infinite grenades.
 
 ### Commands
   Command |  |  | Description

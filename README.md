@@ -3,5 +3,10 @@ Gamemodes for SCP:SL. Requires Smod
 
 ## Gamemodes
  - Juggernaut [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/JuggernautGamemode#juggernaut-gamemode)]
- - Survival Of The Fittest [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/SurvivalOfTheFittestGamemode#survival-of-the-fittest-sotf)]
-- Zombieland [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/ZombielandGamemode#zombieland)]
+ - Survival Of The Fittest [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/SurvivalOfTheFittestGamemode#survival-of-the-fittest-sotf)] *
+ - Zombieland [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/ZombielandGamemode#zombieland)]
+ - Gangwar [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/GangwarGamemode#gangwar)]
+ - What Lurks in the Dark [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/LurkingGamemode#lurking)] *
+
+ * - Indicates the [[Blackout Plugin](https://github.com/galaxy119/Blackout/releases)] is required to use this gamemode.
+ 

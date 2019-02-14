@@ -12,8 +12,10 @@ Friendly Fire is on. Auto Nuke is enabled. Ent Zone and both LCZ gates are locke
  - Integration with Blackout plugin
 
 ### Config Settings
-survival_peanut_delay | ~~ | ~~ | Int - The amount of time (in seconds) should pass before the blackout is enabled and peanuts are released. [Default: 120]
-survival_peanut_health | ~~ | ~~ | Int - The amount of health Peanuts should have when they spawn. The lower the amount, the faster they move. [Default: 173]
+Config option | Config Type | Default Value | Description
+:---: | :---: | :------
+survival_peanut_delay | Int | 120 | The amount of time (in seconds) should pass before the blackout is enabled and peanuts are released. [Default: 120]
+survival_peanut_health | Int | 173 | The amount of health Peanuts should have when they spawn. The lower the amount, the faster they move. [Default: 173]
 
 ### Commands
   Command |  |  | Description
