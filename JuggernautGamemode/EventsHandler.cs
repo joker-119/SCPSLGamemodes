@@ -10,7 +10,7 @@ using UnityEngine;
 namespace JuggernautGamemode
 {
     internal class EventsHandler : IEventHandlerReload, IEventHandlerWaitingForPlayers, IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerSetRoleMaxHP, IEventHandlerSetRole,
-        IEventHandlerLure, IEventHandlerContain106
+        IEventHandlerLure, IEventHandlerContain106, IEventHandlerThrowGrenade
     {
         private readonly Juggernaut plugin;
 
@@ -25,6 +25,7 @@ namespace JuggernautGamemode
         public static Player selectedJuggernaut = null;
         private float critical_damage;
         public static Timer timer;
+        public static Player jugg_killer = null;
 
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
@@ -110,6 +111,20 @@ namespace JuggernautGamemode
             }
         }
 
+        public void OnThrowGrenade(PlayerThrowGrenadeEvent ev)
+        {
+            if (Juggernaut.enabled)
+            {
+                if (ev.Player == juggernaut)
+                {
+                    if (Juggernaut.jugg_infinite_nades)
+                    {
+                        ev.Player.GiveItem(ItemType.FRAG_GRENADE);
+                    }
+                }
+            }
+        }
+
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
             Juggernaut.Jugg_base = this.plugin.GetConfigInt("juggernaut_base_health");
@@ -118,6 +133,7 @@ namespace JuggernautGamemode
             Juggernaut.Jugg_grenade = this.plugin.GetConfigInt("juggernaut_jugg_grenades");
             Juggernaut.NTF_Health = this.plugin.GetConfigInt("juggernaut_ntf_health");
             critical_damage = plugin.GetConfigFloat("juggernaut_critical_damage");
+            Juggernaut.jugg_infinite_nades = this.plugin.GetConfigBool("juggernaut_infinite_jugg_nades");
 
             //foreach (Plugin p in PluginManager.Manager.EnabledPlugins)
             //{
@@ -143,6 +159,11 @@ namespace JuggernautGamemode
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Juggernaut Gamemode Started!");
                 List<Player> players = ev.Server.GetPlayers();
+                
+                if (jugg_killer != null)
+                {
+                    selectedJuggernaut = jugg_killer;
+                }
 
                 if (selectedJuggernaut == null)
                 {
@@ -199,6 +220,7 @@ namespace JuggernautGamemode
             {
                 bool juggernautAlive = false;
                 bool mtfAllive = false;
+                int mtf_count = 0;
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
@@ -209,12 +231,14 @@ namespace JuggernautGamemode
 
                     else if (player.TeamRole.Team == Smod2.API.Team.NINETAILFOX)
                         mtfAllive = true;
+                        mtf_count = mtf_count + 1;
                 }
                 if (ev.Server.GetPlayers().Count > 1)
                 {
                     if (juggernaut != null && juggernautAlive && mtfAllive)
                     {
                         ev.Status = ROUND_END_STATUS.ON_GOING;
+                        plugin.Server.Map.Broadcast(15, "There are " + mtf_count + " NTF remaining.", false);
                     }
                     else if (juggernaut != null && juggernautAlive && mtfAllive == false)
                     {
@@ -235,8 +259,9 @@ namespace JuggernautGamemode
                 if (IsJuggernaut(ev.Player))
                 {
                     plugin.pluginManager.Server.Map.ClearBroadcasts();
-                    plugin.pluginManager.Server.Map.Broadcast(20, "<color=#228B22>Juggernaut " + juggernaut.Name + "</color> has died!", false);
+                    plugin.pluginManager.Server.Map.Broadcast(20, "<color=#228B22>Juggernaut " + juggernaut.Name + "</color> has been killed by" + ev.Killer.Name + "!", false);
                     ResetJuggernaut(ev.Player);
+                    jugg_killer = ev.Killer;
                 }   
             }
         }

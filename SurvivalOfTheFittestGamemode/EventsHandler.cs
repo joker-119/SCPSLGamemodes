@@ -9,11 +9,13 @@ using System.Timers;
 
 namespace SurvivalGamemode
 {
-    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers
+    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie
     {
         private readonly Survival plugin;
         public static Timer timer;
         public static bool blackouts;
+        public static int dboi_count = 0;
+        public static Player winner = null;
 
         public EventsHandler(Survival plugin) => this.plugin = plugin;
         public void OnPlayerJoin(PlayerJoinEvent ev)
@@ -39,6 +41,7 @@ namespace SurvivalGamemode
                else if (ev.TeamRole.Team != Team.SPECTATOR && ev.TeamRole.Team != Team.SCP)
                {
                     SpawnDboi(ev.Player);
+                    dboi_count = dboi_count + 1;
                }
                else if (ev.TeamRole.Team == Team.SPECTATOR)
                {
@@ -82,7 +85,7 @@ namespace SurvivalGamemode
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Survival of the Fittest Gamemode Started!");
 
-                string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173", "106_BOTTOM", "106_PRIMARY", "106_SECONDARY", "HCZ_ARMORY", "079_FIRST", "079_SECOND", "049_ARMORY", "096"};
+                string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173", "HCZ_ARMORY", "079_FIRST", "079_SECOND", "049_ARMORY", "096"};
                 
                 foreach (string d in dlist)
                 {
@@ -97,7 +100,7 @@ namespace SurvivalGamemode
                     }
                 }
 
-                string[] olist = new string[] { "HID" };
+                string[] olist = new string[] { "HID", "106_BOTTOM", "106_PRIMARY", "106_SECONDARY" };
 
                 foreach (string o in olist)
                 {
@@ -115,11 +118,12 @@ namespace SurvivalGamemode
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
-                    if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR)
+                    if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR && player != winner)
                     {
                         SpawnDboi(player);
+                        dboi_count = dboi_count + 1;
                     }
-                    else if (player.TeamRole.Team == Team.SCP)
+                    else if (player.TeamRole.Team == Team.SCP || player == winner)
                     {
                         SpawnNut(player);
                     }
@@ -133,6 +137,17 @@ namespace SurvivalGamemode
             {
                 plugin.Info("Round Ended!");
                 EndGamemodeRound();
+            }
+        }
+
+        public void OnPlayerDie(PlayerDeathEvent ev)
+        {
+            if (ev.Player.TeamRole.Team == Team.CLASSD)
+            {
+                dboi_count = dboi_count - 1;
+                plugin.Server.Map.ClearBroadcasts();
+                plugin.Server.Map.Broadcast(5, "There are now " + dboi_count + " Class-D remaining.", false);
+                ev.Player.PersonalBroadcast(25, "You are dead! But don't worry, now you get to relax and watch your friends die!", false);
             }
         }
 
@@ -167,6 +182,15 @@ namespace SurvivalGamemode
                     else if (peanutAlive && humanAlive && humanCount == 1)
                     {
                         ev.Status = ROUND_END_STATUS.OTHER_VICTORY; EndGamemodeRound();
+                        foreach (Player player in ev.Server.GetPlayers())
+                        {
+                            if (player.TeamRole.Team == Team.CLASSD)
+                            {
+                                ev.Server.Map.ClearBroadcasts();
+                                ev.Server.Map.Broadcast(10, player.Name + " Winner, winner, chicken dinner!", false);
+                                winner = player;
+                            }
+                        }
                     }
                     else if (peanutAlive && humanAlive == false)
                     {

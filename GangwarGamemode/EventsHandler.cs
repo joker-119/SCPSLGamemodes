@@ -53,9 +53,6 @@ namespace GangwarGamemode
         {
             if (Gangwar.enabled)
             {
-
-                PluginManager.Manager.Server.Map.DetonateWarhead();
-
                 Gangwar.roundstarted = true;
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Gangwar Gamemode started!");
@@ -89,16 +86,20 @@ namespace GangwarGamemode
             {
                 bool ciAlive = false;
                 bool ntfAlive = false;
+                int ci_count = 0;
+                int ntf_count = 0;
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
                     if(player.TeamRole.Team == Smod2.API.Team.CHAOS_INSURGENCY)
                     {
                         ciAlive = true; continue;
+                        ci_count = ci_count + 1;
                     }
                     else if (player.TeamRole.Team == Smod2.API.Team.NINETAILFOX)
                     {
                         ntfAlive = true;
+                        ntf_count = ntf_count + 1;
                     }
                 }
                 if (ev.Server.GetPlayers().Count > 1)
@@ -106,6 +107,8 @@ namespace GangwarGamemode
                     if (ciAlive && ntfAlive)
                     {
                         ev.Status = ROUND_END_STATUS.ON_GOING;
+                        ev.Server.Map.ClearBroadcasts();
+                        ev.Server.Map.Broadcast(10, "There are " + ci_count + " Chaos alive, and " + ntf_count + " NTF alive.", false);
                     }
                     else if (ciAlive && ntfAlive == false)
                     {

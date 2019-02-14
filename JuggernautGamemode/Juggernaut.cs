@@ -24,6 +24,7 @@ namespace JuggernautGamemode
         public static int Jugg_grenade;
         public static int NTF_ammo;
         public static int NTF_Health;
+        public static bool jugg_infinite_nades;
 
 
         public static bool
@@ -55,6 +56,7 @@ namespace JuggernautGamemode
             this.AddConfig(new ConfigSetting("juggernaut_ntf_ammo", 272, SettingType.NUMERIC, true, "The amount of ammo NTF Commanders should spawn with."));
             this.AddConfig(new ConfigSetting("juggernaut_ntf_health", 150, SettingType.NUMERIC, true, "The amount of health the first wave of NTF should have."));
             this.AddConfig(new ConfigSetting("juggernaut_critical_damage", (float)0.15, SettingType.FLOAT, true, "The amount of critical damage the Juggernaut should recieve."));
+            this.AddConfig(new ConfigSetting("juggernaut_infinit_jugg_nades", false, SettingType.BOOL, true, "If the Juggernaut should have infinite grenades."));
         }
 
         public static void EnableGamemode()

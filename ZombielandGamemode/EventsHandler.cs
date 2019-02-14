@@ -2,6 +2,7 @@ using Smod2.API;
 using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using Smod2.Events;
+using System.Timers;
 
 
 namespace ZombielandGamemode
@@ -14,6 +15,10 @@ namespace ZombielandGamemode
 
         private int zombie_health;
         private int child_health;
+        public int alpha_count = 0;
+        public int child_count = 0;
+        public int human_count = 0;
+        public static Timer timer;
 
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
@@ -34,6 +39,7 @@ namespace ZombielandGamemode
                if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role != Role.SCP_049_2)
                {
                    SpawnZombie(ev.Player);
+                   alpha_count = alpha_count + 1;
                }
                else if (ev.TeamRole.Team != Team.SPECTATOR)
                {
@@ -60,7 +66,32 @@ namespace ZombielandGamemode
                 Zombieland.roundstarted = true;
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Zombieland Gamemode Started!");
+
+                foreach (Player player in ev.Server.GetPlayers())
+                {
+                    if (player.TeamRole.Team == Team.SCP && player.TeamRole.Role != Role.SCP_049_2)
+                    {
+                        SpawnZombie(player);
+                        alpha_count = alpha_count + 1;
+                    }
+                    else if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR)
+                    {
+                        human_count = human_count +1;
+                    }
+                }
+
+                timer = new Timer();
+                timer.Interval = 90000;
+                timer.AutoReset = true;
+                timer.Enabled = true;
+                timer.Elapsed += OnTimedEvent;
             }
+        }
+
+        public void OnTimedEvent(System.Object source, ElapsedEventArgs e)
+        {
+            plugin.Server.Map.ClearBroadcasts();
+            plugin.Server.Map.Broadcast(10, "There are currently " + alpha_count + " Alpha zombies, " + child_count + " child zombies and " + human_count + " humans alive.", false);
         }
 
         public void OnRoundEnd(RoundEndEvent ev)
@@ -109,7 +140,7 @@ namespace ZombielandGamemode
         {
             if (Zombieland.enabled && ev.Player.TeamRole.Team != Team.SCP && ev.Damage > ev.Player.GetHealth())
             {
-                if (ev.Attacker == ev.Player && ev.DamageType == DamageType.TESLA)
+                if (ev.Attacker == ev.Player || ev.DamageType == DamageType.TESLA)
                 {
                     ev.Player.ChangeRole(Role.SPECTATOR);
                 }
@@ -117,6 +148,7 @@ namespace ZombielandGamemode
                 {
                     ev.Damage = 0;
                     SpawnChild(ev.Player);
+                    child_count = child_count + 1;
                 }
             }   
         }
@@ -126,6 +158,14 @@ namespace ZombielandGamemode
             if (Zombieland.enabled)
             {
                 ev.SpawnChaos = true;
+                foreach (Player player in plugin.Server.GetPlayers())
+                {
+                    if (player.TeamRole.Team != Team.SCP)
+                    {
+                        human_count = 0;
+                        human_count = human_count +1;
+                    }
+                }
             }
         }
 
