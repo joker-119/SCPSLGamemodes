@@ -121,7 +121,7 @@ namespace SurvivalGamemode
                     if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR && player != winner)
                     {
                         SpawnDboi(player);
-                        dboi_count = dboi_count + 1;
+                        dboi_count = dboi_count++;
                     }
                     else if (player.TeamRole.Team == Team.SCP || player == winner)
                     {
@@ -142,12 +142,15 @@ namespace SurvivalGamemode
 
         public void OnPlayerDie(PlayerDeathEvent ev)
         {
-            if (ev.Player.TeamRole.Team == Team.CLASSD)
+            if (Survival.enabled)
             {
-                dboi_count = dboi_count - 1;
-                plugin.Server.Map.ClearBroadcasts();
-                plugin.Server.Map.Broadcast(5, "There are now " + dboi_count + " Class-D remaining.", false);
-                ev.Player.PersonalBroadcast(25, "You are dead! But don't worry, now you get to relax and watch your friends die!", false);
+                if (ev.Player.TeamRole.Role == Role.CLASSD)
+                {
+                    dboi_count = dboi_count--;
+                    plugin.Server.Map.ClearBroadcasts();
+                    plugin.Server.Map.Broadcast(5, "There are now " + dboi_count + " Class-D remaining.", false);
+                    ev.Player.PersonalBroadcast(25, "You are dead! But don't worry, now you get to relax and watch your friends die!", false);
+                }
             }
         }
 

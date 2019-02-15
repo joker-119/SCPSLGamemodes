@@ -39,7 +39,7 @@ namespace ZombielandGamemode
                if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role != Role.SCP_049_2)
                {
                    SpawnZombie(ev.Player);
-                   alpha_count = alpha_count + 1;
+                   alpha_count = alpha_count++;
                }
                else if (ev.TeamRole.Team != Team.SPECTATOR)
                {
@@ -72,11 +72,11 @@ namespace ZombielandGamemode
                     if (player.TeamRole.Team == Team.SCP && player.TeamRole.Role != Role.SCP_049_2)
                     {
                         SpawnZombie(player);
-                        alpha_count = alpha_count + 1;
+                        alpha_count = alpha_count++;
                     }
                     else if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR)
                     {
-                        human_count = human_count +1;
+                        human_count = human_count++;
                     }
                 }
 
@@ -148,7 +148,7 @@ namespace ZombielandGamemode
                 {
                     ev.Damage = 0;
                     SpawnChild(ev.Player);
-                    child_count = child_count + 1;
+                    child_count = child_count++;
                 }
             }   
         }

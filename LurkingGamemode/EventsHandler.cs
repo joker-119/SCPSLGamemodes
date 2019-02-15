@@ -66,11 +66,17 @@ namespace LurkingGamemode
                     {
                         for (int i = 0; i < Lurking.larry_count; i++)
                         {
-                            SpawnLarry(player);
+                            if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 && player.TeamRole.Role != Role.SCP_939_89)
+                            {
+                                SpawnLarry(player);
+                            }
                         }
                         for (int i = 0; i < Lurking.doggo_count; i++)
                         {
-                            SpawnDoggo(player);
+                            if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 && player.TeamRole.Role != Role.SCP_939_89)
+                            {
+                                SpawnDoggo(player);
+                            }
                         }
                     }
                     else if (player.TeamRole.Team == Team.NINETAILFOX || player.TeamRole.Team == Team.CHAOS_INSURGENCY)
@@ -115,7 +121,7 @@ namespace LurkingGamemode
                     else if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR && player.TeamRole.Role != Role.FACILITY_GUARD)
                     {
                         humanAlive = true;
-                        humanCount = humanCount +1;
+                        humanCount = humanCount++;
                     }
                 }
                 if (ev.Server.GetPlayers().Count > 1)
