@@ -90,8 +90,11 @@ namespace ZombielandGamemode
 
         public void OnTimedEvent(System.Object source, ElapsedEventArgs e)
         {
-            plugin.Server.Map.ClearBroadcasts();
-            plugin.Server.Map.Broadcast(10, "There are currently " + alpha_count + " Alpha zombies, " + child_count + " child zombies and " + human_count + " humans alive.", false);
+            if (Zombieland.enabled)
+            {
+                plugin.Server.Map.ClearBroadcasts();
+                plugin.Server.Map.Broadcast(10, "There are currently " + alpha_count + " Alpha zombies, " + child_count + " child zombies and " + human_count + " humans alive.", false);
+            }
         }
 
         public void OnRoundEnd(RoundEndEvent ev)

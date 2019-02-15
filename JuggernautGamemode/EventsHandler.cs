@@ -230,8 +230,10 @@ namespace JuggernautGamemode
                     }
 
                     else if (player.TeamRole.Team == Smod2.API.Team.NINETAILFOX)
+                    {
                         mtfAllive = true;
                         mtf_count = mtf_count++;
+                    }
                 }
                 if (ev.Server.GetPlayers().Count > 1)
                 {

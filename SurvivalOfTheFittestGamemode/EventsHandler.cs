@@ -224,18 +224,12 @@ namespace SurvivalGamemode
                 Survival.roundstarted = false;
                 plugin.Server.Round.EndRound();
 
-                foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
+                plugin.Info("Toggling Blackout off.");
+                Blackout.Plugin.ToggleBlackout();
+                if (blackouts)
                 {
-                    if (p.Details.id == "Blackout" && p is Blackout.Plugin)
-                    {
-                        plugin.Info("Toggling Blackout off.");
-                        Blackout.Plugin.ToggleBlackout();
-                        if (blackouts)
-                        {
-                            plugin.Info("Enabling timed Blackouts.");
-                            Blackout.Plugin.EnableBlackouts();
-                        }
-                    }
+                    plugin.Info("Enabling timed Blackouts.");
+                    Blackout.Plugin.EnableBlackouts();
                 }
             }
         }
