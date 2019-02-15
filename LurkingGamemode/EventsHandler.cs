@@ -26,7 +26,7 @@ namespace LurkingGamemode
                     server.Map.ClearBroadcasts();
                     server.Map.Broadcast(25, "<color=#2D2B2B> Lurking in the dark</color> gamemode starting..", false);
                 }
-                blackouts = Lightsout.Lightsout.enabled;
+                blackouts = SCP575.SCP575.enabled;
             }
         }
 
@@ -45,11 +45,11 @@ namespace LurkingGamemode
             {
                 foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
                 {
-                    if (p.Details.id == "Blackout" && p is Lightsout.Lightsout)
+                    if (p.Details.id == "Blackout" && p is SCP575.SCP575)
                     {
-                        if (Lightsout.Lightsout.enabled)
+                        if (SCP575.SCP575.enabled)
                         {
-                            Lightsout.Functions.DisableBlackouts();
+                            SCP575.Functions.DisableBlackouts();
                             plugin.Info("Disabling timed blackouts.");
                             blackouts = true;
                         }
@@ -58,7 +58,7 @@ namespace LurkingGamemode
 
                 Lurking.roundstarted = true;
                 plugin.Info("Lurking in the Dark gamemode started!");
-                Lightsout.Functions.ToggleBlackout();
+                SCP575.Functions.ToggleBlackout();
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
@@ -161,10 +161,10 @@ namespace LurkingGamemode
 
                 if (blackouts)
                 {
-                    Lightsout.Functions.EnableBlackouts();
+                    SCP575.Functions.EnableBlackouts();
                     plugin.Info("Enabling timed Blackouts.");
                 }
-                Lightsout.Functions.ToggleBlackout();
+                SCP575.Functions.ToggleBlackout();
             }
         }
 

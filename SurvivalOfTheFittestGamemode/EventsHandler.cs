@@ -63,11 +63,11 @@ namespace SurvivalGamemode
 
                 foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
                 {
-                    if (p.Details.id == "joker.lightsout" && p is Lightsout.Lightsout)
+                    if (p.Details.id == "joker.SCP575" && p is SCP575.SCP575)
                     {
-                        if (Lightsout.Lightsout.enabled)
+                        if (SCP575.SCP575.enabled)
                         {
-                            Lightsout.Functions.DisableBlackouts();
+                            SCP575.Functions.DisableBlackouts();
                             plugin.Info("Disabling timed blackouts.");
                             blackouts = true;
                         }
@@ -225,11 +225,11 @@ namespace SurvivalGamemode
                 plugin.Server.Round.EndRound();
 
                 plugin.Info("Toggling Blackout off.");
-                Lightsout.Functions.ToggleBlackout();
+                SCP575.Functions.ToggleBlackout();
                 if (blackouts)
                 {
                     plugin.Info("Enabling timed Blackouts.");
-                    Lightsout.Functions.EnableBlackouts();
+                    SCP575.Functions.EnableBlackouts();
                 }
             }
         }
@@ -265,7 +265,7 @@ namespace SurvivalGamemode
         public void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
             plugin.Info("Timer completed!");
-            Lightsout.Functions.ToggleBlackout();
+            SCP575.Functions.ToggleBlackout();
             Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_939_53);
             foreach (Player player in plugin.Server.GetPlayers())
             {
