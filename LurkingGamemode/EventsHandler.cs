@@ -26,7 +26,7 @@ namespace LurkingGamemode
                     server.Map.ClearBroadcasts();
                     server.Map.Broadcast(25, "<color=#2D2B2B> Lurking in the dark</color> gamemode starting..", false);
                 }
-                blackouts = Blackout.Plugin.enabled;
+                blackouts = Lightsout.Lightsout.enabled;
             }
         }
 
@@ -45,11 +45,11 @@ namespace LurkingGamemode
             {
                 foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
                 {
-                    if (p.Details.id == "Blackout" && p is Blackout.Plugin)
+                    if (p.Details.id == "Blackout" && p is Lightsout.Lightsout)
                     {
-                        if (Blackout.Plugin.enabled)
+                        if (Lightsout.Lightsout.enabled)
                         {
-                            Blackout.Plugin.DisableBlackouts();
+                            Lightsout.Functions.DisableBlackouts();
                             plugin.Info("Disabling timed blackouts.");
                             blackouts = true;
                         }
@@ -58,7 +58,7 @@ namespace LurkingGamemode
 
                 Lurking.roundstarted = true;
                 plugin.Info("Lurking in the Dark gamemode started!");
-                Blackout.Plugin.ToggleBlackout();
+                Lightsout.Functions.ToggleBlackout();
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
@@ -161,10 +161,10 @@ namespace LurkingGamemode
 
                 if (blackouts)
                 {
-                    Blackout.Plugin.EnableBlackouts();
+                    Lightsout.Functions.EnableBlackouts();
                     plugin.Info("Enabling timed Blackouts.");
                 }
-                Blackout.Plugin.ToggleBlackout();
+                Lightsout.Functions.ToggleBlackout();
             }
         }
 
