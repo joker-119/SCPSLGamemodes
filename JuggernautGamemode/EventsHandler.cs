@@ -26,7 +26,6 @@ namespace JuggernautGamemode
         private float critical_damage;
         public static Timer timer;
         public static Player jugg_killer = null;
-        public static int mtf_count = 0;
 
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
@@ -221,7 +220,6 @@ namespace JuggernautGamemode
             {
                 bool juggernautAlive = false;
                 bool mtfAllive = false;
-                mtf_count = 0;
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
@@ -233,7 +231,6 @@ namespace JuggernautGamemode
                     else if (player.TeamRole.Team == Smod2.API.Team.NINETAILFOX)
                     {
                         mtfAllive = true;
-                        mtf_count++;
                     }
                 }
                 if (ev.Server.GetPlayers().Count > 1)
@@ -267,9 +264,8 @@ namespace JuggernautGamemode
                 }
                 else
                 {
-                    mtf_count--;
                     plugin.Server.Map.ClearBroadcasts();
-                    plugin.Server.Map.Broadcast(15, "There are " + mtf_count + " NTF remaining.", false);
+                    plugin.Server.Map.Broadcast(15, "There are " + Juggernaut.plugin.pluginManager.Server.Round.Stats.NTFAlive + " NTF remaining.", false);
                 }   
             }
         }

@@ -14,7 +14,6 @@ namespace SurvivalGamemode
         private readonly Survival plugin;
         public static Timer timer;
         public static bool blackouts;
-        public static int dboi_count = 0;
         public static Player winner = null;
 
         public EventsHandler(Survival plugin) => this.plugin = plugin;
@@ -41,7 +40,6 @@ namespace SurvivalGamemode
                else if (ev.TeamRole.Team != Team.SPECTATOR && ev.TeamRole.Team != Team.SCP)
                {
                     SpawnDboi(ev.Player);
-                    dboi_count++;
                }
                else if (ev.TeamRole.Team == Team.SPECTATOR)
                {
@@ -65,7 +63,7 @@ namespace SurvivalGamemode
                 {
                     if (p.Details.id == "joker.SCP575" && p is SCP575.SCP575)
                     {
-                        if (SCP575.SCP575.enabled)
+                        if (SCP575.SCP575.Timed)
                         {
                             SCP575.Functions.DisableBlackouts();
                             plugin.Info("Disabling timed blackouts.");
@@ -85,7 +83,7 @@ namespace SurvivalGamemode
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Survival of the Fittest Gamemode Started!");
 
-                string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173", "HCZ_ARMORY", "079_FIRST", "079_SECOND", "049_ARMORY", "096"};
+                string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173", "HCZ_ARMORY", "NUKE_ARMORY", "049_ARMORY", "096"};
                 
                 foreach (string d in dlist)
                 {
@@ -100,7 +98,7 @@ namespace SurvivalGamemode
                     }
                 }
 
-                string[] olist = new string[] { "HID", "106_BOTTOM", "106_PRIMARY", "106_SECONDARY" };
+                string[] olist = new string[] { "HID", "106_BOTTOM", "106_PRIMARY", "106_SECONDARY", "079_SECOND", "079_FIRST" };
 
                 foreach (string o in olist)
                 {
@@ -121,7 +119,6 @@ namespace SurvivalGamemode
                     if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR && player != winner)
                     {
                         SpawnDboi(player);
-                        dboi_count++;
                     }
                     else if (player.TeamRole.Team == Team.SCP || player == winner)
                     {
@@ -146,9 +143,8 @@ namespace SurvivalGamemode
             {
                 if (ev.Player.TeamRole.Role == Role.CLASSD)
                 {
-                    dboi_count--;
                     plugin.Server.Map.ClearBroadcasts();
-                    plugin.Server.Map.Broadcast(5, "There are now " + dboi_count + " Class-D remaining.", false);
+                    plugin.Server.Map.Broadcast(5, "There are now " + (Survival.plugin.pluginManager.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
                     ev.Player.PersonalBroadcast(25, "You are dead! But don't worry, now you get to relax and watch your friends die!", false);
                 }
             }
