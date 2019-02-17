@@ -250,11 +250,9 @@ namespace SurvivalGamemode
 
         public void SpawnNut(Player player)
         {
-            int nut_health = Survival.nut_health;
 
             player.ChangeRole(Role.SCP_173, false, true, true, true);
             plugin.Info("Spawned " + player.Name + " as SCP-173");
-            player.SetHealth(nut_health);
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(35, "You will be teleported into the game arena when adequate time has passed for other players to hide...", false);
         }
@@ -262,12 +260,12 @@ namespace SurvivalGamemode
         {
             plugin.Info("Timer completed!");
             SCP575.Functions.ToggleBlackout();
-            Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_939_53);
             foreach (Player player in plugin.Server.GetPlayers())
             {
                 if (player.TeamRole.Role == Role.SCP_173)
                 {
-                    player.Teleport(spawn);
+                    player.Teleport(Functions.NutSpawn());
+                    player.SetHealth(Survival.nut_health);
                     player.PersonalBroadcast(15, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the Class-D before the auto-nuke goes off!", false);
                 }
             }

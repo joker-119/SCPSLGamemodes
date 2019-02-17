@@ -1,7 +1,10 @@
 using Smod2;
+using Smod2.API;
 using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SurvivalGamemode
 {
@@ -60,6 +63,25 @@ namespace SurvivalGamemode
         {
             enabled = false;
             plugin.pluginManager.Server.Map.ClearBroadcasts();
+        }
+    }
+
+    public class Functions
+    {
+        public static Vector NutSpawn()
+        {
+            List<Room> rooms = new List<Room>();
+            foreach (Room room in PluginManager.Manager.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA))
+            {
+                if (room.ZoneType == ZoneType.HCZ)
+                {
+                    rooms.Add(room);
+                }
+            }
+            int randomNum = new System.Random().Next(rooms.Count());
+            Room randomRoom = rooms[randomNum];
+            Vector spawn = randomRoom.Position;
+            return spawn;
         }
     }
 }

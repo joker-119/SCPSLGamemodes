@@ -4,8 +4,6 @@ using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
-using System;
-using System.Timers;
 
 namespace LurkingGamemode
 {
