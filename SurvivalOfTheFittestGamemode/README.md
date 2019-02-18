@@ -2,8 +2,8 @@ Survival Of The Fittest (SOTF)
 ======
 made by Joker 119
 ## Description
-Everyone spawns as a Class-D in Heavy Containment. After 60sec 2 peanuts spawn. All Class-D spawn with a COM15 (with no extra ammo). 
-Friendly Fire is on. Auto Nuke is enabled. Ent Zone and both LCZ gates are locked. 106, nuke armory and HCZ_armory doors locked open.
+Everyone spawns as a Class-D in Heavy Containment. 2-4 peanuts spawn in their normal spawn, awaiting to be unleashed on the Class-D.
+Auto Nuke is enabled. Ent Zone and both LCZ gates are locked. 106, Micro-HID and SCP-079 rooms are locked open., all armory doors in HCZ are locked closed.
 
 ### Features
  - Players who join before the round has started will be notified that SOTF Gamemode is starting.
