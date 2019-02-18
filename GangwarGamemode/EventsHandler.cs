@@ -27,15 +27,15 @@ namespace GangwarGamemode
         {
             if (Gangwar.enabled)
             {
-                if (ev.Player.TeamRole.Team == Smod2.API.Team.SCP)
+                if (ev.Player.TeamRole.Team == Team.SCP || ev.Player.TeamRole.Team == Team.CLASSD)
                 {
                     SpawnChaos(ev.Player);
                 }
-                else if (ev.Player.TeamRole.Team == Smod2.API.Team.NINETAILFOX || ev.Player.TeamRole.Team == Smod2.API.Team.SCIENTIST || ev.Player.TeamRole.Team == Smod2.API.Team.NINETAILFOX)
+                else if (ev.Player.TeamRole.Role == Role.FACILITY_GUARD || ev.Player.TeamRole.Team == Team.SCIENTIST)
                 {
                     SpawnNTF(ev.Player);
                 }
-                else if (ev.Player.TeamRole.Team == Smod2.API.Team.SPECTATOR)
+                else if (ev.Player.TeamRole.Team == Team.SPECTATOR)
                 {
                     ev.Player.PersonalBroadcast(25, "You are dead, but don't worry, you will respawn soon!", false);
                 }
@@ -58,11 +58,11 @@ namespace GangwarGamemode
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
-                    if (player.TeamRole.Team == Smod2.API.Team.SCP || player.TeamRole.Team == Smod2.API.Team.CLASSD)
+                    if (player.TeamRole.Team == Team.SCP || player.TeamRole.Team == Team.CLASSD)
                     {
                         SpawnChaos(player);
                     }
-                    else if (player.TeamRole.Team == Smod2.API.Team.NINETAILFOX || player.TeamRole.Team == Smod2.API.Team.SCIENTIST || player.TeamRole.Team == Smod2.API.Team.NINETAILFOX)
+                    else if (player.TeamRole.Role == Role.FACILITY_GUARD || player.TeamRole.Team == Team.SCIENTIST)
                     {
                         SpawnNTF(player);
                     }
@@ -85,20 +85,16 @@ namespace GangwarGamemode
             {
                 bool ciAlive = false;
                 bool ntfAlive = false;
-                int ci_count = 0;
-                int ntf_count = 0;
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
-                    if(player.TeamRole.Team == Smod2.API.Team.CHAOS_INSURGENCY)
+                    if(player.TeamRole.Team == Team.CHAOS_INSURGENCY)
                     {
-                        ci_count++;
                         ciAlive = true; continue;
                     }
-                    else if (player.TeamRole.Team == Smod2.API.Team.NINETAILFOX)
+                    else if (player.TeamRole.Team == Team.NINETAILFOX)
                     {
                         ntfAlive = true;
-                        ntf_count++;
                     }
                 }
                 if (ev.Server.GetPlayers().Count > 1)
@@ -107,11 +103,11 @@ namespace GangwarGamemode
                     {
                         ev.Status = ROUND_END_STATUS.ON_GOING;
                         ev.Server.Map.ClearBroadcasts();
-                        ev.Server.Map.Broadcast(10, "There are " + ci_count + " Chaos alive, and " + ntf_count + " NTF alive.", false);
+                        ev.Server.Map.Broadcast(10, "There are " + plugin.Round.Stats.CiAlive + " Chaos alive, and " + plugin.Round.Stats.NTFAlive + " NTF alive.", false);
                     }
                     else if (ciAlive && ntfAlive == false)
                     {
-                        ev.Status = ROUND_END_STATUS.CI_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; EndGamemodeRound();
                     }
                     else if (ciAlive == false && ntfAlive)
                     {
@@ -125,24 +121,11 @@ namespace GangwarGamemode
         {
             if (Gangwar.enabled)
             {
-                int ci_count = 0;
-                int ntf_count = 0;
-                foreach (Player player in plugin.Server.GetPlayers())
-                {
-                    if (player.TeamRole.Team == Smod2.API.Team.CHAOS_INSURGENCY)
-                    {
-                        ci_count = ci_count + 1;
-                    }
-                    else if (player.TeamRole.Team == Smod2.API.Team.NINETAILFOX)
-                    {
-                        ntf_count = ntf_count + 1;
-                    }
-                }
-                if (ci_count >= ntf_count)
+                if (plugin.Round.Stats.CiAlive >= plugin.Round.Stats.NTFAlive)
                 {
                     ev.SpawnChaos = false;
                 }
-                else if (ci_count < ntf_count)
+                else if (plugin.Round.Stats.CiAlive < plugin.Round.Stats.NTFAlive)
                 {
                     ev.SpawnChaos = true;
                 }

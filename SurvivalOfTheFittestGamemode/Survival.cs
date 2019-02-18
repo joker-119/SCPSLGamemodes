@@ -46,7 +46,7 @@ namespace SurvivalGamemode
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "survival", "sotf", "surv" }, new SurvivalCommand());
 
-            this.AddConfig(new ConfigSetting("survival_peanut_delay", 120000, SettingType.NUMERIC, true, "The amount of time to wait before unleading peanuts."));
+            this.AddConfig(new ConfigSetting("survival_peanut_delay", 120, SettingType.NUMERIC, true, "The amount of time to wait before unleading peanuts."));
             this.AddConfig(new ConfigSetting("survival_peanut_health", 173, SettingType.NUMERIC, true, "The amount of health peanuts should have (lower values move faster"));
         }
 
