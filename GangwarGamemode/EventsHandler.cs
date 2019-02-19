@@ -53,6 +53,7 @@ namespace GangwarGamemode
             if (Gangwar.enabled)
             {
                 Gangwar.roundstarted = true;
+                plugin.Server.Map.DetonateWarhead();
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Gangwar Gamemode started!");
 

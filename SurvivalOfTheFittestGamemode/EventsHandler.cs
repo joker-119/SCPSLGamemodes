@@ -5,14 +5,13 @@ using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
 using System;
-using System.Timers;
+using scp4aiur;
 
 namespace SurvivalGamemode
 {
     internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie
     {
         private readonly Survival plugin;
-        public static Timer timer;
         public static bool blackouts;
         public static Player winner = null;
 
@@ -71,11 +70,7 @@ namespace SurvivalGamemode
                         }
                     }
                 }
-                timer = new System.Timers.Timer();
-                timer.Interval = Survival.nut_delay * 1000;
-                timer.Elapsed += OnTimedEvent;
-                timer.AutoReset = false;
-                timer.Enabled = true;
+                Timing.Timer(TeleportNuts, Survival.nut_delay);
                 plugin.Info("Timer Initialized..");
                 plugin.Info("Timer set to " + Survival.nut_delay + " ms.");
 
@@ -256,7 +251,7 @@ namespace SurvivalGamemode
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(35, "You will be teleported into the game arena when adequate time has passed for other players to hide...", false);
         }
-        public void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
+        public void TeleportNuts(float inaccuracy = 0)
         {
             plugin.Info("Timer completed!");
             SCP575.Functions.ToggleBlackout();
