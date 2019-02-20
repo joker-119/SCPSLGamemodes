@@ -5,6 +5,7 @@ using Smod2.Attributes;
 using Smod2.Config;
 using System.Collections.Generic;
 using System.Linq;
+using scp4aiur;
 
 namespace SurvivalGamemode
 {
@@ -26,7 +27,7 @@ namespace SurvivalGamemode
             enabled = false,
             roundstarted = false;
 
-        public static int nut_delay;
+        public static float nut_delay;
 
         public static int nut_health;
         
@@ -45,8 +46,8 @@ namespace SurvivalGamemode
         {
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "survival", "sotf", "surv" }, new SurvivalCommand());
-
-            this.AddConfig(new ConfigSetting("survival_peanut_delay", 120, SettingType.NUMERIC, true, "The amount of time to wait before unleading peanuts."));
+            Timing.Init(this);
+            this.AddConfig(new ConfigSetting("survival_peanut_delay", 120f, SettingType.FLOAT, true, "The amount of time to wait before unleading peanuts."));
             this.AddConfig(new ConfigSetting("survival_peanut_health", 173, SettingType.NUMERIC, true, "The amount of health peanuts should have (lower values move faster"));
         }
 

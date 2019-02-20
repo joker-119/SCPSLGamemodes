@@ -11,187 +11,129 @@ using System.Linq;
 
 namespace scp4aiur
 {
-    /// <summary>
-    /// Module for easy and efficient frame-based timers
-    /// </summary>
-    internal class Timing : IEventHandlerUpdate
-    {
-        private static Action<string> log;
+	/// <summary>
+	/// Module for easy and efficient frame-based timers
+	/// </summary>
+	internal class Timing : IEventHandlerUpdate, IEventHandlerRoundRestart
+	{
+		private static Action<string> log;
 
-        private static int nextNextTickId;
-        private static int nextNextTicksId;
-        private static int nextTimersId;
+		private static int jobId;
+		private static Dictionary<int, QueueItem> jobs;
 
-        private static Dictionary<int, Action> nextTick;
-        private static Dictionary<int, NextTicksQueue> nextTicks;
-        private static Dictionary<int, TimerQueue> timers;
+		public static void Init(Smod2.Plugin plugin, Priority priority = Priority.Normal)
+		{
+			log = plugin.Error;
+			plugin.AddEventHandlers(new Timing(), priority);
 
-        public Timing(Action<string> log)
-        {
-            Timing.log = log;
+			jobId = int.MinValue;
+			jobs = new Dictionary<int, QueueItem>();
+		}
 
-            nextNextTickId = int.MinValue;
-            nextNextTicksId = int.MinValue;
-            nextTimersId = int.MinValue;
+		/// <summary>
+		/// Queues a job.
+		/// </summary>
+		public static int Run(IEnumerable<float> method, bool persist = false)
+		{
+			int id = jobId++;
+			jobs.Add(id, new QueueItem(method, persist));
 
-            nextTick = new Dictionary<int, Action>();
-            nextTicks = new Dictionary<int, NextTicksQueue>();
-            timers = new Dictionary<int, TimerQueue>();
-        }
+			return id;
+		}
 
-        /// <summary>
-        /// Queues a job for the next tick.
-        /// </summary>
-        /// <param name="action">Job to execute.</param>
-        public static int NextTick(Action action)
-        {
-            int id = nextNextTickId++;
-            nextTick.Add(id, action);
+		/// <summary>
+		/// Removes a job from the queue.
+		/// </summary>
+		/// <param name="id">ID of the job to remove.</param>
+		public static bool Remove(int id)
+		{
+			return jobs.Remove(id);
+		}
 
-            return id;
-        }
+		/// <summary>
+		/// <para>DO NOT USE</para>
+		/// <para>This is an event for Smod2 and as such should not be called by any external code </para>
+		/// </summary>
+		/// <param name="ev"></param>
+		public void OnUpdate(UpdateEvent ev)
+		{
+			int[] removeJobs = jobs.Keys.Where(x => jobs[x].Run()).ToArray();
 
-        /// <summary>
-        /// Removes a job from the queue.
-        /// </summary>
-        /// <param name="id">ID of the job to remove.</param>
-        public static bool RemoveNextTick(int id)
-        {
-            return nextTick.Remove(id);
-        }
+			foreach (int job in removeJobs)
+			{
+				jobs.Remove(job);
+			}
+		}
 
-        /// <summary>
-        /// Queues a job to run in a certain amount of ticks.
-        /// </summary>
-        /// <param name="action">Job to execute.</param>
-        /// <param name="ticks">Number of ticks to wait.</param>
-        public static int NextTicks(Action action, int ticks)
-        {
-            int id = nextNextTicksId++;
-            nextTicks.Add(id, new NextTicksQueue
-            {
-                action = action,
-                ticksLeft = ticks
-            });
+		/// <summary>
+		/// <para>DO NOT USE</para>
+		/// <para>This is an event for Smod2 and as such should not be called by any external code </para>
+		/// </summary>
+		/// <param name="ev"></param>
+		public void OnRoundRestart(RoundRestartEvent ev)
+		{
+			int[] removeJobs = jobs.Where(x => !x.Value.RoundPersist).Select(x => x.Key).ToArray();
 
-            return id;
-        }
+			foreach (int job in removeJobs)
+			{
+				jobs.Remove(job);
+			}
+		}
 
-        /// <summary>
-        /// Removes a job from the queue.
-        /// </summary>
-        /// <param name="id">ID of the job to remove.</param>
-        public static bool RemoveNextTicks(int id)
-        {
-            return nextTicks.Remove(id);
-        }
+		private class QueueItem
+		{
+			private readonly IEnumerator<float> timer;
+			private int waitFrames;
+			private float waitTime;
 
-        /// <summary>
-        /// Queues a job to run in a certain amount of seconds
-        /// </summary>
-        /// <param name="action">Job to execute.</param>
-        /// <param name="seconds">Number of seconds to wait.</param>
-        public static int Timer(Action<float> action, float seconds)
-        {
-            int id = nextTimersId++;
-            timers.Add(id, new TimerQueue
-            {
-                action = action,
-                timeLeft = seconds
-            });
+			public bool RoundPersist { get; }
 
-            return id;
-        }
+			public QueueItem(IEnumerable<float> timer, bool persist)
+			{
+				this.timer = timer.GetEnumerator();
+				RoundPersist = persist;
+			}
 
-        /// <summary>
-        /// Removes a job from the queue.
-        /// </summary>
-        /// <param name="id">ID of the job to remove.</param>
-        public static bool RemoveTimer(int id)
-        {
-            return timers.Remove(id);
-        }
+			public bool Run()
+			{
+				try
+				{
+					if (waitFrames < 1)
+					{
+						if (waitTime <= 0)
+						{
+							if (!timer.MoveNext())
+							{
+								return true;
+							}
 
-        /// <summary>
-        /// <para>DO NOT USE</para>
-        /// <para>This is an event for Smod2 and as such should not be called by any external code </para>
-        /// </summary>
-        /// <param name="ev"></param>
-        public void OnUpdate(UpdateEvent ev)
-        {
-            if (nextTick.Count > 0)
-            {
-                foreach (int id in nextTick.Select(x => x.Key).ToArray())
-                {
-                    Action action = nextTick[id];
-                    nextTick.Remove(id); //remove from queue before running so it doesnt loop if exception is thrown
+							if (timer.Current > 0)
+							{
+								waitTime += timer.Current;
+							}
+							else
+							{
+								waitFrames = (int)-timer.Current;
+							}
+						}
+						else
+						{
+							waitTime -= Time.deltaTime;
+						}
+					}
+					else
+					{
+						waitFrames--;
+					}
 
-                    try
-                    {
-                        action();
-                    }
-                    catch (Exception e)
-                    {
-                        log($"Exception thrown by next-tick job:\n{e}");
-                    }
-                }
-            }
-
-            if (nextTicks.Count > 0)
-            {
-                foreach (int id in nextTicks.Select(x => x.Key).ToArray())
-                {
-                    if (--nextTicks[id].ticksLeft == 0)
-                    { //if the job is scheduled for this tick
-                        Action action = nextTicks[id].action;
-                        nextTicks.Remove(id); //remove from queue before running so it doesnt loop if exception is thrown
-
-                        try
-                        {
-                            action();
-                        }
-                        catch (Exception e)
-                        {
-                            log($"Exception thrown by next-ticks job:\n{e}");
-                        }
-                    }
-                }
-            }
-
-            if (timers.Count > 0)
-            {
-                foreach (int id in timers.Select(x => x.Key).ToArray())
-                {
-                    if ((timers[id].timeLeft -= Time.deltaTime) <= 0)
-                    {
-                        //if the timer is up
-                        Action<float> action = timers[id].action;
-                        float timeLeft = timers[id].timeLeft;
-                        timers.Remove(id); //remove from queue before running so it doesnt loop if exception is thrown
-
-                        try
-                        {
-                            action(timeLeft); //run with inaccuracy as argument
-                        }
-                        catch (Exception e)
-                        {
-                            log($"Exception thrown by timed job:\n{e}");
-                        }
-                    }
-                }
-            }
-        }
-
-        private class NextTicksQueue
-        {
-            public int ticksLeft;
-            public Action action;
-        }
-
-        private class TimerQueue
-        {
-            public float timeLeft;
-            public Action<float> action;
-        }
-    }
+					return false;
+				}
+				catch (Exception e)
+				{
+					log($"Exception was thrown by job:\n{e}");
+					return true;
+				}
+			}
+		}
+	}
 }

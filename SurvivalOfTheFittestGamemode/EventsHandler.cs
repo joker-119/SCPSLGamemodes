@@ -49,7 +49,7 @@ namespace SurvivalGamemode
 
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
-            Survival.nut_delay = this.plugin.GetConfigInt("survival_peanut_delay");
+            Survival.nut_delay = this.plugin.GetConfigFloat("survival_peanut_delay");
             Survival.nut_health = this.plugin.GetConfigInt("survival_peanut_health");
         }
 
@@ -70,7 +70,7 @@ namespace SurvivalGamemode
                         }
                     }
                 }
-                Timing.Timer(TeleportNuts, Survival.nut_delay);
+                Timing.Run(TeleportNuts(Survival.nut_delay));
                 plugin.Info("Timer Initialized..");
                 plugin.Info("Timer set to " + Survival.nut_delay + " ms.");
 
@@ -251,8 +251,9 @@ namespace SurvivalGamemode
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(35, "You will be teleported into the game arena when adequate time has passed for other players to hide...", false);
         }
-        public void TeleportNuts(float inaccuracy = 0)
+        public IEnumerable<float> TeleportNuts(float delay)
         {
+            yield return delay;
             plugin.Info("Timer completed!");
             SCP575.Functions.ToggleBlackout();
             foreach (Player player in plugin.Server.GetPlayers())
