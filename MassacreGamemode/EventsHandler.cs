@@ -1,36 +1,33 @@
-using Smod2;
 using Smod2.API;
 using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
-using System;
-using scp4aiur;
 
-namespace SurvivalGamemode
+namespace MassacreGamemode
 {
     internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie
     {
-        private readonly Survival plugin;
-        public static bool blackouts;
+        private readonly Massacre plugin;
         public static Player winner = null;
+        public static Vector SpawnLoc;
 
-        public EventsHandler(Survival plugin) => this.plugin = plugin;
+        public EventsHandler(Massacre plugin) => this.plugin = plugin;
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
-            if (Survival.enabled)
+            if (Massacre.enabled)
             {
-                if (!Survival.roundstarted)
+                if (!Massacre.roundstarted)
                 {
                     Server server = plugin.pluginManager.Server;
                     server.Map.ClearBroadcasts();
-                    server.Map.Broadcast(25, "<color=#50c878>Survival Gamemode</color> is starting...", false);
+                    server.Map.Broadcast(25, "<color=#50c878>Massacre Gamemode</color> is starting...", false);
                 }
             }
         }
         public void OnSetRole(PlayerSetRoleEvent ev)
         {
-            if (Survival.enabled)
+            if (Massacre.enabled)
             {
                if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role != Role.SCP_173)
                {
@@ -49,65 +46,17 @@ namespace SurvivalGamemode
 
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
-            Survival.nut_delay = this.plugin.GetConfigFloat("survival_peanut_delay");
-            Survival.nut_health = this.plugin.GetConfigInt("survival_peanut_health");
+            Massacre.SpawnRoom = plugin.GetConfigString("mass_spawn_room");
         }
 
         public void OnRoundStart(RoundStartEvent ev)
         {
-            if (Survival.enabled)
+            if (Massacre.enabled)
             {
-
-                foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
-                {
-                    if (p.Details.id == "joker.SCP575" && p is SCP575.SCP575)
-                    {
-                        if (SCP575.SCP575.Timed)
-                        {
-                            SCP575.Functions.DisableBlackouts();
-                            plugin.Info("Disabling timed blackouts.");
-                            blackouts = true;
-                        }
-                    }
-                }
-                Timing.Run(TeleportNuts(Survival.nut_delay));
-                plugin.Info("Timer Initialized..");
-                plugin.Info("Timer set to " + Survival.nut_delay + " ms.");
-
-                Survival.roundstarted = true;
+                Massacre.roundstarted = true;
+                SpawnLoc = Functions.SpawnLoc();
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
-                plugin.Info("Survival of the Fittest Gamemode Started!");
-
-                string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173", "HCZ_ARMORY", "NUKE_ARMORY", "049_ARMORY" };
-                
-                foreach (string d in dlist)
-                {
-                    foreach (Door door in ev.Server.Map.GetDoors())
-                    {
-                        if ( d == door.Name)
-                        {
-                            plugin.Info("Locking " + door.Name + ".");
-                            door.Open = false;
-                            door.Locked = true;
-                        }
-                    }
-                }
-
-                string[] olist = new string[] { "HID", "106_BOTTOM", "106_PRIMARY", "106_SECONDARY", "079_SECOND", "079_FIRST", "096" };
-
-                foreach (string o in olist)
-                {
-                    foreach (Door door in ev.Server.Map.GetDoors())
-                    {
-                        if (o == door.Name)
-                        {
-                            plugin.Info("Opening " + door.Name + ".");
-                            door.Open = true;
-                            door.Locked = true;
-                        }
-                    }
-                }
-
+                plugin.Info("Massacre of the D-Bois Gamemode Started!");
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
@@ -125,7 +74,7 @@ namespace SurvivalGamemode
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (Survival.enabled)
+            if (Massacre.enabled)
             {
                 plugin.Info("Round Ended!");
                 EndGamemodeRound();
@@ -134,20 +83,20 @@ namespace SurvivalGamemode
 
         public void OnPlayerDie(PlayerDeathEvent ev)
         {
-            if (Survival.enabled)
+            if (Massacre.enabled)
             {
                 if (ev.Player.TeamRole.Role == Role.CLASSD)
                 {
                     plugin.Server.Map.ClearBroadcasts();
-                    plugin.Server.Map.Broadcast(5, "There are now " + (Survival.plugin.pluginManager.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
-                    ev.Player.PersonalBroadcast(25, "Skiddaddle, skidacted, your neck is now [REDACTED]!", false);
+                    plugin.Server.Map.Broadcast(5, "There are now " + (Massacre.plugin.pluginManager.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
+                    ev.Player.PersonalBroadcast(25, "You are dead! But don't worry, now you get to relax and watch your friends die!", false);
                 }
             }
         }
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (Survival.enabled)
+            if (Massacre.enabled)
             {
                 bool peanutAlive = false;
                 bool humanAlive = false;
@@ -200,7 +149,7 @@ namespace SurvivalGamemode
 
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            if (Survival.enabled)
+            if (Massacre.enabled)
             {
                 ev.SpawnChaos = true;
                 ev.PlayerList = new List<Player>();
@@ -209,27 +158,18 @@ namespace SurvivalGamemode
 
         public void EndGamemodeRound()
         {
-            if (Survival.enabled)
+            if (Massacre.enabled)
             {
                 plugin.Info("EndgameRound Function");
-                Survival.roundstarted = false;
+                Massacre.roundstarted = false;
                 plugin.Server.Round.EndRound();
-
-                plugin.Info("Toggling Blackout off.");
-                SCP575.Functions.ToggleBlackout();
-                if (blackouts)
-                {
-                    plugin.Info("Enabling timed Blackouts.");
-                    SCP575.Functions.EnableBlackouts();
-                }
             }
         }
 
         public void SpawnDboi(Player player)
         {
-            Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_096);
             player.ChangeRole(Role.CLASSD, false, false, false, true);
-            player.Teleport(spawn);
+            player.Teleport(SpawnLoc);
 
             foreach (Item item in player.GetInventory())
             {
@@ -240,31 +180,16 @@ namespace SurvivalGamemode
             player.GiveItem(ItemType.CUP);
 
             player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Find a hiding place and survive from the peanuts! They will spawn in 939's area when the lights go off!", false);
+            player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Get ready to die!", false);
         }
 
         public void SpawnNut(Player player)
         {
-
+            player.Teleport(SpawnLoc);
             player.ChangeRole(Role.SCP_173, false, true, true, true);
             plugin.Info("Spawned " + player.Name + " as SCP-173");
             player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(35, "You will be teleported into the game arena when adequate time has passed for other players to hide...", false);
-        }
-        public IEnumerable<float> TeleportNuts(float delay)
-        {
-            yield return delay;
-            plugin.Info("Timer completed!");
-            SCP575.Functions.ToggleBlackout();
-            foreach (Player player in plugin.Server.GetPlayers())
-            {
-                if (player.TeamRole.Role == Role.SCP_173)
-                {
-                    player.Teleport(Functions.NutSpawn());
-                    player.SetHealth(Survival.nut_health);
-                    player.PersonalBroadcast(15, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the Class-D before the auto-nuke goes off!", false);
-                }
-            }
+            player.PersonalBroadcast(35, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the D-bois!", false);
         }
     }
 }

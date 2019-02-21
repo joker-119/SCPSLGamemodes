@@ -53,7 +53,7 @@ namespace GangwarGamemode
             if (Gangwar.enabled)
             {
                 Gangwar.roundstarted = true;
-                plugin.Server.Map.DetonateWarhead();
+                plugin.Server.Map.StartWarhead();
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Gangwar Gamemode started!");
 
@@ -146,12 +146,27 @@ namespace GangwarGamemode
         public void SpawnChaos(Player player)
         {
             player.ChangeRole(Role.CHAOS_INSURGENCY, true, true, false, true);
+            foreach (Item item in player.GetInventory())
+            {
+                item.Remove();
+            }
+            player.GiveItem(ItemType.LOGICER);
+            player.GiveItem(ItemType.COM15);
+            player.GiveItem(ItemType.MEDKIT);
+            player.GiveItem(ItemType.FRAG_GRENADE);
+            player.GiveItem(ItemType.FLASHBANG);
+            player.SetAmmo(AmmoType.DROPPED_5,500);
+            player.SetAmmo(AmmoType.DROPPED_7,500);
+            player.SetAmmo(AmmoType.DROPPED_9,500);
             player.SetHealth(Gangwar.ci_health);
         }
 
         public void SpawnNTF(Player player)
         {
             player.ChangeRole(Role.NTF_COMMANDER, true, true, false, true);
+            player.SetAmmo(AmmoType.DROPPED_5,500);
+            player.SetAmmo(AmmoType.DROPPED_7,500);
+            player.SetAmmo(AmmoType.DROPPED_9,500);
             player.SetHealth(Gangwar.ntf_health);
         }
     }

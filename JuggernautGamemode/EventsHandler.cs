@@ -160,7 +160,7 @@ namespace JuggernautGamemode
                 plugin.Info("Juggernaut Gamemode Started!");
                 List<Player> players = ev.Server.GetPlayers();
                 
-                if (jugg_killer != null)
+                if (jugg_killer != null && jugg_killer is Player)
                 {
                     selectedJuggernaut = jugg_killer;
                 }

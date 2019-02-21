@@ -68,6 +68,7 @@ namespace ZombielandGamemode
                     if (player.TeamRole.Team == Team.SCP)
                     {
                         SpawnZombie(player);
+                        player.SetHealth(zombie_health);
                     }
                 }
 
@@ -135,7 +136,7 @@ namespace ZombielandGamemode
         {
             if (Zombieland.enabled && ev.Player.TeamRole.Team != Team.SCP && ev.Damage > ev.Player.GetHealth())
             {
-                if (ev.Attacker == ev.Player || ev.DamageType == DamageType.TESLA)
+                if (ev.Attacker == ev.Player || ev.DamageType == DamageType.TESLA || ev.DamageType == DamageType.NUKE || ev.DamageType == DamageType.LURE)
                 {
                     ev.Player.ChangeRole(Role.SPECTATOR);
                 }
