@@ -29,11 +29,11 @@ namespace GangwarGamemode
             {
                 if (ev.Player.TeamRole.Team == Team.SCP || ev.Player.TeamRole.Team == Team.CLASSD)
                 {
-                    SpawnChaos(ev.Player);
+                    Functions.SpawnChaos(ev.Player);
                 }
                 else if (ev.Player.TeamRole.Role == Role.FACILITY_GUARD || ev.Player.TeamRole.Team == Team.SCIENTIST)
                 {
-                    SpawnNTF(ev.Player);
+                    Functions.SpawnNTF(ev.Player);
                 }
                 else if (ev.Player.TeamRole.Team == Team.SPECTATOR)
                 {
@@ -61,11 +61,11 @@ namespace GangwarGamemode
                 {
                     if (player.TeamRole.Team == Team.SCP || player.TeamRole.Team == Team.CLASSD)
                     {
-                        SpawnChaos(player);
+                        Functions.SpawnChaos(player);
                     }
                     else if (player.TeamRole.Role == Role.FACILITY_GUARD || player.TeamRole.Team == Team.SCIENTIST)
                     {
-                        SpawnNTF(player);
+                        Functions.SpawnNTF(player);
                     }
                 }
             }
@@ -76,7 +76,7 @@ namespace GangwarGamemode
             if (Gangwar.enabled)
             {
                 plugin.Info("Round Ended!");
-                EndGamemodeRound();
+                Functions.EndGamemodeRound();
             }
         }
 
@@ -108,11 +108,11 @@ namespace GangwarGamemode
                     }
                     else if (ciAlive && ntfAlive == false)
                     {
-                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; Functions.EndGamemodeRound();
                     }
                     else if (ciAlive == false && ntfAlive)
                     {
-                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.EndGamemodeRound();
                     }
                 }
             }
@@ -131,43 +131,6 @@ namespace GangwarGamemode
                     ev.SpawnChaos = true;
                 }
             }
-        }
-
-        public void EndGamemodeRound()
-        {
-            if (Gangwar.enabled)
-            {
-                plugin.Info("EndgameRound Function.");
-                Gangwar.roundstarted = false;
-                plugin.Server.Round.EndRound();
-            }
-        }
-
-        public void SpawnChaos(Player player)
-        {
-            player.ChangeRole(Role.CHAOS_INSURGENCY, true, true, false, true);
-            foreach (Item item in player.GetInventory())
-            {
-                item.Remove();
-            }
-            player.GiveItem(ItemType.LOGICER);
-            player.GiveItem(ItemType.COM15);
-            player.GiveItem(ItemType.MEDKIT);
-            player.GiveItem(ItemType.FRAG_GRENADE);
-            player.GiveItem(ItemType.FLASHBANG);
-            player.SetAmmo(AmmoType.DROPPED_5,500);
-            player.SetAmmo(AmmoType.DROPPED_7,500);
-            player.SetAmmo(AmmoType.DROPPED_9,500);
-            player.SetHealth(Gangwar.ci_health);
-        }
-
-        public void SpawnNTF(Player player)
-        {
-            player.ChangeRole(Role.NTF_COMMANDER, true, true, false, true);
-            player.SetAmmo(AmmoType.DROPPED_5,500);
-            player.SetAmmo(AmmoType.DROPPED_7,500);
-            player.SetAmmo(AmmoType.DROPPED_9,500);
-            player.SetHealth(Gangwar.ntf_health);
         }
     }
 }

@@ -10,7 +10,8 @@ namespace MuskateersGamemode
         author = "Joker119",
         name = "Three Muskateers Gamemode",
         description = "3 NTF Vs. a crap load of Class-D",
-        version = "1.0",
+        id = "muskateers.gamemode",
+        version = "1.3.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
@@ -31,6 +32,7 @@ namespace MuskateersGamemode
         }
         public override void OnEnable()
         {
+            plugin = this;
             plugin.Info(plugin.Details.name + " v." + plugin.Details.version + " has been enabled.");
         }
         public override void Register()

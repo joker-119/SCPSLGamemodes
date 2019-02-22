@@ -21,21 +21,41 @@ namespace LurkingGamemode
         {
             if (args.Length > 0)
             {
-                if (args[0].ToLower() == "help")
+                switch (args[0].ToLower())
                 {
-                    return new string[] {
-                        "Lurking Command List \n" +
-                        "Lurking enable - Enable Lurking for the next round. \n" +
-                        "Lurking disable - Disable Lurking this and following rounds."
-                    };
+                    case "help":
+                        return new string[]
+                        {
+                            "Lurking Command List \n"+
+                            "Lurking enable - Enables the Lurking gamemode. \n"+
+                            "Lurking disable - Disables the Lurking gamemode. \n"
+                        };
+                    case "enable":
+                        Functions.EnableGamemode();
+                        return new string[]
+                        {
+                            "Lurking will be enabled for the next round!"
+                        };
+                    case "disable":
+                        Functions.DisableGamemode();
+                        return new string[]
+                        {
+                            "Lurking gamemode now disabled."
+                        };
+                    default:
+                        return new string[]
+                        {
+                            GetUsage()
+                        };
                 }
-                else if (args[0].ToLower() == "enable") { Lurking.EnableGamemode(); return new string[] { "Lurking will be enabled next round!" }; }
-                else if (args[0].ToLower() == "disable") { Lurking.DisableGamemode(); return new string[] { "Lurking is now disabled." }; }
-                else
-                    return new string[] { GetUsage() };
             }
-            else
-                return new string[] { GetUsage() };
+            else 
+            {
+                return new string[]
+                {
+                    GetUsage()
+                };
+            }
         }
     }
 }

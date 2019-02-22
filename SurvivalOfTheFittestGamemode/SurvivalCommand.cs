@@ -21,21 +21,41 @@ namespace SurvivalGamemode
         {
             if (args.Length > 0)
             {
-                if (args[0].ToLower() == "help")
+                switch (args[0].ToLower())
                 {
-                    return new string[] {
-                        "Survival Command List \n" +
-                        "Survival enable - Enable Survival for the next round. \n" +
-                        "Survival disable - Disable Survival this and following rounds."
-                    };
+                    case "help":
+                        return new string[]
+                        {
+                            "Survival Command List \n"+
+                            "Survival enable - Enables the Survival gamemode. \n"+
+                            "Survival disable - Disables the Survival gamemode. \n"
+                        };
+                    case "enable":
+                        Functions.EnableGamemode();
+                        return new string[]
+                        {
+                            "Survival will be enabled for the next round!"
+                        };
+                    case "disable":
+                        Functions.DisableGamemode();
+                        return new string[]
+                        {
+                            "Survival gamemode now disabled."
+                        };
+                    default:
+                        return new string[]
+                        {
+                            GetUsage()
+                        };
                 }
-                else if (args[0].ToLower() == "enable") { Survival.EnableGamemode(); return new string[] { "Survival will be enabled next round!" }; }
-                else if (args[0].ToLower() == "disable") { Survival.DisableGamemode(); return new string[] { "Survival is now disabled." }; }
-                else
-                    return new string[] { GetUsage() };
             }
-            else
-                return new string[] { GetUsage() };
+            else 
+            {
+                return new string[]
+                {
+                    GetUsage()
+                };
+            }
         }
     }
 }

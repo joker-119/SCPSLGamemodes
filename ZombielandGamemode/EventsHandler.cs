@@ -12,9 +12,6 @@ namespace ZombielandGamemode
         private readonly Zombieland plugin;
 
         public EventsHandler(Zombieland plugin) => this.plugin = plugin;
-
-        private int zombie_health;
-        private int child_health;
         public static Timer timer;
 
         public void OnPlayerJoin(PlayerJoinEvent ev)
@@ -35,7 +32,7 @@ namespace ZombielandGamemode
             {
                if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role != Role.SCP_049_2)
                {
-                   SpawnZombie(ev.Player);
+                   Functions.SpawnZombie(ev.Player);
                }
                else if (ev.TeamRole.Team != Team.SPECTATOR)
                {
@@ -67,8 +64,8 @@ namespace ZombielandGamemode
                 {
                     if (player.TeamRole.Team == Team.SCP)
                     {
-                        SpawnZombie(player);
-                        player.SetHealth(zombie_health);
+                        Functions.SpawnZombie(player);
+                        player.SetHealth(Zombieland.zombie_health);
                     }
                 }
 
@@ -94,7 +91,7 @@ namespace ZombielandGamemode
         {
             if (Zombieland.enabled)
                 plugin.Info("Round Ended!");
-                EndGamemodeRound();
+                Functions.EndGamemodeRound();
         }
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
@@ -122,11 +119,11 @@ namespace ZombielandGamemode
                     }
                     else if (zombieAlive && humanAlive == false)
                     {
-                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.EndGamemodeRound();
                     }
                     else if (zombieAlive == false && humanAlive)
                     {
-                        ev.Status = ROUND_END_STATUS.CI_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.EndGamemodeRound();
                     }
                 }
             }
@@ -143,7 +140,7 @@ namespace ZombielandGamemode
                 else
                 {
                     ev.Damage = 0;
-                    SpawnChild(ev.Player);
+                    Functions.SpawnChild(ev.Player);
                 }
             }   
         }
@@ -154,42 +151,6 @@ namespace ZombielandGamemode
             {
                 ev.SpawnChaos = true;
             }
-        }
-
-        public void EndGamemodeRound()
-        {
-            if (Zombieland.enabled)
-            {
-                plugin.Info("EndgameRound Function");
-                Zombieland.roundstarted = false;
-                plugin.Server.Round.EndRound();
-            }
-
-        }
-
-        public void SpawnChild(Player player)
-        {
-            player.ChangeRole(Role.SCP_049_2, false, false, false, true);
-
-
-            child_health = Zombieland.child_health;
-            player.SetHealth(child_health);
-
-            player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(15, "You died and became a <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);
-        }
-
-        public void SpawnZombie(Player player)
-        {
-            Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
-            player.ChangeRole(Role.SCP_049_2, false, false, true, true);
-            player.Teleport(spawn);
-
-            zombie_health = Zombieland.zombie_health;
-            player.SetHealth(zombie_health);
-
-            player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(15, "You are an alpha <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);
         }
     }
 }

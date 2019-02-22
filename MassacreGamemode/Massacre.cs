@@ -24,6 +24,7 @@ namespace MassacreGamemode
             enabled = false,
             roundstarted = false;
         public static string SpawnRoom;
+        public static Vector SpawnLoc;
         
         public override void OnDisable()
         {
@@ -40,27 +41,26 @@ namespace MassacreGamemode
         {
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "massacre", "motdb", "mascr" }, new MassacreCommand());
-            this.AddConfig(new ConfigSetting("mass_spawn_room", "jail", SettingType.BOOL, true, "Where everyone should spawn."));
-        }
-
-        public static void EnableGamemode()
-        {
-            enabled = true;
-            if (!roundstarted)
-            {
-                plugin.pluginManager.Server.Map.ClearBroadcasts();
-                plugin.pluginManager.Server.Map.Broadcast(25, "<color=#50c878>Massacre of the D-Bois Gamemode</color> is starting..", false);
-            }
-        }
-        public static void DisableGamemode()
-        {
-            enabled = false;
-            plugin.pluginManager.Server.Map.ClearBroadcasts();
+            this.AddConfig(new ConfigSetting("mass_spawn_room", "jail", SettingType.STRING, true, "Where everyone should spawn."));
         }
     }
 
     public class Functions
     {
+        public static void EnableGamemode()
+        {
+            Massacre.enabled = true;
+            if (!Massacre.roundstarted)
+            {
+                Massacre.plugin.pluginManager.Server.Map.ClearBroadcasts();
+                Massacre.plugin.pluginManager.Server.Map.Broadcast(25, "<color=#50c878>Massacre of the D-Bois Gamemode</color> is starting..", false);
+            }
+        }
+        public static void DisableGamemode()
+        {
+            Massacre.enabled = false;
+            Massacre.plugin.pluginManager.Server.Map.ClearBroadcasts();
+        }
         public static Vector SpawnLoc()
         {
             Vector spawn = null;
@@ -95,6 +95,39 @@ namespace MassacreGamemode
                 spawn = new Vector(53,1020,-44);
             }
             return spawn;
+        }
+        public static void SpawnDboi(Player player)
+        {
+            player.ChangeRole(Role.CLASSD, false, false, false, true);
+            player.Teleport(Massacre.SpawnLoc);
+
+            foreach (Item item in player.GetInventory())
+            {
+                item.Remove();
+            }
+
+            player.GiveItem(ItemType.FLASHLIGHT);
+            player.GiveItem(ItemType.CUP);
+
+            player.PersonalClearBroadcasts();
+            player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Get ready to die!", false);
+        }
+        public static void SpawnNut(Player player)
+        {
+            player.ChangeRole(Role.SCP_173, false, true, true, true);
+            player.Teleport(Massacre.SpawnLoc);
+            Massacre.plugin.Info("Spawned " + player.Name + " as SCP-173");
+            player.PersonalClearBroadcasts();
+            player.PersonalBroadcast(35, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the D-bois!", false);
+        }
+        public static void EndGamemodeRound()
+        {
+            if (Massacre.enabled)
+            {
+                Massacre.plugin.Info("EndgameRound Function");
+                Massacre.roundstarted = false;
+                Massacre.plugin.Server.Round.EndRound();
+            }
         }
     }
 }

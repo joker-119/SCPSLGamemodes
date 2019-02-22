@@ -14,22 +14,21 @@ namespace SurvivalGamemode
         name = "Survival of the Fittest Gamemode",
         description = "Gamemode Template",
         id = "gamemode.survival",
-        version = "1.0",
+        version = "1.3.0",
         SmodMajor = 3,
-        SmodMinor = 2,
-        SmodRevision = 2
+        SmodMinor = 3,
+        SmodRevision = 0
     )]
     public class Survival : Plugin
     {
         internal static Survival plugin;
-        
         public static bool
             enabled = false,
             roundstarted = false;
-
         public static float nut_delay;
-
+        public static Vector pos;
         public static int nut_health;
+        public static bool blackouts;
         
         public override void OnDisable()
         {
@@ -50,25 +49,68 @@ namespace SurvivalGamemode
             this.AddConfig(new ConfigSetting("survival_peanut_delay", 120f, SettingType.FLOAT, true, "The amount of time to wait before unleading peanuts."));
             this.AddConfig(new ConfigSetting("survival_peanut_health", 173, SettingType.NUMERIC, true, "The amount of health peanuts should have (lower values move faster"));
         }
-
-        public static void EnableGamemode()
-        {
-            enabled = true;
-            if (!roundstarted)
-            {
-                plugin.pluginManager.Server.Map.ClearBroadcasts();
-                plugin.pluginManager.Server.Map.Broadcast(25, "<color=#50c878>Survival of the Fittest Gamemode</color> is starting..", false);
-            }
-        }
-        public static void DisableGamemode()
-        {
-            enabled = false;
-            plugin.pluginManager.Server.Map.ClearBroadcasts();
-        }
     }
 
     public class Functions
     {
+        public static void EnableGamemode()
+        {
+            Survival.enabled = true;
+            if (!Survival.roundstarted)
+            {
+                Survival.plugin.pluginManager.Server.Map.ClearBroadcasts();
+                Survival.plugin.pluginManager.Server.Map.Broadcast(25, "<color=#50c878>Survival of the Fittest Gamemode</color> is starting..", false);
+            }
+        }
+        public static void DisableGamemode()
+        {
+            Survival.enabled = false;
+            Survival.plugin.pluginManager.Server.Map.ClearBroadcasts();
+        }
+        public static void EndGamemodeRound()
+        {
+            if (Survival.enabled)
+            {
+                Survival.plugin.Info("EndgameRound Function");
+                Survival.roundstarted = false;
+                Survival.plugin.Server.Round.EndRound();
+
+                Survival.plugin.Info("Toggling Blackout off.");
+                SCP575.Functions.ToggleBlackout();
+                if (Survival.blackouts)
+                {
+                    Survival.plugin.Info("Enabling timed Blackouts.");
+                    SCP575.Functions.EnableBlackouts();
+                }
+            }
+        }
+
+        public static void SpawnDboi(Player player)
+        {
+            Vector spawn = Survival.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_096);
+            player.ChangeRole(Role.CLASSD, false, false, false, true);
+            player.Teleport(spawn);
+
+            foreach (Item item in player.GetInventory())
+            {
+                item.Remove();
+            }
+
+            player.GiveItem(ItemType.FLASHLIGHT);
+            player.GiveItem(ItemType.CUP);
+
+            player.PersonalClearBroadcasts();
+            player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Find a hiding place and survive from the peanuts! They will spawn in 939's area when the lights go off!", false);
+        }
+
+        public static void SpawnNut(Player player)
+        {
+
+            player.ChangeRole(Role.SCP_173, false, true, true, true);
+            Survival.plugin.Info("Spawned " + player.Name + " as SCP-173");
+            player.PersonalClearBroadcasts();
+            player.PersonalBroadcast(35, "You will be teleported into the game arena when adequate time has passed for other players to hide...", false);
+        }
         public static Vector NutSpawn()
         {
             List<Room> rooms = new List<Room>();
@@ -83,6 +125,21 @@ namespace SurvivalGamemode
             Room randomRoom = rooms[randomNum];
             Vector spawn = randomRoom.Position;
             return spawn;
+        }
+        public static IEnumerable<float> TeleportNuts(float delay)
+        {
+            yield return delay;
+            Survival.plugin.Info("Timer completed!");
+            SCP575.Functions.ToggleBlackout();
+            foreach (Player player in Survival.plugin.Server.GetPlayers())
+            {
+                if (player.TeamRole.Role == Role.SCP_173)
+                {
+                    player.Teleport(Survival.pos);
+                    player.SetHealth(Survival.nut_health);
+                    player.PersonalBroadcast(15, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the Class-D before the auto-nuke goes off!", false);
+                }
+            }
         }
     }
 }

@@ -10,7 +10,6 @@ namespace MassacreGamemode
     {
         private readonly Massacre plugin;
         public static Player winner = null;
-        public static Vector SpawnLoc;
 
         public EventsHandler(Massacre plugin) => this.plugin = plugin;
         public void OnPlayerJoin(PlayerJoinEvent ev)
@@ -31,11 +30,11 @@ namespace MassacreGamemode
             {
                if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role != Role.SCP_173)
                {
-                   SpawnNut(ev.Player);
+                   Functions.SpawnNut(ev.Player);
                }
                else if (ev.TeamRole.Team != Team.SPECTATOR && ev.TeamRole.Team != Team.SCP)
                {
-                    SpawnDboi(ev.Player);
+                    Functions.SpawnDboi(ev.Player);
                }
                else if (ev.TeamRole.Team == Team.SPECTATOR)
                {
@@ -47,6 +46,7 @@ namespace MassacreGamemode
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
             Massacre.SpawnRoom = plugin.GetConfigString("mass_spawn_room");
+            Massacre.SpawnLoc = Functions.SpawnLoc();
         }
 
         public void OnRoundStart(RoundStartEvent ev)
@@ -54,7 +54,11 @@ namespace MassacreGamemode
             if (Massacre.enabled)
             {
                 Massacre.roundstarted = true;
-                SpawnLoc = Functions.SpawnLoc();
+                foreach (Door door in ev.Server.Map.GetDoors())
+                {
+                    door.Locked = true;
+                    door.Open = false;
+                }
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Massacre of the D-Bois Gamemode Started!");
 
@@ -62,11 +66,11 @@ namespace MassacreGamemode
                 {
                     if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR && player != winner)
                     {
-                        SpawnDboi(player);
+                        Functions.SpawnDboi(player);
                     }
                     else if (player.TeamRole.Team == Team.SCP || player == winner)
                     {
-                        SpawnNut(player);
+                        Functions.SpawnNut(player);
                     }
                 }
             }
@@ -77,7 +81,7 @@ namespace MassacreGamemode
             if (Massacre.enabled)
             {
                 plugin.Info("Round Ended!");
-                EndGamemodeRound();
+                Functions.EndGamemodeRound();
             }
         }
 
@@ -124,7 +128,7 @@ namespace MassacreGamemode
                     }
                     else if (peanutAlive && humanAlive && humanCount == 1)
                     {
-                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; Functions.EndGamemodeRound();
                         foreach (Player player in ev.Server.GetPlayers())
                         {
                             if (player.TeamRole.Team == Team.CLASSD)
@@ -137,11 +141,11 @@ namespace MassacreGamemode
                     }
                     else if (peanutAlive && humanAlive == false)
                     {
-                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.EndGamemodeRound();
                     }
                     else if (peanutAlive == false && humanAlive)
                     {
-                        ev.Status = ROUND_END_STATUS.CI_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.EndGamemodeRound();
                     }
                 }
             }
@@ -154,42 +158,6 @@ namespace MassacreGamemode
                 ev.SpawnChaos = true;
                 ev.PlayerList = new List<Player>();
             }
-        }
-
-        public void EndGamemodeRound()
-        {
-            if (Massacre.enabled)
-            {
-                plugin.Info("EndgameRound Function");
-                Massacre.roundstarted = false;
-                plugin.Server.Round.EndRound();
-            }
-        }
-
-        public void SpawnDboi(Player player)
-        {
-            player.ChangeRole(Role.CLASSD, false, false, false, true);
-            player.Teleport(SpawnLoc);
-
-            foreach (Item item in player.GetInventory())
-            {
-                item.Remove();
-            }
-
-            player.GiveItem(ItemType.FLASHLIGHT);
-            player.GiveItem(ItemType.CUP);
-
-            player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Get ready to die!", false);
-        }
-
-        public void SpawnNut(Player player)
-        {
-            player.Teleport(SpawnLoc);
-            player.ChangeRole(Role.SCP_173, false, true, true, true);
-            plugin.Info("Spawned " + player.Name + " as SCP-173");
-            player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(35, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the D-bois!", false);
         }
     }
 }

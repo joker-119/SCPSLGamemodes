@@ -21,21 +21,41 @@ namespace MassacreGamemode
         {
             if (args.Length > 0)
             {
-                if (args[0].ToLower() == "help")
+                switch (args[0].ToLower())
                 {
-                    return new string[] {
-                        "Massacre Command List \n" +
-                        "Massacre enable - Enable Massacre for the next round. \n" +
-                        "Massacre disable - Disable Massacre this and following rounds."
-                    };
+                    case "help":
+                        return new string[]
+                        {
+                            "Massacre Command List \n"+
+                            "Massacre enable - Enables the Massacre gamemode. \n"+
+                            "Massacre disable - Disables the Massacre gamemode. \n"
+                        };
+                    case "enable":
+                        Functions.EnableGamemode();
+                        return new string[]
+                        {
+                            "Massacre will be enabled for the next round!"
+                        };
+                    case "disable":
+                        Functions.DisableGamemode();
+                        return new string[]
+                        {
+                            "Massacre gamemode now disabled."
+                        };
+                    default:
+                        return new string[]
+                        {
+                            GetUsage()
+                        };
                 }
-                else if (args[0].ToLower() == "enable") { Massacre.EnableGamemode(); return new string[] { "Massacre will be enabled next round!" }; }
-                else if (args[0].ToLower() == "disable") { Massacre.DisableGamemode(); return new string[] { "Massacre is now disabled." }; }
-                else
-                    return new string[] { GetUsage() };
             }
-            else
-                return new string[] { GetUsage() };
+            else 
+            {
+                return new string[]
+                {
+                    GetUsage()
+                };
+            }
         }
     }
 }

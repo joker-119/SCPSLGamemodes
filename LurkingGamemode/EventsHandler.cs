@@ -10,7 +10,6 @@ namespace LurkingGamemode
     internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers
     {
         public readonly Lurking plugin;
-        public static bool blackouts;
 
         public EventsHandler(Lurking plugin) => this.plugin = plugin;
 
@@ -24,7 +23,7 @@ namespace LurkingGamemode
                     server.Map.ClearBroadcasts();
                     server.Map.Broadcast(25, "<color=#2D2B2B> Lurking in the dark</color> gamemode starting..", false);
                 }
-                blackouts = SCP575.SCP575.enabled;
+                Lurking.blackouts = SCP575.SCP575.enabled;
             }
         }
 
@@ -49,7 +48,7 @@ namespace LurkingGamemode
                         {
                             SCP575.Functions.DisableBlackouts();
                             plugin.Info("Disabling timed blackouts.");
-                            blackouts = true;
+                            Lurking.blackouts = true;
                         }
                     }
                 }
@@ -66,14 +65,14 @@ namespace LurkingGamemode
                         {
                             if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 && player.TeamRole.Role != Role.SCP_939_89)
                             {
-                                SpawnLarry(player);
+                                Functions.SpawnLarry(player);
                             }
                         }
                         for (int i = 0; i < Lurking.doggo_count; i++)
                         {
                             if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 && player.TeamRole.Role != Role.SCP_939_89)
                             {
-                                SpawnDoggo(player);
+                                Functions.SpawnDoggo(player);
                             }
                         }
                     }
@@ -98,7 +97,7 @@ namespace LurkingGamemode
             if (Lurking.enabled)
             {
                 plugin.Info("Round Ended!");
-                EndGamemodeRound();
+                Functions.EndGamemodeRound();
             }
         }
 
@@ -130,11 +129,11 @@ namespace LurkingGamemode
                     }
                     else if (scpAlive && humanAlive == false)
                     {
-                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.EndGamemodeRound();
                     }
                     else if (scpAlive == false && humanAlive)
                     {
-                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.EndGamemodeRound();
                     }
                 }
             }
@@ -146,41 +145,6 @@ namespace LurkingGamemode
             {
                 ev.SpawnChaos = false;
                 ev.PlayerList = new List<Player>();
-            }
-        }
-
-        public void EndGamemodeRound()
-        {
-            if (Lurking.enabled)
-            {
-                plugin.Info("EndgameRound Function");
-                Lurking.roundstarted = false;
-                plugin.Server.Round.EndRound();
-
-                if (blackouts)
-                {
-                    SCP575.Functions.EnableBlackouts();
-                    plugin.Info("Enabling timed Blackouts.");
-                }
-                SCP575.Functions.ToggleBlackout();
-            }
-        }
-
-        public void SpawnLarry(Player player)
-        {
-            player.ChangeRole(Role.SCP_106, false, true, false, false);
-            player.SetHealth(Lurking.larry_health);
-            player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(25, "You are <color=#2D2B2B> what lurks in the dark</color>, your job is to kill the Scientists before they escape.", false);
-        }
-        public void SpawnDoggo(Player player)
-        {
-            if (player.TeamRole.Role != Role.SCP_106)
-            {
-                player.ChangeRole(Role.SCP_939_53, false, true, false, false);
-                player.SetHealth(Lurking.doggo_health);
-                player.PersonalClearBroadcasts();
-                player.PersonalBroadcast(25, "You are <color=#2D2B2B> what lurks in the dark</color>, your job is to kill the Scientists before they escape.", false);
             }
         }
     }

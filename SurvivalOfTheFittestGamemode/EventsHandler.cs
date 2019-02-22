@@ -12,7 +12,6 @@ namespace SurvivalGamemode
     internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie
     {
         private readonly Survival plugin;
-        public static bool blackouts;
         public static Player winner = null;
 
         public EventsHandler(Survival plugin) => this.plugin = plugin;
@@ -34,11 +33,11 @@ namespace SurvivalGamemode
             {
                if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role != Role.SCP_173)
                {
-                   SpawnNut(ev.Player);
+                   Functions.SpawnNut(ev.Player);
                }
                else if (ev.TeamRole.Team != Team.SPECTATOR && ev.TeamRole.Team != Team.SCP)
                {
-                    SpawnDboi(ev.Player);
+                    Functions.SpawnDboi(ev.Player);
                }
                else if (ev.TeamRole.Team == Team.SPECTATOR)
                {
@@ -51,6 +50,7 @@ namespace SurvivalGamemode
         {
             Survival.nut_delay = this.plugin.GetConfigFloat("survival_peanut_delay");
             Survival.nut_health = this.plugin.GetConfigInt("survival_peanut_health");
+            Survival.pos = Functions.NutSpawn();
         }
 
         public void OnRoundStart(RoundStartEvent ev)
@@ -66,13 +66,13 @@ namespace SurvivalGamemode
                         {
                             SCP575.Functions.DisableBlackouts();
                             plugin.Info("Disabling timed blackouts.");
-                            blackouts = true;
+                            Survival.blackouts = true;
                         }
                     }
                 }
-                Timing.Run(TeleportNuts(Survival.nut_delay));
+                Timing.Run(Functions.TeleportNuts(Survival.nut_delay));
                 plugin.Info("Timer Initialized..");
-                plugin.Info("Timer set to " + Survival.nut_delay + " ms.");
+                plugin.Info("Timer set to " + Survival.nut_delay + "s.");
 
                 Survival.roundstarted = true;
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
@@ -113,11 +113,11 @@ namespace SurvivalGamemode
                 {
                     if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR && player != winner)
                     {
-                        SpawnDboi(player);
+                        Functions.SpawnDboi(player);
                     }
-                    else if (player.TeamRole.Team == Team.SCP || player == winner)
+                    else if (player.TeamRole.Team == Team.SCP || (player == winner && winner is Player))
                     {
-                        SpawnNut(player);
+                        Functions.SpawnNut(player);
                     }
                 }
             }
@@ -128,7 +128,7 @@ namespace SurvivalGamemode
             if (Survival.enabled)
             {
                 plugin.Info("Round Ended!");
-                EndGamemodeRound();
+                Functions.EndGamemodeRound();
             }
         }
 
@@ -175,7 +175,7 @@ namespace SurvivalGamemode
                     }
                     else if (peanutAlive && humanAlive && humanCount == 1)
                     {
-                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; Functions.EndGamemodeRound();
                         foreach (Player player in ev.Server.GetPlayers())
                         {
                             if (player.TeamRole.Team == Team.CLASSD)
@@ -188,11 +188,11 @@ namespace SurvivalGamemode
                     }
                     else if (peanutAlive && humanAlive == false)
                     {
-                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.EndGamemodeRound();
                     }
                     else if (peanutAlive == false && humanAlive)
                     {
-                        ev.Status = ROUND_END_STATUS.CI_VICTORY; EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.EndGamemodeRound();
                     }
                 }
             }
@@ -204,66 +204,6 @@ namespace SurvivalGamemode
             {
                 ev.SpawnChaos = true;
                 ev.PlayerList = new List<Player>();
-            }
-        }
-
-        public void EndGamemodeRound()
-        {
-            if (Survival.enabled)
-            {
-                plugin.Info("EndgameRound Function");
-                Survival.roundstarted = false;
-                plugin.Server.Round.EndRound();
-
-                plugin.Info("Toggling Blackout off.");
-                SCP575.Functions.ToggleBlackout();
-                if (blackouts)
-                {
-                    plugin.Info("Enabling timed Blackouts.");
-                    SCP575.Functions.EnableBlackouts();
-                }
-            }
-        }
-
-        public void SpawnDboi(Player player)
-        {
-            Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_096);
-            player.ChangeRole(Role.CLASSD, false, false, false, true);
-            player.Teleport(spawn);
-
-            foreach (Item item in player.GetInventory())
-            {
-                item.Remove();
-            }
-
-            player.GiveItem(ItemType.FLASHLIGHT);
-            player.GiveItem(ItemType.CUP);
-
-            player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Find a hiding place and survive from the peanuts! They will spawn in 939's area when the lights go off!", false);
-        }
-
-        public void SpawnNut(Player player)
-        {
-
-            player.ChangeRole(Role.SCP_173, false, true, true, true);
-            plugin.Info("Spawned " + player.Name + " as SCP-173");
-            player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(35, "You will be teleported into the game arena when adequate time has passed for other players to hide...", false);
-        }
-        public IEnumerable<float> TeleportNuts(float delay)
-        {
-            yield return delay;
-            plugin.Info("Timer completed!");
-            SCP575.Functions.ToggleBlackout();
-            foreach (Player player in plugin.Server.GetPlayers())
-            {
-                if (player.TeamRole.Role == Role.SCP_173)
-                {
-                    player.Teleport(Functions.NutSpawn());
-                    player.SetHealth(Survival.nut_health);
-                    player.PersonalBroadcast(15, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the Class-D before the auto-nuke goes off!", false);
-                }
             }
         }
     }

@@ -17,26 +17,45 @@ namespace ZombielandGamemode
                 "zombieland ENABLE \n" +
                 "zombieland DISABLE";
         }
-
         public string[] OnCall(ICommandSender sender, string[] args)
         {
             if (args.Length > 0)
             {
-                if (args[0].ToLower() == "help")
+                switch (args[0].ToLower())
                 {
-                    return new string[] {
-                        "zombieland Command List \n" +
-                        "zombieland enable - Enable zombieland for the next round. \n" +
-                        "zombieland disable - Disable zombieland this and following rounds."
-                    };
+                    case "help":
+                        return new string[]
+                        {
+                            "Zombieland Command List \n"+
+                            "Zombieland enable - Enables the Zombieland gamemode. \n"+
+                            "Zombieland disable - Disables the Zombieland gamemode. \n"
+                        };
+                    case "enable":
+                        Functions.EnableGamemode();
+                        return new string[]
+                        {
+                            "Zombieland will be enabled for the next round!"
+                        };
+                    case "disable":
+                        Functions.DisableGamemode();
+                        return new string[]
+                        {
+                            "Zombieland gamemode now disabled."
+                        };
+                    default:
+                        return new string[]
+                        {
+                            GetUsage()
+                        };
                 }
-                else if (args[0].ToLower() == "enable") { Zombieland.EnableGamemode(); return new string[] { "Zombieland will be enabled next round!" }; }
-                else if (args[0].ToLower() == "disable") { Zombieland.DisableGamemode(); return new string[] { "Zombieland is now disabled." }; }
-                else
-                    return new string[] { GetUsage() };
             }
-            else
-                return new string[] { GetUsage() };
+            else 
+            {
+                return new string[]
+                {
+                    GetUsage()
+                };
+            }
         }
     }
 }

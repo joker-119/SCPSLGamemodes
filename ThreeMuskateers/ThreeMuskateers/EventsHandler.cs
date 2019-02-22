@@ -33,31 +33,35 @@ namespace MuskateersGamemode
         }
         public void OnRoundStart(RoundStartEvent ev)
         {
-            List<Player> players = ev.Server.GetPlayers();
-            List<Player> muskateer = new List<Player>();
-            
-            for (int i = 0; i > 3; i++)
+            if (Muskateers.enabled)
             {
+                List<Player> players = ev.Server.GetPlayers();
+                List<Player> muskateer = new List<Player>();
+
+                for (int i = 0; i < 3; i++)
+                {
+                    int randomPlayer = new System.Random().Next(players.Count);
+                        muskateer.Add(players[randomPlayer]);
+                }
                 foreach (Player player in players)
                 {
-                    muskateer.Add(player);
-                }
-            }
-            foreach (Player player in players)
-            {
-                if (muskateer.Contains(player))
-                {
-                    Functions.SpawnNTF(player);
-                }
-                else
-                {
-                    Functions.SpawnClassD(player);
+                    if (muskateer.Contains(player))
+                    {
+                        Functions.SpawnNTF(player);
+                    }
+                    else
+                    {
+                        Functions.SpawnClassD(player);
+                    }
                 }
             }
         }
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            ev.SpawnChaos = true;
+            if (Muskateers.enabled)
+            {
+                ev.SpawnChaos = true;
+            }
         }
         public void OnRoundEnd(RoundEndEvent ev)
         {

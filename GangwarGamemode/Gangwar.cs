@@ -2,6 +2,7 @@ using Smod2;
 using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
+using Smod2.API;
 
 namespace GangwarGamemode
 {
@@ -10,10 +11,10 @@ namespace GangwarGamemode
         name = "Gangwar Gamemode",
         description = "Gangwar Gamemode",
         id = "gamemode.gangwar",
-        version = "1.0",
+        version = "1.3.0",
         SmodMajor = 3,
-        SmodMinor = 2,
-        SmodRevision = 2
+        SmodMinor = 3,
+        SmodRevision = 0
     )]
 
     public class Gangwar : Plugin
@@ -44,21 +45,60 @@ namespace GangwarGamemode
             this.AddConfig(new ConfigSetting("gangwar_ci_health", 120, SettingType.NUMERIC, true, "The amount of health CI have."));
             this.AddConfig(new ConfigSetting("gangwar_ntf_health", 150, SettingType.NUMERIC, true, "The amount of health NTF have."));
         }
+    }
 
+    public class Functions
+    {
         public static void EnableGamemode()
         {
-            enabled = true;
-            if (!roundstarted)
+            Gangwar.enabled = true;
+            if (!Gangwar.roundstarted)
             {
-                plugin.pluginManager.Server.Map.ClearBroadcasts();
-                plugin.pluginManager.Server.Map.Broadcast(25, "<color=#00ffff> Gangwar Gamemode is starting..</color>", false);
+                Gangwar.plugin.pluginManager.Server.Map.ClearBroadcasts();
+                Gangwar.plugin.pluginManager.Server.Map.Broadcast(25, "<color=#00ffff> Gangwar Gamemode is starting..</color>", false);
             }
         }
 
         public static void DisableGamemode()
         {
-            enabled = false;
-            plugin.pluginManager.Server.Map.ClearBroadcasts();
+            Gangwar.enabled = false;
+            Gangwar.plugin.pluginManager.Server.Map.ClearBroadcasts();
+        }
+        public static void EndGamemodeRound()
+        {
+            if (Gangwar.enabled)
+            {
+                Gangwar.plugin.Info("EndgameRound Function.");
+                Gangwar.roundstarted = false;
+                Gangwar.plugin.Server.Round.EndRound();
+            }
+        }
+
+        public static void SpawnChaos(Player player)
+        {
+            player.ChangeRole(Role.CHAOS_INSURGENCY, true, true, false, true);
+            foreach (Item item in player.GetInventory())
+            {
+                item.Remove();
+            }
+            player.GiveItem(ItemType.LOGICER);
+            player.GiveItem(ItemType.COM15);
+            player.GiveItem(ItemType.MEDKIT);
+            player.GiveItem(ItemType.FRAG_GRENADE);
+            player.GiveItem(ItemType.FLASHBANG);
+            player.SetAmmo(AmmoType.DROPPED_5,500);
+            player.SetAmmo(AmmoType.DROPPED_7,500);
+            player.SetAmmo(AmmoType.DROPPED_9,500);
+            player.SetHealth(Gangwar.ci_health);
+        }
+
+        public static void SpawnNTF(Player player)
+        {
+            player.ChangeRole(Role.NTF_COMMANDER, true, true, false, true);
+            player.SetAmmo(AmmoType.DROPPED_5,500);
+            player.SetAmmo(AmmoType.DROPPED_7,500);
+            player.SetAmmo(AmmoType.DROPPED_9,500);
+            player.SetHealth(Gangwar.ntf_health);
         }
     }
 }

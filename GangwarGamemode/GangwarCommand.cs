@@ -22,41 +22,41 @@ namespace GangwarGamemode
         {
             if (args.Length > 0)
             {
-                if (args[0].ToLower() == "help")
+                switch (args[0].ToLower())
                 {
-                    return new string[] {
-                        "Gangwar Command List \n" +
-                        "Gangwar enable - Enable Gangwar for the next round. \n" +
-                        "Gangwar disable - Disable gangwar for following rounds. \n"
-                    };
+                    case "help":
+                        return new string[]
+                        {
+                            "Gangwar Command List \n"+
+                            "Gangwar enable - Enables the Gangwar gamemode. \n"+
+                            "Gangwar disable - Disables the Gangwar gamemode. \n"
+                        };
+                    case "enable":
+                        Functions.EnableGamemode();
+                        return new string[]
+                        {
+                            "Gangwar will be enabled for the next round!"
+                        };
+                    case "disable":
+                        Functions.DisableGamemode();
+                        return new string[]
+                        {
+                            "Gangwar gamemode now disabled."
+                        };
+                    default:
+                        return new string[]
+                        {
+                            GetUsage()
+                        };
                 }
-                else if (args[0].ToLower() == "enable")
-                {
-                    Gangwar.EnableGamemode();
-                    return new string[]
-                    {
-                        "Gangwar will be enabled next round!"
-                    };
-                }
-                else if (args[0].ToLower() == "disable")
-                {
-                    Gangwar.DisableGamemode();
-                    return new string[]
-                    {
-                        "Gangwar is now disabled."
-                    };
-                }
-                else
-                    return new string[] 
-                    {
-                        GetUsage()
-                    };
             }
-            else
+            else 
+            {
                 return new string[]
                 {
                     GetUsage()
                 };
+            }
         }
     }
 }
