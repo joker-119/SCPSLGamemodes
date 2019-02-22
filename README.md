@@ -7,6 +7,8 @@ Gamemodes for SCP:SL. Requires Smod
  - Zombieland [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/ZombielandGamemode#zombieland)]
  - Gangwar [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/GangwarGamemode#gangwar)]
  - What Lurks in the Dark [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/LurkingGamemode#lurking)] *
+ - Massacre of the D-Bois [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/MassacreGamemode#massacre)]
+ - Three Muskateers [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/MuskateersGamemode#muskateers)]
 
- `*` Indicates the [[Blackout Plugin](https://github.com/galaxy119/Blackout/releases)] is required to use this gamemode.
+ `*` Indicates the [[SCP-575 Plugin](https://github.com/galaxy119/SCP-575/releases)] is required to use this gamemode.
  

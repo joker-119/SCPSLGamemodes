@@ -14,8 +14,8 @@ Auto Nuke is enabled. Ent Zone and both LCZ gates are locked. 106, Micro-HID and
 ### Config Settings
 Config option | Config Type | Default Value | Description
 :---: | :---: | :---: | :------
-survival_peanut_delay | Int | 120 | The amount of time (in seconds) should pass before the blackout is enabled and peanuts are released. [Default: 120]
-survival_peanut_health | Int | 173 | The amount of health Peanuts should have when they spawn. The lower the amount, the faster they move. [Default: 173]
+survival_peanut_delay | Int | 120 | The amount of time (in seconds) should pass before the blackout is enabled and peanuts are released.
+survival_peanut_health | Int | 173 | The amount of health Peanuts should have when they spawn. The lower the amount, the faster they move.
 
 ### Commands
   Command |  |  | Description

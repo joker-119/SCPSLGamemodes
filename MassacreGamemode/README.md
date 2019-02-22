@@ -1,26 +1,24 @@
-Survival Of The Fittest (SOTF)
+Massacre of the D-Bois
 ======
 made by Joker 119
 ## Description
-Everyone spawns as a Class-D in Heavy Containment. 2-4 peanuts spawn in their normal spawn, awaiting to be unleashed on the Class-D.
-Auto Nuke is enabled. Ent Zone and both LCZ gates are locked. 106, Micro-HID and SCP-079 rooms are locked open., all armory doors in HCZ are locked closed.
+1-4 Peanuts will spawn, and everyone else will be Class-D with flashlights and cups.
+All players are then teleported to a locked room, where the peanuts may begin murdering everyone.
+The last D-Boi alive, wins!
 
 ### Features
- - Players who join before the round has started will be notified that SOTF Gamemode is starting.
+ - Players who join before the round has started will be notified that Massacre Gamemode is starting.
  - All players will be given a broadcast of their role and their objective.
- - SCP 173 will be teleported into the map after the timer goes off.
- - Integration with Blackout plugin
 
 ### Config Settings
 Config option | Config Type | Default Value | Description
 :---: | :---: | :---: | :------
-survival_peanut_delay | Int | 120 | The amount of time (in seconds) should pass before the blackout is enabled and peanuts are released. [Default: 120]
-survival_peanut_health | Int | 173 | The amount of health Peanuts should have when they spawn. The lower the amount, the faster they move. [Default: 173]
+mass_spawn_room | String | jail | The location the event takes place. Currently accepted locations are: jail, 939's spawn, 049's spawn, 173's spawn and 106's spawn. Invalid locations will default to jail.
 
 ### Commands
   Command |  |  | Description
 :---: | :---: | :---: | :------
-**Aliases** | **Survival** | **Surv** | **SOTF**
-Survival Enable | ~~ | ~~ | Enable SOTF for the next round
-Survival Disable | ~~ | ~~ | Disable SOTF this and following rounds
+**Aliases** | **Massacre** | **mascr** | **motdb**
+massacre Enable | ~~ | ~~ | Enable massacre for the next round
+massacre Disable | ~~ | ~~ | Disable massacre this and following rounds
 
