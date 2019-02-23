@@ -32,7 +32,6 @@ namespace JuggernautGamemode
         public static Player activator = null;
         public static int juggernaut_healh;
         public static int ntf_health;
-        //private bool blackouts = false;
         public static string[] juggernaut_prevRank = new string[2];
         public static Player selectedJuggernaut = null;
         public static float critical_damage;

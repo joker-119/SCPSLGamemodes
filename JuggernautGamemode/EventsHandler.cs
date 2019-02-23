@@ -125,21 +125,6 @@ namespace JuggernautGamemode
             Juggernaut.NTF_Health = this.plugin.GetConfigInt("juggernaut_ntf_health");
             Juggernaut.critical_damage = plugin.GetConfigFloat("juggernaut_critical_damage");
             Juggernaut.jugg_infinite_nades = this.plugin.GetConfigBool("juggernaut_infinite_jugg_nades");
-
-            //foreach (Plugin p in PluginManager.Manager.EnabledPlugins)
-            //{
-            //    if (p.Details.id == "blackout")
-            //    {
-            //        if (p is Blackout.Plugin)
-            //        {
-            //            if (Blackout.Plugin.enabled)
-            //            {
-            //                Blackout.Plugin.DisableBlackouts();
-            //                blackouts = true;
-            //            }
-            //        }
-            //    }
-            //}
         }
 
         public void OnRoundStart(RoundStartEvent ev)
@@ -256,7 +241,7 @@ namespace JuggernautGamemode
                 else
                 {
                     plugin.Server.Map.ClearBroadcasts();
-                    plugin.Server.Map.Broadcast(15, "There are " + Juggernaut.plugin.pluginManager.Server.Round.Stats.NTFAlive + " NTF remaining.", false);
+                    plugin.Server.Map.Broadcast(15, "There are " + (Juggernaut.plugin.pluginManager.Server.Round.Stats.NTFAlive - 1) + " NTF remaining.", false);
                 }   
             }
         }

@@ -28,17 +28,9 @@ namespace MassacreGamemode
         {
             if (Massacre.enabled)
             {
-               if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role != Role.SCP_173)
+               if (ev.TeamRole.Role == Role.SCP_173)
                {
-                   Functions.SpawnNut(ev.Player);
-               }
-               else if (ev.TeamRole.Team != Team.SPECTATOR && ev.TeamRole.Team != Team.SCP)
-               {
-                    Functions.SpawnDboi(ev.Player);
-               }
-               else if (ev.TeamRole.Team == Team.SPECTATOR)
-               {
-                    ev.Player.PersonalBroadcast(25, "You are dead! But don't worry, now you get to relax and watch your friends die!", false);
+                   ev.Player.SetHealth(Massacre.nut_health);
                }
            }
         }
@@ -47,6 +39,7 @@ namespace MassacreGamemode
         {
             Massacre.SpawnRoom = plugin.GetConfigString("mass_spawn_room");
             Massacre.SpawnLoc = Functions.SpawnLoc();
+            Massacre.nut_health = plugin.GetConfigInt("mass_peanut_health");
         }
 
         public void OnRoundStart(RoundStartEvent ev)

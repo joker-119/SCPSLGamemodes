@@ -3,6 +3,7 @@ using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
 using Smod2.API;
+using System.Collections.Generic;
 
 namespace ZombielandGamemode
 {
@@ -21,6 +22,8 @@ namespace ZombielandGamemode
         internal static Zombieland plugin;
         public static int zombie_health;
         public static int child_health;
+        public static List<Player> Alpha = new List<Player>();
+        public static bool AlphaDoorDestroy;
         
         public static bool
             enabled = false,
@@ -44,6 +47,7 @@ namespace ZombielandGamemode
 
             this.AddConfig(new ConfigSetting("zombieland_zombie_health", 3000, SettingType.NUMERIC, true, "The amount of health the starting zombies have."));
             this.AddConfig(new ConfigSetting("zombieland_child_health", 500, SettingType.NUMERIC, true, "The amoutn of health child zombies should have."));
+            this.AddConfig(new ConfigSetting("zombieland_alphas_destroy_doors", true, SettingType.BOOL, true, "If Alpha zombies should destroy locked doors."));
         }
     }
 
@@ -89,7 +93,7 @@ namespace ZombielandGamemode
             player.ChangeRole(Role.SCP_049_2, false, false, true, true);
             player.Teleport(spawn);
 
-            player.SetHealth(Zombieland.zombie_health);
+            Zombieland.Alpha.Add(player);
 
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(15, "You are an alpha <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);

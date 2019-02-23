@@ -3,6 +3,7 @@ using Smod2.API;
 using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
+using System.Collections.Generic;
 
 namespace MassacreGamemode
 {
@@ -25,6 +26,8 @@ namespace MassacreGamemode
             roundstarted = false;
         public static string SpawnRoom;
         public static Vector SpawnLoc;
+        public static int nut_health;
+        public static List<Vector> SpawnLocs = new List<Vector>();
         
         public override void OnDisable()
         {
@@ -42,6 +45,7 @@ namespace MassacreGamemode
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "massacre", "motdb", "mascr" }, new MassacreCommand());
             this.AddConfig(new ConfigSetting("mass_spawn_room", "jail", SettingType.STRING, true, "Where everyone should spawn."));
+            this.AddConfig(new ConfigSetting("mass_peanut_health", 1, SettingType.NUMERIC, true, "How much health Peanuts spawn with."));
         }
     }
 
@@ -64,37 +68,56 @@ namespace MassacreGamemode
         public static Vector SpawnLoc()
         {
             Vector spawn = null;
-            if (Massacre.SpawnRoom.ToLower() == "jail")
+
+            switch (Massacre.SpawnRoom.ToLower())
             {
-                Massacre.plugin.Info("Jail room selected");
-                spawn = new Vector(53,1020,-44);
+                case "jail":
+                {
+                    Massacre.plugin.Info("Jail room selected.");
+                    spawn = new Vector(53,1020,-44);
+                    return spawn;
+                }
+                case "939":
+                {
+                    Massacre.plugin.Info("939 Spawn Room selected");
+                    spawn = Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_939_53);
+                    return spawn;
+                }
+                case "049":
+                {
+                    Massacre.plugin.Info("049 Spawn room selected");
+                    spawn = Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
+                    return spawn;
+                }
+                case "106":
+                {
+                    Massacre.plugin.Info("106 Spawn room selected");
+                    spawn = Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_106);
+                    return spawn;
+                }
+                case "173":
+                {
+                    Massacre.plugin.Info("173 Spawn room selected.");
+                    spawn = Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_173);
+                    return spawn;
+                }
+                case "random":
+                {
+                    Massacre.SpawnLocs.Add(Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_939_53));
+                    Massacre.SpawnLocs.Add(Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_173));
+                    Massacre.SpawnLocs.Add(Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_049));
+                    Massacre.SpawnLocs.Add(Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_106));
+                    Massacre.SpawnLocs.Add(new Vector(53,1020,-44));
+                    int RandomInt = new System.Random().Next(Massacre.SpawnLocs.Count);
+                    return Massacre.SpawnLocs[RandomInt];
+                }
+                default:
+                {
+                    Massacre.plugin.Info("Invalid location selected, defaulting to Jail.");
+                    spawn = new Vector(53,1020,-44);
+                    return spawn;
+                }
             }
-            else if (Massacre.SpawnRoom.ToLower() == "939")
-            {
-                Massacre.plugin.Info("939 Spawn Room selected");
-                spawn = Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_939_53);
-            }
-            else if (Massacre.SpawnRoom.ToLower() == "049")
-            {
-                Massacre.plugin.Info("SCP-049 Spawn room selected");
-                spawn = Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
-            }
-            else if (Massacre.SpawnRoom.ToLower() == "173")
-            {
-                Massacre.plugin.Info("SCP-173 Spawn room selected.");
-                spawn = Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_173);
-            }
-            else if (Massacre.SpawnRoom.ToLower() == "106")
-            {
-                Massacre.plugin.Info("SCP-106 Spawn room selected.");
-                spawn = Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_106);
-            }
-            else
-            {
-                Massacre.plugin.Info("An invalid spawn room was entered, defaulting to Jail.");
-                spawn = new Vector(53,1020,-44);
-            }
-            return spawn;
         }
         public static void SpawnDboi(Player player)
         {

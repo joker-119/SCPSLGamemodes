@@ -2,6 +2,7 @@ using Smod2.API;
 using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using Smod2.Events;
+using System.Collections.Generic;
 
 namespace GangwarGamemode
 {
@@ -30,6 +31,13 @@ namespace GangwarGamemode
                 if (ev.Player.TeamRole.Team == Team.SCP || ev.Player.TeamRole.Team == Team.CLASSD)
                 {
                     Functions.SpawnChaos(ev.Player);
+                    List<ItemType> items = new List<ItemType>();
+                    items.Add(ItemType.LOGICER);
+                    items.Add(ItemType.MEDKIT);
+                    items.Add(ItemType.USP);
+                    items.Add(ItemType.FLASHBANG);
+                    items.Add(ItemType.FRAG_GRENADE);
+                    ev.Items = items;
                 }
                 else if (ev.Player.TeamRole.Role == Role.FACILITY_GUARD || ev.Player.TeamRole.Team == Team.SCIENTIST)
                 {

@@ -7,7 +7,7 @@ using System.Timers;
 
 namespace ZombielandGamemode
 {
-    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerHurt, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerSetRole, IEventHandlerWaitingForPlayers
+    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerDoorAccess, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerHurt, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerSetRole, IEventHandlerWaitingForPlayers
     {
         private readonly Zombieland plugin;
 
@@ -30,7 +30,7 @@ namespace ZombielandGamemode
         {
             if (Zombieland.enabled)
             {
-               if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role != Role.SCP_049_2)
+               if (ev.TeamRole.Team == Team.SCP)
                {
                    Functions.SpawnZombie(ev.Player);
                }
@@ -49,6 +49,7 @@ namespace ZombielandGamemode
         {
             Zombieland.zombie_health = this.plugin.GetConfigInt("zombieland_zombie_health");
             Zombieland.child_health = this.plugin.GetConfigInt("zombieland_child_health");
+            Zombieland.AlphaDoorDestroy = this.plugin.GetConfigBool("zombieland_alphas_destroy_doors");
         }
 
         public void OnRoundStart(RoundStartEvent ev)
@@ -62,9 +63,8 @@ namespace ZombielandGamemode
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
-                    if (player.TeamRole.Team == Team.SCP)
+                    if (player.TeamRole.Role == Role.SCP_049_2)
                     {
-                        Functions.SpawnZombie(player);
                         player.SetHealth(Zombieland.zombie_health);
                     }
                 }
@@ -84,6 +84,14 @@ namespace ZombielandGamemode
                 plugin.Server.Map.ClearBroadcasts();
                 int human_count = (Zombieland.plugin.Round.Stats.NTFAlive + Zombieland.plugin.Round.Stats.ScientistsAlive + Zombieland.plugin.Round.Stats.ClassDAlive + Zombieland.plugin.Round.Stats.CiAlive);
                 plugin.Server.Map.Broadcast(10, "There are currently " + Zombieland.plugin.Round.Stats.Zombies + " zombies and " + human_count + " humans alive.", false);
+            }
+        }
+
+        public void OnDoorAccess(PlayerDoorAccessEvent ev)
+        {
+            if (ev.Door.Locked && Zombieland.Alpha.Contains(ev.Player) && Zombieland.AlphaDoorDestroy)
+            {
+                ev.Destroy = true;
             }
         }
 

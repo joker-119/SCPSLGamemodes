@@ -9,7 +9,7 @@ using Smod2.Events;
 
 namespace MuskateersGamemode
 {
-    internal class EventsHandler : IEventHandlerWaitingForPlayers, IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerTeamRespawn, IEventHandlerPlayerJoin, IEventHandlerPlayerDie
+    internal class EventsHandler : IEventHandlerWaitingForPlayers, IEventHandlerSetRole, IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerTeamRespawn, IEventHandlerPlayerJoin, IEventHandlerPlayerDie
     {
         private readonly Muskateers plugin;
         public EventsHandler(Muskateers plugin) => this.plugin = plugin;
@@ -22,7 +22,7 @@ namespace MuskateersGamemode
                 {
                     Server server = plugin.pluginManager.Server;
                     server.Map.ClearBroadcasts();
-                    server.Map.Broadcast(25, "<color=#308ADA>Three Muskateers<color> gamemode is starting..", false);
+                    server.Map.Broadcast(25, "<color=#308ADA>Three Muskateers</color> gamemode is starting..", false);
                 }
             }
         }
@@ -35,24 +35,50 @@ namespace MuskateersGamemode
         {
             if (Muskateers.enabled)
             {
+                Muskateers.roundstarted = true;
                 List<Player> players = ev.Server.GetPlayers();
                 List<Player> muskateer = new List<Player>();
+                List<Player> classd = new List<Player>();
 
                 for (int i = 0; i < 3; i++)
                 {
-                    int randomPlayer = new System.Random().Next(players.Count);
+                    int randomPlayer = Muskateers.generator.Next(players.Count);
                         muskateer.Add(players[randomPlayer]);
+                        players.RemoveAt(randomPlayer);
                 }
                 foreach (Player player in players)
+                {
+                    classd.Add(player);
+                }
+                foreach (Player player in ev.Server.GetPlayers())
                 {
                     if (muskateer.Contains(player))
                     {
                         Functions.SpawnNTF(player);
                     }
-                    else
+                    else if (classd.Contains(player))
                     {
                         Functions.SpawnClassD(player);
                     }
+                }
+            }
+        }
+        public void OnSetRole(PlayerSetRoleEvent ev)
+        {
+            if (Muskateers.enabled)
+            {
+                if (ev.TeamRole.Role == Role.CLASSD)
+                {
+                    List<ItemType> items = new List<ItemType>();
+                    items.Add(ItemType.USP);
+                    items.Add(ItemType.ZONE_MANAGER_KEYCARD);
+                    items.Add(ItemType.MEDKIT);
+                    ev.Items = items;
+                    ev.Player.SetHealth(Muskateers.classd_health);
+                }
+                else if (ev.TeamRole.Team == Team.NINETAILFOX)
+                {
+                    ev.Player.SetHealth(Muskateers.ntf_health);
                 }
             }
         }
