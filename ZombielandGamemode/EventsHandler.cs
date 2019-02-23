@@ -28,7 +28,7 @@ namespace ZombielandGamemode
         }
         public void OnSetRole(PlayerSetRoleEvent ev)
         {
-            if (Zombieland.enabled)
+            if (Zombieland.enabled || Zombieland.roundstarted)
             {
                if (ev.TeamRole.Team == Team.SCP)
                {
@@ -79,7 +79,7 @@ namespace ZombielandGamemode
 
         public void OnTimedEvent(System.Object source, ElapsedEventArgs e)
         {
-            if (Zombieland.enabled)
+            if (Zombieland.enabled || Zombieland.roundstarted)
             {
                 plugin.Server.Map.ClearBroadcasts();
                 int human_count = (Zombieland.plugin.Round.Stats.NTFAlive + Zombieland.plugin.Round.Stats.ScientistsAlive + Zombieland.plugin.Round.Stats.ClassDAlive + Zombieland.plugin.Round.Stats.CiAlive);
@@ -97,14 +97,14 @@ namespace ZombielandGamemode
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (Zombieland.enabled)
+            if (Zombieland.enabled || Zombieland.roundstarted)
                 plugin.Info("Round Ended!");
                 Functions.EndGamemodeRound();
         }
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (Zombieland.enabled)
+            if (Zombieland.enabled || Zombieland.roundstarted)
             {
                 bool zombieAlive = false;
                 bool humanAlive = false;
@@ -139,7 +139,7 @@ namespace ZombielandGamemode
 
         public void OnPlayerHurt(PlayerHurtEvent ev)
         {
-            if (Zombieland.enabled && ev.Player.TeamRole.Team != Team.SCP && ev.Damage > ev.Player.GetHealth())
+            if ((Zombieland.enabled || Zombieland.roundstarted) && ev.Player.TeamRole.Team != Team.SCP && ev.Damage > ev.Player.GetHealth())
             {
                 if (ev.Attacker == ev.Player || ev.DamageType == DamageType.TESLA || ev.DamageType == DamageType.NUKE || ev.DamageType == DamageType.LURE)
                 {
@@ -155,7 +155,7 @@ namespace ZombielandGamemode
 
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            if (Zombieland.enabled)
+            if (Zombieland.enabled || Zombieland.roundstarted)
             {
                 ev.SpawnChaos = true;
             }

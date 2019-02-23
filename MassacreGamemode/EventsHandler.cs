@@ -26,7 +26,7 @@ namespace MassacreGamemode
         }
         public void OnSetRole(PlayerSetRoleEvent ev)
         {
-            if (Massacre.enabled)
+            if (Massacre.enabled || Massacre.roundstarted)
             {
                if (ev.TeamRole.Role == Role.SCP_173)
                {
@@ -71,7 +71,7 @@ namespace MassacreGamemode
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (Massacre.enabled)
+            if (Massacre.enabled || Massacre.roundstarted)
             {
                 plugin.Info("Round Ended!");
                 Functions.EndGamemodeRound();
@@ -80,7 +80,7 @@ namespace MassacreGamemode
 
         public void OnPlayerDie(PlayerDeathEvent ev)
         {
-            if (Massacre.enabled)
+            if (Massacre.enabled || Massacre.roundstarted)
             {
                 if (ev.Player.TeamRole.Role == Role.CLASSD)
                 {
@@ -93,7 +93,7 @@ namespace MassacreGamemode
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (Massacre.enabled)
+            if (Massacre.enabled || Massacre.roundstarted)
             {
                 bool peanutAlive = false;
                 bool humanAlive = false;
@@ -146,7 +146,7 @@ namespace MassacreGamemode
 
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            if (Massacre.enabled)
+            if (Massacre.enabled || Massacre.roundstarted)
             {
                 ev.SpawnChaos = true;
                 ev.PlayerList = new List<Player>();

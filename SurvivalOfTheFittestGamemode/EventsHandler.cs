@@ -29,7 +29,7 @@ namespace SurvivalGamemode
         }
         public void OnSetRole(PlayerSetRoleEvent ev)
         {
-            if (Survival.enabled)
+            if (Survival.enabled || Survival.roundstarted)
             {
                if (ev.TeamRole.Role == Role.SCP_173)
                {
@@ -117,7 +117,7 @@ namespace SurvivalGamemode
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (Survival.enabled)
+            if (Survival.enabled || Survival.roundstarted)
             {
                 plugin.Info("Round Ended!");
                 Functions.EndGamemodeRound();
@@ -126,7 +126,7 @@ namespace SurvivalGamemode
 
         public void OnPlayerDie(PlayerDeathEvent ev)
         {
-            if (Survival.enabled)
+            if (Survival.enabled || Survival.roundstarted)
             {
                 if (ev.Player.TeamRole.Role == Role.CLASSD)
                 {
@@ -139,7 +139,7 @@ namespace SurvivalGamemode
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (Survival.enabled)
+            if (Survival.enabled || Survival.roundstarted)
             {
                 bool peanutAlive = false;
                 bool humanAlive = false;
@@ -192,7 +192,7 @@ namespace SurvivalGamemode
 
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            if (Survival.enabled)
+            if (Survival.enabled || Survival.roundstarted)
             {
                 ev.SpawnChaos = true;
                 ev.PlayerList = new List<Player>();

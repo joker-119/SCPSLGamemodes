@@ -33,7 +33,7 @@ namespace JuggernautGamemode
 
         public void OnSetRoleMaxHP(SetRoleMaxHPEvent ev)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
                 if (ev.Role == Role.CHAOS_INSURGENCY)
                     ev.MaxHP = Juggernaut.juggernaut_healh;
@@ -42,7 +42,7 @@ namespace JuggernautGamemode
 
         public void OnSetRole(PlayerSetRoleEvent ev)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
                 if (Functions.IsJuggernaut(ev.Player))
                 {
@@ -93,7 +93,7 @@ namespace JuggernautGamemode
 
         public void OnReload(PlayerReloadEvent ev)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
                 if (ev.Player.Name == Juggernaut.juggernaut.Name || ev.Player.SteamId == Juggernaut.juggernaut.SteamId)
                 {
@@ -104,7 +104,7 @@ namespace JuggernautGamemode
 
         public void OnThrowGrenade(PlayerThrowGrenadeEvent ev)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
                 if (ev.Player == Juggernaut.juggernaut)
                 {
@@ -185,14 +185,14 @@ namespace JuggernautGamemode
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled || Juggernaut.roundstarted)
                 plugin.Info("Round Ended!");
                 Functions.EndGamemodeRound();
         }
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
                 bool juggernautAlive = false;
                 bool mtfAllive = false;
@@ -229,7 +229,7 @@ namespace JuggernautGamemode
 
         public void OnPlayerDie(PlayerDeathEvent ev)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
                 if (Functions.IsJuggernaut(ev.Player))
                 {
@@ -248,7 +248,7 @@ namespace JuggernautGamemode
 
         public void OnPlayerHurt(PlayerHurtEvent ev)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
                 if (Functions.IsJuggernaut(ev.Player))
                 {
@@ -261,7 +261,7 @@ namespace JuggernautGamemode
 
         public void OnLure(PlayerLureEvent ev)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled && Juggernaut.roundstarted)
             {
                 Juggernaut.activator = ev.Player;
             }
@@ -270,7 +270,7 @@ namespace JuggernautGamemode
 
         public void OnContain106(PlayerContain106Event ev)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
                 if (Juggernaut.juggernaut != null)
                 {
@@ -285,7 +285,7 @@ namespace JuggernautGamemode
 
         public void OnTimedEvent(System.Object source, ElapsedEventArgs e)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
                 Player juggernautPlayer = Functions.GetJuggernautPlayer();
                 if (juggernautPlayer != null && Juggernaut.activator != null)
@@ -297,7 +297,7 @@ namespace JuggernautGamemode
 
         public void OnSetSCPConfig(SetSCPConfigEvent ev)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
                 ev.Ban049 = true;
                 ev.Ban079 = true;
@@ -311,7 +311,7 @@ namespace JuggernautGamemode
 
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            if (Juggernaut.enabled)
+            if (Juggernaut.enabled || Juggernaut.roundstarted)
                 ev.SpawnChaos = false;
         }
     }

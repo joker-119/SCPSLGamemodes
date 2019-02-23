@@ -65,7 +65,7 @@ namespace MuskateersGamemode
         }
         public void OnSetRole(PlayerSetRoleEvent ev)
         {
-            if (Muskateers.enabled)
+            if (Muskateers.enabled || Muskateers.roundstarted)
             {
                 if (ev.TeamRole.Role == Role.CLASSD)
                 {
@@ -84,14 +84,15 @@ namespace MuskateersGamemode
         }
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            if (Muskateers.enabled)
+            if (Muskateers.enabled || Muskateers.roundstarted)
             {
                 ev.SpawnChaos = true;
+                ev.PlayerList = new List<Player>();
             }
         }
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (Muskateers.enabled)
+            if (Muskateers.enabled || Muskateers.roundstarted)
             {
                 plugin.Info("Round Ended!");
                 Functions.EndGamemodeRound();
@@ -99,7 +100,7 @@ namespace MuskateersGamemode
         }
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (Muskateers.enabled)
+            if (Muskateers.enabled || Muskateers.roundstarted)
             {
                 bool muskyAlive = false;
                 bool classDAlive = false;
@@ -136,7 +137,7 @@ namespace MuskateersGamemode
         }
         public void OnPlayerDie(PlayerDeathEvent ev)
         {
-            if (Muskateers.enabled)
+            if (Muskateers.enabled || Muskateers.roundstarted)
             {
                 plugin.Server.Map.ClearBroadcasts();
                 if (ev.Player.TeamRole.Team == Team.NINETAILFOX)

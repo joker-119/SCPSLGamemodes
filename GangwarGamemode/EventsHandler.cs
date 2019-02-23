@@ -26,7 +26,7 @@ namespace GangwarGamemode
         }
         public void OnSetRole(PlayerSetRoleEvent ev)
         {
-            if (Gangwar.enabled)
+            if (Gangwar.enabled || Gangwar.roundstarted)
             {
                 if (ev.Player.TeamRole.Team == Team.SCP || ev.Player.TeamRole.Team == Team.CLASSD)
                 {
@@ -81,7 +81,7 @@ namespace GangwarGamemode
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (Gangwar.enabled)
+            if (Gangwar.enabled ||Gangwar.roundstarted)
             {
                 plugin.Info("Round Ended!");
                 Functions.EndGamemodeRound();
@@ -90,7 +90,7 @@ namespace GangwarGamemode
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (Gangwar.enabled)
+            if (Gangwar.enabled || Gangwar.roundstarted)
             {
                 bool ciAlive = false;
                 bool ntfAlive = false;
@@ -128,7 +128,7 @@ namespace GangwarGamemode
 
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            if (Gangwar.enabled)
+            if (Gangwar.enabled || Gangwar.roundstarted)
             {
                 if (plugin.Round.Stats.CiAlive >= plugin.Round.Stats.NTFAlive)
                 {

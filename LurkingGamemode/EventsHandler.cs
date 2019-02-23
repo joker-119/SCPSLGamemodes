@@ -94,7 +94,7 @@ namespace LurkingGamemode
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (Lurking.enabled)
+            if (Lurking.enabled || Lurking.roundstarted)
             {
                 plugin.Info("Round Ended!");
                 Functions.EndGamemodeRound();
@@ -103,7 +103,7 @@ namespace LurkingGamemode
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (Lurking.enabled)
+            if (Lurking.enabled || Lurking.roundstarted)
             {
                 bool scpAlive = false;
                 bool humanAlive = false;
@@ -141,7 +141,7 @@ namespace LurkingGamemode
 
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            if (Lurking.enabled)
+            if (Lurking.enabled || Lurking.roundstarted)
             {
                 ev.SpawnChaos = false;
                 ev.PlayerList = new List<Player>();
