@@ -13,7 +13,7 @@ namespace JuggernautGamemode
         name = "Juggernaut Gamemode",
         description = "Gamemode Template",
         id = "gamemode.juggernaut",
-        version = "1.3.0",
+        version = "1.3.5",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
