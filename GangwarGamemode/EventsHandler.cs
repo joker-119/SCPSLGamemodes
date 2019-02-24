@@ -38,10 +38,12 @@ namespace GangwarGamemode
                     items.Add(ItemType.FLASHBANG);
                     items.Add(ItemType.FRAG_GRENADE);
                     ev.Items = items;
+                    ev.Player.SetHealth(Gangwar.ci_health);
                 }
                 else if (ev.Player.TeamRole.Role == Role.FACILITY_GUARD || ev.Player.TeamRole.Team == Team.SCIENTIST)
                 {
                     Functions.SpawnNTF(ev.Player);
+                    ev.Player.SetHealth(Gangwar.ntf_health);
                 }
                 else if (ev.Player.TeamRole.Team == Team.SPECTATOR)
                 {

@@ -82,10 +82,12 @@ namespace JuggernautGamemode
                             plugin.Info("Spawning " + ev.Player.Name + " as NTF Commander, and setting inventory.");
                             ev.Items = items;
                             Functions.SpawnAsNTFCommander(ev.Player);
+                            ev.Player.SetHealth(Juggernaut.ntf_health);
                         }
                         else if (ev.TeamRole.Role == Role.FACILITY_GUARD || ev.TeamRole.Role == Role.NTF_LIEUTENANT || ev.TeamRole.Role == Role.NTF_SCIENTIST || ev.TeamRole.Role == Role.NTF_CADET)
                             ev.Items = items;
                         Functions.SpawnAsNTFCommander(ev.Player);
+                        ev.Player.SetHealth(Juggernaut.ntf_health);
                     }
                 }
             }
@@ -234,7 +236,7 @@ namespace JuggernautGamemode
                 if (Functions.IsJuggernaut(ev.Player))
                 {
                     plugin.pluginManager.Server.Map.ClearBroadcasts();
-                    plugin.pluginManager.Server.Map.Broadcast(20, "<color=#228B22>Juggernaut " + Juggernaut.juggernaut.Name + "</color> has been killed by" + ev.Killer.Name + "!", false);
+                    plugin.pluginManager.Server.Map.Broadcast(20, "<color=#228B22>Juggernaut " + Juggernaut.juggernaut.Name + "</color> has been killed by " + ev.Killer.Name + "!", false);
                     Functions.ResetJuggernaut(ev.Player);
                     Juggernaut.jugg_killer = ev.Killer;
                 }

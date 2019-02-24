@@ -67,17 +67,19 @@ namespace MuskateersGamemode
         {
             if (Muskateers.enabled || Muskateers.roundstarted)
             {
-                if (ev.TeamRole.Role == Role.CLASSD)
+                if (ev.TeamRole.Role != Role.NTF_COMMANDER)
                 {
                     List<ItemType> items = new List<ItemType>();
                     items.Add(ItemType.USP);
                     items.Add(ItemType.ZONE_MANAGER_KEYCARD);
                     items.Add(ItemType.MEDKIT);
+                    Functions.SpawnClassD(ev.Player);
                     ev.Items = items;
                     ev.Player.SetHealth(Muskateers.classd_health);
                 }
                 else if (ev.TeamRole.Team == Team.NINETAILFOX)
                 {
+                    Functions.SpawnNTF(ev.Player);
                     ev.Player.SetHealth(Muskateers.ntf_health);
                 }
             }

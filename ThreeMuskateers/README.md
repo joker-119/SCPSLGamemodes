@@ -11,7 +11,7 @@ Everyone except for 3 NTF Commanders will spawn as Class-D in Light containment(
 Config option | Config Type | Default Value | Description
 :---: | :---: | :---: | :------
 musk_classd_health | Int | 100 | The amount of health Class-D have.
-musk_ntf_health | Int | 150 | The amount of health the Muskateers have.
+musk_ntf_health | Int | 4500 | The amount of health the Muskateers have.
 
 ### Commands
   Command |  |  | Description
