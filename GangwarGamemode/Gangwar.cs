@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using Smod2;
 using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
 using Smod2.API;
+using scp4aiur;
 
 namespace GangwarGamemode
 {
@@ -44,6 +46,7 @@ namespace GangwarGamemode
             this.AddCommands(new string[] { "gangwar", "gang", "gw" }, new GangwarCommand());
             this.AddConfig(new ConfigSetting("gangwar_ci_health", 120, SettingType.NUMERIC, true, "The amount of health CI have."));
             this.AddConfig(new ConfigSetting("gangwar_ntf_health", 150, SettingType.NUMERIC, true, "The amount of health NTF have."));
+            Timing.Init(this);
         }
     }
 
@@ -73,18 +76,45 @@ namespace GangwarGamemode
                 Gangwar.plugin.Server.Round.EndRound();
             }
         }
-
-        public static void SpawnChaos(Player player)
+        public static IEnumerable<float> SpawnChaos(Player player, float delay)
         {
-            player.ChangeRole(Role.CHAOS_INSURGENCY, true, true, false, true);
-        }
+            yield return delay;
+            player.ChangeRole(Role.CHAOS_INSURGENCY, false, true, false, true);
+            yield return 2;
+            foreach (Item item in player.GetInventory())
+            {
+                item.Remove();
+            }
+            player.GiveItem(ItemType.LOGICER);
+            player.GiveItem(ItemType.COM15);
+            player.GiveItem(ItemType.FRAG_GRENADE);
+            player.GiveItem(ItemType.MEDKIT);
+            player.GiveItem(ItemType.FLASHBANG);
 
-        public static void SpawnNTF(Player player)
-        {
-            player.ChangeRole(Role.NTF_COMMANDER, true, true, false, true);
             player.SetAmmo(AmmoType.DROPPED_5,500);
             player.SetAmmo(AmmoType.DROPPED_7,500);
             player.SetAmmo(AmmoType.DROPPED_9,500);
+            player.SetHealth(Gangwar.ci_health);
+        }
+        public static IEnumerable<float> SpawnNTF(Player player, float delay)
+        {
+            yield return delay;
+            player.ChangeRole(Role.NTF_COMMANDER, false, true, false, false);
+            yield return 2;
+            foreach (Item item in player.GetInventory())
+            {
+                item.Remove();
+            }
+            player.GiveItem(ItemType.E11_STANDARD_RIFLE);
+            player.GiveItem(ItemType.COM15);
+            player.GiveItem(ItemType.FRAG_GRENADE);
+            player.GiveItem(ItemType.MEDKIT);
+            player.GiveItem(ItemType.FLASHBANG);
+
+            player.SetAmmo(AmmoType.DROPPED_5,500);
+            player.SetAmmo(AmmoType.DROPPED_7,500);
+            player.SetAmmo(AmmoType.DROPPED_9,500);
+            player.SetHealth(Gangwar.ntf_health);
         }
     }
 }

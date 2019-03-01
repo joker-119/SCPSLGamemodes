@@ -1,8 +1,10 @@
+using System.Linq;
 using Smod2.API;
 using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using Smod2.Events;
 using System.Collections.Generic;
+using scp4aiur;
 
 namespace GangwarGamemode
 {
@@ -30,20 +32,11 @@ namespace GangwarGamemode
             {
                 if (ev.Player.TeamRole.Team == Team.SCP || ev.Player.TeamRole.Team == Team.CLASSD)
                 {
-                    Functions.SpawnChaos(ev.Player);
-                    List<ItemType> items = new List<ItemType>();
-                    items.Add(ItemType.LOGICER);
-                    items.Add(ItemType.MEDKIT);
-                    items.Add(ItemType.USP);
-                    items.Add(ItemType.FLASHBANG);
-                    items.Add(ItemType.FRAG_GRENADE);
-                    ev.Items = items;
-                    ev.Player.SetHealth(Gangwar.ci_health);
+                    Timing.Run(Functions.SpawnChaos(ev.Player,0));
                 }
                 else if (ev.Player.TeamRole.Role == Role.FACILITY_GUARD || ev.Player.TeamRole.Team == Team.SCIENTIST)
                 {
-                    Functions.SpawnNTF(ev.Player);
-                    ev.Player.SetHealth(Gangwar.ntf_health);
+                    Timing.Run(Functions.SpawnNTF(ev.Player, 0));
                 }
                 else if (ev.Player.TeamRole.Team == Team.SPECTATOR)
                 {
@@ -66,17 +59,18 @@ namespace GangwarGamemode
                 plugin.Server.Map.StartWarhead();
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Gangwar Gamemode started!");
+                List<Player> players = ev.Server.GetPlayers();
 
-                foreach (Player player in ev.Server.GetPlayers())
+                for (int i = 0; i < (players.Count / 2); i++)
                 {
-                    if (player.TeamRole.Team == Team.SCP || player.TeamRole.Team == Team.CLASSD)
-                    {
-                        Functions.SpawnChaos(player);
-                    }
-                    else if (player.TeamRole.Role == Role.FACILITY_GUARD || player.TeamRole.Team == Team.SCIENTIST)
-                    {
-                        Functions.SpawnNTF(player);
-                    }
+                    int random = new System.Random().Next(players.Count);
+                    Player randomplayer = players[random];
+                    players.Remove(randomplayer);
+                    Timing.Run(Functions.SpawnNTF(randomplayer,0));
+                }
+                foreach (Player player in players)
+                {
+                    Timing.Run(Functions.SpawnChaos(player,0));
                 }
             }
         }

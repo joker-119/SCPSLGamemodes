@@ -54,16 +54,24 @@ namespace MassacreGamemode
                 }
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Massacre of the D-Bois Gamemode Started!");
+                List<Player> players = ev.Server.GetPlayers();
+                List<string> nuts = new List<string>();
 
-                foreach (Player player in ev.Server.GetPlayers())
+                for (int i = 0; i < Massacre.nut_count; i++)
                 {
-                    if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR && player != winner)
-                    {
-                        Functions.SpawnDboi(player);
-                    }
-                    else if (player.TeamRole.Team == Team.SCP || player == winner)
+                    int random = Massacre.generator.Next(players.Count);
+                    string name = players[random].Name;
+                    nuts.Add(name);
+                }
+                foreach (Player player in players)
+                {
+                    if (nuts.Contains(player.Name))
                     {
                         Functions.SpawnNut(player);
+                    }
+                    else
+                    {
+                        Functions.SpawnDboi(player);
                     }
                 }
             }

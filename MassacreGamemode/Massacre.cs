@@ -4,6 +4,8 @@ using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
 using System.Collections.Generic;
+using System;
+using scp4aiur;
 
 namespace MassacreGamemode
 {
@@ -26,7 +28,10 @@ namespace MassacreGamemode
             roundstarted = false;
         public static string SpawnRoom;
         public static Vector SpawnLoc;
-        public static int nut_health;
+        public static int 
+            nut_health,
+            nut_count;
+        public static Random generator = new System.Random();
         public static List<Vector> SpawnLocs = new List<Vector>();
         
         public override void OnDisable()
@@ -46,6 +51,8 @@ namespace MassacreGamemode
             this.AddCommands(new string[] { "massacre", "motdb", "mascr" }, new MassacreCommand());
             this.AddConfig(new ConfigSetting("mass_spawn_room", "jail", SettingType.STRING, true, "Where everyone should spawn."));
             this.AddConfig(new ConfigSetting("mass_peanut_health", 1, SettingType.NUMERIC, true, "How much health Peanuts spawn with."));
+            this.AddConfig(new ConfigSetting("mass_peanut_count", 3, SettingType.NUMERIC, true, "The number of peanuts selected."));
+            Timing.Init(this);
         }
     }
 
@@ -142,6 +149,12 @@ namespace MassacreGamemode
             Massacre.plugin.Info("Spawned " + player.Name + " as SCP-173");
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(35, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the D-bois!", false);
+            Timing.Run(Functions.NutHealth(player, 2));
+        }
+        public static IEnumerable<float> NutHealth(Player player, float delay)
+        {
+            yield return delay;
+            player.SetHealth(Massacre.nut_health);
         }
         public static void EndGamemodeRound()
         {

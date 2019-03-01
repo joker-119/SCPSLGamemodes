@@ -56,7 +56,7 @@ namespace SurvivalGamemode
                     {
                         if (SCP575.SCP575.Timed)
                         {
-                            SCP575.Functions.DisableBlackouts();
+                            SCP575.Functions.singleton.DisableBlackouts();
                             plugin.Info("Disabling timed blackouts.");
                             Survival.blackouts = true;
                         }

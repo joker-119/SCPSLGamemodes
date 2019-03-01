@@ -76,11 +76,11 @@ namespace SurvivalGamemode
                 Survival.plugin.Server.Round.EndRound();
 
                 Survival.plugin.Info("Toggling Blackout off.");
-                SCP575.Functions.ToggleBlackout();
+                SCP575.Functions.singleton.ToggleBlackout();
                 if (Survival.blackouts)
                 {
                     Survival.plugin.Info("Enabling timed Blackouts.");
-                    SCP575.Functions.EnableBlackouts();
+                    SCP575.Functions.singleton.EnableBlackouts();
                 }
             }
         }
@@ -130,7 +130,7 @@ namespace SurvivalGamemode
         {
             yield return delay;
             Survival.plugin.Info("Timer completed!");
-            SCP575.Functions.ToggleBlackout();
+            SCP575.Functions.singleton.ToggleBlackout();
             foreach (Player player in Survival.plugin.Server.GetPlayers())
             {
                 if (player.TeamRole.Role == Role.SCP_173)

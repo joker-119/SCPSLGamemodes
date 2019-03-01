@@ -63,10 +63,10 @@ namespace LurkingGamemode
 
                 if (Lurking.blackouts)
                 {
-                    SCP575.Functions.EnableBlackouts();
+                    SCP575.Functions.singleton.EnableBlackouts();
                     Lurking.plugin.Info("Enabling timed Blackouts.");
                 }
-                SCP575.Functions.ToggleBlackout();
+                SCP575.Functions.singleton.ToggleBlackout();
             }
         }
 

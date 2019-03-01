@@ -46,7 +46,7 @@ namespace LurkingGamemode
                     {
                         if (SCP575.SCP575.enabled)
                         {
-                            SCP575.Functions.DisableBlackouts();
+                            SCP575.Functions.singleton.DisableBlackouts();
                             plugin.Info("Disabling timed blackouts.");
                             Lurking.blackouts = true;
                         }
@@ -55,7 +55,7 @@ namespace LurkingGamemode
 
                 Lurking.roundstarted = true;
                 plugin.Info("Lurking in the Dark gamemode started!");
-                SCP575.Functions.ToggleBlackout();
+                SCP575.Functions.singleton.ToggleBlackout();
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
