@@ -1,4 +1,5 @@
-﻿using Smod2;
+﻿using System.Collections.Generic;
+using Smod2;
 using Smod2.API;
 using Smod2.Events;
 using Smod2.Attributes;
@@ -62,16 +63,18 @@ namespace MuskateersGamemode
             Muskateers.enabled = false;
             Muskateers.plugin.pluginManager.Server.Map.ClearBroadcasts();
         }
-        public static void SpawnNTF(Player player)
+        public static IEnumerable<float> SpawnNTF(Player player, float delay)
         {
             player.ChangeRole(Role.NTF_COMMANDER, true, true, true, true);
+			yield return 2;
             player.SetHealth(Muskateers.ntf_health);
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(25, "You are a <color=#308ADA>Muskateer</color>. Enter the facility and eliminate all Class-D.", false);
         }
-        public static void SpawnClassD(Player player)
+        public static IEnumerable<float> SpawnClassD(Player player, float delay)
         {
             player.ChangeRole(Role.CLASSD, true, true, true, true);
+			yield return 2;
             player.SetHealth(Muskateers.classd_health);
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(25, "You are a <color=#DAA130>Class-D personnel</color>. Escape the facility before the auto-nuke, but evade the NTF sent to kill you!", false);

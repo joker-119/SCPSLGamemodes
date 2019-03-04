@@ -126,10 +126,11 @@ namespace MassacreGamemode
                 }
             }
         }
-        public static void SpawnDboi(Player player)
+        public static IEnumerable<float> SpawnDboi(Player player, float delay)
         {
             player.ChangeRole(Role.CLASSD, false, false, false, true);
             player.Teleport(Massacre.SpawnLoc);
+			yield return 2;
 
             foreach (Item item in player.GetInventory())
             {
@@ -142,19 +143,15 @@ namespace MassacreGamemode
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Get ready to die!", false);
         }
-        public static void SpawnNut(Player player)
+        public static IEnumerable<float> SpawnNut(Player player, float delay)
         {
             player.ChangeRole(Role.SCP_173, false, true, true, true);
             player.Teleport(Massacre.SpawnLoc);
             Massacre.plugin.Info("Spawned " + player.Name + " as SCP-173");
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(35, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the D-bois!", false);
-            Timing.Run(Functions.NutHealth(player, 2));
-        }
-        public static IEnumerable<float> NutHealth(Player player, float delay)
-        {
-            yield return delay;
-            player.SetHealth(Massacre.nut_health);
+			yield return 2;
+			player.SetHealth(Massacre.nut_health);
         }
         public static void EndGamemodeRound()
         {

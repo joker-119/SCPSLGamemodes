@@ -109,7 +109,7 @@ namespace SurvivalGamemode
             player.ChangeRole(Role.SCP_173, false, true, true, true);
             Survival.plugin.Info("Spawned " + player.Name + " as SCP-173");
             player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(35, "You will be teleported into the game arena when adequate time has passed for other players to hide...", false);
+            player.PersonalBroadcast(45, "You will be teleported into the game arena when adequate time has passed for other players to hide...", false);
         }
         public static Vector NutSpawn()
         {

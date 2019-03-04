@@ -56,7 +56,6 @@ namespace JuggernautGamemode
                     // Set NTF Inventory
                     plugin.Info("Setting NTF items..");
                     List<ItemType> items = new List<ItemType>();
-                    items.Add(ItemType.MICROHID);
                     items.Add(ItemType.E11_STANDARD_RIFLE);
                     items.Add(ItemType.MTF_COMMANDER_KEYCARD);
                     items.Add(ItemType.FRAG_GRENADE);
@@ -182,6 +181,13 @@ namespace JuggernautGamemode
                         }
                     }
                 }
+				for (int i = 0; i < 4; i++)
+				{
+					foreach (Player player in players)
+					{
+						player.GiveItem(ItemType.MICROHID);
+					}
+				}
             }
         }
 

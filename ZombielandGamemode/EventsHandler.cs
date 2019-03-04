@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Smod2.API;
 using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;

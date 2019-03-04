@@ -5,11 +5,12 @@ using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
+using scp4aiur;
 
 
 namespace MuskateersGamemode
 {
-    internal class EventsHandler : IEventHandlerWaitingForPlayers, IEventHandlerSetRole, IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerTeamRespawn, IEventHandlerPlayerJoin, IEventHandlerPlayerDie
+    internal class EventsHandler : IEventHandlerWaitingForPlayers, IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerTeamRespawn, IEventHandlerPlayerJoin, IEventHandlerPlayerDie
     {
         private readonly Muskateers plugin;
         public EventsHandler(Muskateers plugin) => this.plugin = plugin;
@@ -42,46 +43,15 @@ namespace MuskateersGamemode
 
                 for (int i = 0; i < 3; i++)
                 {
-                    int randomPlayer = Muskateers.generator.Next(players.Count);
-                        muskateer.Add(players[randomPlayer]);
-                        players.RemoveAt(randomPlayer);
+                    int random = Muskateers.generator.Next(players.Count);
+					Player randomPlayer = players[random];
+                    players.Remove(randomPlayer);
+					Timing.Run(Functions.SpawnNTF(randomPlayer,0));
                 }
-                foreach (Player player in players)
-                {
-                    classd.Add(player);
-                }
-                foreach (Player player in ev.Server.GetPlayers())
-                {
-                    if (muskateer.Contains(player))
-                    {
-                        Functions.SpawnNTF(player);
-                    }
-                    else if (classd.Contains(player))
-                    {
-                        Functions.SpawnClassD(player);
-                    }
-                }
-            }
-        }
-        public void OnSetRole(PlayerSetRoleEvent ev)
-        {
-            if (Muskateers.enabled || Muskateers.roundstarted)
-            {
-                if (ev.TeamRole.Role != Role.NTF_COMMANDER)
-                {
-                    List<ItemType> items = new List<ItemType>();
-                    items.Add(ItemType.USP);
-                    items.Add(ItemType.ZONE_MANAGER_KEYCARD);
-                    items.Add(ItemType.MEDKIT);
-                    Functions.SpawnClassD(ev.Player);
-                    ev.Items = items;
-                    ev.Player.SetHealth(Muskateers.classd_health);
-                }
-                else if (ev.TeamRole.Team == Team.NINETAILFOX)
-                {
-                    Functions.SpawnNTF(ev.Player);
-                    ev.Player.SetHealth(Muskateers.ntf_health);
-                }
+				foreach (Player player in players)
+				{
+					Timing.Run(Functions.SpawnClassD(player,0));
+				}
             }
         }
         public void OnTeamRespawn(TeamRespawnEvent ev)

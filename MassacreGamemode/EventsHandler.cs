@@ -3,6 +3,7 @@ using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
+using scp4aiur;
 
 namespace MassacreGamemode
 {
@@ -40,6 +41,7 @@ namespace MassacreGamemode
             Massacre.SpawnRoom = plugin.GetConfigString("mass_spawn_room");
             Massacre.SpawnLoc = Functions.SpawnLoc();
             Massacre.nut_health = plugin.GetConfigInt("mass_peanut_health");
+			Massacre.nut_count = plugin.GetConfigInt("mass_peanut_count");
         }
 
         public void OnRoundStart(RoundStartEvent ev)
@@ -60,20 +62,15 @@ namespace MassacreGamemode
                 for (int i = 0; i < Massacre.nut_count; i++)
                 {
                     int random = Massacre.generator.Next(players.Count);
-                    string name = players[random].Name;
-                    nuts.Add(name);
+                    Player randomplayer = players[random];
+                    players.Remove(randomplayer);
+					Timing.Run(Functions.SpawnNut(randomplayer,0));
+
                 }
                 foreach (Player player in players)
-                {
-                    if (nuts.Contains(player.Name))
-                    {
-                        Functions.SpawnNut(player);
-                    }
-                    else
-                    {
-                        Functions.SpawnDboi(player);
-                    }
-                }
+				{
+					Timing.Run(Functions.SpawnDboi(player,0));
+				}
             }
         }
 

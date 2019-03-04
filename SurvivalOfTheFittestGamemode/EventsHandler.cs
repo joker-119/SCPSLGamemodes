@@ -131,8 +131,9 @@ namespace SurvivalGamemode
                 if (ev.Player.TeamRole.Role == Role.CLASSD)
                 {
                     plugin.Server.Map.ClearBroadcasts();
+					ev.Player.PersonalClearBroadcasts();
+					ev.Player.PersonalBroadcast(5, "Skiddaddle, skidacted, your neck is now [REDACTED]!", false);
                     plugin.Server.Map.Broadcast(5, "There are now " + (Survival.plugin.pluginManager.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
-                    ev.Player.PersonalBroadcast(25, "Skiddaddle, skidacted, your neck is now [REDACTED]!", false);
                 }
             }
         }
