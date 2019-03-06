@@ -111,7 +111,7 @@ namespace SurvivalGamemode
             List<Room> rooms = new List<Room>();
             foreach (Room room in PluginManager.Manager.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA))
             {
-                if (room.ZoneType == ZoneType.HCZ)
+                if (room.ZoneType == ZoneType.HCZ && room.RoomType != RoomType.ENTRANCE_CHECKPOINT && room.RoomType != RoomType.CHECKPOINT_A && room.RoomType != RoomType.CHECKPOINT_B)
                 {
                     rooms.Add(room);
                 }
