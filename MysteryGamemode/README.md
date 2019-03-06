@@ -42,3 +42,4 @@ myst_det_respawn | Bool | True | If a random detective should be choosen during 
 **Aliases** | **mystery** | **murder**
 mystery enable | | | Enables the Murder Mystery Gamemode.
 mystery disable | | | Disables the Murder Mystery Gamemode.
+mystery spawn PlayerName role | | | Spawns the Selected Player as the indicated role, accepts: det, civ or murd
