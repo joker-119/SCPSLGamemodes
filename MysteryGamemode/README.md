@@ -12,7 +12,8 @@ SCPs spawn normally.
 The objective of the game is for the Murderers to try and kill all the other humans. Civilians and Detectives must work together to find and eliminate the murderers.
 The monsters can choose to help the humans, or the murderers, or no one.
 
-The round will end when all Detectives and Civilians have been killed, or when all Murderers have been killed. (Monsters alive or dead won't hinder round progression)
+The round will end when all Civilians have been killed, or when all Murderers have been killed. 
+Monsters and Detectives have no 
 
 
 

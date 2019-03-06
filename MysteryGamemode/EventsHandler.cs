@@ -92,12 +92,24 @@ namespace Mystery
 					{
 						plugin.Server.Map.ClearBroadcasts();
 						plugin.Server.Map.Broadcast(25, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Civilians alive.", false);
+						if (!Mystery.murds.Contains(ev.Player.Name))
+						{
+							ev.Killer.Kill();
+							ev.Killer.PersonalClearBroadcasts();
+							ev.Killer.PersonalBroadcast(15, "<color=#c50000>You killed an innocent person! You monster!", false);
+						}
 					}
 				}
 				else if (ev.Player.TeamRole.Role == Role.SCIENTIST)
 				{
 					plugin.Server.Map.ClearBroadcasts();
 					plugin.Server.Map.Broadcast(15, "A detective, " + ev.Player.Name + " has been killed!", false);
+					if (!Mystery.murds.Contains(ev.Killer.Name))
+						{
+							ev.Killer.Kill();
+							ev.Killer.PersonalClearBroadcasts();
+							ev.Killer.PersonalBroadcast(15, "<color=#c50000>You were innocent and killed a Detective! How rude!", false);
+						}
 				}
 			}
 		}
@@ -106,7 +118,6 @@ namespace Mystery
 			if (Mystery.enabled || Mystery.roundstarted)
 			{
 				bool murd_alive = false;
-				bool det_alive = false;
 				bool civ_alive = false;
 
 				foreach (Player player in ev.Server.GetPlayers())
@@ -119,29 +130,25 @@ namespace Mystery
 					{
 						civ_alive = true; continue;
 					}
-					else if (player.TeamRole.Role == Role.SCIENTIST)
-					{
-						det_alive = true;
-					}
 				}
 
 				if (ev.Server.GetPlayers().Count > 1)
 				{
-					if (murd_alive && (civ_alive || det_alive))
+					if (murd_alive && civ_alive)
 					{
 						ev.Status = ROUND_END_STATUS.ON_GOING;
 					}
-					else if (!murd_alive && (civ_alive || det_alive))
+					else if (!murd_alive && civ_alive)
 					{
 						ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.singleton.EndGamemoderound();
 						plugin.Server.Map.ClearBroadcasts();
 						plugin.Server.Map.Broadcast(25, "The Civilains and Detectives have eliminated all the murderers!", false);
 					}
-					else if (murd_alive && !(civ_alive || det_alive))
+					else if (murd_alive && !civ_alive)
 					{
 						ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.singleton.EndGamemoderound();
 						plugin.Server.Map.ClearBroadcasts();
-						plugin.Server.Map.Broadcast(25, "The murderers have killed all of the civilians and detectives!", false);
+						plugin.Server.Map.Broadcast(25, "The murderers have killed all of the civilians!", false);
 					}
 				}
 			}

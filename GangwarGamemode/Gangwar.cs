@@ -85,7 +85,7 @@ namespace GangwarGamemode
             {
                 item.Remove();
             }
-            player.GiveItem(ItemType.LOGICER);
+            player.GiveItem(ItemType.E11_STANDARD_RIFLE);
             player.GiveItem(ItemType.COM15);
             player.GiveItem(ItemType.FRAG_GRENADE);
             player.GiveItem(ItemType.MEDKIT);

@@ -57,12 +57,15 @@ namespace Mystery
 			player.GiveItem(ItemType.ZONE_MANAGER_KEYCARD);
 			player.GiveItem(ItemType.FLASHLIGHT);
 			player.GiveItem(ItemType.COIN);
+			player.GiveItem(ItemType.RADIO);
 			//Set 500 ammo for all weapons
 			player.SetAmmo(AmmoType.DROPPED_5,500);
 			player.SetAmmo(AmmoType.DROPPED_7,500);
 			player.SetAmmo(AmmoType.DROPPED_9,500);
 			//Set player health to config
 			player.SetHealth(Mystery.murder_health);
+			player.PersonalClearBroadcasts();
+			player.PersonalBroadcast(15, "You are a <color=#c50000> Murderer</color>. You must murder all of the Civilians before the detectives find and kill you.", false);
 		}
 		public IEnumerable<float> SpawnDet(Player player)
 		{
@@ -79,10 +82,13 @@ namespace Mystery
 			player.GiveItem(ItemType.CONTAINMENT_ENGINEER_KEYCARD);
 			player.GiveItem(ItemType.MEDKIT);
 			player.GiveItem(ItemType.FLASHLIGHT);
+			player.GiveItem(ItemType.DISARMER);
 			//Set player health to config
 			player.SetHealth(Mystery.det_health);
 			//Set 9mm Ammo to 500
 			player.SetAmmo(AmmoType.DROPPED_5,500);
+			player.PersonalClearBroadcasts();
+			player.PersonalBroadcast(15, "You are a <color=#DAD530> Detective</color>. You must find all of the Murderers before they kill all of the Civilians!", false);
 		}
 		public IEnumerable<float> SpawnCiv(Player player)
 		{
@@ -98,6 +104,8 @@ namespace Mystery
 			player.GiveItem(ItemType.JANITOR_KEYCARD);
 			player.GiveItem(ItemType.COIN);
 			player.GiveItem(ItemType.CUP);
+			player.PersonalClearBroadcasts();
+			player.PersonalBroadcast(15, "You are a <color=#5AD3D9>Civilian</color>. You must help the Detectives find the murderers, before they kill all of your friends!", false);
 		}
 	}
 }
