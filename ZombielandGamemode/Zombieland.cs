@@ -13,7 +13,7 @@ namespace ZombielandGamemode
         name = "Zombieland Gamemode",
         description = "Gamemode Template",
         id = "gamemode.zombieland",
-        version = "1.3.6",
+        version = "1.3.8",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
