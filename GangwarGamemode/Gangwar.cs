@@ -13,7 +13,7 @@ namespace GangwarGamemode
         name = "Gangwar Gamemode",
         description = "Gangwar Gamemode",
         id = "gamemode.gangwar",
-        version = "1.3.5",
+        version = "1.3.8",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
@@ -85,7 +85,7 @@ namespace GangwarGamemode
             {
                 item.Remove();
             }
-            player.GiveItem(ItemType.LOGICER);
+            player.GiveItem(ItemType.E11_STANDARD_RIFLE);
             player.GiveItem(ItemType.COM15);
             player.GiveItem(ItemType.FRAG_GRENADE);
             player.GiveItem(ItemType.MEDKIT);

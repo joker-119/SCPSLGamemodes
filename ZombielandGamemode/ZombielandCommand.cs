@@ -31,13 +31,13 @@ namespace ZombielandGamemode
                             "Zombieland disable - Disables the Zombieland gamemode. \n"
                         };
                     case "enable":
-                        Functions.EnableGamemode();
+                        Functions.singleton.EnableGamemode();
                         return new string[]
                         {
                             "Zombieland will be enabled for the next round!"
                         };
                     case "disable":
-                        Functions.DisableGamemode();
+                        Functions.singleton.DisableGamemode();
                         return new string[]
                         {
                             "Zombieland gamemode now disabled."
