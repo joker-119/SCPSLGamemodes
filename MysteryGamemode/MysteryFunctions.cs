@@ -21,24 +21,24 @@ namespace Mystery
 		public void DisableGamemode()
 		{
 			Mystery.enabled = false;
-			Mystery.plugin.pluginManager.Server.Map.ClearBroadcasts();
+			Mystery.pluginManager.Server.Map.ClearBroadcasts();
 		}
 		public void EnableGamemode()
 		{
 			Mystery.enabled = true;
 			if (!Mystery.roundstarted)
 			{
-				Mystery.plugin.Server.Map.ClearBroadcasts();
-				Mystery.plugin.Server.Map.Broadcast(25, "<color=#c50000>Murder Mystery</color> gamemode is starting..", false);	
+				Mystery.Server.Map.ClearBroadcasts();
+				Mystery.Server.Map.Broadcast(25, "<color=#c50000>Murder Mystery</color> gamemode is starting..", false);	
 			}
 		}
 		public void EndGamemoderound()
 		{
 			if (Mystery.enabled)
 			{
-				Mystery.plugin.Info("Endgame function.");
+				Mystery.Info("Endgame function.");
 				Mystery.roundstarted = false;
-				Mystery.plugin.Server.Round.EndRound();
+				Mystery.Server.Round.EndRound();
 			}
 		}
 		public IEnumerable<float> SpawnMurd(Player player)

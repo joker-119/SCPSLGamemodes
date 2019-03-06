@@ -20,7 +20,7 @@ namespace ZombielandGamemode
     )]
     public class Zombieland : Plugin
     {
-        internal static Zombieland plugin;
+        internal static Zombieland singleton;
         public static int zombie_health;
         public static int child_health;
         public static List<Player> Alpha = new List<Player>();
@@ -32,13 +32,13 @@ namespace ZombielandGamemode
         
         public override void OnDisable()
         {
-            plugin.Info(plugin.Details.name + " v." + plugin.Details.version + " has been disabled.");
+            this.Info(this.Details.name + " v." + this.Details.version + " has been disabled.");
         }
 
         public override void OnEnable()
         {
-            plugin = this;
-            plugin.Info(plugin.Details.name + " v." + plugin.Details.version + " has been enabled.");
+            singleton = this;
+            this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
         }
 
         public override void Register()

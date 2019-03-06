@@ -18,22 +18,22 @@ namespace ZombielandGamemode
             Zombieland.enabled = true;
             if (!Zombieland.roundstarted)
             {
-                Zombieland.plugin.pluginManager.Server.Map.ClearBroadcasts();
-                Zombieland.plugin.pluginManager.Server.Map.Broadcast(25, "<color=#50c878>Zombieland Gamemode</color> is starting..", false);
+                Zombieland.pluginManager.Server.Map.ClearBroadcasts();
+                Zombieland.pluginManager.Server.Map.Broadcast(25, "<color=#50c878>Zombieland Gamemode</color> is starting..", false);
             }
         }
         public void DisableGamemode()
         {
             Zombieland.enabled = false;
-            Zombieland.plugin.pluginManager.Server.Map.ClearBroadcasts();
+            Zombieland.pluginManager.Server.Map.ClearBroadcasts();
         }
         public void EndGamemodeRound()
         {
             if (Zombieland.enabled)
             {
-                Zombieland.plugin.Info("EndgameRound Function");
+                Zombieland.Info("EndgameRound Function");
                 Zombieland.roundstarted = false;
-                Zombieland.plugin.Server.Round.EndRound();
+                Zombieland.Server.Round.EndRound();
             }
 
         }
@@ -53,16 +53,16 @@ namespace ZombielandGamemode
         {
             while (Zombieland.enabled || Zombieland.roundstarted)
             {
-                Zombieland.plugin.Server.Map.ClearBroadcasts();
-                int human_count = (Zombieland.plugin.Round.Stats.NTFAlive + Zombieland.plugin.Round.Stats.ScientistsAlive + Zombieland.plugin.Round.Stats.ClassDAlive + Zombieland.plugin.Round.Stats.CiAlive);
-                Zombieland.plugin.Server.Map.Broadcast(10, "There are currently " + Zombieland.plugin.Round.Stats.Zombies + " zombies and " + human_count + " humans alive.", false);
+                Zombieland.Server.Map.ClearBroadcasts();
+                int human_count = (Zombieland.Round.Stats.NTFAlive + Zombieland.Round.Stats.ScientistsAlive + Zombieland.Round.Stats.ClassDAlive + Zombieland.Round.Stats.CiAlive);
+                Zombieland.Server.Map.Broadcast(10, "There are currently " + Zombieland.Round.Stats.Zombies + " zombies and " + human_count + " humans alive.", false);
                 yield return delay;
             }
         }
         public IEnumerable<float> SpawnAlpha(Player player, float delay)
         {
             yield return delay;
-            Vector spawn = Zombieland.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
+            Vector spawn = Zombieland.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
             player.ChangeRole(Role.SCP_049_2, false, false, true, false);
             yield return 1;
             player.Teleport(spawn);
