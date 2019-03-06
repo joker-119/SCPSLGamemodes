@@ -46,30 +46,18 @@ namespace JuggernautGamemode
                             "Juggernaut will be disabled for the next round!"
                         };
                     case "select":
-                        if (args.Length > 1)
-                        {
-                            if (Juggernaut.enabled)
-                            {
-                                Player player = GetPlayerFromString.GetPlayer(args[1]);
-                                if (player == null)
-                                {
-                                    return new string[]
-                                    {
-                                        "Couldn't get player: " + args[1]
-                                    };
-                                }
-                                Juggernaut.selectedJuggernaut = player;
-                                Juggernaut.plugin.Info("" + player.Name + " Chosen as the Juggernaut!");
-                                return new string[]
-                                {
-                                    "Player " + player.Name + " selected as the next Juggernaut!"
-                                };
-                            }
-                        }
-                        return new string[]
-                        {
-                            "A player name must be specified!"
-                        };
+						if (Juggernaut.enabled && args.Length > 1)
+						{
+							Player player = GetPlayerFromString.GetPlayer(args[1]);
+							if (player == null)
+							{
+								return new string[] { " Couldn't get player: " + args[1]};
+							}
+							Juggernaut.selectedJuggernaut = player;
+							Juggernaut.plugin.Info("" + player.Name + " chosen as the Juggernaut!");
+							return new string[] { " Player " + player.Name + " selected as the next Juggernaut!"};
+						}
+						return new string[] { "A player name must be specified, and the gamemode must be enabled!"};
                     default:
                         return new string[]
                         {

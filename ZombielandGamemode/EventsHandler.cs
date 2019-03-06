@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using Smod2.API;
 using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
+using System.Collections.Generic;
 using Smod2.Events;
 using scp4aiur;
 
@@ -31,7 +32,7 @@ namespace ZombielandGamemode
             {
                if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role != Role.SCP_049_2)
                {
-                   Timing.Run(Functions.SpawnAlpha(ev.Player,0));
+                   Timing.Run(Functions.singleton.SpawnAlpha(ev.Player,0));
                }
                else if (ev.TeamRole.Team != Team.SPECTATOR)
                {
@@ -43,7 +44,6 @@ namespace ZombielandGamemode
                }
             }
         }
-
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
             Zombieland.zombie_health = this.plugin.GetConfigInt("zombieland_zombie_health");
@@ -64,10 +64,10 @@ namespace ZombielandGamemode
                 {
                     if (player.TeamRole.Team == Team.SCP)
                     {
-                        Timing.Run(Functions.SpawnAlpha(player,0));
+                        Timing.Run(Functions.singleton.SpawnAlpha(player,0));
                     }
                 }
-                Timing.Run(Functions.AliveCounter(90));
+                Timing.Run(Functions.singleton.AliveCounter(90));
             }
         }
 
@@ -84,7 +84,7 @@ namespace ZombielandGamemode
         {
             if (Zombieland.enabled || Zombieland.roundstarted)
                 plugin.Info("Round Ended!");
-                Functions.EndGamemodeRound();
+                Functions.singleton.EndGamemodeRound();
         }
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
@@ -112,11 +112,11 @@ namespace ZombielandGamemode
                     }
                     else if (zombieAlive && humanAlive == false)
                     {
-                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                     else if (zombieAlive == false && humanAlive)
                     {
-                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                 }
             }
@@ -133,7 +133,7 @@ namespace ZombielandGamemode
                 else
                 {
                     ev.Damage = 0;
-                    Functions.SpawnChild(ev.Player, ev.Attacker);
+                    Functions.singleton.SpawnChild(ev.Player, ev.Attacker);
                 }
             }   
         }
