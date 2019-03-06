@@ -69,12 +69,9 @@ namespace GangwarGamemode
         }
         public static void EndGamemodeRound()
         {
-            if (Gangwar.enabled)
-            {
-                Gangwar.plugin.Info("EndgameRound Function.");
-                Gangwar.roundstarted = false;
-                Gangwar.plugin.Server.Round.EndRound();
-            }
+            Gangwar.plugin.Info("EndgameRound Function.");
+            Gangwar.roundstarted = false;
+            Gangwar.plugin.Server.Round.EndRound();
         }
         public static IEnumerable<float> SpawnChaos(Player player, float delay)
         {

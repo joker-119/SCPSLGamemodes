@@ -174,16 +174,10 @@ namespace JuggernautGamemode
 
         public static void EndGamemodeRound()
         {
-            if (Juggernaut.enabled)
-            {
-                Juggernaut.plugin.Info("EndgameRound Function");
-                ResetJuggernaut();
-                Juggernaut.roundstarted = false;
-                Juggernaut.plugin.Server.Round.EndRound();
-                //if (blackouts)
-                //    Blackout.Plugin.EnableBlackouts();
-            }
-
+            Juggernaut.plugin.Info("EndgameRound Function");
+            ResetJuggernaut();
+            Juggernaut.roundstarted = false;
+            Juggernaut.plugin.Server.Round.EndRound();
         }
 
         public static void SpawnAsNTFCommander(Player player)

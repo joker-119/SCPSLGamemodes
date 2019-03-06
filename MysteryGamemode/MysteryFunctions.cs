@@ -34,12 +34,9 @@ namespace Mystery
 		}
 		public void EndGamemoderound()
 		{
-			if (Mystery.enabled)
-			{
-				Mystery.Info("Endgame function.");
-				Mystery.roundstarted = false;
-				Mystery.Server.Round.EndRound();
-			}
+			Mystery.Info("Endgame function.");
+			Mystery.roundstarted = false;
+			Mystery.Server.Round.EndRound();
 		}
 		public IEnumerable<float> SpawnMurd(Player player)
 		{

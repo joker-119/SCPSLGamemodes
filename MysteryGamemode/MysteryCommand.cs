@@ -29,7 +29,6 @@ namespace Mystery
 							"Mystery Command List \n"+
 							"mystery enable - Enables the Murder Mystery gamemode. \n"+
 							"mystery disable - Disables the Murder Mystery gamemode. \n"
-
 						};
 					case "enable":
 						Functions.singleton.EnableGamemode();

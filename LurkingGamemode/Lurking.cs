@@ -55,18 +55,14 @@ namespace LurkingGamemode
     {
         public static void EndGamemodeRound()
         {
-            if (Lurking.enabled)
-            {
-                Lurking.plugin.Info("EndgameRound Function");
-                Lurking.roundstarted = false;
-                Lurking.plugin.Server.Round.EndRound();
+            Lurking.plugin.Info("EndgameRound Function");
+            Lurking.roundstarted = false;
+            Lurking.plugin.Server.Round.EndRound();
 
-                if (Lurking.blackouts)
-                {
-                    SCP575.Functions.singleton.EnableBlackouts();
-                    Lurking.plugin.Info("Enabling timed Blackouts.");
-                }
-                SCP575.Functions.singleton.ToggleBlackout();
+            if (Lurking.blackouts)
+            {
+                SCP575.Functions.singleton.EnableBlackouts();
+                Lurking.plugin.Info("Enabling timed Blackouts.");
             }
         }
 

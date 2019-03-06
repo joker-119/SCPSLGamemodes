@@ -69,19 +69,14 @@ namespace SurvivalGamemode
         }
         public static void EndGamemodeRound()
         {
-            if (Survival.enabled)
+            Survival.plugin.Info("EndgameRound Function");
+            Survival.roundstarted = false;
+            Survival.plugin.Server.Round.EndRound();
+            Survival.plugin.Info("Toggling Blackout off.");
+            if (Survival.blackouts)
             {
-                Survival.plugin.Info("EndgameRound Function");
-                Survival.roundstarted = false;
-                Survival.plugin.Server.Round.EndRound();
-
-                Survival.plugin.Info("Toggling Blackout off.");
-                SCP575.Functions.singleton.ToggleBlackout();
-                if (Survival.blackouts)
-                {
-                    Survival.plugin.Info("Enabling timed Blackouts.");
-                    SCP575.Functions.singleton.EnableBlackouts();
-                }
+               Survival.plugin.Info("Enabling timed Blackouts.");
+                SCP575.Functions.singleton.EnableBlackouts();
             }
         }
 

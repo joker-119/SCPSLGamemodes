@@ -29,12 +29,9 @@ namespace ZombielandGamemode
         }
         public void EndGamemodeRound()
         {
-            if (Zombieland.enabled)
-            {
-                Zombieland.Info("EndgameRound Function");
-                Zombieland.roundstarted = false;
-                Zombieland.Server.Round.EndRound();
-            }
+            Zombieland.Info("EndgameRound Function");
+            Zombieland.roundstarted = false;
+            Zombieland.Server.Round.EndRound();
 
         }
 

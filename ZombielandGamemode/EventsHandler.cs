@@ -133,7 +133,7 @@ namespace ZombielandGamemode
                 else
                 {
                     ev.Damage = 0;
-                    Functions.singleton.SpawnChild(ev.Player, ev.Attacker);
+                    Timing.Run(Functions.singleton.SpawnChild(ev.Player, ev.Attacker));
                 }
             }   
         }

@@ -155,12 +155,9 @@ namespace MassacreGamemode
         }
         public static void EndGamemodeRound()
         {
-            if (Massacre.enabled)
-            {
-                Massacre.plugin.Info("EndgameRound Function");
-                Massacre.roundstarted = false;
-                Massacre.plugin.Server.Round.EndRound();
-            }
+            Massacre.plugin.Info("EndgameRound Function");
+            Massacre.roundstarted = false;
+            Massacre.plugin.Server.Round.EndRound();
         }
     }
 }

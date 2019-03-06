@@ -81,12 +81,9 @@ namespace MuskateersGamemode
         }
         public static void EndGamemodeRound()
         {
-            if (Muskateers.enabled)
-            {
-                Muskateers.plugin.Info("The Gamemode round has ended!");
-                Muskateers.roundstarted = false;
-                Muskateers.plugin.Server.Round.EndRound();
-            }
+            Muskateers.plugin.Info("The Gamemode round has ended!");
+            Muskateers.roundstarted = false;
+            Muskateers.plugin.Server.Round.EndRound();
         }
     }
 }
