@@ -99,11 +99,13 @@ namespace JuggernautGamemode
 
         public void OnReload(PlayerReloadEvent ev)
         {
-            if (Juggernaut.enabled || Juggernaut.roundstarted)
+            if (Juggernaut.enabled || Juggernaut.roundstarted && Juggernaut.juggernaut != null)
             {
                 if (ev.Player.Name == Juggernaut.juggernaut.Name || ev.Player.SteamId == Juggernaut.juggernaut.SteamId)
                 {
                     ev.Player.SetAmmo(AmmoType.DROPPED_7, 2000);
+					ev.Player.SetAmmo(AmmoType.DROPPED_5, 2000);
+					ev.Player.SetAmmo(AmmoType.DROPPED_9, 2000);
                 }
             }
         }
@@ -201,11 +203,12 @@ namespace JuggernautGamemode
                         }
                     }
                 }
-				for (int i = 0; i < 4; i++)
+				for (int i = 0; i < 4 && players.Count > 0; i++)
 				{
 					foreach (Player player in players)
 					{
 						player.GiveItem(ItemType.MICROHID);
+						players.Remove(player);
 					}
 				}
             }

@@ -41,16 +41,24 @@ namespace MuskateersGamemode
                 List<Player> muskateer = new List<Player>();
                 List<Player> classd = new List<Player>();
 
-                for (int i = 0; i < 3; i++)
-                {
-                    int random = Muskateers.generator.Next(players.Count);
-					Player randomPlayer = players[random];
-                    players.Remove(randomPlayer);
-					Timing.Run(Functions.SpawnNTF(randomPlayer,0));
-                }
-				foreach (Player player in players)
+				if (players.Count > 4)
 				{
-					Timing.Run(Functions.SpawnClassD(player,0));
+                	for (int i = 0; i < 3; i++)
+                	{
+	                    int random = Muskateers.generator.Next(players.Count);
+						Player randomPlayer = players[random];
+                    	players.Remove(randomPlayer);
+						Timing.Run(Functions.SpawnNTF(randomPlayer));
+                	}
+					foreach (Player player in players)
+					{
+						Timing.Run(Functions.SpawnClassD(player));
+					}
+				}
+				else
+				{
+					plugin.Error("You must have at least 4 players to play this gamemode.");
+					Muskateers.enabled = false;
 				}
             }
         }

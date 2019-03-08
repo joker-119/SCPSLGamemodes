@@ -14,7 +14,7 @@ namespace MassacreGamemode
         name = "Massacre of the D-Bois Gamemode",
         description = "Gamemode Template",
         id = "gamemode.massacre",
-        version = "1.3.9",
+        version = "1.4.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
@@ -145,12 +145,12 @@ namespace MassacreGamemode
         }
         public static IEnumerable<float> SpawnNut(Player player, float delay)
         {
-            player.ChangeRole(Role.SCP_173, false, true, true, true);
+            player.ChangeRole(Role.SCP_173, false, false, false, false);
+			yield return 5.5f;
             player.Teleport(Massacre.SpawnLoc);
             Massacre.plugin.Info("Spawned " + player.Name + " as SCP-173");
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(35, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the D-bois!", false);
-			yield return 2;
 			player.SetHealth(Massacre.nut_health);
         }
         public static void EndGamemodeRound()

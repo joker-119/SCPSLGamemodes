@@ -42,7 +42,7 @@ namespace SurvivalGamemode
         {
             Survival.nut_delay = this.plugin.GetConfigFloat("survival_peanut_delay");
             Survival.nut_health = this.plugin.GetConfigInt("survival_peanut_health");
-            Survival.pos = Functions.NutSpawn();
+			Survival.zone = this.plugin.GetConfigString("survival_zone_type");
         }
 
         public void OnRoundStart(RoundStartEvent ev)

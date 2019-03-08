@@ -5,6 +5,7 @@ using Smod2.Attributes;
 using Smod2.Config;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using scp4aiur;
 
 namespace SurvivalGamemode
@@ -14,7 +15,7 @@ namespace SurvivalGamemode
         name = "Survival of the Fittest Gamemode",
         description = "Gamemode Template",
         id = "gamemode.survival",
-        version = "1.3.9",
+        version = "1.4.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
@@ -22,13 +23,14 @@ namespace SurvivalGamemode
     public class Survival : Plugin
     {
         internal static Survival plugin;
+		public static Random gen = new System.Random();
         public static bool
             enabled = false,
             roundstarted = false;
         public static float nut_delay;
-        public static Vector pos;
         public static int nut_health;
         public static bool blackouts;
+		public static string zone;
         
         public override void OnDisable()
         {
@@ -48,6 +50,7 @@ namespace SurvivalGamemode
             Timing.Init(this);
             this.AddConfig(new ConfigSetting("survival_peanut_delay", 120f, SettingType.FLOAT, true, "The amount of time to wait before unleading peanuts."));
             this.AddConfig(new ConfigSetting("survival_peanut_health", 173, SettingType.NUMERIC, true, "The amount of health peanuts should have (lower values move faster"));
+			this.AddConfig(new ConfigSetting("survival_zone_type", "hcz", false, SettingType.STRING, true, "The zone the event should take place in."));
         }
     }
 
@@ -82,7 +85,15 @@ namespace SurvivalGamemode
 
         public static void SpawnDboi(Player player)
         {
-            Vector spawn = Survival.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_096);
+			Vector spawn;
+			if (Survival.zone == "lcz")
+			{
+				spawn = Survival.plugin.Server.Map.GetRandomSpawnPoint(Role.SCIENTIST);
+			}
+			else
+			{
+				spawn = Survival.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_096);
+			}
             player.ChangeRole(Role.CLASSD, false, false, false, true);
             player.Teleport(spawn);
 
@@ -109,14 +120,27 @@ namespace SurvivalGamemode
         public static Vector NutSpawn()
         {
             List<Room> rooms = new List<Room>();
-            foreach (Room room in PluginManager.Manager.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA))
-            {
-                if (room.ZoneType == ZoneType.HCZ && room.RoomType != RoomType.ENTRANCE_CHECKPOINT && room.RoomType != RoomType.CHECKPOINT_A && room.RoomType != RoomType.CHECKPOINT_B)
-                {
-                    rooms.Add(room);
-                }
-            }
-            int randomNum = new System.Random().Next(rooms.Count());
+			if (Survival.zone == "lcz")
+			{
+				foreach (Room room in PluginManager.Manager.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA))
+				{
+					if (room.ZoneType == ZoneType.LCZ && room.RoomType != RoomType.CHECKPOINT_A && room.RoomType != RoomType.CHECKPOINT_B && room.RoomType != RoomType.ENTRANCE_CHECKPOINT)
+					{
+						rooms.Add(room);
+					}
+				}
+			}
+			else
+			{
+            	foreach (Room room in PluginManager.Manager.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA))
+            	{
+	                if (room.ZoneType == ZoneType.HCZ && room.RoomType != RoomType.ENTRANCE_CHECKPOINT && room.RoomType != RoomType.CHECKPOINT_A && room.RoomType != RoomType.CHECKPOINT_B)
+                	{
+	                    rooms.Add(room);
+                	}
+            	}
+			}
+            int randomNum = Survival.gen.Next(rooms.Count);
             Room randomRoom = rooms[randomNum];
             Vector spawn = randomRoom.Position;
             return spawn;
@@ -130,7 +154,7 @@ namespace SurvivalGamemode
             {
                 if (player.TeamRole.Role == Role.SCP_173)
                 {
-                    player.Teleport(Survival.pos);
+                    player.Teleport(NutSpawn());
                     player.SetHealth(Survival.nut_health);
                     player.PersonalBroadcast(15, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the Class-D before the auto-nuke goes off!", false);
                 }

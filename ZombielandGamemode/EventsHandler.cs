@@ -32,7 +32,7 @@ namespace ZombielandGamemode
             {
                if (ev.TeamRole.Team == Team.SCP && ev.TeamRole.Role != Role.SCP_049_2)
                {
-                   Timing.Run(Functions.singleton.SpawnAlpha(ev.Player,0));
+                   Timing.Run(Functions.singleton.SpawnAlpha(ev.Player));
                }
                else if (ev.TeamRole.Team != Team.SPECTATOR)
                {
@@ -64,7 +64,7 @@ namespace ZombielandGamemode
                 {
                     if (player.TeamRole.Team == Team.SCP)
                     {
-                        Timing.Run(Functions.singleton.SpawnAlpha(player,0));
+                        Timing.Run(Functions.singleton.SpawnAlpha(player));
                     }
                 }
                 Timing.Run(Functions.singleton.AliveCounter(90));
@@ -77,6 +77,7 @@ namespace ZombielandGamemode
             {
                 ev.Destroy = true;
                 ev.Door.Destroyed = true;
+				ev.Door.Open = true;
             }
         }
 

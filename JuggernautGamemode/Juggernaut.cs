@@ -13,7 +13,7 @@ namespace JuggernautGamemode
         name = "Juggernaut Gamemode",
         description = "Gamemode Template",
         id = "gamemode.juggernaut",
-        version = "1.3.9",
+        version = "1.4.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
@@ -73,7 +73,7 @@ namespace JuggernautGamemode
             this.AddConfig(new ConfigSetting("juggernaut_ntf_health", 150, SettingType.NUMERIC, true, "The amount of health the first wave of NTF should have."));
             this.AddConfig(new ConfigSetting("juggernaut_critical_damage", (float)0.15, SettingType.FLOAT, true, "The amount of critical damage the Juggernaut should recieve."));
             this.AddConfig(new ConfigSetting("juggernaut_infinite_jugg_nades", false, SettingType.BOOL, true, "If the Juggernaut should have infinite grenades."));
-            this.AddConfig(new ConfigSetting("juggernaut_health_bar_type", "", false, SettingType.STRING, true, "Type of Health Bar to use for Juggernaut"));
+            this.AddConfig(new ConfigSetting("juggernaut_health_bar_type", "bar", false, SettingType.STRING, true, "Type of Health Bar to use for Juggernaut"));
         }
     }
 
@@ -186,13 +186,18 @@ namespace JuggernautGamemode
             Juggernaut.plugin.Server.Round.EndRound();
         }
 
-        public static void SpawnAsNTFCommander(Player player)
+        public static IEnumerable<float> SpawnAsNTFCommander(Player player)
         {
             player.ChangeRole(Role.NTF_COMMANDER, false, true, true, true);
+			yield return 1;
 
             Juggernaut.ntf_health = Juggernaut.NTF_Health;
             Juggernaut.plugin.Info("SpawnNTF Health");
             player.SetHealth(Juggernaut.ntf_health);
+			player.SetAmmo(AmmoType.DROPPED_5, 500);
+			player.SetAmmo(AmmoType.DROPPED_7, 500);
+			player.SetAmmo(AmmoType.DROPPED_9, 500);
+			player.GiveItem(ItemType.FLASHLIGHT);
 
             player.PersonalClearBroadcasts();
             if (Juggernaut.juggernaut != null)

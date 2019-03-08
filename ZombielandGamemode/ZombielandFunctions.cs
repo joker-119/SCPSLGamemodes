@@ -56,11 +56,10 @@ namespace ZombielandGamemode
                 yield return delay;
             }
         }
-        public IEnumerable<float> SpawnAlpha(Player player, float delay)
+        public IEnumerable<float> SpawnAlpha(Player player)
         {
-            yield return delay;
             Vector spawn = Zombieland.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
-            player.ChangeRole(Role.SCP_049_2, false, false, true, false);
+            player.ChangeRole(Role.SCP_049_2, false, false, false, false);
             yield return 1;
             player.Teleport(spawn);
             Zombieland.Alpha.Add(player);

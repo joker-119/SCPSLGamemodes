@@ -13,7 +13,7 @@ namespace MuskateersGamemode
         name = "Three Muskateers Gamemode",
         description = "3 NTF Vs. a crap load of Class-D",
         id = "muskateers.gamemode",
-        version = "1.3.9",
+        version = "1.4.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
@@ -63,19 +63,21 @@ namespace MuskateersGamemode
             Muskateers.enabled = false;
             Muskateers.plugin.pluginManager.Server.Map.ClearBroadcasts();
         }
-        public static IEnumerable<float> SpawnNTF(Player player, float delay)
+        public static IEnumerable<float> SpawnNTF(Player player)
         {
-            player.ChangeRole(Role.NTF_COMMANDER, true, true, true, true);
+            player.ChangeRole(Role.NTF_COMMANDER, true, true, false, true);
 			yield return 2;
             player.SetHealth(Muskateers.ntf_health);
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(25, "You are a <color=#308ADA>Muskateer</color>. Enter the facility and eliminate all Class-D.", false);
         }
-        public static IEnumerable<float> SpawnClassD(Player player, float delay)
+        public static IEnumerable<float> SpawnClassD(Player player)
         {
-            player.ChangeRole(Role.CLASSD, true, true, true, true);
+            player.ChangeRole(Role.CLASSD, true, true, false, true);
 			yield return 2;
             player.SetHealth(Muskateers.classd_health);
+			player.GiveItem(ItemType.USP);
+			player.GiveItem(ItemType.ZONE_MANAGER_KEYCARD);
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(25, "You are a <color=#DAA130>Class-D personnel</color>. Escape the facility before the auto-nuke, but evade the NTF sent to kill you!", false);
         }

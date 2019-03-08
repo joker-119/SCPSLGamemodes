@@ -22,6 +22,7 @@ juggernaut_ntf_disarmer | Bool | false | Wether or not the NTF should spawn with
 juggernaut_ntf_health | Int | 150 | The amount of health NTF should spawn with.
 juggernaut_critical_damage | Float | 0.15 | The % of the Juggernaut's current health the Femur Breaker should deal in damage to the Jugg. (0-1)
 juggernaut_jugg_infinite_nades | Bool | true | If the Juggernaut should have infinite grenades.
+juggernaut_health_bar_type | String | bar | The type of text used to display the Juggernaut health at the top of the screen. Accepts: bar, raw and percent
 
 ### Commands
   Command |  |  | Description
