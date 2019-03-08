@@ -28,6 +28,11 @@ namespace JuggernautGamemode
                     server.Map.ClearBroadcasts();
                     server.Map.Broadcast(25, "<color=#228B22>Juggernaut Gamemode</color> is starting...", false);
                 }
+                else
+                {
+                    ev.Player.PersonalClearBroadcasts();
+                    ev.Player.PersonalBroadcast(10, "<b>Now Playing :</b> <color=#228B22>Juggernaut Gamemode</color>", false);
+                }
             }
         }
 
@@ -36,7 +41,7 @@ namespace JuggernautGamemode
             if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
                 if (ev.Role == Role.CHAOS_INSURGENCY)
-                    ev.MaxHP = Juggernaut.juggernaut_healh;
+                    ev.MaxHP = Juggernaut.juggernaut_health;
             }
         }
 
@@ -126,6 +131,21 @@ namespace JuggernautGamemode
             Juggernaut.NTF_Health = this.plugin.GetConfigInt("juggernaut_ntf_health");
             Juggernaut.critical_damage = plugin.GetConfigFloat("juggernaut_critical_damage");
             Juggernaut.jugg_infinite_nades = this.plugin.GetConfigBool("juggernaut_infinite_jugg_nades");
+            string type = this.plugin.GetConfigString("juggernaut_health_bar_type");
+            switch (type.ToLower().Trim())
+            {
+                case "bar":
+                    plugin.Debug("Drawn Bar Health Bar Selected");
+                    Juggernaut.health_bar_type = HealthBar.Bar; break;
+                case "percent":
+                case "percentage":
+                    plugin.Debug("Percentage Health Bar Selected");
+                    Juggernaut.health_bar_type = HealthBar.Percentage; break;
+                case "raw":
+                default:
+                    plugin.Debug("Raw Health Bar Selected");
+                    Juggernaut.health_bar_type = HealthBar.Raw; break;
+            }
         }
 
         public void OnRoundStart(RoundStartEvent ev)
@@ -260,9 +280,25 @@ namespace JuggernautGamemode
             {
                 if (Functions.IsJuggernaut(ev.Player))
                 {
-                    Juggernaut.juggernaut_healh = (Juggernaut.juggernaut_healh > ev.Player.GetHealth()) ? Juggernaut.juggernaut_healh : ev.Player.GetHealth();
+                    Juggernaut.juggernaut_health = (Juggernaut.juggernaut_health > ev.Player.GetHealth()) ? Juggernaut.juggernaut_health : ev.Player.GetHealth();
                     plugin.pluginManager.Server.Map.ClearBroadcasts();
-                    plugin.pluginManager.Server.Map.Broadcast(3, "<color=#228B22>Juggernaut " + Juggernaut.juggernaut.Name + "</color> HP : <color=#ff0000>" + (Convert.ToInt32(Juggernaut.juggernaut.GetHealth() - ev.Damage)) + "/" + Juggernaut.juggernaut_healh + "</color>", false);
+                    int currentHealth = Convert.ToInt32(Juggernaut.juggernaut.GetHealth() - ev.Damage);
+                    int maxHealth = Juggernaut.juggernaut_health;
+                    double percentage = Math.Round((double)currentHealth / (double)maxHealth, 2);
+                    switch (Juggernaut.health_bar_type)
+                    {
+                        default:
+                        case HealthBar.Raw:
+                            plugin.Debug("Raw Health Bar Created");
+                            plugin.pluginManager.Server.Map.Broadcast(3, "<color=#228B22>Juggernaut " + Juggernaut.juggernaut.Name + "</color> HP : <color=#ff0000>" + currentHealth + "/" + maxHealth + "</color>", false); break;
+                        case HealthBar.Bar:
+                            plugin.Debug("Drawn Bar Health Bar Created");
+                            string bar = Functions.DrawHealthBar(percentage);
+                            plugin.pluginManager.Server.Map.Broadcast(3, "<color=#228B22>Juggernaut " + Juggernaut.juggernaut.Name + "</color> HP : <color=#ff0000>" + bar + "</color>", false); break;
+                        case HealthBar.Percentage:
+                            plugin.Debug("Percentage Health Bar Created");
+                            plugin.pluginManager.Server.Map.Broadcast(3, "<color=#228B22>Juggernaut " + Juggernaut.juggernaut.Name + "</color> HP : <color=#ff0000>" + (percentage * 100) + "%</color>", false); break;
+                    }
                 }
             }
         }

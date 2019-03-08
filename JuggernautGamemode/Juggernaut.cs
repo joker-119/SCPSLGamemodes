@@ -21,21 +21,26 @@ namespace JuggernautGamemode
     public class Juggernaut : Plugin
     {
         internal static Juggernaut plugin;
-        public static bool NTF_Disarmer;
-        public static int Jugg_base;
-        public static int Jugg_increase;
-        public static int Jugg_grenade;
-        public static int NTF_ammo;
-        public static int NTF_Health;
-        public static bool jugg_infinite_nades;
-        public static Player juggernaut;
-        public static Player activator = null;
-        public static int juggernaut_healh;
-        public static int ntf_health;
-        public static string[] juggernaut_prevRank = new string[2];
-        public static Player selectedJuggernaut = null;
+        public static bool
+            NTF_Disarmer,
+            jugg_infinite_nades;
+        public static int
+            Jugg_base,
+            Jugg_increase,
+            Jugg_grenade,
+            NTF_ammo,
+            NTF_Health,
+            juggernaut_health,
+            ntf_health;
+        public static Player
+            juggernaut = null,
+            activator = null,
+            selectedJuggernaut = null,
+            jugg_killer = null;
         public static float critical_damage;
-        public static Player jugg_killer = null;
+        public static string[] juggernaut_prevRank = new string[2];
+        public static HealthBar health_bar_type;
+
 
 
         public static bool
@@ -63,11 +68,12 @@ namespace JuggernautGamemode
             this.AddConfig(new ConfigSetting("juggernaut_base_health", 500, SettingType.NUMERIC, true, "The amoutn of base health the Juggernaut starts with."));
             this.AddConfig(new ConfigSetting("juggernaut_increase_amount", 500, SettingType.NUMERIC, true, "The amount of extra HP a Jugg gets for each additional player."));
             this.AddConfig(new ConfigSetting("juggernaut_jugg_grenades", 6, SettingType.NUMERIC, true, "The number of grenades the Jugg should start with."));
-            this.AddConfig(new ConfigSetting("juggernaut_ntf_disarmer", false, SettingType.BOOL, true, "Wether or not NTF should spawn with Disarmers." ));
+            this.AddConfig(new ConfigSetting("juggernaut_ntf_disarmer", false, SettingType.BOOL, true, "Wether or not NTF should spawn with Disarmers."));
             this.AddConfig(new ConfigSetting("juggernaut_ntf_ammo", 272, SettingType.NUMERIC, true, "The amount of ammo NTF Commanders should spawn with."));
             this.AddConfig(new ConfigSetting("juggernaut_ntf_health", 150, SettingType.NUMERIC, true, "The amount of health the first wave of NTF should have."));
             this.AddConfig(new ConfigSetting("juggernaut_critical_damage", (float)0.15, SettingType.FLOAT, true, "The amount of critical damage the Juggernaut should recieve."));
             this.AddConfig(new ConfigSetting("juggernaut_infinite_jugg_nades", false, SettingType.BOOL, true, "If the Juggernaut should have infinite grenades."));
+            this.AddConfig(new ConfigSetting("juggernaut_health_bar_type", "", false, SettingType.STRING, true, "Type of Health Bar to use for Juggernaut"));
         }
     }
 
@@ -137,7 +143,7 @@ namespace JuggernautGamemode
         {
             //Vector position = PluginManager.Manager.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
             Vector position = GetRandomPDExit();
-            int damage = (int)(Juggernaut.juggernaut_healh * Juggernaut.critical_damage);
+            int damage = (int)(Juggernaut.juggernaut_health * Juggernaut.critical_damage);
             player.Damage(damage, DamageType.FRAG);
             player.Teleport(position);
             Juggernaut.plugin.pluginManager.Server.Map.Broadcast(10, "The <color=#228B22>Juggernaut</color> take a <b>critical hit <i><color=#ff0000> -" + damage + "</color></i></b> and has been <b>transported</b> across the facility!", false);
@@ -148,7 +154,7 @@ namespace JuggernautGamemode
         {
             //Vector position = PluginManager.Manager.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
             Vector position = GetRandomPDExit();
-            int damage = (int)(Juggernaut.juggernaut_healh * Juggernaut.critical_damage);
+            int damage = (int)(Juggernaut.juggernaut_health * Juggernaut.critical_damage);
             player.Damage(damage, DamageType.FRAG);
             player.Teleport(position);
             Juggernaut.plugin.pluginManager.Server.Map.Broadcast(10, "" + activator.Name + " has sacrifieced themselves and made the <color=#228B22>Juggernaut</color> take a <b>critical hit <i><color=#ff0000> -" + damage + "</color></i></b> and has been <b>transported</b> across the facility!", false);
@@ -169,7 +175,7 @@ namespace JuggernautGamemode
             Juggernaut.plugin.Info("Resetting Juggernaut.");
             Juggernaut.juggernaut = null;
             Juggernaut.juggernaut_prevRank = null;
-            Juggernaut.juggernaut_healh = 0;
+            Juggernaut.juggernaut_health = 0;
         }
 
         public static void EndGamemodeRound()
@@ -188,7 +194,7 @@ namespace JuggernautGamemode
             Juggernaut.plugin.Info("SpawnNTF Health");
             player.SetHealth(Juggernaut.ntf_health);
 
-           player.PersonalClearBroadcasts();
+            player.PersonalClearBroadcasts();
             if (Juggernaut.juggernaut != null)
                 player.PersonalBroadcast(15, "You are an <color=#002DB3>NTF Commander</color> Work with others to eliminate the <color=#228B22>Juggernaut " + Juggernaut.juggernaut.Name + "</color>", false);
             else
@@ -210,9 +216,9 @@ namespace JuggernautGamemode
             player.SetRank("silver", "Juggernaut");
 
             // Health scales with amount of players in round
-            int health = Juggernaut.Jugg_base + (Juggernaut.Jugg_increase * Juggernaut.plugin.Server.NumPlayers ) - 500;
+            int health = Juggernaut.Jugg_base + (Juggernaut.Jugg_increase * Juggernaut.plugin.Server.NumPlayers) - 500;
             player.SetHealth(health);
-            Juggernaut.juggernaut_healh = health;
+            Juggernaut.juggernaut_health = health;
 
             // Clear Inventory
             foreach (Smod2.API.Item item in player.GetInventory())
@@ -238,5 +244,33 @@ namespace JuggernautGamemode
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(15, "You are the <color=#228B22>Juggernaut</color> Eliminate all <color=#002DB3>NTF Commanders</color>", false);
         }
+
+        public static string DrawHealthBar(double percentage)
+        {
+            string bar = "<color=#fffff>(</color>";
+            const int BAR_SIZE = 20;
+            percentage *= 100;
+            if (percentage == 0) return "(      )";
+            for (double i = 0; i < 100; i += (100 / BAR_SIZE))
+            {
+                if (i < percentage)
+                {
+                    bar += "█";
+                }
+                else
+                {
+                    bar += "<color=#474747>█</color>";
+                }
+            }
+            bar += "<color=#ffffff>)</color>";
+            return bar;
+        }
+    }
+
+    public enum HealthBar
+    {
+        Raw,
+        Percentage,
+        Bar
     }
 }
