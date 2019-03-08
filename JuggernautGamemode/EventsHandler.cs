@@ -195,6 +195,7 @@ namespace JuggernautGamemode
                             plugin.Info("Selected " + Juggernaut.selectedJuggernaut.Name + " as the Juggernaut");
                             Functions.SpawnAsJuggernaut(player);
                             Juggernaut.selectedJuggernaut = null;
+							players.Remove(player);
                         }
                         else
                         {
