@@ -49,7 +49,7 @@ namespace MassacreGamemode
         {
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "massacre", "motdb", "mascr" }, new MassacreCommand());
-            this.AddConfig(new ConfigSetting("mass_spawn_room", "jail", SettingType.STRING, true, "Where everyone should spawn."));
+            this.AddConfig(new ConfigSetting("mass_spawn_room", "jail", false, SettingType.STRING, true, "Where everyone should spawn."));
             this.AddConfig(new ConfigSetting("mass_peanut_health", 1, SettingType.NUMERIC, true, "How much health Peanuts spawn with."));
             this.AddConfig(new ConfigSetting("mass_peanut_count", 3, SettingType.NUMERIC, true, "The number of peanuts selected."));
             Timing.Init(this);
