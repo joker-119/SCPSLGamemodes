@@ -68,6 +68,7 @@ namespace ZombielandGamemode
                     }
                 }
                 Timing.Run(Functions.singleton.AliveCounter(90));
+				Timing.Run(Functions.singleton.OpenGates(240));
             }
         }
 

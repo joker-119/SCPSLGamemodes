@@ -67,5 +67,17 @@ namespace ZombielandGamemode
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(15, "You are an alpha <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);
         }
+		public IEnumerable<float> OpenGates(float delay)
+		{
+			yield return delay;
+			foreach (Door door in Zombieland.Server.Map.GetDoors())
+			{
+				if (door.Name == "GATE_A" || door.Name == "GATE_B")
+				{
+					door.Open = true;
+					door.Locked = true;
+				}
+			}
+		}
     }
 }

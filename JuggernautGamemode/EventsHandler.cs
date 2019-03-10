@@ -6,6 +6,7 @@ using Smod2.Events;
 using System;
 using System.Timers;
 using UnityEngine;
+using scp4aiur;
 
 namespace JuggernautGamemode
 {
@@ -85,12 +86,12 @@ namespace JuggernautGamemode
                         {
                             plugin.Info("Spawning " + ev.Player.Name + " as NTF Commander, and setting inventory.");
                             ev.Items = items;
-                            Functions.SpawnAsNTFCommander(ev.Player);
+                            Timing.Run(Functions.SpawnAsNTFCommander(ev.Player));
                             ev.Player.SetHealth(Juggernaut.ntf_health);
                         }
                         else if (ev.TeamRole.Role == Role.FACILITY_GUARD || ev.TeamRole.Role == Role.NTF_LIEUTENANT || ev.TeamRole.Role == Role.NTF_SCIENTIST || ev.TeamRole.Role == Role.NTF_CADET)
                             ev.Items = items;
-                        Functions.SpawnAsNTFCommander(ev.Player);
+                        Timing.Run(Functions.SpawnAsNTFCommander(ev.Player));
                         ev.Player.SetHealth(Juggernaut.ntf_health);
                     }
                 }
@@ -114,7 +115,7 @@ namespace JuggernautGamemode
         {
             if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
-                if (ev.Player == Juggernaut.juggernaut)
+                if (ev.Player.SteamId == Juggernaut.juggernaut.SteamId)
                 {
                     if (Juggernaut.jugg_infinite_nades)
                     {
@@ -182,7 +183,7 @@ namespace JuggernautGamemode
                         {
                             // Spawned as normal NTF Commander
                             plugin.Debug("Spawning " + player.Name + "as an NTF Commander");
-                            Functions.SpawnAsNTFCommander(player);
+                            
                         }
                     }
                 }
@@ -200,7 +201,7 @@ namespace JuggernautGamemode
                         else
                         {
                             plugin.Debug("Spawning " + player.Name + "as an NTF Commander");
-                            Functions.SpawnAsNTFCommander(player);
+                            Timing.Run(Functions.SpawnAsNTFCommander(player));
                         }
                     }
                 }
