@@ -50,11 +50,11 @@ namespace JuggernautGamemode
         {
             if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
-                if (Functions.IsJuggernaut(ev.Player))
+                if (Functions.singleton.IsJuggernaut(ev.Player))
                 {
                     if (ev.TeamRole.Team != Smod2.API.Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Smod2.API.Team.SPECTATOR)
                     {
-                        Functions.ResetJuggernaut(ev.Player);
+                        Functions.singleton.ResetJuggernaut(ev.Player);
                     }
                 }
                 else
@@ -86,12 +86,12 @@ namespace JuggernautGamemode
                         {
                             plugin.Info("Spawning " + ev.Player.Name + " as NTF Commander, and setting inventory.");
                             ev.Items = items;
-                            Timing.Run(Functions.SpawnAsNTFCommander(ev.Player));
+                            Timing.Run(Functions.singleton.SpawnAsNTFCommander(ev.Player));
                             ev.Player.SetHealth(Juggernaut.ntf_health);
                         }
                         else if (ev.TeamRole.Role == Role.FACILITY_GUARD || ev.TeamRole.Role == Role.NTF_LIEUTENANT || ev.TeamRole.Role == Role.NTF_SCIENTIST || ev.TeamRole.Role == Role.NTF_CADET)
                             ev.Items = items;
-                        Timing.Run(Functions.SpawnAsNTFCommander(ev.Player));
+                        Timing.Run(Functions.singleton.SpawnAsNTFCommander(ev.Player));
                         ev.Player.SetHealth(Juggernaut.ntf_health);
                     }
                 }
@@ -174,10 +174,10 @@ namespace JuggernautGamemode
                     foreach (Player player in players)
                     {
                         // Selected random Juggernaut
-                        if (Functions.IsJuggernaut(player))
+                        if (Functions.singleton.IsJuggernaut(player))
                         {
                             plugin.Info("" + player.Name + " Chosen as the Juggernaut");
-                            Functions.SpawnAsJuggernaut(player);
+                            Functions.singleton.SpawnAsJuggernaut(player);
                         }
                         else
                         {
@@ -194,14 +194,14 @@ namespace JuggernautGamemode
                         if (player.SteamId == Juggernaut.selectedJuggernaut.SteamId || player.Name == Juggernaut.selectedJuggernaut.Name)
                         {
                             plugin.Info("Selected " + Juggernaut.selectedJuggernaut.Name + " as the Juggernaut");
-                            Functions.SpawnAsJuggernaut(player);
+                            Functions.singleton.SpawnAsJuggernaut(player);
                             Juggernaut.selectedJuggernaut = null;
 							players.Remove(player);
                         }
                         else
                         {
                             plugin.Debug("Spawning " + player.Name + "as an NTF Commander");
-                            Timing.Run(Functions.SpawnAsNTFCommander(player));
+                            Timing.Run(Functions.singleton.SpawnAsNTFCommander(player));
                         }
                     }
                 }
@@ -220,7 +220,7 @@ namespace JuggernautGamemode
         {
             if (Juggernaut.enabled || Juggernaut.roundstarted)
                 plugin.Info("Round Ended!");
-                Functions.EndGamemodeRound();
+                Functions.singleton.EndGamemodeRound();
         }
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
@@ -232,7 +232,7 @@ namespace JuggernautGamemode
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
-                    if (Functions.IsJuggernaut(player) && player.TeamRole.Team == Smod2.API.Team.CHAOS_INSURGENCY)
+                    if (Functions.singleton.IsJuggernaut(player) && player.TeamRole.Team == Smod2.API.Team.CHAOS_INSURGENCY)
                     {
                         juggernautAlive = true; continue;
                     }
@@ -250,11 +250,11 @@ namespace JuggernautGamemode
                     }
                     else if (Juggernaut.juggernaut != null && juggernautAlive && mtfAllive == false)
                     {
-                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                     else if (Juggernaut.juggernaut == null && juggernautAlive == false && mtfAllive)
                     {
-                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                 }
             }
@@ -264,17 +264,17 @@ namespace JuggernautGamemode
         {
             if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
-                if (Functions.IsJuggernaut(ev.Player))
+                if (Functions.singleton.IsJuggernaut(ev.Player))
                 {
                     plugin.pluginManager.Server.Map.ClearBroadcasts();
                     plugin.pluginManager.Server.Map.Broadcast(20, "<color=#228B22>Juggernaut " + Juggernaut.juggernaut.Name + "</color> has been killed by " + ev.Killer.Name + "!", false);
-                    Functions.ResetJuggernaut(ev.Player);
+                    Functions.singleton.ResetJuggernaut(ev.Player);
                     Juggernaut.jugg_killer = ev.Killer;
                 }
                 else
                 {
                     plugin.Server.Map.ClearBroadcasts();
-                    plugin.Server.Map.Broadcast(15, "There are " + (Juggernaut.plugin.pluginManager.Server.Round.Stats.NTFAlive - 1) + " NTF remaining.", false);
+                    plugin.Server.Map.Broadcast(15, "There are " + (Juggernaut.singleton.Server.Round.Stats.NTFAlive - 1) + " NTF remaining.", false);
                 }   
             }
         }
@@ -283,7 +283,7 @@ namespace JuggernautGamemode
         {
             if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
-                if (Functions.IsJuggernaut(ev.Player))
+                if (Functions.singleton.IsJuggernaut(ev.Player))
                 {
                     Juggernaut.juggernaut_health = (Juggernaut.juggernaut_health > ev.Player.GetHealth()) ? Juggernaut.juggernaut_health : ev.Player.GetHealth();
                     plugin.pluginManager.Server.Map.ClearBroadcasts();
@@ -298,7 +298,7 @@ namespace JuggernautGamemode
                             plugin.pluginManager.Server.Map.Broadcast(3, "<color=#228B22>Juggernaut " + Juggernaut.juggernaut.Name + "</color> HP : <color=#ff0000>" + currentHealth + "/" + maxHealth + "</color>", false); break;
                         case HealthBar.Bar:
                             plugin.Debug("Drawn Bar Health Bar Created");
-                            string bar = Functions.DrawHealthBar(percentage);
+                            string bar = Functions.singleton.DrawHealthBar(percentage);
                             plugin.pluginManager.Server.Map.Broadcast(3, "<color=#228B22>Juggernaut " + Juggernaut.juggernaut.Name + "</color> HP : <color=#ff0000>" + bar + "</color>", false); break;
                         case HealthBar.Percentage:
                             plugin.Debug("Percentage Health Bar Created");
@@ -336,11 +336,11 @@ namespace JuggernautGamemode
         {
             if (Juggernaut.enabled || Juggernaut.roundstarted)
             {
-                Player juggernautPlayer = Functions.GetJuggernautPlayer();
+                Player juggernautPlayer = Functions.singleton.GetJuggernautPlayer();
                 if (juggernautPlayer != null && Juggernaut.activator != null)
-                    Functions.CriticalHitJuggernaut(juggernautPlayer, Juggernaut.activator);
+                    Functions.singleton.CriticalHitJuggernaut(juggernautPlayer, Juggernaut.activator);
                 else if (juggernautPlayer != null)
-                    Functions.CriticalHitJuggernaut(juggernautPlayer);
+                    Functions.singleton.CriticalHitJuggernaut(juggernautPlayer);
             }
         }
 

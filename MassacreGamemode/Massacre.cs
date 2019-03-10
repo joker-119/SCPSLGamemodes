@@ -14,14 +14,14 @@ namespace MassacreGamemode
         name = "Massacre of the D-Bois Gamemode",
         description = "Gamemode Template",
         id = "gamemode.massacre",
-        version = "1.4.0",
+        version = "1.5.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
     )]
     public class Massacre : Plugin
     {
-        internal static Massacre plugin;
+        internal static Massacre singleton;
         
         public static bool
             enabled = false,
@@ -36,13 +36,13 @@ namespace MassacreGamemode
         
         public override void OnDisable()
         {
-            plugin.Info(plugin.Details.name + " v." + plugin.Details.version + " has been disabled.");
+            this.Info(this.Details.name + " v." + this.Details.version + " has been disabled.");
         }
 
         public override void OnEnable()
         {
-            plugin = this;
-            plugin.Info(plugin.Details.name + " v." + plugin.Details.version + " has been enabled.");
+            singleton = this;
+            this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
         }
 
         public override void Register()
@@ -53,111 +53,7 @@ namespace MassacreGamemode
             this.AddConfig(new ConfigSetting("mass_peanut_health", 1, SettingType.NUMERIC, true, "How much health Peanuts spawn with."));
             this.AddConfig(new ConfigSetting("mass_peanut_count", 3, SettingType.NUMERIC, true, "The number of peanuts selected."));
             Timing.Init(this);
-        }
-    }
-
-    public class Functions
-    {
-        public static void EnableGamemode()
-        {
-            Massacre.enabled = true;
-            if (!Massacre.roundstarted)
-            {
-                Massacre.plugin.pluginManager.Server.Map.ClearBroadcasts();
-                Massacre.plugin.pluginManager.Server.Map.Broadcast(25, "<color=#50c878>Massacre of the D-Bois Gamemode</color> is starting..", false);
-            }
-        }
-        public static void DisableGamemode()
-        {
-            Massacre.enabled = false;
-            Massacre.plugin.pluginManager.Server.Map.ClearBroadcasts();
-        }
-        public static Vector SpawnLoc()
-        {
-            Vector spawn = null;
-
-            switch (Massacre.SpawnRoom.ToLower())
-            {
-                case "jail":
-                {
-                    Massacre.plugin.Info("Jail room selected.");
-                    spawn = new Vector(53,1020,-44);
-                    return spawn;
-                }
-                case "939":
-                {
-                    Massacre.plugin.Info("939 Spawn Room selected");
-                    spawn = Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_939_53);
-                    return spawn;
-                }
-                case "049":
-                {
-                    Massacre.plugin.Info("049 Spawn room selected");
-                    spawn = Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
-                    return spawn;
-                }
-                case "106":
-                {
-                    Massacre.plugin.Info("106 Spawn room selected");
-                    spawn = Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_106);
-                    return spawn;
-                }
-                case "173":
-                {
-                    Massacre.plugin.Info("173 Spawn room selected.");
-                    spawn = Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_173);
-                    return spawn;
-                }
-                case "random":
-                {
-                    Massacre.SpawnLocs.Add(Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_939_53));
-                    Massacre.SpawnLocs.Add(Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_173));
-                    Massacre.SpawnLocs.Add(Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_049));
-                    Massacre.SpawnLocs.Add(Massacre.plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_106));
-                    Massacre.SpawnLocs.Add(new Vector(53,1020,-44));
-                    int RandomInt = new System.Random().Next(Massacre.SpawnLocs.Count);
-                    return Massacre.SpawnLocs[RandomInt];
-                }
-                default:
-                {
-                    Massacre.plugin.Info("Invalid location selected, defaulting to Jail.");
-                    spawn = new Vector(53,1020,-44);
-                    return spawn;
-                }
-            }
-        }
-        public static IEnumerable<float> SpawnDboi(Player player, float delay)
-        {
-            player.ChangeRole(Role.CLASSD, false, false, false, true);
-            player.Teleport(Massacre.SpawnLoc);
-			yield return 2;
-
-            foreach (Item item in player.GetInventory())
-            {
-                item.Remove();
-            }
-
-            player.GiveItem(ItemType.FLASHLIGHT);
-            player.GiveItem(ItemType.CUP);
-
-            player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Get ready to die!", false);
-        }
-        public static IEnumerable<float> SpawnNut(Player player, float delay)
-        {
-            player.ChangeRole(Role.SCP_173, false, false, false, false);
-			yield return 5.5f;
-            player.Teleport(Massacre.SpawnLoc);
-            Massacre.plugin.Info("Spawned " + player.Name + " as SCP-173");
-            player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(35, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the D-bois!", false);
-			player.SetHealth(Massacre.nut_health);
-        }
-        public static void EndGamemodeRound()
-        {
-            Massacre.plugin.Info("EndgameRound Function");
-            Massacre.roundstarted = false;
-            Massacre.plugin.Server.Round.EndRound();
+			new Functions(this);
         }
     }
 }

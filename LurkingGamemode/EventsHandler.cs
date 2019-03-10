@@ -65,14 +65,14 @@ namespace LurkingGamemode
                         {
                             if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 && player.TeamRole.Role != Role.SCP_939_89)
                             {
-                                Functions.SpawnLarry(player);
+                                Functions.singleton.SpawnLarry(player);
                             }
                         }
                         for (int i = 0; i < Lurking.doggo_count; i++)
                         {
                             if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 && player.TeamRole.Role != Role.SCP_939_89)
                             {
-                                Functions.SpawnDoggo(player);
+                                Functions.singleton.SpawnDoggo(player);
                             }
                         }
                     }
@@ -97,7 +97,7 @@ namespace LurkingGamemode
             if (Lurking.enabled || Lurking.roundstarted)
             {
                 plugin.Info("Round Ended!");
-                Functions.EndGamemodeRound();
+                Functions.singleton.EndGamemodeRound();
 				SCP575.Functions.singleton.ToggleBlackout();
             }
         }
@@ -130,11 +130,11 @@ namespace LurkingGamemode
                     }
                     else if (scpAlive && humanAlive == false)
                     {
-                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                     else if (scpAlive == false && humanAlive)
                     {
-                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                 }
             }

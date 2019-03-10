@@ -48,11 +48,11 @@ namespace MuskateersGamemode
 	                    int random = Muskateers.generator.Next(players.Count);
 						Player randomPlayer = players[random];
                     	players.Remove(randomPlayer);
-						Timing.Run(Functions.SpawnNTF(randomPlayer));
+						Timing.Run(Functions.singleton.SpawnNTF(randomPlayer));
                 	}
 					foreach (Player player in players)
 					{
-						Timing.Run(Functions.SpawnClassD(player));
+						Timing.Run(Functions.singleton.SpawnClassD(player));
 					}
 				}
 				else
@@ -75,7 +75,7 @@ namespace MuskateersGamemode
             if (Muskateers.enabled || Muskateers.roundstarted)
             {
                 plugin.Info("Round Ended!");
-                Functions.EndGamemodeRound();
+                Functions.singleton.EndGamemodeRound();
             }
         }
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
@@ -105,12 +105,12 @@ namespace MuskateersGamemode
                     else if (classDAlive && !muskyAlive)
                     {
                         ev.Status = ROUND_END_STATUS.OTHER_VICTORY;
-                        Functions.EndGamemodeRound();
+                        Functions.singleton.EndGamemodeRound();
                     }
                     else if (!classDAlive && muskyAlive)
                     {
                         ev.Status = ROUND_END_STATUS.MTF_VICTORY;
-                        Functions.EndGamemodeRound();
+                        Functions.singleton.EndGamemodeRound();
                     }
                 }
             }
@@ -122,7 +122,7 @@ namespace MuskateersGamemode
                 plugin.Server.Map.ClearBroadcasts();
                 if (ev.Player.TeamRole.Team == Team.NINETAILFOX)
                 {
-                    plugin.Server.Map.Broadcast(15, "There are now " + (Muskateers.plugin.pluginManager.Server.Round.Stats.NTFAlive -1) + "<color=#308ADA> Muskateers alive!</color>", false);
+                    plugin.Server.Map.Broadcast(15, "There are now " + (plugin.Server.Round.Stats.NTFAlive -1) + "<color=#308ADA> Muskateers alive!</color>", false);
                 }
                 else if (ev.Player.TeamRole.Team != Team.NINETAILFOX)
                 {

@@ -31,13 +31,13 @@ namespace LurkingGamemode
                             "Lurking disable - Disables the Lurking gamemode. \n"
                         };
                     case "enable":
-                        Functions.EnableGamemode();
+                        Functions.singleton.EnableGamemode();
                         return new string[]
                         {
                             "Lurking will be enabled for the next round!"
                         };
                     case "disable":
-                        Functions.DisableGamemode();
+                        Functions.singleton.DisableGamemode();
                         return new string[]
                         {
                             "Lurking gamemode now disabled."

@@ -6,7 +6,7 @@ using Smod2.Events;
 using System.Collections.Generic;
 using scp4aiur;
 
-namespace GangwarGamemode
+namespace Gangwar
 {
     internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerPlayerJoin, IEventHandlerWaitingForPlayers
     {
@@ -32,11 +32,11 @@ namespace GangwarGamemode
             {
                 if (ev.Player.TeamRole.Team == Team.SCP || ev.Player.TeamRole.Team == Team.CLASSD)
                 {
-                    Timing.Run(Functions.SpawnChaos(ev.Player,0));
+                    Timing.Run(Functions.singleton.SpawnChaos(ev.Player,0));
                 }
                 else if (ev.Player.TeamRole.Role == Role.FACILITY_GUARD || ev.Player.TeamRole.Team == Team.SCIENTIST)
                 {
-                    Timing.Run(Functions.SpawnNTF(ev.Player, 0));
+                    Timing.Run(Functions.singleton.SpawnNTF(ev.Player, 0));
                 }
                 else if (ev.Player.TeamRole.Team == Team.SPECTATOR)
                 {
@@ -66,11 +66,11 @@ namespace GangwarGamemode
                     int random = new System.Random().Next(players.Count);
                     Player randomplayer = players[random];
                     players.Remove(randomplayer);
-                    Timing.Run(Functions.SpawnNTF(randomplayer,0));
+                    Timing.Run(Functions.singleton.SpawnNTF(randomplayer,0));
                 }
                 foreach (Player player in players)
                 {
-                    Timing.Run(Functions.SpawnChaos(player,0));
+                    Timing.Run(Functions.singleton.SpawnChaos(player,0));
                 }
             }
         }
@@ -80,7 +80,7 @@ namespace GangwarGamemode
             if (Gangwar.enabled ||Gangwar.roundstarted)
             {
                 plugin.Info("Round Ended!");
-                Functions.EndGamemodeRound();
+                Functions.singleton.EndGamemodeRound();
             }
         }
 
@@ -112,11 +112,11 @@ namespace GangwarGamemode
                     }
                     else if (ciAlive && ntfAlive == false)
                     {
-                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                     else if (ciAlive == false && ntfAlive)
                     {
-                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                 }
             }

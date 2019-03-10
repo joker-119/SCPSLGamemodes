@@ -39,7 +39,7 @@ namespace MassacreGamemode
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
             Massacre.SpawnRoom = plugin.GetConfigString("mass_spawn_room");
-            Massacre.SpawnLoc = Functions.SpawnLoc();
+            Massacre.SpawnLoc = Functions.singleton.SpawnLoc();
             Massacre.nut_health = plugin.GetConfigInt("mass_peanut_health");
 			Massacre.nut_count = plugin.GetConfigInt("mass_peanut_count");
         }
@@ -64,12 +64,12 @@ namespace MassacreGamemode
                     int random = Massacre.generator.Next(players.Count);
                     Player randomplayer = players[random];
                     players.Remove(randomplayer);
-					Timing.Run(Functions.SpawnNut(randomplayer,0));
+					Timing.Run(Functions.singleton.SpawnNut(randomplayer,0));
 
                 }
                 foreach (Player player in players)
 				{
-					Timing.Run(Functions.SpawnDboi(player,0));
+					Timing.Run(Functions.singleton.SpawnDboi(player,0));
 				}
             }
         }
@@ -79,7 +79,7 @@ namespace MassacreGamemode
             if (Massacre.enabled || Massacre.roundstarted)
             {
                 plugin.Info("Round Ended!");
-                Functions.EndGamemodeRound();
+                Functions.singleton.EndGamemodeRound();
             }
         }
 
@@ -90,7 +90,7 @@ namespace MassacreGamemode
                 if (ev.Player.TeamRole.Role == Role.CLASSD)
                 {
                     plugin.Server.Map.ClearBroadcasts();
-                    plugin.Server.Map.Broadcast(5, "There are now " + (Massacre.plugin.pluginManager.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
+                    plugin.Server.Map.Broadcast(5, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
                     ev.Player.PersonalBroadcast(25, "You are dead! But don't worry, now you get to relax and watch your friends die!", false);
                 }
             }
@@ -126,7 +126,7 @@ namespace MassacreGamemode
                     }
                     else if (peanutAlive && humanAlive && humanCount == 1)
                     {
-                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; Functions.singleton.EndGamemodeRound();
                         foreach (Player player in ev.Server.GetPlayers())
                         {
                             if (player.TeamRole.Team == Team.CLASSD)
@@ -139,11 +139,11 @@ namespace MassacreGamemode
                     }
                     else if (peanutAlive && humanAlive == false)
                     {
-                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                     else if (peanutAlive == false && humanAlive)
                     {
-                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                 }
             }

@@ -1,7 +1,7 @@
 using Smod2.Commands;
 
 
-namespace GangwarGamemode
+namespace Gangwar
 {
     class GangwarCommand : ICommandHandler
     {
@@ -32,13 +32,13 @@ namespace GangwarGamemode
                             "Gangwar disable - Disables the Gangwar gamemode. \n"
                         };
                     case "enable":
-                        Functions.EnableGamemode();
+                        Functions.singleton.EnableGamemode();
                         return new string[]
                         {
                             "Gangwar will be enabled for the next round!"
                         };
                     case "disable":
-                        Functions.DisableGamemode();
+                        Functions.singleton.DisableGamemode();
                         return new string[]
                         {
                             "Gangwar gamemode now disabled."

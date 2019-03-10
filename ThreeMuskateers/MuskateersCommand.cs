@@ -29,13 +29,13 @@ namespace MuskateersGamemode
                             "Muskateers disable - Disables the Three Muskateers gamemode. \n"
                         };
                     case "enable":
-                        MuskateersGamemode.Functions.EnableGamemode();
+                        Functions.singleton.EnableGamemode();
                         return new string[]
                         {
                             "Three Muskateers will be enabled for the next round!"
                         };
                     case "disable":
-                        MuskateersGamemode.Functions.DisableGamemode();
+                        Functions.singleton.DisableGamemode();
                         return new string[]
                         {
                             "Three Muskateers gamemode now disabled."

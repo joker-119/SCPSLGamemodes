@@ -13,7 +13,7 @@ namespace MuskateersGamemode
         name = "Three Muskateers Gamemode",
         description = "3 NTF Vs. a crap load of Class-D",
         id = "muskateers.gamemode",
-        version = "1.4.0",
+        version = "1.5.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
@@ -21,7 +21,7 @@ namespace MuskateersGamemode
 
     public class Muskateers : Plugin
     {
-        internal static Muskateers plugin;
+        internal static Muskateers singleton;
         public static bool
             enabled = false,
             roundstarted = false;
@@ -31,61 +31,20 @@ namespace MuskateersGamemode
         
         public override void OnDisable()
         {
-            plugin.Info(plugin.Details.name + " v." + plugin.Details.version + " has been disabled.");
+            this.Info(this.Details.name + " v." + this.Details.version + " has been disabled.");
         }
         public override void OnEnable()
         {
-            plugin = this;
-            plugin.Info(plugin.Details.name + " v." + plugin.Details.version + " has been enabled.");
+            singleton = this;
+            this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
         }
         public override void Register()
         {
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+			new Functions(this);
             this.AddCommands(new string[] { "3muskateers", "muskateers", "3musk" }, new MuskateersCommand());
             this.AddConfig(new ConfigSetting("musk_ntf_health", 4500, SettingType.NUMERIC, true, "How much Health NTF spawn with."));
             this.AddConfig(new ConfigSetting("musk_classd_health", 100, SettingType.NUMERIC, true, "How much health Class-D spawn with."));
-        }
-    }
-
-    public class Functions
-    {
-        public static void EnableGamemode()
-        {
-            Muskateers.enabled = true;
-            if (!Muskateers.roundstarted)
-            {
-                Muskateers.plugin.pluginManager.Server.Map.ClearBroadcasts();
-                Muskateers.plugin.pluginManager.Server.Map.Broadcast(25, "<color=#308ADA> Three Muskateers</color> gamemode starting..", false);
-            }
-        }
-        public static void DisableGamemode()
-        {
-            Muskateers.enabled = false;
-            Muskateers.plugin.pluginManager.Server.Map.ClearBroadcasts();
-        }
-        public static IEnumerable<float> SpawnNTF(Player player)
-        {
-            player.ChangeRole(Role.NTF_COMMANDER, true, true, false, true);
-			yield return 2;
-            player.SetHealth(Muskateers.ntf_health);
-            player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(25, "You are a <color=#308ADA>Muskateer</color>. Enter the facility and eliminate all Class-D.", false);
-        }
-        public static IEnumerable<float> SpawnClassD(Player player)
-        {
-            player.ChangeRole(Role.CLASSD, true, true, false, true);
-			yield return 2;
-            player.SetHealth(Muskateers.classd_health);
-			player.GiveItem(ItemType.USP);
-			player.GiveItem(ItemType.ZONE_MANAGER_KEYCARD);
-            player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(25, "You are a <color=#DAA130>Class-D personnel</color>. Escape the facility before the auto-nuke, but evade the NTF sent to kill you!", false);
-        }
-        public static void EndGamemodeRound()
-        {
-            Muskateers.plugin.Info("The Gamemode round has ended!");
-            Muskateers.roundstarted = false;
-            Muskateers.plugin.Server.Round.EndRound();
         }
     }
 }

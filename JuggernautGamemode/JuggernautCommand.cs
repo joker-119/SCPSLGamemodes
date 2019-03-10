@@ -34,13 +34,13 @@ namespace JuggernautGamemode
                         "Juggernaut select [PlayerName] - Selects the player to be the Juggernaut"
                     };
                     case "enable":
-                        Functions.EnableGamemode();
+                        Functions.singleton.EnableGamemode();
                         return new string[]
                         {
                             "Juggernaut will be enabled for the next round!"
                         };
                     case "disable":
-                        Functions.DisableGamemode();
+                        Functions.singleton.DisableGamemode();
                         return new string[]
                         {
                             "Juggernaut will be disabled for the next round!"
@@ -54,7 +54,7 @@ namespace JuggernautGamemode
 								return new string[] { " Couldn't get player: " + args[1]};
 							}
 							Juggernaut.selectedJuggernaut = player;
-							Juggernaut.plugin.Info("" + player.Name + " chosen as the Juggernaut!");
+							Juggernaut.singleton.Info("" + player.Name + " chosen as the Juggernaut!");
 							return new string[] { " Player " + player.Name + " selected as the next Juggernaut!"};
 						}
 						return new string[] { "A player name must be specified, and the gamemode must be enabled!"};

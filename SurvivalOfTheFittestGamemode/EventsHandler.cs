@@ -62,7 +62,7 @@ namespace SurvivalGamemode
                         }
                     }
                 }
-                Timing.Run(Functions.TeleportNuts(Survival.nut_delay));
+                Timing.Run(Functions.singleton.TeleportNuts(Survival.nut_delay));
                 plugin.Info("Timer Initialized..");
                 plugin.Info("Timer set to " + Survival.nut_delay + "s.");
 
@@ -105,11 +105,11 @@ namespace SurvivalGamemode
                 {
                     if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR && player != winner)
                     {
-                        Functions.SpawnDboi(player);
+                        Functions.singleton.SpawnDboi(player);
                     }
                     else if (player.TeamRole.Team == Team.SCP || (player == winner && winner is Player))
                     {
-                        Functions.SpawnNut(player);
+                        Functions.singleton.SpawnNut(player);
                     }
                 }
             }
@@ -120,7 +120,7 @@ namespace SurvivalGamemode
             if (Survival.enabled || Survival.roundstarted)
             {
                 plugin.Info("Round Ended!");
-                Functions.EndGamemodeRound();
+                Functions.singleton.EndGamemodeRound();
 				SCP575.Functions.singleton.ToggleBlackout();
             }
         }
@@ -134,7 +134,7 @@ namespace SurvivalGamemode
                     plugin.Server.Map.ClearBroadcasts();
 					ev.Player.PersonalClearBroadcasts();
 					ev.Player.PersonalBroadcast(5, "Skiddaddle, skidacted, your neck is now [REDACTED]!", false);
-                    plugin.Server.Map.Broadcast(5, "There are now " + (Survival.plugin.pluginManager.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
+                    plugin.Server.Map.Broadcast(5, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
                 }
             }
         }
@@ -169,7 +169,7 @@ namespace SurvivalGamemode
                     }
                     else if (peanutAlive && humanAlive && humanCount == 1)
                     {
-                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; Functions.singleton.EndGamemodeRound();
                         foreach (Player player in ev.Server.GetPlayers())
                         {
                             if (player.TeamRole.Team == Team.CLASSD)
@@ -182,11 +182,11 @@ namespace SurvivalGamemode
                     }
                     else if (peanutAlive && humanAlive == false)
                     {
-                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                     else if (peanutAlive == false && humanAlive)
                     {
-                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.EndGamemodeRound();
+                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                 }
             }
