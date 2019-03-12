@@ -123,11 +123,9 @@ namespace JuggernautGamemode
 
         public IEnumerable<float> SpawnAsNTFCommander(Player player)
         {
-            player.ChangeRole(Role.NTF_COMMANDER, false, true, true, true);
-			yield return 1;
+            player.ChangeRole(Role.NTF_COMMANDER, false, true, false, false);
+			yield return 2;
 
-            Juggernaut.ntf_health = Juggernaut.NTF_Health;
-            Juggernaut.Info("SpawnNTF Health");
             player.SetHealth(Juggernaut.ntf_health);
 			player.SetAmmo(AmmoType.DROPPED_5, 500);
 			player.SetAmmo(AmmoType.DROPPED_7, 500);

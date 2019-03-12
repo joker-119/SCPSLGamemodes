@@ -5,6 +5,7 @@ using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
 using System;
+using scp4aiur;
 
 namespace MuskateersGamemode
 {
@@ -42,6 +43,7 @@ namespace MuskateersGamemode
         {
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 			new Functions(this);
+			Timing.Init(this);
             this.AddCommands(new string[] { "3muskateers", "muskateers", "3musk" }, new MuskateersCommand());
             this.AddConfig(new ConfigSetting("musk_ntf_health", 4500, SettingType.NUMERIC, true, "How much Health NTF spawn with."));
             this.AddConfig(new ConfigSetting("musk_classd_health", 100, SettingType.NUMERIC, true, "How much health Class-D spawn with."));

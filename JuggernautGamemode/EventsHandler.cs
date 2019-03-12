@@ -184,7 +184,6 @@ namespace JuggernautGamemode
                             // Spawned as normal NTF Commander
                             plugin.Debug("Spawning " + player.Name + "as an NTF Commander");
 							Timing.Run(Functions.singleton.SpawnAsNTFCommander(player));
-                            
                         }
                     }
                 }

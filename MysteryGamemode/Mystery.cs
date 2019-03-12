@@ -4,6 +4,7 @@ using Smod2.Config;
 using Smod2.Events;
 using System;
 using System.Collections.Generic;
+using scp4aiur;
 
 namespace Mystery
 {
@@ -59,6 +60,7 @@ namespace Mystery
 			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 			this.AddCommands(new string[] { "mystery", "murder" }, new MysteryCommand());
 			new Functions(this);
+			Timing.Init(this);
 		}
 	}
 }

@@ -5,6 +5,7 @@ using Smod2.Config;
 using Smod2.API;
 using UnityEngine;
 using System.Collections.Generic;
+using scp4aiur;
 
 namespace JuggernautGamemode
 {
@@ -64,6 +65,8 @@ namespace JuggernautGamemode
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "jug", "jugg", "juggernaut" }, new JuggernautCommand());
 			new Functions(this);
+			Timing.Init(this);
+
 
             // Register Configs
             this.AddConfig(new ConfigSetting("juggernaut_base_health", 500, SettingType.NUMERIC, true, "The amoutn of base health the Juggernaut starts with."));
