@@ -37,14 +37,14 @@ namespace ZombielandGamemode
 
         public IEnumerable<float> SpawnChild(Player player, Player killer)
         {
-            Vector spawn = killer.GetPosition();
-            player.ChangeRole(Role.SCP_049_2, false, false, false, true);
-			yield return 1;
+            Vector spawn = player.GetPosition();
+            player.ChangeRole(Role.SCP_049_2, false, false, false, false);
+			yield return 2;
             player.SetHealth(Zombieland.child_health);
             player.Teleport(spawn);
 
             player.PersonalClearBroadcasts();
-            player.PersonalBroadcast(15, "You died and became a <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);
+            player.PersonalBroadcast(15, killer.Name + " killed you, and you became a <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);
         }
         public IEnumerable<float> AliveCounter(float delay)
         {
@@ -60,7 +60,7 @@ namespace ZombielandGamemode
         {
             Vector spawn = Zombieland.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
             player.ChangeRole(Role.SCP_049_2, false, false, false, false);
-            yield return 1;
+            yield return 2;
             player.Teleport(spawn);
             Zombieland.Alpha.Add(player);
             player.SetHealth(Zombieland.zombie_health);
