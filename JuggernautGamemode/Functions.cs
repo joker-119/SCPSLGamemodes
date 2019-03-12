@@ -2,6 +2,7 @@ using Smod2;
 using Smod2.API;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace JuggernautGamemode
 {
@@ -126,11 +127,26 @@ namespace JuggernautGamemode
             player.ChangeRole(Role.NTF_COMMANDER, false, true, false, false);
 			yield return 2;
 
+			foreach (Smod2.API.Item item in player.GetInventory())
+			{
+				item.Remove();
+			}
+
             player.SetHealth(Juggernaut.ntf_health);
 			player.SetAmmo(AmmoType.DROPPED_5, 500);
 			player.SetAmmo(AmmoType.DROPPED_7, 500);
 			player.SetAmmo(AmmoType.DROPPED_9, 500);
 			player.GiveItem(ItemType.FLASHLIGHT);
+			player.GiveItem(ItemType.RADIO);
+			player.GiveItem(ItemType.E11_STANDARD_RIFLE);
+			player.GiveItem(ItemType.FLASHBANG);
+			player.GiveItem(ItemType.MEDKIT);
+			player.GiveItem(ItemType.MTF_COMMANDER_KEYCARD);
+			player.GiveItem(ItemType.FRAG_GRENADE);
+			if (Juggernaut.NTF_Disarmer) player.GiveItem(ItemType.DISARMER);
+
+			int ran = Juggernaut.gen.Next(1,100);
+			if (ran > 75) player.GiveItem(ItemType.MICROHID);
 
             player.PersonalClearBroadcasts();
             if (Juggernaut.juggernaut != null)

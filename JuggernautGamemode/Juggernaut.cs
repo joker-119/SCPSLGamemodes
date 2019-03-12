@@ -6,6 +6,7 @@ using Smod2.API;
 using UnityEngine;
 using System.Collections.Generic;
 using scp4aiur;
+using System;
 
 namespace JuggernautGamemode
 {
@@ -41,6 +42,7 @@ namespace JuggernautGamemode
         public static float critical_damage;
         public static string[] juggernaut_prevRank = new string[2];
         public static HealthBar health_bar_type;
+		public static System.Random gen = new System.Random();
 
 
 

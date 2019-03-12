@@ -53,7 +53,7 @@ namespace Mystery
 					int random = Mystery.gen.Next(players.Count);
 					Player ranplayer = players[random];
 					players.Remove(ranplayer);
-					Functions.singleton.SpawnMurd(ranplayer);
+					Timing.Run(Functions.singleton.SpawnMurd(ranplayer));
 					Mystery.murds.Add(ranplayer.Name);
 				}
 				for (int i = 0; i < Mystery.detective_num; i++)
@@ -61,11 +61,11 @@ namespace Mystery
 					int random = Mystery.gen.Next(players.Count);
 					Player ranplayer = players[random];
 					players.Remove(ranplayer);
-					Functions.singleton.SpawnDet(ranplayer);
+					Timing.Run(Functions.singleton.SpawnDet(ranplayer));
 				}
 				foreach (Player player in players)
 				{
-					Functions.singleton.SpawnCiv(player);
+					Timing.Run(Functions.singleton.SpawnCiv(player));
 				}
 			}
 		}

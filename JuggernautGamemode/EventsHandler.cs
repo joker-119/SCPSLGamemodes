@@ -46,58 +46,6 @@ namespace JuggernautGamemode
             }
         }
 
-        public void OnSetRole(PlayerSetRoleEvent ev)
-        {
-            if (Juggernaut.enabled || Juggernaut.roundstarted)
-            {
-                if (Functions.singleton.IsJuggernaut(ev.Player))
-                {
-                    if (ev.TeamRole.Team != Smod2.API.Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Smod2.API.Team.SPECTATOR)
-                    {
-                        Functions.singleton.ResetJuggernaut(ev.Player);
-                    }
-                }
-                else
-                {
-                    // Set NTF Inventory
-                    plugin.Info("Setting NTF items..");
-                    List<ItemType> items = new List<ItemType>();
-                    items.Add(ItemType.E11_STANDARD_RIFLE);
-                    items.Add(ItemType.MTF_COMMANDER_KEYCARD);
-                    items.Add(ItemType.FRAG_GRENADE);
-                    items.Add(ItemType.FLASHBANG);
-                    items.Add(ItemType.RADIO);
-                    items.Add(ItemType.MEDKIT);
-
-                    if (Juggernaut.NTF_Disarmer)
-
-                    {
-                        items.Add(ItemType.DISARMER);
-                    }
-                    else
-                    {
-
-                        items.Add(ItemType.FRAG_GRENADE);
-                    }
-
-                    if (ev.TeamRole.Team != Smod2.API.Team.SPECTATOR)
-                    {
-                        if (ev.TeamRole.Team != Smod2.API.Team.NINETAILFOX)
-                        {
-                            plugin.Info("Spawning " + ev.Player.Name + " as NTF Commander, and setting inventory.");
-                            ev.Items = items;
-                            Timing.Run(Functions.singleton.SpawnAsNTFCommander(ev.Player));
-                            ev.Player.SetHealth(Juggernaut.ntf_health);
-                        }
-                        else if (ev.TeamRole.Role == Role.FACILITY_GUARD || ev.TeamRole.Role == Role.NTF_LIEUTENANT || ev.TeamRole.Role == Role.NTF_SCIENTIST || ev.TeamRole.Role == Role.NTF_CADET)
-                            ev.Items = items;
-                        Timing.Run(Functions.singleton.SpawnAsNTFCommander(ev.Player));
-                        ev.Player.SetHealth(Juggernaut.ntf_health);
-                    }
-                }
-            }
-        }
-
         public void OnReload(PlayerReloadEvent ev)
         {
             if (Juggernaut.enabled || Juggernaut.roundstarted && Juggernaut.juggernaut != null)
@@ -150,6 +98,13 @@ namespace JuggernautGamemode
                     Juggernaut.health_bar_type = HealthBar.Raw; break;
             }
         }
+		public void OnSetRole(PlayerSetRoleEvent ev)
+		{
+			if (!Juggernaut.enabled || !Juggernaut.roundstarted) return;
+			if (!Functions.singleton.IsJuggernaut(ev.Player)) return;
+			if (ev.TeamRole.Team != Smod2.API.Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Smod2.API.Team.SPECTATOR)
+				Functions.singleton.ResetJuggernaut();
+		}
 
         public void OnRoundStart(RoundStartEvent ev)
         {
@@ -209,6 +164,7 @@ namespace JuggernautGamemode
 				{
 					foreach (Player player in players)
 					{
+						if (player.SteamId == Juggernaut.juggernaut.SteamId) continue;
 						player.GiveItem(ItemType.MICROHID);
 						players.Remove(player);
 					}
