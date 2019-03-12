@@ -3,6 +3,7 @@ using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
 using scp4aiur;
+using System;
 
 namespace Gangwar
 {
@@ -26,6 +27,7 @@ namespace Gangwar
 
         public static int ci_health;
         public static int ntf_health;
+		public static Random gen = new System.Random();
 
         public override void OnDisable()
         {

@@ -64,6 +64,7 @@ namespace Bomber
 		public IEnumerable<float> GiveMedkits()
 		{
 			if (!Bomber.medkits) yield break;
+			Bomber.Info("Giving medkits!");
 			yield return 5;
 			foreach (Player player in Bomber.players)
 				player.GiveItem(ItemType.MEDKIT);
@@ -74,6 +75,7 @@ namespace Bomber
 			yield return delay;
 			while (Bomber.enabled || Bomber.roundstarted)
 			{
+				Bomber.Info("Starting grenade loop.");
 				int ran = Bomber.gen.Next(1,100);
 				if (ran > 50)
 					DropFlash();
@@ -83,9 +85,12 @@ namespace Bomber
 					foreach (Player player in Bomber.players)
 					{
 						if (IsAlive(player))
+						{
 							player.ThrowGrenade(ItemType.FRAG_GRENADE, false, Vector.Zero, false, player.GetPosition(), false, 0f, false);
+							Bomber.Info("Dropping a grenade on " + player.Name);
+						}
 					}
-					yield return 0.1f;
+					yield return 0.75f;
 				}
 				Bomber.count++;
 				Bomber.timer++;
@@ -95,6 +100,7 @@ namespace Bomber
 					min = 1;
 				if (max < 0)
 					max = 1;
+				Bomber.Info("Timer set to: " + GetTimer(min,max));
 				yield return GetTimer(min,max);
 			}
 		}

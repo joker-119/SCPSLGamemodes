@@ -63,7 +63,7 @@ namespace Gangwar
 
                 for (int i = 0; i < (players.Count / 2); i++)
                 {
-                    int random = new System.Random().Next(players.Count);
+                    int random = Gangwar.gen.Next(players.Count);
                     Player randomplayer = players[random];
                     players.Remove(randomplayer);
                     Timing.Run(Functions.singleton.SpawnNTF(randomplayer,0));
