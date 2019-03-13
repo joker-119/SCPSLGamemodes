@@ -44,21 +44,22 @@ namespace Bomber
 		}
 		public void DropGrenades()
 		{
-			foreach (Player player in Bomber.players)
+			List<Player> players = Bomber.Server.GetPlayers();
+			Bomber.Info("Dropping grenades.");
+			foreach (Player player in players)
 			{
 				if (IsAlive(player))
-					player.ThrowGrenade(ItemType.FRAG_GRENADE, false, Vector.Zero, false, player.GetPosition(), false, 0f, false);
+					player.ThrowGrenade(ItemType.FRAG_GRENADE, false, new Vector(0f, 0f, 0f), true, player.GetPosition(), true, 0f, false);
 			}
 		}
 		public void DropFlash()
 		{
-			for (int i = 0; i < Bomber.count; i++)
+			List<Player> players = Bomber.Server.GetPlayers();
+			Bomber.Info("Dropping flash.");
+			foreach (Player player in players)
 			{
-				foreach (Player player in Bomber.players)
-				{
-					if (IsAlive(player))
-						player.ThrowGrenade(ItemType.FRAG_GRENADE, false, Vector.Zero, false, player.GetPosition(), false, 0f, false);
-				}
+				if (IsAlive(player))
+					player.ThrowGrenade(ItemType.FLASHBANG, false, new Vector(0f, 0f, 0f), true, player.GetPosition(), true, 0f, false);
 			}
 		}
 		public IEnumerable<float> GiveMedkits()
@@ -66,7 +67,8 @@ namespace Bomber
 			if (!Bomber.medkits) yield break;
 			Bomber.Info("Giving medkits!");
 			yield return 5;
-			foreach (Player player in Bomber.players)
+			List<Player> players = Bomber.Server.GetPlayers();
+			foreach (Player player in players)
 				player.GiveItem(ItemType.MEDKIT);
 
 		}
@@ -75,32 +77,24 @@ namespace Bomber
 			yield return delay;
 			while (Bomber.enabled || Bomber.roundstarted)
 			{
-				Bomber.Info("Starting grenade loop.");
+				List<Player> players = Bomber.Server.GetPlayers();
 				int ran = Bomber.gen.Next(1,100);
 				if (ran > 50)
 					DropFlash();
 				yield return 0.5f;
 				for (int i = 0; i < Bomber.count; i++)
 				{
-					foreach (Player player in Bomber.players)
-					{
-						if (IsAlive(player))
-						{
-							player.ThrowGrenade(ItemType.FRAG_GRENADE, false, Vector.Zero, false, player.GetPosition(), false, 0f, false);
-							Bomber.Info("Dropping a grenade on " + player.Name);
-						}
-					}
-					yield return 0.75f;
+					DropGrenades();
+					yield return 0.5f;
 				}
 				Bomber.count++;
 				Bomber.timer++;
 				int min = 15 - ((Bomber.timer * 2)*2);
 				int max = 30 - ((Bomber.timer * 2)*2);
-				if (min < 0)
+				if (min < 1)
 					min = 1;
-				if (max < 0)
-					max = 1;
-				Bomber.Info("Timer set to: " + GetTimer(min,max));
+				if (max < 1)
+					max = 2;
 				yield return GetTimer(min,max);
 			}
 		}
@@ -110,9 +104,14 @@ namespace Bomber
 		}
 		public float GetTimer(int min, int max)
 		{
-			if (Bomber.players.Count > 2)
+			List<Player> players = Bomber.Server.GetPlayers();
+			foreach (Player player in players)
+			{
+				if (!IsAlive(player)) players.Remove(player);
+			}
+			if (players.Count > 2)
 				return Bomber.gen.Next(min, (max + 1));
-			else if (Bomber.players.Count == 2)
+			else if (players.Count == 2)
 				return Bomber.gen.Next((min / 2), ((max + 1)/ 2));
 			return 20;
 		}

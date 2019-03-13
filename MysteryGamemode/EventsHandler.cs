@@ -50,6 +50,7 @@ namespace Mystery
 
 				for (int i = 0; i < Mystery.murderer_num; i++)
 				{
+					if (players.Count == 0) break;
 					int random = Mystery.gen.Next(players.Count);
 					Player ranplayer = players[random];
 					players.Remove(ranplayer);
@@ -58,6 +59,7 @@ namespace Mystery
 				}
 				for (int i = 0; i < Mystery.detective_num; i++)
 				{
+					if (players.Count == 0) break;
 					int random = Mystery.gen.Next(players.Count);
 					Player ranplayer = players[random];
 					players.Remove(ranplayer);
