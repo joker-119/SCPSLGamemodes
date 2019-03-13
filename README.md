@@ -11,6 +11,7 @@ Gamemodes for SCP:SL. Requires Smod
  - Three Muskateers [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/ThreeMuskateers#muskateers)]
  - Murder Mystery [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/MysteryGamemode#mystery)]
  - Bomberman [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/BombermanGamemode#bomberman)]
+ - GunGame [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/GunGame#gungame)]
 
  `*` Indicates the [[SCP-575 Plugin](https://github.com/galaxy119/SCP-575/releases)] is required to use this gamemode.
  

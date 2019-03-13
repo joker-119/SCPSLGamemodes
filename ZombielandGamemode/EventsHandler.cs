@@ -8,7 +8,7 @@ using scp4aiur;
 
 namespace ZombielandGamemode
 {
-    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerDoorAccess, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerHurt, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerSetRole, IEventHandlerWaitingForPlayers
+    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerDoorAccess, IEventHandlerCheckRoundEnd, IEventHandlerSetConfig, IEventHandlerRoundStart, IEventHandlerPlayerHurt, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerSetRole, IEventHandlerWaitingForPlayers
     {
         private readonly Zombieland plugin;
 
@@ -139,7 +139,12 @@ namespace ZombielandGamemode
                 }
             }   
         }
-
+		public void OnSetConfig(SetConfigEvent ev)
+		{
+			if (!Zombieland.enabled || !Zombieland.roundstarted) return;
+			if (ev.Key == "friendly_fire")
+				ev.Value = true;
+		}
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
             if (Zombieland.enabled || Zombieland.roundstarted)
