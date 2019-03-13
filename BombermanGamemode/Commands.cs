@@ -47,11 +47,13 @@ namespace Bomber
 					}
 					case "drop":
 					{
+						Functions.singleton.GetPlayers();
 						Functions.singleton.DropGrenades();
 						return new string[] { "Dropping grenades on all players." };
 					}
 					case "flash":
 					{
+						Functions.singleton.GetPlayers();
 						Functions.singleton.DropFlash();
 						return new string[] { "Dropping flash grenades on all players!" };
 					}

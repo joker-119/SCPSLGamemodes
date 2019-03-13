@@ -44,9 +44,8 @@ namespace Bomber
 		}
 		public void DropGrenades()
 		{
-			List<Player> players = Bomber.Server.GetPlayers();
 			Bomber.Info("Dropping grenades.");
-			foreach (Player player in players)
+			foreach (Player player in Bomber.players)
 			{
 				if (IsAlive(player))
 					player.ThrowGrenade(ItemType.FRAG_GRENADE, false, new Vector(0f, 0f, 0f), true, player.GetPosition(), true, 0f, false);
@@ -54,13 +53,16 @@ namespace Bomber
 		}
 		public void DropFlash()
 		{
-			List<Player> players = Bomber.Server.GetPlayers();
 			Bomber.Info("Dropping flash.");
-			foreach (Player player in players)
+			foreach (Player player in Bomber.players)
 			{
 				if (IsAlive(player))
 					player.ThrowGrenade(ItemType.FLASHBANG, false, new Vector(0f, 0f, 0f), true, player.GetPosition(), true, 0f, false);
 			}
+		}
+		public void GetPlayers()
+		{
+			Bomber.players = Bomber.Server.GetPlayers();
 		}
 		public IEnumerable<float> GiveMedkits()
 		{
@@ -77,10 +79,9 @@ namespace Bomber
 			yield return delay;
 			while (Bomber.enabled || Bomber.roundstarted)
 			{
-				List<Player> players = Bomber.Server.GetPlayers();
 				int ran = Bomber.gen.Next(1,100);
 				if (ran > 50)
-					DropFlash();
+					
 				yield return 0.5f;
 				for (int i = 0; i < Bomber.count; i++)
 				{
@@ -105,13 +106,15 @@ namespace Bomber
 		public float GetTimer(int min, int max)
 		{
 			List<Player> players = Bomber.Server.GetPlayers();
+			List<Player> alive = new List<Player>();
 			foreach (Player player in players)
 			{
-				if (!IsAlive(player)) players.Remove(player);
+				if (IsAlive(player))
+					alive.Add(player);
 			}
-			if (players.Count > 2)
+			if (alive.Count > 2)
 				return Bomber.gen.Next(min, (max + 1));
-			else if (players.Count == 2)
+			else if (alive.Count == 2)
 				return Bomber.gen.Next((min / 2), ((max + 1)/ 2));
 			return 20;
 		}

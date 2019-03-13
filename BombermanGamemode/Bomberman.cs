@@ -36,6 +36,7 @@ namespace Bomber
 			max;
 		public static string spawn_class;
 		public static float grenade_multi;
+		public static List<Player> players = new List<Player>();
 
 		public override void OnDisable()
         {
