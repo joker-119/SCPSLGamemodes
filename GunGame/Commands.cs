@@ -1,4 +1,5 @@
 using Smod2.Commands;
+using Smod2.API;
 
 namespace Gungame
 {
@@ -21,6 +22,7 @@ namespace Gungame
 		{
 			if (args.Length > 0)
 			{
+				Player p = sender as Player;
 				switch (args[0].ToLower())
 				{
 					case "help":
@@ -37,9 +39,23 @@ namespace Gungame
 					case "disable":
 						Functions.singleton.DisableGamemode();
 						return new string[] { "Gungame gamemode now disabled."};
+					case "debug":
+						if (!GunGame.roundstarted)
+							return new string[] {"Please wait for the gungame round to begin before using this command."};
+						Functions.singleton.ReplaceGun(p);
+						return new string[] { "Debugging gun replacement for " + p.Name + "."};
+					case "win":
+						if (!GunGame.roundstarted)
+							return new string[] {"Please wait for the round to begin before using this command."};
+						Functions.singleton.AnnounceWinner(p);
+						return new string[] {p.Name + " is the winner!"};
 					case "select":
 						if (args.Length > 1)
 						{
+							if (GunGame.roundstarted)
+								return new string[] {"This command cannot be used once the round has started."};
+							if (!GunGame.enabled)
+								return new string[] {"Please enable the gamemode before using this command."};
 							switch (args[1].ToLower())
 							{
 								case "lcz":

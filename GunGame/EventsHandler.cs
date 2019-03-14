@@ -5,10 +5,11 @@ using Smod2.EventSystem;
 using Smod2.EventHandlers;
 using System.Collections.Generic;
 using scp4aiur;
+using UnityEngine;
 
 namespace Gungame
 {
-	internal class EventsHandler : IEventHandlerRoundStart, IEventHandlerRoundEnd,IEventHandlerSetConfig, IEventHandlerPlayerDie, IEventHandlerHandcuffed, IEventHandlerCheckRoundEnd, IEventHandlerThrowGrenade, IEventHandlerShoot, IEventHandlerWaitingForPlayers
+	internal class EventsHandler : IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerCheckRoundEnd, IEventHandlerThrowGrenade, IEventHandlerPlayerHurt, IEventHandlerWaitingForPlayers
 	{
 		private readonly GunGame plugin;
 
@@ -22,127 +23,60 @@ namespace Gungame
 		}
 		public void OnRoundStart(RoundStartEvent ev)
 		{
+			if (!GunGame.enabled) return;
+			GunGame.roundstarted = true;
 			List<Player> players = ev.Server.GetPlayers();
 			foreach (Player player in players)
 			{
 				Timing.Run(Functions.singleton.Spawn(player));
+				(player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
 			}
+			
 		}
-		public void OnShoot(PlayerShootEvent ev)
+		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			ev.Player.SetAmmo(AmmoType.DROPPED_5, 100);
-			ev.Player.SetAmmo(AmmoType.DROPPED_7, 100);
-			ev.Player.SetAmmo(AmmoType.DROPPED_9, 100);
+			if (!GunGame.roundstarted) return;
+			(ev.Player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
 		}
 		public void OnThrowGrenade(PlayerThrowGrenadeEvent ev)
 		{
+			if (!GunGame.enabled && !GunGame.roundstarted) return;
 			ev.Player.GiveItem(ItemType.FRAG_GRENADE);
 		}
 		public void OnPlayerDie(PlayerDeathEvent ev)
 		{
-			if (GunGame.reversed)
-			{
-				foreach (Item item in ev.Killer.GetInventory())
-				{
-					switch (item.ItemType)
-					{
-						case ItemType.E11_STANDARD_RIFLE:
-							item.Remove();
-							ev.Killer.GiveItem(ItemType.P90);
-							break;
-						case ItemType.P90:
-							item.Remove();
-							ev.Killer.GiveItem(ItemType.LOGICER);
-							break;
-						case ItemType.LOGICER:
-							item.Remove();
-							ev.Killer.GiveItem(ItemType.MP4);
-							break;
-						case ItemType.MP4:
-							item.Remove();
-							ev.Killer.GiveItem(ItemType.USP);
-							break;
-						case ItemType.USP:
-							item.Remove();
-							ev.Killer.GiveItem(ItemType.COM15);
-							break;
-						case ItemType.COM15:
-							item.Remove();
-							ev.Killer.GiveItem(ItemType.FRAG_GRENADE);
-							break;
-						case ItemType.FRAG_GRENADE:
-							item.Remove();
-							ev.Killer.GiveItem(ItemType.DISARMER);
-							break;
-					}
-				}
-			}
-			foreach (Item item in ev.Killer.GetInventory())
-			{
-				switch (item.ItemType)
-				{
-					case ItemType.FRAG_GRENADE:
-						item.Remove();
-						ev.Killer.GiveItem(ItemType.COM15);
-						break;
-					case ItemType.COM15:
-						item.Remove();
-						ev.Killer.GiveItem(ItemType.USP);
-						break;
-					case ItemType.USP:
-						item.Remove();
-						ev.Killer.GiveItem(ItemType.MP4);
-						break;
-					case ItemType.MP4:
-						item.Remove();
-						ev.Killer.GiveItem(ItemType.LOGICER);
-						break;
-					case ItemType.LOGICER:
-						item.Remove();
-						ev.Killer.GiveItem(ItemType.P90);
-						break;
-					case ItemType.P90:
-						item.Remove();
-						ev.Killer.GiveItem(ItemType.E11_STANDARD_RIFLE);
-						break;
-				}
-			}
+			if (!GunGame.enabled && !GunGame.roundstarted) return;
+			Functions.singleton.ReplaceGun(ev.Killer);
 			if (!GunGame.reversed && ev.DamageTypeVar == DamageType.E11_STANDARD_RIFLE)
+			{
 				Functions.singleton.AnnounceWinner(ev.Killer);
+				GunGame.winner = ev.Killer;
+			}
+			else if (GunGame.reversed && ev.DamageTypeVar == DamageType.FRAG)
+			{
+				Functions.singleton.AnnounceWinner(ev.Killer);
+				GunGame.winner = ev.Killer;
+			}
 			else
 				Timing.Run(Functions.singleton.Spawn(ev.Player));
 		}
-		public void OnHandcuffed(PlayerHandcuffedEvent ev)
+		public void OnPlayerHurt(PlayerHurtEvent ev)
 		{
-			if (GunGame.reversed)
-			{
-				Functions.singleton.AnnounceWinner(ev.Owner);
-			}
-			else 
-				foreach (Item item in ev.Owner.GetInventory())
-				{
-					if (item.ItemType == ItemType.DISARMER)
-					{
-						item.Remove();
-						ev.Owner.GiveItem(ItemType.FRAG_GRENADE);
-					}
-				}
+			if (!GunGame.enabled && !GunGame.roundstarted) return;
+			if (ev.Player.SteamId == ev.Attacker.SteamId && ev.DamageType == DamageType.FRAG)
+				ev.Damage = 0;
+			
 		}
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (GunGame.enabled || GunGame.roundstarted)
+			if (!GunGame.enabled && !GunGame.roundstarted) return;
+			if (!(GunGame.winner is Player))
 				ev.Status = ROUND_END_STATUS.ON_GOING;
 		}
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
-			if (!GunGame.enabled || !GunGame.roundstarted) return;
+			if (!GunGame.enabled && !GunGame.roundstarted) return;
 			Functions.singleton.EndGamemodeRound();
-		}
-		public void OnSetConfig(SetConfigEvent ev)
-		{
-			if (!GunGame.enabled || !GunGame.roundstarted) return;
-			if (ev.Key == "friendly_fire")
-				ev.Value = true;
 		}
 	}
 }

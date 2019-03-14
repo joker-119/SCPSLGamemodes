@@ -31,6 +31,7 @@ namespace Gungame
 			reversed;
 		public static int 
 			health;
+		public static Player winner = null;
 
 		public static string zone;
 		

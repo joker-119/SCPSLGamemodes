@@ -55,7 +55,7 @@ namespace Mystery
 					Player ranplayer = players[random];
 					players.Remove(ranplayer);
 					Timing.Run(Functions.singleton.SpawnMurd(ranplayer));
-					Mystery.murds.Add(ranplayer.Name);
+					Mystery.murds.Add(ranplayer.SteamId);
 				}
 				for (int i = 0; i < Mystery.detective_num; i++)
 				{
@@ -85,7 +85,7 @@ namespace Mystery
 			{
 				if (ev.Player.TeamRole.Role == Role.CLASSD)
 				{
-					if (Mystery.murds.Contains(ev.Player.Name))
+					if (Mystery.murds.Contains(ev.Player.SteamId))
 					{
 						plugin.Server.Map.ClearBroadcasts();
 						plugin.Server.Map.Broadcast(15, "A murderer, " + ev.Player.Name + " has been eliminated by " + ev.Killer.Name + "!", false);
@@ -94,7 +94,7 @@ namespace Mystery
 					{
 						plugin.Server.Map.ClearBroadcasts();
 						plugin.Server.Map.Broadcast(25, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Civilians alive.", false);
-						if (!Mystery.murds.Contains(ev.Player.Name))
+						if (!Mystery.murds.Contains(ev.Killer.SteamId))
 						{
 							ev.Killer.Kill();
 							ev.Killer.PersonalClearBroadcasts();
@@ -106,7 +106,7 @@ namespace Mystery
 				{
 					plugin.Server.Map.ClearBroadcasts();
 					plugin.Server.Map.Broadcast(15, "A detective, " + ev.Player.Name + " has been killed!", false);
-					if (!Mystery.murds.Contains(ev.Killer.Name))
+					if (!Mystery.murds.Contains(ev.Killer.SteamId))
 						{
 							ev.Killer.Kill();
 							ev.Killer.PersonalClearBroadcasts();
@@ -117,7 +117,7 @@ namespace Mystery
 		}
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (Mystery.enabled || Mystery.roundstarted)
+			if (Mystery.enabled || Mystery.roundstarted && ev.Round.Duration >= 10)
 			{
 				bool murd_alive = false;
 				bool civ_alive = false;
@@ -169,12 +169,12 @@ namespace Mystery
 					Player randet = ev.PlayerList[random];
 					ev.PlayerList.Remove(randet);
 
-					Functions.singleton.SpawnMurd(ranmurd);
-					Functions.singleton.SpawnDet(randet);
+					Timing.Run(Functions.singleton.SpawnMurd(ranmurd));
+					Timing.Run(Functions.singleton.SpawnDet(randet));
 				}
 				foreach (Player player in ev.PlayerList)
 				{
-					Functions.singleton.SpawnCiv(player);
+					Timing.Run(Functions.singleton.SpawnCiv(player));
 				}
 				
             }

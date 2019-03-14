@@ -35,14 +35,16 @@ namespace Gungame
 			GunGame.Info("EndGamemode Round");
 			GunGame.roundstarted = false;
 			GunGame.Server.Round.EndRound();
+			GunGame.winner = null;
 		}
 		public IEnumerable<float> Spawn(Player player)
 		{
 			player.ChangeRole(Role.CLASSD, false, false, false, false);
 			yield return 2;
-			player.Teleport(GetSpawn());
+			player.SetGodmode(false);
+			player.Teleport(new Vector (GetSpawn().x, (GetSpawn().y + 3), GetSpawn().z));
 			player.SetHealth(GunGame.health);
-			foreach (Item item in player.GetInventory())
+			foreach (Smod2.API.Item item in player.GetInventory())
 			{
 				item.Remove();
 			}
@@ -54,13 +56,87 @@ namespace Gungame
 		}
 		public void LockDoors()
 		{
-			foreach (Door door in GunGame.Server.Map.GetDoors())
+			foreach (Smod2.API.Door door in GunGame.Server.Map.GetDoors())
 			{
 				if (door.Name.Contains("ZONE"))
 					door.Locked = true;
 				else
 					door.Locked = false;
 			}
+		}
+		public void ReplaceGun(Player player)
+		{
+			if (GunGame.reversed)
+			{
+				foreach (Smod2.API.Item item in player.GetInventory())
+				{
+					switch (item.ItemType)
+					{
+						case ItemType.E11_STANDARD_RIFLE:
+							item.Remove();
+							player.GiveItem(ItemType.P90);
+							break;
+						case ItemType.P90:
+							item.Remove();
+							player.GiveItem(ItemType.LOGICER);
+							break;
+						case ItemType.LOGICER:
+							item.Remove();
+							player.GiveItem(ItemType.MP4);
+							break;
+						case ItemType.MP4:
+							item.Remove();
+							player.GiveItem(ItemType.USP);
+							break;
+						case ItemType.USP:
+							item.Remove();
+							player.GiveItem(ItemType.COM15);
+							break;
+						case ItemType.COM15:
+							item.Remove();
+							player.GiveItem(ItemType.FRAG_GRENADE);
+							break;
+						case ItemType.FRAG_GRENADE:
+							item.Remove();
+							player.GiveItem(ItemType.DISARMER);
+							break;
+					}
+				}
+			}
+			else
+				foreach (Smod2.API.Item item in player.GetInventory())
+				{
+					switch (item.ItemType)
+					{
+						case ItemType.FRAG_GRENADE:
+							item.Remove();
+							player.GiveItem(ItemType.COM15);
+							break;
+						case ItemType.COM15:
+							item.Remove();
+							player.GiveItem(ItemType.USP);
+							break;
+						case ItemType.USP:
+							item.Remove();
+							player.GiveItem(ItemType.MP4);
+							break;
+						case ItemType.MP4:
+							item.Remove();
+							player.GiveItem(ItemType.LOGICER);
+							break;
+						case ItemType.LOGICER:
+							item.Remove();
+							player.GiveItem(ItemType.P90);
+							break;
+						case ItemType.P90:
+							item.Remove();
+							player.GiveItem(ItemType.E11_STANDARD_RIFLE);
+							break;
+					}
+				}
+			player.SetAmmo(AmmoType.DROPPED_5, 500);
+			player.SetAmmo(AmmoType.DROPPED_7, 500);
+			player.SetAmmo(AmmoType.DROPPED_9, 500);
 		}
 		public void AnnounceWinner(Player player)
 		{

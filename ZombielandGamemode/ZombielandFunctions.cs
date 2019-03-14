@@ -1,4 +1,5 @@
 using Smod2;
+using UnityEngine;
 using Smod2.API;
 using System.Collections.Generic;
 
@@ -33,7 +34,6 @@ namespace ZombielandGamemode
             Zombieland.Info("EndgameRound Function");
             Zombieland.roundstarted = false;
             Zombieland.Server.Round.EndRound();
-
         }
 
         public IEnumerable<float> SpawnChild(Player player, Player killer)
@@ -71,7 +71,7 @@ namespace ZombielandGamemode
 		public IEnumerable<float> OpenGates(float delay)
 		{
 			yield return delay;
-			foreach (Door door in Zombieland.Server.Map.GetDoors())
+			foreach (Smod2.API.Door door in Zombieland.Server.Map.GetDoors())
 			{
 				if (door.Name == "GATE_A" || door.Name == "GATE_B")
 				{
