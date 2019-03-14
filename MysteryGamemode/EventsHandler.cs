@@ -5,6 +5,8 @@ using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
 using scp4aiur;
+using UnityEngine;
+using Smod2.Commands;
 
 namespace Mystery
 {
@@ -47,6 +49,8 @@ namespace Mystery
 				List<Player> players = ev.Server.GetPlayers();
 				List<string> murds = new List<string>();
 				List<string> dets = new List<string>();
+
+				plugin.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] {"friendly_fire","true"});
 
 				for (int i = 0; i < Mystery.murderer_num; i++)
 				{
@@ -117,8 +121,9 @@ namespace Mystery
 		}
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (Mystery.enabled || Mystery.roundstarted && ev.Round.Duration >= 10)
+			if (Mystery.enabled || Mystery.roundstarted)
 			{
+				if (ev.Round.Duration < 10) return;
 				bool murd_alive = false;
 				bool civ_alive = false;
 

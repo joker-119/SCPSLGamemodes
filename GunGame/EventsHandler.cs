@@ -29,8 +29,8 @@ namespace Gungame
 			foreach (Player player in players)
 			{
 				Timing.Run(Functions.singleton.Spawn(player));
-				(player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
 			}
+			plugin.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] {"friendly_fire","true"});
 			
 		}
 		public void OnPlayerJoin(PlayerJoinEvent ev)

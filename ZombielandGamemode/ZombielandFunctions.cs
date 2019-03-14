@@ -34,6 +34,7 @@ namespace ZombielandGamemode
             Zombieland.Info("EndgameRound Function");
             Zombieland.roundstarted = false;
             Zombieland.Server.Round.EndRound();
+			Zombieland.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] {"friendly_fire","false"});
         }
 
         public IEnumerable<float> SpawnChild(Player player, Player killer)

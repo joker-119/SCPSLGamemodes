@@ -37,6 +37,7 @@ namespace Mystery
 			Mystery.Info("Endgame function.");
 			Mystery.roundstarted = false;
 			Mystery.Server.Round.EndRound();
+			Mystery.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] {"friendly_fire","false"});
 		}
 		public IEnumerable<float> SpawnMurd(Player player)
 		{
@@ -45,7 +46,7 @@ namespace Mystery
 			yield return 1;
 			player.Teleport(spawn);
 			//Delete old inventory and replace with new one
-			foreach (Item item in player.GetInventory())
+			foreach (Smod2.API.Item item in player.GetInventory())
 			{
 				item.Remove();
 			}
@@ -71,7 +72,7 @@ namespace Mystery
 			yield return 1;
 			player.Teleport(spawn);
 			//Remove old inventory and replace with new one
-			foreach (Item item in player.GetInventory())
+			foreach (Smod2.API.Item item in player.GetInventory())
 			{
 				item.Remove();
 			}
@@ -93,7 +94,7 @@ namespace Mystery
 			player.ChangeRole(Role.CLASSD, false, false, false, false);
 			yield return 1;
 			player.Teleport(spawn);
-			foreach (Item item in player.GetInventory())
+			foreach (Smod2.API.Item item in player.GetInventory())
 			{
 				item.Remove();
 			}

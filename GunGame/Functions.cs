@@ -36,6 +36,7 @@ namespace Gungame
 			GunGame.roundstarted = false;
 			GunGame.Server.Round.EndRound();
 			GunGame.winner = null;
+			GunGame.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] {"friendly_fire","false"});
 		}
 		public IEnumerable<float> Spawn(Player player)
 		{
