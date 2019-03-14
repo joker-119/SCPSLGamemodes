@@ -36,6 +36,8 @@ namespace Mystery
 					server.Map.ClearBroadcasts();
 					server.Map.Broadcast(25, "<color=#c50000>Murder Mystery</color> gamemode is starting...", false);
 				}
+				else
+					(ev.Player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
 			}
 		}
 		public void OnRoundStart(RoundStartEvent ev)
@@ -50,7 +52,10 @@ namespace Mystery
 				List<string> murds = new List<string>();
 				List<string> dets = new List<string>();
 
-				plugin.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] {"friendly_fire","true"});
+				foreach (GameObject player in PlayerManager.singleton.players)
+				{
+					player.GetComponent<WeaponManager>().NetworkfriendlyFire = true;
+				}
 
 				for (int i = 0; i < Mystery.murderer_num; i++)
 				{

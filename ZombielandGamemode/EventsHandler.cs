@@ -68,8 +68,8 @@ namespace ZombielandGamemode
                     {
                         Timing.Run(Functions.singleton.SpawnAlpha(player));
                     }
+					(player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
                 }
-				plugin.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] {"friendly_fire","true"});
                 Timing.Run(Functions.singleton.AliveCounter(90));
 				Timing.Run(Functions.singleton.OpenGates(240));
             }
