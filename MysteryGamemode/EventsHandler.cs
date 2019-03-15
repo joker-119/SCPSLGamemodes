@@ -128,7 +128,11 @@ namespace Mystery
 		{
 			if (Mystery.enabled || Mystery.roundstarted)
 			{
-				if (ev.Round.Duration < 10) return;
+				if (ev.Round.Duration < 20)
+				{
+					ev.Status = ROUND_END_STATUS.ON_GOING;
+					return;
+				}
 				bool murd_alive = false;
 				bool civ_alive = false;
 

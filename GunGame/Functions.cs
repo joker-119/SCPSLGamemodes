@@ -41,9 +41,9 @@ namespace Gungame
 		public IEnumerable<float> Spawn(Player player)
 		{
 			player.ChangeRole(Role.CLASSD, false, false, false, false);
-			yield return 2;
-			player.SetGodmode(false);
 			player.Teleport(new Vector (GetSpawn().x, (GetSpawn().y + 3), GetSpawn().z));
+			yield return 1;
+			player.SetGodmode(false);
 			player.SetHealth(GunGame.health);
 			foreach (Smod2.API.Item item in player.GetInventory())
 			{
@@ -59,7 +59,7 @@ namespace Gungame
 		{
 			foreach (Smod2.API.Door door in GunGame.Server.Map.GetDoors())
 			{
-				if (door.Name.Contains("ZONE"))
+			if (door.Name.Contains("CHECKPOINT") || door.Name.Contains("079") || door.Name.Contains("106"))
 					door.Locked = true;
 				else
 					door.Locked = false;
