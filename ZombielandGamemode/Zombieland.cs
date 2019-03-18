@@ -23,6 +23,8 @@ namespace ZombielandGamemode
         internal static Zombieland singleton;
         public static int zombie_health;
         public static int child_health;
+        public static int zombie_damage;
+        public static int child_damage;
         public static List<Player> Alpha = new List<Player>();
         public static bool AlphaDoorDestroy;
         
@@ -50,6 +52,8 @@ namespace ZombielandGamemode
             this.AddConfig(new ConfigSetting("zombieland_zombie_health", 3000, SettingType.NUMERIC, true, "The amount of health the starting zombies have."));
             this.AddConfig(new ConfigSetting("zombieland_child_health", 500, SettingType.NUMERIC, true, "The amoutn of health child zombies should have."));
             this.AddConfig(new ConfigSetting("zombieland_alphas_destroy_doors", true, SettingType.BOOL, true, "If Alpha zombies should destroy locked doors."));
+            this.AddConfig(new ConfigSetting("zombieland_zombie_damage", 100, SettingType.NUMERIC, true, "The amount of damage the starting zombies deal."));
+            this.AddConfig(new ConfigSetting("zombieland_child_damage", 100, SettingType.NUMERIC, true, "The amount of damage the child zombies should deal."));
         }
     }
 }

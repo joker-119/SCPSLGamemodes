@@ -51,6 +51,8 @@ namespace ZombielandGamemode
         {
             Zombieland.zombie_health = this.plugin.GetConfigInt("zombieland_zombie_health");
             Zombieland.child_health = this.plugin.GetConfigInt("zombieland_child_health");
+            Zombieland.zombie_damage = this.plugin.GetConfigInt("zombieland_zombie_damage");
+            Zombieland.child_damage = this.plugin.GetConfigInt("zombieland_child_damage");
             Zombieland.AlphaDoorDestroy = this.plugin.GetConfigBool("zombieland_alphas_destroy_doors");
         }
         public void OnRoundStart(RoundStartEvent ev)
@@ -129,6 +131,12 @@ namespace ZombielandGamemode
 
         public void OnPlayerHurt(PlayerHurtEvent ev)
         {
+            if (ev.Attacker.TeamRole.Team == Smod2.API.Team.SCP)
+            {
+                if (Zombieland.Alpha.Contains(ev.Attacker)) ev.Damage = Zombieland.zombie_damage;
+                else ev.Damage = Zombieland.child_damage;
+            }
+
             if ((Zombieland.enabled || Zombieland.roundstarted) && ev.Player.TeamRole.Team != Smod2.API.Team.SCP && ev.Damage > ev.Player.GetHealth())
             {
                 if (ev.Attacker == ev.Player || ev.DamageType == DamageType.TESLA || ev.DamageType == DamageType.NUKE || ev.DamageType == DamageType.LURE || ev.DamageType == DamageType.DECONT)
