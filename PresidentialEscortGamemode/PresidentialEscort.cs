@@ -1,0 +1,49 @@
+using Smod2;
+using Smod2.Events;
+using Smod2.Attributes;
+using Smod2.Config;
+using Smod2.API;
+using System.Collections.Generic;
+using scp4aiur;
+
+namespace PresidentialEscortGamemode
+{
+    [PluginDetails(
+        author = "mkrzy",
+        name = "Presidential Escort Gamemode",
+        description = "Scientist (VIP) has to escape from SCPs with help of NTF",
+        id = "mkrzy.gamemode.presidential",
+        version = "1.0",
+        SmodMajor = 3,
+        SmodMinor = 2,
+        SmodRevision = 2
+    )]
+    public class PresidentialEscort : Plugin
+    {
+        internal static PresidentialEscort singleton;
+        public static Player vip = null;
+        
+        public static bool
+            enabled = false,
+            roundstarted = false;
+        
+        public override void OnDisable()
+        {
+            this.Info(this.Details.name + " v." + this.Details.version + " has been disabled.");
+        }
+
+        public override void OnEnable()
+        {
+            singleton = this;
+            this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
+        }
+
+        public override void Register()
+        {
+            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+            this.AddCommands(new string[] { "presidentialescort", "presidential", "escort", "pe" }, new PresidentialEscortCommand());
+            Timing.Init(this);
+            new Functions(this);
+        }
+    }
+}
