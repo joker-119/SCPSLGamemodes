@@ -82,8 +82,8 @@ namespace PresidentialEscortGamemode
         }
 		public void OnCheckEscape(PlayerCheckEscapeEvent ev)
 		{
-			if (ev.Player.SteamId == PresidentialEscort.vip.SteamId)
-				ev.Player.GiveItem(ItemType.CUP);
+            if (ev.Player.SteamId == PresidentialEscort.vip.SteamId)
+                PresidentialEscort.vipEscaped = true;
 		}
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
@@ -100,31 +100,34 @@ namespace PresidentialEscortGamemode
                     {
                         scpAlive = true; continue;
                     }
-
                     else if (player.SteamId == PresidentialEscort.vip.SteamId)
                     {
                         vipAlive = true;
-
-                        if (player.TeamRole.Team != Smod2.API.Team.SCIENTIST)
-                        {
-                            if (player.HasItem(ItemType.CUP)) 
-								vipEscaped = true;
-                        }
                     }
                 }
+
                 if (ev.Server.GetPlayers().Count > 1)
                 {
-                    if (vipAlive && scpAlive)
-						ev.Status = ROUND_END_STATUS.ON_GOING;
-					else if (vipEscaped || (vipAlive && !scpAlive))
+                    if (vipEscaped || (vipAlive && !scpAlive))
 					{
 						ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.singleton.EndGamemodeRound();
 					}
+                    else if (vipAlive && scpAlive)
+                    {
+                        ev.Status = ROUND_END_STATUS.ON_GOING;
+                    }
                     else if (scpAlive && !vipAlive)
                     {
                         ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                 }
+            }
+        }
+        public void OnTeamRespawn(TeamRespawnEvent ev)
+        {
+            if (PresidentialEscort.enabled || PresidentialEscort.roundstarted)
+            {
+                ev.SpawnChaos = false;
             }
         }
     }
