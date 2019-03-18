@@ -131,6 +131,7 @@ namespace ZombielandGamemode
 
         public void OnPlayerHurt(PlayerHurtEvent ev)
         {
+			if (!Zombieland.enabled && !Zombieland.roundstarted) return;
             if (ev.Attacker.TeamRole.Team == Smod2.API.Team.SCP)
             {
                 if (Zombieland.Alpha.Contains(ev.Attacker)) ev.Damage = Zombieland.zombie_damage;

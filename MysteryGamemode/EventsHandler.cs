@@ -7,6 +7,7 @@ using Smod2.Events;
 using scp4aiur;
 using UnityEngine;
 using Smod2.Commands;
+using System.Linq;
 
 namespace Mystery
 {
@@ -123,46 +124,35 @@ namespace Mystery
 		 }
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (Mystery.enabled || Mystery.roundstarted)
+			if (!Mystery.enabled && !Mystery.roundstarted) return;
+			bool civAlive = false;
+			bool murdAlive = false;
+
+			foreach (Player player in ev.Server.GetPlayers().Where(ply => ply.TeamRole.Team != Smod2.API.Team.SPECTATOR))
 			{
-				if (ev.Round.Duration < 20)
+				if (Mystery.murd.ContainsKey(player.SteamId))
 				{
-					ev.Status = ROUND_END_STATUS.ON_GOING;
-					return;
+					murdAlive = true; continue;
 				}
-				bool murd_alive = false;
-				bool civ_alive = false;
+				else if (player.TeamRole.Role == Smod2.API.Role.CLASSD)
+				{
+					civAlive = true;
+				}
+			}
 
-				foreach (Player player in ev.Server.GetPlayers())
-				{
-					if (Mystery.murd.ContainsKey(player.SteamId))
-					{
-						if (Mystery.murd[player.SteamId])
-							murd_alive = true;
-						else
-							civ_alive = false;
-					}
-				}
-
-				if (ev.Server.GetPlayers().Count > 1)
-				{
-					if (murd_alive && civ_alive)
-					{
-						ev.Status = ROUND_END_STATUS.ON_GOING;
-					}
-					else if (!murd_alive && civ_alive)
-					{
-						ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.singleton.EndGamemoderound();
-						plugin.Server.Map.ClearBroadcasts();
-						plugin.Server.Map.Broadcast(25, "The Civilains and Detectives have eliminated all the murderers!", false);
-					}
-					else if (murd_alive && !civ_alive)
-					{
-						ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.singleton.EndGamemoderound();
-						plugin.Server.Map.ClearBroadcasts();
-						plugin.Server.Map.Broadcast(25, "The murderers have killed all of the civilians!", false);
-					}
-				}
+			if (murdAlive && civAlive)
+			{
+				ev.Status = ROUND_END_STATUS.ON_GOING;
+			}
+			else if (!murdAlive && civAlive)
+			{
+				ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.singleton.EndGamemoderound();
+				plugin.Info("All of the murderers are dead!");
+			}
+			else if (murdAlive && !civAlive)
+			{
+				ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.singleton.EndGamemoderound();
+				plugin.Info("All the Civilians are dead!");
 			}
 		}
 		public void OnTeamRespawn(TeamRespawnEvent ev)

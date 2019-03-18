@@ -21,7 +21,7 @@ namespace PresidentialEscortGamemode
             if (!PresidentialEscort.roundstarted)
             {
                 PresidentialEscort.pluginManager.Server.Map.ClearBroadcasts();
-                PresidentialEscort.pluginManager.Server.Map.Broadcast(25, "<color=#50c878>Zombieland Gamemode</color> is starting..", false);
+                PresidentialEscort.pluginManager.Server.Map.Broadcast(25, "<color=#f8ea56>Presidential Escort</color> gamemode is starting...", false);
             }
         }
         public void DisableGamemode()
@@ -34,7 +34,7 @@ namespace PresidentialEscortGamemode
             PresidentialEscort.Info("EndgameRound Function");
             PresidentialEscort.roundstarted = false;
             PresidentialEscort.Server.Round.EndRound();
-            PresidentialEscort.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] {"friendly_fire","false"});
+			PresidentialEscort.vip = null;
         }
 
         public IEnumerable<float> SpawnVIP(Player player)
@@ -45,6 +45,15 @@ namespace PresidentialEscortGamemode
             yield return 2;
             player.Teleport(spawn);
 
+			foreach (Smod2.API.Item item in player.GetInventory())
+			{
+				item.Remove();
+			}
+			player.GiveItem(ItemType.MAJOR_SCIENTIST_KEYCARD);
+			player.GiveItem(ItemType.MEDKIT);
+			player.GiveItem(ItemType.RADIO);
+			player.GiveItem(ItemType.FLASHLIGHT);
+
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(15, "You are the <color=#f8ea56>VIP</color> Escape the facility with the help of " +
                 "<color=#308ADA>NTF</color> while avoiding the <color=#e83e25>SCPs</color>.", false);
@@ -54,7 +63,7 @@ namespace PresidentialEscortGamemode
         public IEnumerable<float> SpawnNTF(Player player)
         {
             Vector spawn = PresidentialEscort.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
-            player.ChangeRole(Role.NTF_CADET, false, true, false, false);
+            player.ChangeRole(Role.FACILITY_GUARD, false, true, false, false);
             yield return 2;
             player.Teleport(spawn);
 
@@ -67,11 +76,11 @@ namespace PresidentialEscortGamemode
             player.SetAmmo(AmmoType.DROPPED_7, 500);
             player.SetAmmo(AmmoType.DROPPED_9, 500);
             player.GiveItem(ItemType.RADIO);
-            player.GiveItem(ItemType.E11_STANDARD_RIFLE);
-            player.GiveItem(ItemType.FLASHBANG);
+            player.GiveItem(ItemType.P90);
+            player.GiveItem(ItemType.FRAG_GRENADE);
             player.GiveItem(ItemType.MEDKIT);
             player.GiveItem(ItemType.SENIOR_GUARD_KEYCARD);
-            player.GiveItem(ItemType.FRAG_GRENADE);
+			player.GiveItem(ItemType.FLASHLIGHT);
 
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(15, "You are an <color=#308ADA>NTF Cadet</color>. Work with others to help the " +

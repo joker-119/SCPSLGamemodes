@@ -9,11 +9,17 @@ using UnityEngine;
 
 namespace PresidentialEscortGamemode
 {
-    internal class EventsHandler : IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd
+    internal class EventsHandler : IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerCheckEscape, IEventHandlerWaitingForPlayers
     {
         private readonly PresidentialEscort plugin;
 
         public EventsHandler(PresidentialEscort plugin) => this.plugin = plugin;
+		
+		public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
+		{
+			PresidentialEscort.vip_health = this.plugin.GetConfigInt("vip_vip_health");
+			PresidentialEscort.guard_health = this.plugin.GetConfigInt("vip_guard_health");
+		}
 
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
@@ -47,8 +53,15 @@ namespace PresidentialEscortGamemode
                 }
 
                 // chooses and spawns VIP scientist
-                int chosenVIP = new System.Random().Next(players.Count);
-                Player vip = players[chosenVIP];
+				Player vip;
+				if (!(PresidentialEscort.vip is Player))
+				{
+                	int chosenVIP = new System.Random().Next(players.Count);
+                	vip = players[chosenVIP];
+				}
+				else
+					vip = PresidentialEscort.vip;
+
                 plugin.Info("" + vip.Name + " chosen as the VIP");
                 Timing.Run(Functions.singleton.SpawnVIP(vip));
                 players.Remove(vip);
@@ -67,6 +80,11 @@ namespace PresidentialEscortGamemode
                 plugin.Info("Round Ended!");
                 Functions.singleton.EndGamemodeRound();
         }
+		public void OnCheckEscape(PlayerCheckEscapeEvent ev)
+		{
+			if (ev.Player.SteamId == PresidentialEscort.vip.SteamId)
+				ev.Player.GiveItem(ItemType.CUP);
+		}
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
@@ -74,7 +92,6 @@ namespace PresidentialEscortGamemode
             {
                 bool vipAlive = false;
                 bool scpAlive = false;
-                bool vipUpgraded = false;
                 bool vipEscaped = false;
 
                 foreach (Player player in ev.Server.GetPlayers())
@@ -84,38 +101,28 @@ namespace PresidentialEscortGamemode
                         scpAlive = true; continue;
                     }
 
-                    else if (player == PresidentialEscort.vip)
+                    else if (player.SteamId == PresidentialEscort.vip.SteamId)
                     {
                         vipAlive = true;
 
                         if (player.TeamRole.Team != Smod2.API.Team.SCIENTIST)
                         {
-                            vipUpgraded = true;
-                            if (player.HasItem(ItemType.FLASHLIGHT)) vipEscaped = true;
+                            if (player.HasItem(ItemType.CUP)) 
+								vipEscaped = true;
                         }
                     }
                 }
                 if (ev.Server.GetPlayers().Count > 1)
                 {
-                    if (vipEscaped)
-                    {
-                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; Functions.singleton.EndGamemodeRound();
-                    }
-                    else if (vipUpgraded)
-                    {
-                        ev.Status = ROUND_END_STATUS.NO_VICTORY; Functions.singleton.EndGamemodeRound();
-                    }
-                    else if (vipAlive)
-                    {
-                        ev.Status = ROUND_END_STATUS.ON_GOING;
-                    }
+                    if (vipAlive && scpAlive)
+						ev.Status = ROUND_END_STATUS.ON_GOING;
+					else if (vipEscaped || (vipAlive && !scpAlive))
+					{
+						ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.singleton.EndGamemodeRound();
+					}
                     else if (scpAlive && !vipAlive)
                     {
                         ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.singleton.EndGamemodeRound();
-                    }
-                    else
-                    {
-                        ev.Status = ROUND_END_STATUS.NO_VICTORY; Functions.singleton.EndGamemodeRound();
                     }
                 }
             }
