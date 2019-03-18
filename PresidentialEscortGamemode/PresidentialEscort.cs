@@ -22,6 +22,7 @@ namespace PresidentialEscortGamemode
     {
         internal static PresidentialEscort singleton;
         public static Player vip = null;
+        public static bool vipEscaped = false;
         
         public static bool
             enabled = false,
