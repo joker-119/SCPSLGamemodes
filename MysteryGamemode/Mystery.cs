@@ -23,8 +23,7 @@ namespace Mystery
 	{
 		internal static Mystery singleton;
 		public static Random gen = new System.Random();
-		public static List<string> 
-			murds = new List<string>();
+		public static Dictionary<string, bool> murd = new Dictionary<string, bool>();
 		public static bool
 			enabled = false,
 			roundstarted = false,

@@ -122,9 +122,16 @@ namespace JuggernautGamemode
 
                 if (Juggernaut.selectedJuggernaut == null)
                 {
-                    int chosenJuggernaut = new System.Random().Next(players.Count);
-
-                    Juggernaut.juggernaut = players[chosenJuggernaut];
+                    int limit = 50;
+					for (int i = 0; i < limit; i ++)
+					{
+						int chosenJuggernaut = Juggernaut.gen.Next(players.Count);
+						if (!(players[chosenJuggernaut].OverwatchMode))
+						{
+                    		Juggernaut.juggernaut = players[chosenJuggernaut];
+							break;
+						}					
+					}
 
                     foreach (Player player in players)
                     {

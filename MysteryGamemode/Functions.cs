@@ -84,7 +84,8 @@ namespace Mystery
 			//Set player health to config
 			player.SetHealth(Mystery.det_health);
 			//Set 9mm Ammo to 500
-			player.SetAmmo(AmmoType.DROPPED_5,500);
+			player.SetAmmo(AmmoType.DROPPED_9,500);
+			Mystery.murd.Add(player.SteamId, true);
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(15, "You are a <color=#DAD530> Detective</color>. You must find all of the Murderers before they kill all of the Civilians!", false);
 		}
@@ -102,6 +103,7 @@ namespace Mystery
 			player.GiveItem(ItemType.JANITOR_KEYCARD);
 			player.GiveItem(ItemType.COIN);
 			player.GiveItem(ItemType.CUP);
+			Mystery.murd.Add(player.SteamId, false);
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(15, "You are a <color=#5AD3D9>Civilian</color>. You must help the Detectives find the murderers, before they kill all of your friends!", false);
 		}

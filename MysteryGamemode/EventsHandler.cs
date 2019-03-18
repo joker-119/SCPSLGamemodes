@@ -64,7 +64,6 @@ namespace Mystery
 					Player ranplayer = players[random];
 					players.Remove(ranplayer);
 					Timing.Run(Functions.singleton.SpawnMurd(ranplayer));
-					Mystery.murds.Add(ranplayer.SteamId);
 				}
 				for (int i = 0; i < Mystery.detective_num; i++)
 				{
@@ -90,40 +89,38 @@ namespace Mystery
 		}
 		public void OnPlayerDie(PlayerDeathEvent ev)
 		{
-			if (Mystery.enabled || Mystery.roundstarted)
+			if (!Mystery.enabled && !Mystery.roundstarted) return;
+			if (ev.Player.TeamRole.Role == Role.CLASSD)
 			{
-				if (ev.Player.TeamRole.Role == Role.CLASSD)
-				{
-					if (Mystery.murds.Contains(ev.Player.SteamId))
-					{
-						plugin.Server.Map.ClearBroadcasts();
-						plugin.Server.Map.Broadcast(15, "A murderer, " + ev.Player.Name + " has been eliminated by " + ev.Killer.Name + "!", false);
-					}
-					else
-					{
-						plugin.Server.Map.ClearBroadcasts();
-						plugin.Server.Map.Broadcast(25, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Civilians alive.", false);
-						if (!Mystery.murds.Contains(ev.Killer.SteamId))
-						{
-							ev.Killer.Kill();
-							ev.Killer.PersonalClearBroadcasts();
-							ev.Killer.PersonalBroadcast(15, "<color=#c50000>You killed an innocent person! You monster!", false);
-						}
-					}
-				}
-				else if (ev.Player.TeamRole.Role == Role.SCIENTIST)
+				if (Mystery.murd[ev.Player.SteamId])
 				{
 					plugin.Server.Map.ClearBroadcasts();
-					plugin.Server.Map.Broadcast(15, "A detective, " + ev.Player.Name + " has been killed!", false);
-					if (!Mystery.murds.Contains(ev.Killer.SteamId))
-						{
-							ev.Killer.Kill();
-							ev.Killer.PersonalClearBroadcasts();
-							ev.Killer.PersonalBroadcast(15, "<color=#c50000>You were innocent and killed a Detective! How rude!", false);
-						}
+					plugin.Server.Map.Broadcast(15, "A murderer, " + ev.Player.Name + " has been eliminated by " + ev.Killer.Name + "!", false);
+				}
+				else
+				{
+					plugin.Server.Map.ClearBroadcasts();
+					plugin.Server.Map.Broadcast(25, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Civilians alive.", false);
+					if (!Mystery.murd[ev.Killer.SteamId])
+					{
+						ev.Killer.Kill();
+						ev.Killer.PersonalClearBroadcasts();
+						ev.Killer.PersonalBroadcast(10, "<color=#c50000>You killed an innocent person! You monster!", false);
+					}
 				}
 			}
-		}
+			else if (ev.Player.TeamRole.Role == Role.SCIENTIST)
+			{
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(15, "A detective, " + ev.Player.Name + " has been killed!", false);
+				if (!Mystery.murd[ev.Killer.SteamId])
+				{
+					ev.Killer.Kill();
+					ev.Player.PersonalClearBroadcasts();
+					ev.Player.PersonalBroadcast(10, "<color=#c50000>You were innocent and killed a Detective! How rude!", false);
+				}
+			}
+		 }
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
 			if (Mystery.enabled || Mystery.roundstarted)
@@ -138,13 +135,12 @@ namespace Mystery
 
 				foreach (Player player in ev.Server.GetPlayers())
 				{
-					if (player.TeamRole.Role == Role.CLASSD && Mystery.murds.Contains(player.Name))
+					if (Mystery.murd.ContainsKey(player.SteamId))
 					{
-						murd_alive = true; continue;
-					}
-					else if (player.TeamRole.Role == Role.CLASSD && !Mystery.murds.Contains(player.Name))
-					{
-						civ_alive = true; continue;
+						if (Mystery.murd[player.SteamId])
+							murd_alive = true;
+						else
+							civ_alive = false;
 					}
 				}
 
