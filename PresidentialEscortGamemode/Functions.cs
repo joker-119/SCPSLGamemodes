@@ -34,7 +34,8 @@ namespace PresidentialEscortGamemode
             PresidentialEscort.Info("EndgameRound Function");
             PresidentialEscort.roundstarted = false;
             PresidentialEscort.Server.Round.EndRound();
-			PresidentialEscort.vip = null;
+            PresidentialEscort.vip = null;
+            PresidentialEscort.vipEscaped = false;
         }
 
         public IEnumerable<float> SpawnVIP(Player player)
