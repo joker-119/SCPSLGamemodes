@@ -8,6 +8,8 @@ There are also some SCPs in the facility. If the VIP dies, SCPs win. If the VIP 
 ### Config Settings
 Config option | Config Type | Default Value | Description
 :---: | :---: | :---: | :------
+pres_vip_health | Int | 2000 | The amount of health the VIP starts with.
+pres_guard_health | Int | 200 | The amount of health guards spawn with.
 
 ### Commands
   Command |  |  | Description

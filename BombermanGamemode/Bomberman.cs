@@ -14,7 +14,7 @@ namespace Bomber
 		name = "Bomberman Gamemode",
 		description = "Run from the bombs!",
 		id = "bomberman.gamemode",
-		version = "1.5.0",
+		version = "1.6.0",
 		SmodMajor = 3,
 		SmodMinor = 2,
 		SmodRevision = 0

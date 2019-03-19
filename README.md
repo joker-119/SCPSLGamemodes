@@ -12,6 +12,7 @@ Gamemodes for SCP:SL. Requires Smod
  - Murder Mystery [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/MysteryGamemode#mystery)]
  - Bomberman [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/BombermanGamemode#bomberman)]
  - GunGame [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/GunGame#gungame)]
+ - Presidential Escort [[Info] (https://github.com/Mozeman/SCPSLGamemodes/tree/master/PresidentialEscortGamemode#presidentialescortgamemode)]
 
  `*` Indicates the [[SCP-575 Plugin](https://github.com/galaxy119/SCP-575/releases)] is required to use this gamemode.
  

@@ -14,7 +14,7 @@ namespace MuskateersGamemode
         name = "Three Muskateers Gamemode",
         description = "3 NTF Vs. a crap load of Class-D",
         id = "muskateers.gamemode",
-        version = "1.5.0",
+        version = "1.6.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
