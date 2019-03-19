@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Smod2.Events;
 using scp4aiur;
 using UnityEngine;
+using System.Linq;
 
 namespace PresidentialEscortGamemode
 {
@@ -44,7 +45,7 @@ namespace PresidentialEscortGamemode
                 List<Player> players = ev.Server.GetPlayers();
 
                 // removes SCPs from player list (used to spawn rest of players)
-                foreach(Player player in players)
+                foreach(Player player in ev.Server.GetPlayers())
                 {
                     if(player.TeamRole.Team == Smod2.API.Team.SCP)
                     {
@@ -93,6 +94,14 @@ namespace PresidentialEscortGamemode
                 bool vipAlive = false;
                 bool scpAlive = false;
                 bool vipEscaped = false;
+
+				if (!(PresidentialEscort.vip is Player))
+				{
+					plugin.Info("VIP not found. Ending gamemode.");
+					ev.Status = ROUND_END_STATUS.NO_VICTORY;
+					Functions.singleton.EndGamemodeRound();
+					return;
+				}
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
