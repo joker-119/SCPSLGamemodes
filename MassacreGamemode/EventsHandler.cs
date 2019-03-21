@@ -29,11 +29,11 @@ namespace MassacreGamemode
         {
             if (Massacre.enabled || Massacre.roundstarted)
             {
-               if (ev.TeamRole.Role == Role.SCP_173)
-               {
-                   ev.Player.SetHealth(Massacre.nut_health);
-               }
-           }
+                if (ev.TeamRole.Role == Role.SCP_173)
+                {
+                    ev.Player.SetHealth(Massacre.nut_health);
+                }
+            }
         }
 
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
@@ -41,7 +41,7 @@ namespace MassacreGamemode
             Massacre.SpawnRoom = plugin.GetConfigString("mass_spawn_room");
             Massacre.SpawnLoc = Functions.singleton.SpawnLoc();
             Massacre.nut_health = plugin.GetConfigInt("mass_peanut_health");
-			Massacre.nut_count = plugin.GetConfigInt("mass_peanut_count");
+            Massacre.nut_count = plugin.GetConfigInt("mass_peanut_count");
         }
 
         public void OnRoundStart(RoundStartEvent ev)
@@ -64,13 +64,13 @@ namespace MassacreGamemode
                     int random = Massacre.generator.Next(players.Count);
                     Player randomplayer = players[random];
                     players.Remove(randomplayer);
-					Timing.Run(Functions.singleton.SpawnNut(randomplayer,0));
+                    Timing.Run(Functions.singleton.SpawnNut(randomplayer, 0));
 
                 }
                 foreach (Player player in players)
-				{
-					Timing.Run(Functions.singleton.SpawnDboi(player,0));
-				}
+                {
+                    Timing.Run(Functions.singleton.SpawnDboi(player, 0));
+                }
             }
         }
 

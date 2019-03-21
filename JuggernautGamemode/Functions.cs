@@ -6,15 +6,15 @@ using System;
 
 namespace JuggernautGamemode
 {
-	public class Functions
+    public class Functions
     {
-		public static Functions singleton;
-		public Juggernaut Juggernaut;
-		public Functions(Juggernaut plugin)
-		{
-			this.Juggernaut = plugin;
-			Functions.singleton = this;
-		}
+        public static Functions singleton;
+        public Juggernaut Juggernaut;
+        public Functions(Juggernaut plugin)
+        {
+            this.Juggernaut = plugin;
+            Functions.singleton = this;
+        }
         public void EnableGamemode()
         {
             Juggernaut.enabled = true;
@@ -125,28 +125,28 @@ namespace JuggernautGamemode
         public IEnumerable<float> SpawnAsNTFCommander(Player player)
         {
             player.ChangeRole(Role.NTF_COMMANDER, false, true, false, false);
-			yield return 2;
+            yield return 2;
 
-			foreach (Smod2.API.Item item in player.GetInventory())
-			{
-				item.Remove();
-			}
+            foreach (Smod2.API.Item item in player.GetInventory())
+            {
+                item.Remove();
+            }
 
             player.SetHealth(Juggernaut.ntf_health);
-			player.SetAmmo(AmmoType.DROPPED_5, 500);
-			player.SetAmmo(AmmoType.DROPPED_7, 500);
-			player.SetAmmo(AmmoType.DROPPED_9, 500);
-			player.GiveItem(ItemType.FLASHLIGHT);
-			player.GiveItem(ItemType.RADIO);
-			player.GiveItem(ItemType.E11_STANDARD_RIFLE);
-			player.GiveItem(ItemType.FLASHBANG);
-			player.GiveItem(ItemType.MEDKIT);
-			player.GiveItem(ItemType.MTF_COMMANDER_KEYCARD);
-			player.GiveItem(ItemType.FRAG_GRENADE);
-			if (Juggernaut.NTF_Disarmer) player.GiveItem(ItemType.DISARMER);
+            player.SetAmmo(AmmoType.DROPPED_5, 500);
+            player.SetAmmo(AmmoType.DROPPED_7, 500);
+            player.SetAmmo(AmmoType.DROPPED_9, 500);
+            player.GiveItem(ItemType.FLASHLIGHT);
+            player.GiveItem(ItemType.RADIO);
+            player.GiveItem(ItemType.E11_STANDARD_RIFLE);
+            player.GiveItem(ItemType.FLASHBANG);
+            player.GiveItem(ItemType.MEDKIT);
+            player.GiveItem(ItemType.MTF_COMMANDER_KEYCARD);
+            player.GiveItem(ItemType.FRAG_GRENADE);
+            if (Juggernaut.NTF_Disarmer) player.GiveItem(ItemType.DISARMER);
 
-			int ran = Juggernaut.gen.Next(1,100);
-			if (ran > 75) player.GiveItem(ItemType.MICROHID);
+            int ran = Juggernaut.gen.Next(1, 100);
+            if (ran > 75) player.GiveItem(ItemType.MICROHID);
 
             player.PersonalClearBroadcasts();
             if (Juggernaut.juggernaut != null)

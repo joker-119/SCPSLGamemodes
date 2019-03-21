@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 namespace SurvivalGamemode
 {
-	public class Functions
+    public class Functions
     {
-		public static Functions singleton;
-		public Survival Survival;
-		public Functions(Survival plugin)
-		{
-			this.Survival = plugin;
-			Functions.singleton = this;
-		}
+        public static Functions singleton;
+        public Survival Survival;
+        public Functions(Survival plugin)
+        {
+            this.Survival = plugin;
+            Functions.singleton = this;
+        }
         public void EnableGamemode()
         {
             Survival.enabled = true;
@@ -36,22 +36,22 @@ namespace SurvivalGamemode
             Survival.Info("Toggling Blackout off.");
             if (Survival.blackouts)
             {
-               Survival.Info("Enabling timed Blackouts.");
+                Survival.Info("Enabling timed Blackouts.");
                 SCP575.Functions.singleton.EnableBlackouts();
             }
         }
 
         public void SpawnDboi(Player player)
         {
-			Vector spawn;
-			if (Survival.zone == "lcz")
-			{
-				spawn = Survival.Server.Map.GetRandomSpawnPoint(Role.SCIENTIST);
-			}
-			else
-			{
-				spawn = Survival.Server.Map.GetRandomSpawnPoint(Role.SCP_096);
-			}
+            Vector spawn;
+            if (Survival.zone == "lcz")
+            {
+                spawn = Survival.Server.Map.GetRandomSpawnPoint(Role.SCIENTIST);
+            }
+            else
+            {
+                spawn = Survival.Server.Map.GetRandomSpawnPoint(Role.SCP_096);
+            }
             player.ChangeRole(Role.CLASSD, false, false, false, true);
             player.Teleport(spawn);
 
@@ -78,26 +78,26 @@ namespace SurvivalGamemode
         public Vector NutSpawn()
         {
             List<Room> rooms = new List<Room>();
-			if (Survival.zone == "lcz")
-			{
-				foreach (Room room in PluginManager.Manager.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA))
-				{
-					if (room.ZoneType == ZoneType.LCZ && room.RoomType != RoomType.CHECKPOINT_A && room.RoomType != RoomType.CHECKPOINT_B && room.RoomType != RoomType.ENTRANCE_CHECKPOINT)
-					{
-						rooms.Add(room);
-					}
-				}
-			}
-			else
-			{
-            	foreach (Room room in PluginManager.Manager.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA))
-            	{
-	                if (room.ZoneType == ZoneType.HCZ && room.RoomType != RoomType.ENTRANCE_CHECKPOINT && room.RoomType != RoomType.CHECKPOINT_A && room.RoomType != RoomType.CHECKPOINT_B)
-                	{
-	                    rooms.Add(room);
-                	}
-            	}
-			}
+            if (Survival.zone == "lcz")
+            {
+                foreach (Room room in PluginManager.Manager.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA))
+                {
+                    if (room.ZoneType == ZoneType.LCZ && room.RoomType != RoomType.CHECKPOINT_A && room.RoomType != RoomType.CHECKPOINT_B && room.RoomType != RoomType.ENTRANCE_CHECKPOINT)
+                    {
+                        rooms.Add(room);
+                    }
+                }
+            }
+            else
+            {
+                foreach (Room room in PluginManager.Manager.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA))
+                {
+                    if (room.ZoneType == ZoneType.HCZ && room.RoomType != RoomType.ENTRANCE_CHECKPOINT && room.RoomType != RoomType.CHECKPOINT_A && room.RoomType != RoomType.CHECKPOINT_B)
+                    {
+                        rooms.Add(room);
+                    }
+                }
+            }
             int randomNum = Survival.gen.Next(rooms.Count);
             Room randomRoom = rooms[randomNum];
             Vector spawn = randomRoom.Position;

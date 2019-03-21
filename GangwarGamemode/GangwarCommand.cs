@@ -12,7 +12,7 @@ namespace Gangwar
 
         public string GetUsage()
         {
-            return "Gangwar Enabled : " + Gangwar.enabled + "\n"+
+            return "Gangwar Enabled : " + Gangwar.enabled + "\n" +
                 "[Gangwar / gang / gw] HELP \n" +
                 "gang ENABLE \n" +
                 "gang DISABLE \n";
@@ -50,7 +50,7 @@ namespace Gangwar
                         };
                 }
             }
-            else 
+            else
             {
                 return new string[]
                 {

@@ -14,7 +14,7 @@ namespace PresidentialEscortGamemode
 
         public string GetUsage()
         {
-            return "Presidential Escort Enabled : " + PresidentialEscort.enabled + "\n"+
+            return "Presidential Escort Enabled : " + PresidentialEscort.enabled + "\n" +
                 "[presidentialescort / presidential / escort / pe] HELP \n" +
                 "presidential ENABLE \n" +
                 "presidential DISABLE";
@@ -44,19 +44,19 @@ namespace PresidentialEscortGamemode
                         {
                             "Presidential Escort gamemode now disabled."
                         };
-					case "select":
-						{
-							if (args.Length > 1)
-							{
-								List<Player> players = PresidentialEscort.singleton.Server.GetPlayers(args[1]);
-								Player player;
-								if (players == null || players.Count == 0) return new string[] {"Player not found!"};
-								player = players.OrderBy(ply => ply.Name.Length).First();
-								PresidentialEscort.vip = player;
-								return new string[] {player.Name + " selected as the next VIP!"};
-							}
-							return new string[] {"You must supply a player name of ID."};
-						}
+                    case "select":
+                        {
+                            if (args.Length > 1)
+                            {
+                                List<Player> players = PresidentialEscort.singleton.Server.GetPlayers(args[1]);
+                                Player player;
+                                if (players == null || players.Count == 0) return new string[] { "Player not found!" };
+                                player = players.OrderBy(ply => ply.Name.Length).First();
+                                PresidentialEscort.vip = player;
+                                return new string[] { player.Name + " selected as the next VIP!" };
+                            }
+                            return new string[] { "You must supply a player name of ID." };
+                        }
                     default:
                         return new string[]
                         {
@@ -64,7 +64,7 @@ namespace PresidentialEscortGamemode
                         };
                 }
             }
-            else 
+            else
             {
                 return new string[]
                 {

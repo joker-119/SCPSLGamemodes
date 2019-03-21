@@ -3,15 +3,15 @@ using Smod2.API;
 
 namespace LurkingGamemode
 {
-	public class Functions
+    public class Functions
     {
-		public static Functions singleton;
-		public Lurking Lurking;
-		public Functions(Lurking plugin)
-		{
-			this.Lurking = plugin;
-			Functions.singleton = this;
-		}
+        public static Functions singleton;
+        public Lurking Lurking;
+        public Functions(Lurking plugin)
+        {
+            this.Lurking = plugin;
+            Functions.singleton = this;
+        }
         public void EndGamemodeRound()
         {
             Lurking.Info("EndgameRound Function");

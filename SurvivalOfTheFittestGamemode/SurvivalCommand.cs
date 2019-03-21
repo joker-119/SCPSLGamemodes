@@ -11,7 +11,7 @@ namespace SurvivalGamemode
 
         public string GetUsage()
         {
-            return "Survival Enabled : " + Survival.enabled + "\n"+
+            return "Survival Enabled : " + Survival.enabled + "\n" +
                 "[Survival / suv / sotf] HELP \n" +
                 "Survival ENABLE \n" +
                 "Survival DISABLE";
@@ -42,22 +42,22 @@ namespace SurvivalGamemode
                         {
                             "Survival gamemode now disabled."
                         };
-					case "zone":
-						if (args.Length > 1)
-						{
-							switch (args[1].ToLower())
-							{
-								case "hcz":
-									Survival.zone = "hcz";
-									return new string[] {"Heavy Containment Zone selected."};
-								case "lcz":
-									Survival.zone = "lcz";
-									return new string[] {"Light Containment zone selected."};
-								default:
-									return new string[] {"A valid zone must be specified."};
-							}
-						}
-						return new string[] {"A valid zone must be specified."};
+                    case "zone":
+                        if (args.Length > 1)
+                        {
+                            switch (args[1].ToLower())
+                            {
+                                case "hcz":
+                                    Survival.zone = "hcz";
+                                    return new string[] { "Heavy Containment Zone selected." };
+                                case "lcz":
+                                    Survival.zone = "lcz";
+                                    return new string[] { "Light Containment zone selected." };
+                                default:
+                                    return new string[] { "A valid zone must be specified." };
+                            }
+                        }
+                        return new string[] { "A valid zone must be specified." };
                     default:
                         return new string[]
                         {
@@ -65,7 +65,7 @@ namespace SurvivalGamemode
                         };
                 }
             }
-            else 
+            else
             {
                 return new string[]
                 {

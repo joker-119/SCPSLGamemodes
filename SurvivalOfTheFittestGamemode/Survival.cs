@@ -23,15 +23,15 @@ namespace SurvivalGamemode
     public class Survival : Plugin
     {
         internal static Survival singleton;
-		public static Random gen = new System.Random();
+        public static Random gen = new System.Random();
         public static bool
             enabled = false,
-			blackouts,
+            blackouts,
             roundstarted = false;
         public static float nut_delay;
         public static int nut_health;
-		public static string zone;
-        
+        public static string zone;
+
         public override void OnDisable()
         {
             this.Info(this.Details.name + " v." + this.Details.version + " has been disabled.");
@@ -48,10 +48,10 @@ namespace SurvivalGamemode
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "survival", "sotf", "surv" }, new SurvivalCommand());
             Timing.Init(this);
-			new Functions(this);
+            new Functions(this);
             this.AddConfig(new ConfigSetting("survival_peanut_delay", 120f, SettingType.FLOAT, true, "The amount of time to wait before unleading peanuts."));
             this.AddConfig(new ConfigSetting("survival_peanut_health", 173, SettingType.NUMERIC, true, "The amount of health peanuts should have (lower values move faster"));
-			this.AddConfig(new ConfigSetting("survival_zone_type", "hcz", false, SettingType.STRING, true, "The zone the event should take place in."));
+            this.AddConfig(new ConfigSetting("survival_zone_type", "hcz", false, SettingType.STRING, true, "The zone the event should take place in."));
         }
     }
 }

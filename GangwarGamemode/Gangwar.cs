@@ -21,13 +21,13 @@ namespace Gangwar
     public class Gangwar : Plugin
     {
         internal static Gangwar singleton;
-        public static bool 
+        public static bool
             enabled = false,
             roundstarted = false;
 
         public static int ci_health;
         public static int ntf_health;
-		public static Random gen = new System.Random();
+        public static Random gen = new System.Random();
 
         public override void OnDisable()
         {
@@ -47,7 +47,7 @@ namespace Gangwar
             this.AddConfig(new ConfigSetting("gangwar_ci_health", 120, SettingType.NUMERIC, true, "The amount of health CI have."));
             this.AddConfig(new ConfigSetting("gangwar_ntf_health", 150, SettingType.NUMERIC, true, "The amount of health NTF have."));
             Timing.Init(this);
-			new Functions(this);
+            new Functions(this);
         }
     }
 }

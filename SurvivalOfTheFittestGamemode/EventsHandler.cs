@@ -31,18 +31,18 @@ namespace SurvivalGamemode
         {
             if (Survival.enabled || Survival.roundstarted)
             {
-               if (ev.TeamRole.Role == Role.SCP_173)
-               {
-                   ev.Player.SetHealth(Survival.nut_health);
-               }
-           }
+                if (ev.TeamRole.Role == Role.SCP_173)
+                {
+                    ev.Player.SetHealth(Survival.nut_health);
+                }
+            }
         }
 
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
             Survival.nut_delay = this.plugin.GetConfigFloat("survival_peanut_delay");
             Survival.nut_health = this.plugin.GetConfigInt("survival_peanut_health");
-			Survival.zone = this.plugin.GetConfigString("survival_zone_type");
+            Survival.zone = this.plugin.GetConfigString("survival_zone_type");
         }
 
         public void OnRoundStart(RoundStartEvent ev)
@@ -71,12 +71,12 @@ namespace SurvivalGamemode
                 plugin.Info("Survival of the Fittest Gamemode Started!");
 
                 string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173", "HCZ_ARMORY", "NUKE_ARMORY", "049_ARMORY" };
-                
+
                 foreach (string d in dlist)
                 {
                     foreach (Door door in ev.Server.Map.GetDoors())
                     {
-                        if ( d == door.Name)
+                        if (d == door.Name)
                         {
                             plugin.Info("Locking " + door.Name + ".");
                             door.Open = false;
@@ -121,7 +121,7 @@ namespace SurvivalGamemode
             {
                 plugin.Info("Round Ended!");
                 Functions.singleton.EndGamemodeRound();
-				SCP575.Functions.singleton.ToggleBlackout();
+                SCP575.Functions.singleton.ToggleBlackout();
             }
         }
 
@@ -132,8 +132,8 @@ namespace SurvivalGamemode
                 if (ev.Player.TeamRole.Role == Role.CLASSD)
                 {
                     plugin.Server.Map.ClearBroadcasts();
-					ev.Player.PersonalClearBroadcasts();
-					ev.Player.PersonalBroadcast(5, "Skiddaddle, skidacted, your neck is now [REDACTED]!", false);
+                    ev.Player.PersonalClearBroadcasts();
+                    ev.Player.PersonalBroadcast(5, "Skiddaddle, skidacted, your neck is now [REDACTED]!", false);
                     plugin.Server.Map.Broadcast(5, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
                 }
             }

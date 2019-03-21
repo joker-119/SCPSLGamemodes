@@ -53,8 +53,8 @@ namespace JuggernautGamemode
                 if (ev.Player.Name == Juggernaut.juggernaut.Name || ev.Player.SteamId == Juggernaut.juggernaut.SteamId)
                 {
                     ev.Player.SetAmmo(AmmoType.DROPPED_7, 2000);
-					ev.Player.SetAmmo(AmmoType.DROPPED_5, 2000);
-					ev.Player.SetAmmo(AmmoType.DROPPED_9, 2000);
+                    ev.Player.SetAmmo(AmmoType.DROPPED_5, 2000);
+                    ev.Player.SetAmmo(AmmoType.DROPPED_9, 2000);
                 }
             }
         }
@@ -98,13 +98,13 @@ namespace JuggernautGamemode
                     Juggernaut.health_bar_type = HealthBar.Raw; break;
             }
         }
-		public void OnSetRole(PlayerSetRoleEvent ev)
-		{
-			if (!Juggernaut.enabled || !Juggernaut.roundstarted) return;
-			if (!Functions.singleton.IsJuggernaut(ev.Player)) return;
-			if (ev.TeamRole.Team != Smod2.API.Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Smod2.API.Team.SPECTATOR)
-				Functions.singleton.ResetJuggernaut();
-		}
+        public void OnSetRole(PlayerSetRoleEvent ev)
+        {
+            if (!Juggernaut.enabled || !Juggernaut.roundstarted) return;
+            if (!Functions.singleton.IsJuggernaut(ev.Player)) return;
+            if (ev.TeamRole.Team != Smod2.API.Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Smod2.API.Team.SPECTATOR)
+                Functions.singleton.ResetJuggernaut();
+        }
 
         public void OnRoundStart(RoundStartEvent ev)
         {
@@ -114,7 +114,7 @@ namespace JuggernautGamemode
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Juggernaut Gamemode Started!");
                 List<Player> players = ev.Server.GetPlayers();
-                
+
                 if (Juggernaut.jugg_killer != null && Juggernaut.jugg_killer is Player)
                 {
                     Juggernaut.selectedJuggernaut = Juggernaut.jugg_killer;
@@ -123,15 +123,15 @@ namespace JuggernautGamemode
                 if (Juggernaut.selectedJuggernaut == null)
                 {
                     int limit = 50;
-					for (int i = 0; i < limit; i ++)
-					{
-						int chosenJuggernaut = Juggernaut.gen.Next(players.Count);
-						if (!(players[chosenJuggernaut].OverwatchMode))
-						{
-                    		Juggernaut.juggernaut = players[chosenJuggernaut];
-							break;
-						}					
-					}
+                    for (int i = 0; i < limit; i++)
+                    {
+                        int chosenJuggernaut = Juggernaut.gen.Next(players.Count);
+                        if (!(players[chosenJuggernaut].OverwatchMode))
+                        {
+                            Juggernaut.juggernaut = players[chosenJuggernaut];
+                            break;
+                        }
+                    }
 
                     foreach (Player player in players)
                     {
@@ -145,7 +145,7 @@ namespace JuggernautGamemode
                         {
                             // Spawned as normal NTF Commander
                             plugin.Debug("Spawning " + player.Name + "as an NTF Commander");
-							Timing.Run(Functions.singleton.SpawnAsNTFCommander(player));
+                            Timing.Run(Functions.singleton.SpawnAsNTFCommander(player));
                         }
                     }
                 }
@@ -158,7 +158,7 @@ namespace JuggernautGamemode
                             plugin.Info("Selected " + Juggernaut.selectedJuggernaut.Name + " as the Juggernaut");
                             Functions.singleton.SpawnAsJuggernaut(player);
                             Juggernaut.selectedJuggernaut = null;
-							players.Remove(player);
+                            players.Remove(player);
                         }
                         else
                         {
@@ -167,15 +167,15 @@ namespace JuggernautGamemode
                         }
                     }
                 }
-				for (int i = 0; i < 4 && players.Count > 0; i++)
-				{
-					foreach (Player player in players)
-					{
-						if (player.SteamId == Juggernaut.juggernaut.SteamId) continue;
-						player.GiveItem(ItemType.MICROHID);
-						players.Remove(player);
-					}
-				}
+                for (int i = 0; i < 4 && players.Count > 0; i++)
+                {
+                    foreach (Player player in players)
+                    {
+                        if (player.SteamId == Juggernaut.juggernaut.SteamId) continue;
+                        player.GiveItem(ItemType.MICROHID);
+                        players.Remove(player);
+                    }
+                }
             }
         }
 
@@ -183,7 +183,7 @@ namespace JuggernautGamemode
         {
             if (Juggernaut.enabled || Juggernaut.roundstarted)
                 plugin.Info("Round Ended!");
-                Functions.singleton.EndGamemodeRound();
+            Functions.singleton.EndGamemodeRound();
         }
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
@@ -238,7 +238,7 @@ namespace JuggernautGamemode
                 {
                     plugin.Server.Map.ClearBroadcasts();
                     plugin.Server.Map.Broadcast(15, "There are " + (Juggernaut.singleton.Server.Round.Stats.NTFAlive - 1) + " NTF remaining.", false);
-                }   
+                }
             }
         }
 

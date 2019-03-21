@@ -6,15 +6,15 @@ using System;
 
 namespace Gangwar
 {
-	public class Functions
+    public class Functions
     {
-		public static Functions singleton;
-		public Gangwar Gangwar;
-		public Functions(Gangwar plugin)
-		{
-			this.Gangwar = plugin;
-			Functions.singleton = this;
-		}
+        public static Functions singleton;
+        public Gangwar Gangwar;
+        public Functions(Gangwar plugin)
+        {
+            this.Gangwar = plugin;
+            Functions.singleton = this;
+        }
         public void EnableGamemode()
         {
             Gangwar.enabled = true;
@@ -51,9 +51,9 @@ namespace Gangwar
             player.GiveItem(ItemType.MEDKIT);
             player.GiveItem(ItemType.FLASHBANG);
 
-            player.SetAmmo(AmmoType.DROPPED_5,500);
-            player.SetAmmo(AmmoType.DROPPED_7,500);
-            player.SetAmmo(AmmoType.DROPPED_9,500);
+            player.SetAmmo(AmmoType.DROPPED_5, 500);
+            player.SetAmmo(AmmoType.DROPPED_7, 500);
+            player.SetAmmo(AmmoType.DROPPED_9, 500);
             player.SetHealth(Gangwar.ci_health);
         }
         public IEnumerable<float> SpawnNTF(Player player, float delay)
@@ -71,9 +71,9 @@ namespace Gangwar
             player.GiveItem(ItemType.MEDKIT);
             player.GiveItem(ItemType.FLASHBANG);
 
-            player.SetAmmo(AmmoType.DROPPED_5,500);
-            player.SetAmmo(AmmoType.DROPPED_7,500);
-            player.SetAmmo(AmmoType.DROPPED_9,500);
+            player.SetAmmo(AmmoType.DROPPED_5, 500);
+            player.SetAmmo(AmmoType.DROPPED_7, 500);
+            player.SetAmmo(AmmoType.DROPPED_9, 500);
             player.SetHealth(Gangwar.ntf_health);
         }
     }

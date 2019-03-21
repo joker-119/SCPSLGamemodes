@@ -32,7 +32,7 @@ namespace Gangwar
             {
                 if (ev.Player.TeamRole.Team == Team.SCP || ev.Player.TeamRole.Team == Team.CLASSD)
                 {
-                    Timing.Run(Functions.singleton.SpawnChaos(ev.Player,0));
+                    Timing.Run(Functions.singleton.SpawnChaos(ev.Player, 0));
                 }
                 else if (ev.Player.TeamRole.Role == Role.FACILITY_GUARD || ev.Player.TeamRole.Team == Team.SCIENTIST)
                 {
@@ -66,18 +66,18 @@ namespace Gangwar
                     int random = Gangwar.gen.Next(players.Count);
                     Player randomplayer = players[random];
                     players.Remove(randomplayer);
-                    Timing.Run(Functions.singleton.SpawnNTF(randomplayer,0));
+                    Timing.Run(Functions.singleton.SpawnNTF(randomplayer, 0));
                 }
                 foreach (Player player in players)
                 {
-                    Timing.Run(Functions.singleton.SpawnChaos(player,0));
+                    Timing.Run(Functions.singleton.SpawnChaos(player, 0));
                 }
             }
         }
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (Gangwar.enabled ||Gangwar.roundstarted)
+            if (Gangwar.enabled || Gangwar.roundstarted)
             {
                 plugin.Info("Round Ended!");
                 Functions.singleton.EndGamemodeRound();
@@ -93,7 +93,7 @@ namespace Gangwar
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
-                    if(player.TeamRole.Team == Team.CHAOS_INSURGENCY)
+                    if (player.TeamRole.Team == Team.CHAOS_INSURGENCY)
                     {
                         ciAlive = true; continue;
                     }

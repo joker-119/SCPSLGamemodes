@@ -41,25 +41,25 @@ namespace MuskateersGamemode
                 List<Player> muskateer = new List<Player>();
                 List<Player> classd = new List<Player>();
 
-				if (players.Count > 4)
-				{
-                	for (int i = 0; i < 3; i++)
-                	{
-	                    int random = Muskateers.generator.Next(players.Count);
-						Player randomPlayer = players[random];
-                    	players.Remove(randomPlayer);
-						Timing.Run(Functions.singleton.SpawnNTF(randomPlayer));
-                	}
-					foreach (Player player in players)
-					{
-						Timing.Run(Functions.singleton.SpawnClassD(player));
-					}
-				}
-				else
-				{
-					plugin.Error("You must have at least 4 players to play this gamemode.");
-					Muskateers.enabled = false;
-				}
+                if (players.Count > 4)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        int random = Muskateers.generator.Next(players.Count);
+                        Player randomPlayer = players[random];
+                        players.Remove(randomPlayer);
+                        Timing.Run(Functions.singleton.SpawnNTF(randomPlayer));
+                    }
+                    foreach (Player player in players)
+                    {
+                        Timing.Run(Functions.singleton.SpawnClassD(player));
+                    }
+                }
+                else
+                {
+                    plugin.Error("You must have at least 4 players to play this gamemode.");
+                    Muskateers.enabled = false;
+                }
             }
         }
         public void OnTeamRespawn(TeamRespawnEvent ev)
@@ -122,11 +122,11 @@ namespace MuskateersGamemode
                 plugin.Server.Map.ClearBroadcasts();
                 if (ev.Player.TeamRole.Team == Team.NINETAILFOX)
                 {
-                    plugin.Server.Map.Broadcast(15, "There are now " + (plugin.Server.Round.Stats.NTFAlive -1) + "<color=#308ADA> Muskateers alive!</color>", false);
+                    plugin.Server.Map.Broadcast(15, "There are now " + (plugin.Server.Round.Stats.NTFAlive - 1) + "<color=#308ADA> Muskateers alive!</color>", false);
                 }
                 else if (ev.Player.TeamRole.Team != Team.NINETAILFOX)
                 {
-                    plugin.Server.Map.Broadcast(15, "There are now " + ((plugin.Server.Round.Stats.ClassDAlive + plugin.Server.Round.Stats.CiAlive) -1) + "<color=#DAA130> Class-D alive!</color>", false);
+                    plugin.Server.Map.Broadcast(15, "There are now " + ((plugin.Server.Round.Stats.ClassDAlive + plugin.Server.Round.Stats.CiAlive) - 1) + "<color=#DAA130> Class-D alive!</color>", false);
                 }
             }
         }

@@ -6,10 +6,10 @@ namespace JuggernautGamemode
     //Used from AdminToolBox
 
     /// <summary>
-	/// Class containing the <see cref="GetPlayer(string)"/> constructor
-	/// </summary>
+    /// Class containing the <see cref="GetPlayer(string)"/> constructor
+    /// </summary>
     public class GetPlayerFromString
-    { 
+    {
         private static Server Server => PluginManager.Manager.Server;
 
         /// <summary>

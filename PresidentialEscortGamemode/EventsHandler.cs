@@ -15,12 +15,12 @@ namespace PresidentialEscortGamemode
         private readonly PresidentialEscort plugin;
 
         public EventsHandler(PresidentialEscort plugin) => this.plugin = plugin;
-		
-		public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
-		{
-			PresidentialEscort.vip_health = this.plugin.GetConfigInt("vip_vip_health");
-			PresidentialEscort.guard_health = this.plugin.GetConfigInt("vip_guard_health");
-		}
+
+        public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
+        {
+            PresidentialEscort.vip_health = this.plugin.GetConfigInt("vip_vip_health");
+            PresidentialEscort.guard_health = this.plugin.GetConfigInt("vip_guard_health");
+        }
 
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
@@ -45,23 +45,23 @@ namespace PresidentialEscortGamemode
                 List<Player> players = ev.Server.GetPlayers();
 
                 // removes SCPs from player list (used to spawn rest of players)
-                foreach(Player player in ev.Server.GetPlayers())
+                foreach (Player player in ev.Server.GetPlayers())
                 {
-                    if(player.TeamRole.Team == Smod2.API.Team.SCP)
+                    if (player.TeamRole.Team == Smod2.API.Team.SCP)
                     {
                         players.Remove(player);
                     }
                 }
 
                 // chooses and spawns VIP scientist
-				Player vip;
-				if (!(PresidentialEscort.vip is Player))
-				{
-                	int chosenVIP = new System.Random().Next(players.Count);
-                	vip = players[chosenVIP];
-				}
-				else
-					vip = PresidentialEscort.vip;
+                Player vip;
+                if (!(PresidentialEscort.vip is Player))
+                {
+                    int chosenVIP = new System.Random().Next(players.Count);
+                    vip = players[chosenVIP];
+                }
+                else
+                    vip = PresidentialEscort.vip;
 
                 plugin.Info("" + vip.Name + " chosen as the VIP");
                 Timing.Run(Functions.singleton.SpawnVIP(vip));
@@ -79,13 +79,13 @@ namespace PresidentialEscortGamemode
         {
             if (PresidentialEscort.enabled || PresidentialEscort.roundstarted)
                 plugin.Info("Round Ended!");
-                Functions.singleton.EndGamemodeRound();
+            Functions.singleton.EndGamemodeRound();
         }
-		public void OnCheckEscape(PlayerCheckEscapeEvent ev)
-		{
+        public void OnCheckEscape(PlayerCheckEscapeEvent ev)
+        {
             if (ev.Player.SteamId == PresidentialEscort.vip.SteamId)
                 PresidentialEscort.vipEscaped = true;
-		}
+        }
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
@@ -95,13 +95,13 @@ namespace PresidentialEscortGamemode
                 bool scpAlive = false;
                 bool vipEscaped = false;
 
-				if (!(PresidentialEscort.vip is Player))
-				{
-					plugin.Info("VIP not found. Ending gamemode.");
-					ev.Status = ROUND_END_STATUS.NO_VICTORY;
-					Functions.singleton.EndGamemodeRound();
-					return;
-				}
+                if (!(PresidentialEscort.vip is Player))
+                {
+                    plugin.Info("VIP not found. Ending gamemode.");
+                    ev.Status = ROUND_END_STATUS.NO_VICTORY;
+                    Functions.singleton.EndGamemodeRound();
+                    return;
+                }
 
                 foreach (Player player in ev.Server.GetPlayers())
                 {
@@ -118,9 +118,9 @@ namespace PresidentialEscortGamemode
                 if (ev.Server.GetPlayers().Count > 1)
                 {
                     if (vipEscaped || (vipAlive && !scpAlive))
-					{
-						ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.singleton.EndGamemodeRound();
-					}
+                    {
+                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.singleton.EndGamemodeRound();
+                    }
                     else if (vipAlive && scpAlive)
                     {
                         ev.Status = ROUND_END_STATUS.ON_GOING;

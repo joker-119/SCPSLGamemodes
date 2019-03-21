@@ -11,7 +11,7 @@ namespace LurkingGamemode
 
         public string GetUsage()
         {
-            return "Lurking Enabled : " + Lurking.enabled + "\n"+
+            return "Lurking Enabled : " + Lurking.enabled + "\n" +
                 "[Lurking / lurk / litd] HELP \n" +
                 "Lurking ENABLE \n" +
                 "Lurking DISABLE";
@@ -49,7 +49,7 @@ namespace LurkingGamemode
                         };
                 }
             }
-            else 
+            else
             {
                 return new string[]
                 {

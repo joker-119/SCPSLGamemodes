@@ -22,18 +22,18 @@ namespace MassacreGamemode
     public class Massacre : Plugin
     {
         internal static Massacre singleton;
-        
+
         public static bool
             enabled = false,
             roundstarted = false;
         public static string SpawnRoom;
         public static Vector SpawnLoc;
-        public static int 
+        public static int
             nut_health,
             nut_count;
         public static Random generator = new System.Random();
         public static List<Vector> SpawnLocs = new List<Vector>();
-        
+
         public override void OnDisable()
         {
             this.Info(this.Details.name + " v." + this.Details.version + " has been disabled.");
@@ -53,7 +53,7 @@ namespace MassacreGamemode
             this.AddConfig(new ConfigSetting("mass_peanut_health", 1, SettingType.NUMERIC, true, "How much health Peanuts spawn with."));
             this.AddConfig(new ConfigSetting("mass_peanut_count", 3, SettingType.NUMERIC, true, "The number of peanuts selected."));
             Timing.Init(this);
-			new Functions(this);
+            new Functions(this);
         }
     }
 }

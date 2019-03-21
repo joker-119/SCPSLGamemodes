@@ -42,7 +42,7 @@ namespace JuggernautGamemode
         public static float critical_damage;
         public static string[] juggernaut_prevRank = new string[2];
         public static HealthBar health_bar_type;
-		public static System.Random gen = new System.Random();
+        public static System.Random gen = new System.Random();
 
 
 
@@ -66,8 +66,8 @@ namespace JuggernautGamemode
             // Register Events
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
             this.AddCommands(new string[] { "jug", "jugg", "juggernaut" }, new JuggernautCommand());
-			new Functions(this);
-			Timing.Init(this);
+            new Functions(this);
+            Timing.Init(this);
 
 
             // Register Configs

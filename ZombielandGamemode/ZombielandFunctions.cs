@@ -6,15 +6,15 @@ using System.Collections.Generic;
 
 namespace ZombielandGamemode
 {
-	public class Functions
+    public class Functions
     {
-		public static Functions singleton;
-		public Zombieland Zombieland;
-		public Functions(Zombieland plugin)
-		{
-			this.Zombieland = plugin;
-			Functions.singleton = this;
-		}
+        public static Functions singleton;
+        public Zombieland Zombieland;
+        public Functions(Zombieland plugin)
+        {
+            this.Zombieland = plugin;
+            Functions.singleton = this;
+        }
         public void EnableGamemode()
         {
             Zombieland.enabled = true;
@@ -34,14 +34,14 @@ namespace ZombielandGamemode
             Zombieland.Info("EndgameRound Function");
             Zombieland.roundstarted = false;
             Zombieland.Server.Round.EndRound();
-			Zombieland.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] {"friendly_fire","false"});
+            Zombieland.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] { "friendly_fire", "false" });
         }
 
         public IEnumerable<float> SpawnChild(Player player, Player killer)
         {
             Vector spawn = player.GetPosition();
             player.ChangeRole(Role.SCP_049_2, false, false, false, false);
-			yield return 2;
+            yield return 2;
             player.SetHealth(Zombieland.child_health);
             player.Teleport(spawn);
 
@@ -69,17 +69,17 @@ namespace ZombielandGamemode
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(15, "You are an alpha <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);
         }
-		public IEnumerable<float> OpenGates(float delay)
-		{
-			yield return delay;
-			foreach (Smod2.API.Door door in Zombieland.Server.Map.GetDoors())
-			{
-				if (door.Name == "GATE_A" || door.Name == "GATE_B")
-				{
-					door.Open = true;
-					door.Locked = true;
-				}
-			}
-		}
+        public IEnumerable<float> OpenGates(float delay)
+        {
+            yield return delay;
+            foreach (Smod2.API.Door door in Zombieland.Server.Map.GetDoors())
+            {
+                if (door.Name == "GATE_A" || door.Name == "GATE_B")
+                {
+                    door.Open = true;
+                    door.Locked = true;
+                }
+            }
+        }
     }
 }

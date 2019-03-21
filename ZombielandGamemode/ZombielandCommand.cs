@@ -12,7 +12,7 @@ namespace ZombielandGamemode
 
         public string GetUsage()
         {
-            return "zombieland Enabled : " + Zombieland.enabled + "\n"+
+            return "zombieland Enabled : " + Zombieland.enabled + "\n" +
                 "[zombieland / zombie / zl] HELP \n" +
                 "zombieland ENABLE \n" +
                 "zombieland DISABLE";
@@ -49,7 +49,7 @@ namespace ZombielandGamemode
                         };
                 }
             }
-            else 
+            else
             {
                 return new string[]
                 {

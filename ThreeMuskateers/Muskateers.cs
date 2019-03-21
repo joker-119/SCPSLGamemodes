@@ -29,7 +29,7 @@ namespace MuskateersGamemode
         public static int ntf_health;
         public static int classd_health;
         public static Random generator = new System.Random();
-        
+
         public override void OnDisable()
         {
             this.Info(this.Details.name + " v." + this.Details.version + " has been disabled.");
@@ -42,8 +42,8 @@ namespace MuskateersGamemode
         public override void Register()
         {
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
-			new Functions(this);
-			Timing.Init(this);
+            new Functions(this);
+            Timing.Init(this);
             this.AddCommands(new string[] { "3muskateers", "muskateers", "3musk" }, new MuskateersCommand());
             this.AddConfig(new ConfigSetting("musk_ntf_health", 4500, SettingType.NUMERIC, true, "How much Health NTF spawn with."));
             this.AddConfig(new ConfigSetting("musk_classd_health", 100, SettingType.NUMERIC, true, "How much health Class-D spawn with."));

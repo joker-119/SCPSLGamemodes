@@ -98,7 +98,7 @@ namespace LurkingGamemode
             {
                 plugin.Info("Round Ended!");
                 Functions.singleton.EndGamemodeRound();
-				SCP575.Functions.singleton.ToggleBlackout();
+                SCP575.Functions.singleton.ToggleBlackout();
             }
         }
 

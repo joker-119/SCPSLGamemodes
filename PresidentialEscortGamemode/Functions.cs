@@ -6,15 +6,15 @@ using System;
 
 namespace PresidentialEscortGamemode
 {
-	public class Functions
+    public class Functions
     {
-		public static Functions singleton;
-		public PresidentialEscort PresidentialEscort;
-		public Functions(PresidentialEscort plugin)
-		{
-			this.PresidentialEscort = plugin;
-			Functions.singleton = this;
-		}
+        public static Functions singleton;
+        public PresidentialEscort PresidentialEscort;
+        public Functions(PresidentialEscort plugin)
+        {
+            this.PresidentialEscort = plugin;
+            Functions.singleton = this;
+        }
         public void EnableGamemode()
         {
             PresidentialEscort.enabled = true;
@@ -46,14 +46,14 @@ namespace PresidentialEscortGamemode
             yield return 2;
             player.Teleport(spawn);
 
-			foreach (Smod2.API.Item item in player.GetInventory())
-			{
-				item.Remove();
-			}
-			player.GiveItem(ItemType.MAJOR_SCIENTIST_KEYCARD);
-			player.GiveItem(ItemType.MEDKIT);
-			player.GiveItem(ItemType.RADIO);
-			player.GiveItem(ItemType.FLASHLIGHT);
+            foreach (Smod2.API.Item item in player.GetInventory())
+            {
+                item.Remove();
+            }
+            player.GiveItem(ItemType.MAJOR_SCIENTIST_KEYCARD);
+            player.GiveItem(ItemType.MEDKIT);
+            player.GiveItem(ItemType.RADIO);
+            player.GiveItem(ItemType.FLASHLIGHT);
 
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(15, "You are the <color=#f8ea56>VIP</color> Escape the facility with the help of " +
@@ -72,7 +72,7 @@ namespace PresidentialEscortGamemode
             {
                 item.Remove();
             }
-            
+
             player.SetAmmo(AmmoType.DROPPED_5, 500);
             player.SetAmmo(AmmoType.DROPPED_7, 500);
             player.SetAmmo(AmmoType.DROPPED_9, 500);
@@ -81,7 +81,7 @@ namespace PresidentialEscortGamemode
             player.GiveItem(ItemType.FRAG_GRENADE);
             player.GiveItem(ItemType.MEDKIT);
             player.GiveItem(ItemType.SENIOR_GUARD_KEYCARD);
-			player.GiveItem(ItemType.FLASHLIGHT);
+            player.GiveItem(ItemType.FLASHLIGHT);
 
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(15, "You are an <color=#308ADA>NTF Cadet</color>. Work with others to help the " +

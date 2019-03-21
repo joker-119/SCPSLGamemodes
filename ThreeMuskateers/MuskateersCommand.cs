@@ -11,8 +11,8 @@ namespace MuskateersGamemode
         public string GetUsage()
         {
             return "Three Muskateers Enabled: " + Muskateers.enabled + "\n" +
-                    "[3Muskateers / Muskateers / 3Musk] HELP \n"+
-                    "3musk ENABLE \n"+
+                    "[3Muskateers / Muskateers / 3Musk] HELP \n" +
+                    "3musk ENABLE \n" +
                     "3musk DISABLE \n";
         }
         public string[] OnCall(ICommandSender sender, string[] args)
@@ -47,7 +47,7 @@ namespace MuskateersGamemode
                         };
                 }
             }
-            else 
+            else
             {
                 return new string[]
                 {

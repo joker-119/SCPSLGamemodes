@@ -11,7 +11,7 @@ namespace MassacreGamemode
 
         public string GetUsage()
         {
-            return "Massacre Enabled : " + Massacre.enabled + "\n"+
+            return "Massacre Enabled : " + Massacre.enabled + "\n" +
                 "[Massacre / mascr / motdb] HELP \n" +
                 "Massacre ENABLE \n" +
                 "Massacre DISABLE";
@@ -49,7 +49,7 @@ namespace MassacreGamemode
                         };
                 }
             }
-            else 
+            else
             {
                 return new string[]
                 {
