@@ -36,7 +36,6 @@ namespace Gungame
             GunGame.roundstarted = false;
             GunGame.Server.Round.EndRound();
             GunGame.winner = null;
-            GunGame.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] { "friendly_fire", "false" });
         }
         public IEnumerable<float> Spawn(Player player)
         {
@@ -52,7 +51,7 @@ namespace Gungame
             if (GunGame.reversed)
                 player.GiveItem(ItemType.E11_STANDARD_RIFLE);
             else
-                player.GiveItem(ItemType.DISARMER);
+                player.GiveItem(ItemType.FRAG_GRENADE);
             player.GiveItem(ItemType.MEDKIT);
         }
         public void LockDoors()
@@ -147,8 +146,15 @@ namespace Gungame
         }
         public Room GetRooms(ZoneType zone)
         {
-            int ran = GunGame.gen.Next(GunGame.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA).Where(p => p.ZoneType == zone).ToList().Count);
-            return GunGame.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA).Where(p => p.ZoneType == zone).ToList()[ran];
+            List<Room> rooms = new List<Room>();
+            foreach (Room room in GunGame.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA).Where(rm => rm.ZoneType == zone))
+            {
+                if (GunGame.validRooms.Contains(room.RoomType))
+                    rooms.Add(room);
+            }
+            int r = GunGame.gen.Next(rooms.Count);
+            return rooms[r];
+
         }
         public Vector GetSpawn()
         {

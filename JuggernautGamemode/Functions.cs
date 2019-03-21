@@ -132,7 +132,7 @@ namespace JuggernautGamemode
                 item.Remove();
             }
 
-            player.SetHealth(Juggernaut.ntf_health);
+            player.SetHealth(150);
             player.SetAmmo(AmmoType.DROPPED_5, 500);
             player.SetAmmo(AmmoType.DROPPED_7, 500);
             player.SetAmmo(AmmoType.DROPPED_9, 500);

@@ -44,15 +44,6 @@ namespace PresidentialEscortGamemode
                 plugin.Info("Presidential Escort Gamemode Started!");
                 List<Player> players = ev.Server.GetPlayers();
 
-                // removes SCPs from player list (used to spawn rest of players)
-                foreach (Player player in ev.Server.GetPlayers())
-                {
-                    if (player.TeamRole.Team == Smod2.API.Team.SCP)
-                    {
-                        players.Remove(player);
-                    }
-                }
-
                 // chooses and spawns VIP scientist
                 Player vip;
                 if (!(PresidentialEscort.vip is Player))
@@ -70,15 +61,16 @@ namespace PresidentialEscortGamemode
                 // spawn NTF into round
                 foreach (Player player in players)
                 {
-                    Timing.Run(Functions.singleton.SpawnNTF(player));
+                    if (player.TeamRole.Team != Smod2.API.Team.SCP)
+                        Timing.Run(Functions.singleton.SpawnNTF(player));
                 }
             }
         }
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (PresidentialEscort.enabled || PresidentialEscort.roundstarted)
-                plugin.Info("Round Ended!");
+            if (!PresidentialEscort.enabled && !PresidentialEscort.roundstarted) return;
+            plugin.Info("Round Ended!");
             Functions.singleton.EndGamemodeRound();
         }
         public void OnCheckEscape(PlayerCheckEscapeEvent ev)

@@ -36,6 +36,7 @@ namespace Gungame
         {
             if (!GunGame.roundstarted) return;
             (ev.Player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
+            Timing.Run(Functions.singleton.Spawn(ev.Player));
         }
         public void OnThrowGrenade(PlayerThrowGrenadeEvent ev)
         {

@@ -181,8 +181,8 @@ namespace JuggernautGamemode
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (Juggernaut.enabled || Juggernaut.roundstarted)
-                plugin.Info("Round Ended!");
+            if (!Juggernaut.enabled && !Juggernaut.roundstarted) return;
+            plugin.Info("Round Ended!");
             Functions.singleton.EndGamemodeRound();
         }
 

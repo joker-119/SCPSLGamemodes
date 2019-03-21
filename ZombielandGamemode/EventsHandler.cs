@@ -89,8 +89,8 @@ namespace ZombielandGamemode
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (Zombieland.enabled || Zombieland.roundstarted)
-                plugin.Info("Round Ended!");
+            if (!Zombieland.enabled && !Zombieland.roundstarted) return;
+            plugin.Info("Round Ended!");
             Functions.singleton.EndGamemodeRound();
         }
 
