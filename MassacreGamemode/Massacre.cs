@@ -13,26 +13,33 @@ namespace MassacreGamemode
         author = "Joker119",
         name = "Massacre of the D-Bois Gamemode",
         description = "Gamemode Template",
-        id = "gamemode.massacre",
-        version = "1.6.0",
+        id = "massacre.Gamemode",
+        version = "1.7.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
     )]
     public class Massacre : Plugin
     {
-        internal static Massacre singleton;
+        public Functions Functions { get; private set; }
 
-        public static bool
-            enabled = false,
-            roundstarted = false;
-        public static string SpawnRoom;
-        public static Vector SpawnLoc;
-        public static int
-            nut_health,
-            nut_count;
-        public static Random generator = new System.Random();
-        public static List<Vector> SpawnLocs = new List<Vector>();
+        public Random Gen = new System.Random();
+
+        public List<Vector> SpawnLocs = new List<Vector>();
+
+        public string[] ValidRanks { get; private set; }
+
+        public bool Enabled { get; internal set; }
+        public bool RoundStarted { get; internal set; }
+
+        public string SpawnRoom { get; internal set; }
+
+        public Vector SpawnLoc { get; internal set; }
+
+        public int NutHealth { get; private set; }
+        public int NutCount { get; private set; }
+
+        public Player Winner { get; internal set; } = null;
 
         public override void OnDisable()
         {
@@ -41,19 +48,32 @@ namespace MassacreGamemode
 
         public override void OnEnable()
         {
-            singleton = this;
-            this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
+            this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
         }
 
         public override void Register()
         {
-            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
-            this.AddCommands(new string[] { "massacre", "motdb", "mascr" }, new MassacreCommand());
             this.AddConfig(new ConfigSetting("mass_spawn_room", "jail", false, SettingType.STRING, true, "Where everyone should spawn."));
             this.AddConfig(new ConfigSetting("mass_peanut_health", 1, SettingType.NUMERIC, true, "How much health Peanuts spawn with."));
             this.AddConfig(new ConfigSetting("mass_peanut_count", 3, SettingType.NUMERIC, true, "The number of peanuts selected."));
+            this.AddConfig(new ConfigSetting("gamemode_ranks", new string[] { "owner", "admin" }, SettingType.LIST, true, "The ranks able to use commands."));
+
+            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+
+            this.AddCommands(new string[] { "massacre", "motdb", "mascr" }, new MassacreCommand(this));
+
             Timing.Init(this);
-            new Functions(this);
+
+            Functions = new Functions(this);
+        }
+
+        public void ReloadConfig()
+        {
+            SpawnRoom = GetConfigString("mass_spawn_room");
+            SpawnLoc = this.Functions.SpawnLoc();
+            NutHealth = GetConfigInt("mass_peanut_health");
+            NutCount = GetConfigInt("mass_peanut_count");
+            ValidRanks = GetConfigList("gamemode_ranks");
         }
     }
 }

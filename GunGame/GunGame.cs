@@ -13,8 +13,8 @@ namespace Gungame
         author = "Joker119",
         name = "GunGame Gamemode",
         description = "Kill EVERYONE!",
-        id = "gungame.gamemode",
-        version = "1.6.0",
+        id = "gungame.Gamemode",
+        version = "1.7.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
@@ -22,19 +22,24 @@ namespace Gungame
 
     public class GunGame : Plugin
     {
-        internal static GunGame singleton;
-        public static Random gen = new System.Random();
-        public static List<Room> rooms = new List<Room>();
-        public static bool
-            enabled = false,
-            roundstarted = false,
-            reversed;
-        public static int
-            health;
-        public static Player winner = null;
-        public List<RoomType> validRooms = new List<RoomType>() { RoomType.CLASS_D_CELLS, RoomType.CAFE, RoomType.AIRLOCK_00, RoomType.AIRLOCK_01, RoomType.INTERCOM, RoomType.PC_LARGE, RoomType.PC_SMALL, RoomType.SCP_049, RoomType.SCP_096, RoomType.SCP_173, RoomType.SCP_372, RoomType.SCP_939 };
+        public Functions Functions { get; private set; }
 
-        public static string zone;
+        public Random Gen = new System.Random();
+
+        public string[] ValidRanks { get; private set; }
+
+        public List<RoomType> ValidRooms = new List<RoomType>() { RoomType.CLASS_D_CELLS, RoomType.CAFE, RoomType.AIRLOCK_00, RoomType.AIRLOCK_01, RoomType.INTERCOM, RoomType.PC_LARGE, RoomType.PC_SMALL, RoomType.SCP_049, RoomType.SCP_096, RoomType.SCP_173, RoomType.SCP_372, RoomType.SCP_939 };
+        public List<Room> Rooms = new List<Room>();
+
+        public Player Winner { get; internal set; } = null;
+
+        public bool Enabled { get; internal set; }
+        public bool RoundStarted { get; internal set; }
+        public bool Reversed { get; private set; }
+
+        public int Health { get; private set; }
+
+        public string Zone { get; internal set; }
 
         public override void OnDisable()
         {
@@ -43,18 +48,30 @@ namespace Gungame
 
         public override void OnEnable()
         {
-            singleton = this;
-            this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
+            this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
         }
         public override void Register()
         {
-            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
-            this.AddCommands(new string[] { " gungame", "gun" }, new GunGameCommand());
             this.AddConfig(new ConfigSetting("gun_reversed", true, SettingType.BOOL, true, "If the traditional gungame mode should be reversed."));
             this.AddConfig(new ConfigSetting("gun_spawn_zone", "lcz", SettingType.STRING, true, "Where you should spawn."));
             this.AddConfig(new ConfigSetting("gun_health", 100, SettingType.NUMERIC, true, "How much healt you will have."));
+            this.AddConfig(new ConfigSetting("gamemode_ranks", new string[] { "owner", "admin" }, SettingType.LIST, true, "The ranks able to use commands."));
+
+            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+
+            this.AddCommands(new string[] { " gungame", "gun" }, new GunGameCommand(this));
+
             Timing.Init(this);
-            new Functions(this);
+
+            Functions = new Functions(this);
+        }
+
+        public void ReloadConfig()
+        {
+            Reversed = GetConfigBool("gun_reversed");
+            Zone = GetConfigString("gun_spawn_zone");
+            Health = GetConfigInt("gun_health");
+            ValidRanks = GetConfigList("gamemode_ranks");
         }
     }
 }

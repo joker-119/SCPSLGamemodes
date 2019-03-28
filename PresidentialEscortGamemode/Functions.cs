@@ -1,48 +1,70 @@
 using Smod2;
 using UnityEngine;
 using Smod2.API;
+using Smod2.Commands;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace PresidentialEscortGamemode
 {
     public class Functions
     {
-        public static Functions singleton;
-        public PresidentialEscort PresidentialEscort;
-        public Functions(PresidentialEscort plugin)
+        private readonly PresidentialEscort plugin;
+
+        public Functions(PresidentialEscort plugin) => this.plugin = plugin;
+
+        public bool IsAllowed(ICommandSender sender)
         {
-            this.PresidentialEscort = plugin;
-            Functions.singleton = this;
+            Player player = (sender is Player) ? sender as Player : null;
+
+            if (player != null)
+            {
+                List<string> roleList = (plugin.ValidRanks != null && plugin.ValidRanks.Length > 0) ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
+
+                if (roleList != null && roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
+                    return true;
+                else if (roleList == null || roleList.Count == 0)
+                    return true;
+                else
+                    return false;
+            }
+            return true;
         }
+
         public void EnableGamemode()
         {
-            PresidentialEscort.enabled = true;
-            if (!PresidentialEscort.roundstarted)
+            plugin.Enabled = true;
+
+            if (!plugin.RoundStarted)
             {
-                PresidentialEscort.pluginManager.Server.Map.ClearBroadcasts();
-                PresidentialEscort.pluginManager.Server.Map.Broadcast(25, "<color=#f8ea56>Presidential Escort</color> gamemode is starting...", false);
+                plugin.pluginManager.Server.Map.ClearBroadcasts();
+                plugin.pluginManager.Server.Map.Broadcast(25, "<color=#f8ea56>Presidential Escort</color> gamemode is starting...", false);
             }
         }
+
         public void DisableGamemode()
         {
-            PresidentialEscort.enabled = false;
-            PresidentialEscort.pluginManager.Server.Map.ClearBroadcasts();
+            plugin.Enabled = false;
+            plugin.pluginManager.Server.Map.ClearBroadcasts();
         }
+
         public void EndGamemodeRound()
         {
-            PresidentialEscort.Info("EndgameRound Function");
-            PresidentialEscort.roundstarted = false;
-            PresidentialEscort.Server.Round.EndRound();
-            PresidentialEscort.vip = null;
-            PresidentialEscort.vipEscaped = false;
+            plugin.Info("EndgameRound Function");
+            plugin.RoundStarted = false;
+            plugin.Server.Round.EndRound();
+            plugin.VIP = null;
+            plugin.VIPEscaped = false;
         }
 
         public IEnumerable<float> SpawnVIP(Player player)
         {
-            PresidentialEscort.vip = player;
-            Vector spawn = PresidentialEscort.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
+            plugin.VIP = player;
+            Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
+
             player.ChangeRole(Role.SCIENTIST, false, false, true, false);
+
             yield return 2;
             player.Teleport(spawn);
 
@@ -50,6 +72,7 @@ namespace PresidentialEscortGamemode
             {
                 item.Remove();
             }
+
             player.GiveItem(ItemType.MAJOR_SCIENTIST_KEYCARD);
             player.GiveItem(ItemType.MEDKIT);
             player.GiveItem(ItemType.RADIO);
@@ -63,8 +86,9 @@ namespace PresidentialEscortGamemode
 
         public IEnumerable<float> SpawnNTF(Player player)
         {
-            Vector spawn = PresidentialEscort.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
+            Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
             player.ChangeRole(Role.FACILITY_GUARD, false, true, false, false);
+
             yield return 2;
             player.Teleport(spawn);
 
@@ -76,6 +100,7 @@ namespace PresidentialEscortGamemode
             player.SetAmmo(AmmoType.DROPPED_5, 500);
             player.SetAmmo(AmmoType.DROPPED_7, 500);
             player.SetAmmo(AmmoType.DROPPED_9, 500);
+
             player.GiveItem(ItemType.RADIO);
             player.GiveItem(ItemType.P90);
             player.GiveItem(ItemType.FRAG_GRENADE);

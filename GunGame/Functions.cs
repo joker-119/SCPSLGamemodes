@@ -3,60 +3,82 @@ using Smod2;
 using Smod2.API;
 using System.Collections.Generic;
 using System;
+using Smod2.Commands;
 
 namespace Gungame
 {
     public class Functions
     {
-        public static Functions singleton;
-        public GunGame GunGame;
-        public Functions(GunGame plugin)
+        private readonly GunGame plugin;
+        public Functions(GunGame plugin) => this.plugin = plugin;
+
+        public bool IsAllowed(ICommandSender sender)
         {
-            this.GunGame = plugin;
-            Functions.singleton = this;
+            Player player = (sender is Player) ? sender as Player : null;
+
+            if (player != null)
+            {
+                List<string> roleList = (plugin.ValidRanks != null && plugin.ValidRanks.Length > 0) ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
+
+                if (roleList != null && roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
+                    return true;
+                else if (roleList == null || roleList.Count == 0)
+                    return true;
+                else
+                    return false;
+            }
+            return true;
         }
 
         public void EnableGamemode()
         {
-            GunGame.enabled = true;
-            if (!GunGame.roundstarted)
+            plugin.Enabled = true;
+            if (!plugin.RoundStarted)
             {
-                GunGame.Server.Map.ClearBroadcasts();
-                GunGame.Server.Map.Broadcast(10, "<color=#5D9AAC>GunGame Gamemode</color> is starting..", false);
+                plugin.Server.Map.ClearBroadcasts();
+                plugin.Server.Map.Broadcast(10, "<color=#5D9AAC>GunGame Gamemode</color> is starting..", false);
             }
         }
+
         public void DisableGamemode()
         {
-            GunGame.enabled = false;
-            GunGame.Server.Map.ClearBroadcasts();
+            plugin.Enabled = false;
+            plugin.Server.Map.ClearBroadcasts();
         }
+
         public void EndGamemodeRound()
         {
-            GunGame.Info("EndGamemode Round");
-            GunGame.roundstarted = false;
-            GunGame.Server.Round.EndRound();
-            GunGame.winner = null;
+            plugin.Info("EndGamemode Round");
+            plugin.RoundStarted = false;
+            plugin.Server.Round.EndRound();
+            plugin.Winner = null;
         }
+
         public IEnumerable<float> Spawn(Player player)
         {
             player.ChangeRole(Role.CLASSD, false, false, false, false);
             player.Teleport(new Vector(GetSpawn().x, (GetSpawn().y + 3), GetSpawn().z));
             yield return 1;
+
             player.SetGodmode(false);
-            player.SetHealth(GunGame.health);
+            player.SetHealth(plugin.Health);
+
             foreach (Smod2.API.Item item in player.GetInventory())
             {
                 item.Remove();
             }
-            if (GunGame.reversed)
+
+            if (plugin.Reversed)
                 player.GiveItem(ItemType.E11_STANDARD_RIFLE);
             else
                 player.GiveItem(ItemType.FRAG_GRENADE);
+
             player.GiveItem(ItemType.MEDKIT);
         }
+
         public void LockDoors()
         {
-            foreach (Smod2.API.Door door in GunGame.Server.Map.GetDoors())
+            foreach (Smod2.API.Door door in plugin.Server.Map.GetDoors())
             {
                 if (door.Name.Contains("CHECKPOINT") || door.Name.Contains("079") || door.Name.Contains("106"))
                     door.Locked = true;
@@ -64,9 +86,10 @@ namespace Gungame
                     door.Locked = false;
             }
         }
+
         public void ReplaceGun(Player player)
         {
-            if (GunGame.reversed)
+            if (plugin.Reversed)
             {
                 foreach (Smod2.API.Item item in player.GetInventory())
                 {
@@ -134,31 +157,36 @@ namespace Gungame
                             break;
                     }
                 }
+
             player.SetAmmo(AmmoType.DROPPED_5, 500);
             player.SetAmmo(AmmoType.DROPPED_7, 500);
             player.SetAmmo(AmmoType.DROPPED_9, 500);
         }
+
         public void AnnounceWinner(Player player)
         {
-            GunGame.Server.Map.ClearBroadcasts();
-            GunGame.Server.Map.Broadcast(15, "We have out champion! Congratulations " + player.Name + "!", false);
+            plugin.Server.Map.ClearBroadcasts();
+            plugin.Server.Map.Broadcast(15, "We have out champion! Congratulations " + player.Name + "!", false);
             EndGamemodeRound();
         }
+
         public Room GetRooms(ZoneType zone)
         {
             List<Room> rooms = new List<Room>();
-            foreach (Room room in GunGame.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA).Where(rm => rm.ZoneType == zone))
+
+            foreach (Room room in plugin.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA).Where(rm => rm.ZoneType == zone))
             {
-                if (GunGame.validRooms.Contains(room.RoomType))
+                if (plugin.ValidRooms.Contains(room.RoomType))
                     rooms.Add(room);
             }
-            int r = GunGame.gen.Next(rooms.Count);
-            return rooms[r];
 
+            int r = plugin.Gen.Next(rooms.Count);
+            return rooms[r];
         }
+
         public Vector GetSpawn()
         {
-            switch (GunGame.zone.ToLower())
+            switch (plugin.Zone.ToLower())
             {
                 case "lcz":
                     return GetRooms(ZoneType.LCZ).Position;

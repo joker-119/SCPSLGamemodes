@@ -14,41 +14,48 @@ namespace JuggernautGamemode
         author = "Mozeman",
         name = "Juggernaut Gamemode",
         description = "Gamemode Template",
-        id = "gamemode.juggernaut",
-        version = "1.6.0",
+        id = "juggernaut.Gamemode",
+        version = "1.7.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
         )]
     public class Juggernaut : Plugin
     {
-        internal static Juggernaut singleton;
-        public static bool
-            NTF_Disarmer,
-            jugg_infinite_nades;
-        public static int
-            Jugg_base,
-            Jugg_increase,
-            Jugg_grenade,
-            NTF_ammo,
-            NTF_Health,
-            juggernaut_health,
-            ntf_health;
-        public static Player
-            juggernaut = null,
-            activator = null,
-            selectedJuggernaut = null,
-            jugg_killer = null;
-        public static float critical_damage;
-        public static string[] juggernaut_prevRank = new string[2];
-        public static HealthBar health_bar_type;
-        public static System.Random gen = new System.Random();
+        public Functions Functions { get; private set; }
 
+        public System.Random Gen = new System.Random();
 
+        public string[] ValidRanks { get; private set; }
 
-        public static bool
-            enabled = false,
-            roundstarted = false;
+        public bool NTFDisarmer { get; private set; }
+        public bool JuggInfiniteNades { get; private set; }
+        public bool Enabled { get; internal set; }
+        public bool RoundStarted { get; internal set; }
+
+        public int JuggBase { get; private set; }
+        public int JuggIncrease { get; private set; }
+        public int JuggGrenades { get; private set; }
+        public int NTFAmmo { get; private set; }
+        public int NTFHealth { get; private set; }
+        public int JuggHealth { get; internal set; }
+
+        public Player Jugg { get; internal set; } = null;
+        public Player Activator { get; internal set; } = null;
+        public Player SelectedJugg { get; internal set; } = null;
+        public Player JuggKiller { get; internal set; } = null;
+
+        public float CriticalDamage { get; private set; }
+
+        public string[] JuggernautPrevRank = new string[2];
+
+        public HealthBar HealthBarType { get; private set; }
+        public enum HealthBar
+        {
+            Raw,
+            Percentage,
+            Bar
+        }
 
         public override void OnDisable()
         {
@@ -57,20 +64,11 @@ namespace JuggernautGamemode
 
         public override void OnEnable()
         {
-            singleton = this;
-            this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
+            this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
         }
 
         public override void Register()
         {
-            // Register Events
-            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
-            this.AddCommands(new string[] { "jug", "jugg", "juggernaut" }, new JuggernautCommand());
-            new Functions(this);
-            Timing.Init(this);
-
-
-            // Register Configs
             this.AddConfig(new ConfigSetting("juggernaut_base_health", 500, SettingType.NUMERIC, true, "The amoutn of base health the Juggernaut starts with."));
             this.AddConfig(new ConfigSetting("juggernaut_increase_amount", 500, SettingType.NUMERIC, true, "The amount of extra HP a Jugg gets for each additional player."));
             this.AddConfig(new ConfigSetting("juggernaut_jugg_grenades", 6, SettingType.NUMERIC, true, "The number of grenades the Jugg should start with."));
@@ -80,13 +78,43 @@ namespace JuggernautGamemode
             this.AddConfig(new ConfigSetting("juggernaut_critical_damage", (float)0.15, SettingType.FLOAT, true, "The amount of critical damage the Juggernaut should recieve."));
             this.AddConfig(new ConfigSetting("juggernaut_infinite_jugg_nades", false, SettingType.BOOL, true, "If the Juggernaut should have infinite grenades."));
             this.AddConfig(new ConfigSetting("juggernaut_health_bar_type", "bar", false, SettingType.STRING, true, "Type of Health Bar to use for Juggernaut"));
-        }
-    }
+            this.AddConfig(new ConfigSetting("gamemode_ranks", new string[] { "owner", "admin" }, SettingType.LIST, true, "The ranks able to use commands."));
 
-    public enum HealthBar
-    {
-        Raw,
-        Percentage,
-        Bar
+            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+
+            this.AddCommands(new string[] { "jug", "jugg", "juggernaut" }, new JuggernautCommand(this));
+
+            Timing.Init(this);
+
+            Functions = new Functions(this);
+        }
+
+        public void ReloadConfig()
+        {
+            JuggBase = GetConfigInt("juggernaut_base_health");
+            JuggIncrease = GetConfigInt("juggernaut_increase_amount");
+            NTFDisarmer = GetConfigBool("juggernaut_ntf_disarmer");
+            JuggGrenades = GetConfigInt("juggernaut_jugg_grenades");
+            NTFHealth = GetConfigInt("juggernaut_ntf_health");
+            CriticalDamage = GetConfigFloat("juggernaut_critical_damage");
+            JuggInfiniteNades = GetConfigBool("juggernaut_infinite_jugg_nades");
+            ValidRanks = GetConfigList("gamemode_ranks");
+
+            string type = GetConfigString("juggernaut_health_bar_type");
+            switch (type.ToLower().Trim())
+            {
+                case "bar":
+                    this.Debug("Drawn Bar Health Bar Selected");
+                    HealthBarType = HealthBar.Bar; break;
+                case "percent":
+                case "percentage":
+                    this.Debug("Percentage Health Bar Selected");
+                    HealthBarType = HealthBar.Percentage; break;
+                case "raw":
+                default:
+                    this.Debug("Raw Health Bar Selected");
+                    HealthBarType = HealthBar.Raw; break;
+            }
+        }
     }
 }

@@ -15,23 +15,21 @@ namespace Bomber
 
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
-            Bomber.spawn_class = this.plugin.GetConfigString("bomb_class");
-            Bomber.medkits = this.plugin.GetConfigBool("bomb_medkits");
-            Bomber.min = this.plugin.GetConfigInt("bomb_min");
-            Bomber.max = this.plugin.GetConfigInt("bomb_max");
-            Bomber.grenade_multi = this.plugin.GetConfigFloat("bomb_grenade_multi");
+            plugin.ReloadConfig();
         }
         public void OnRoundStart(RoundStartEvent ev)
         {
-            if (!Bomber.enabled) return;
-            Bomber.roundstarted = true;
+            if (!plugin.Enabled) return;
+
+            plugin.RoundStarted = true;
             plugin.Server.Map.ClearBroadcasts();
             plugin.Info("Bomberman Gamemode started!");
+
             List<Player> players = plugin.Server.GetPlayers();
 
-            if (!(Bomber.spawn_class == ""))
+            if (!(plugin.SpawnClass == ""))
             {
-                switch (Bomber.spawn_class.ToLower().Trim())
+                switch (plugin.SpawnClass.ToLower().Trim())
                 {
                     case "classd":
                         plugin.Info("Class-D spawn selected.");
@@ -72,17 +70,21 @@ namespace Bomber
                         break;
                     case "war":
                         plugin.Info("Warmode initiated.");
-                        Bomber.warmode = true;
+                        plugin.Warmode = true;
+
                         List<string> nerds = new List<string>();
                         int num = (players.Count / 2);
+
                         if (num == 0)
                             plugin.Error("Ya dun goofed, kid!");
+
                         for (int i = 0; i < num; i++)
                         {
-                            int ran = Bomber.gen.Next(players.Count);
+                            int ran = plugin.Gen.Next(players.Count);
                             nerds.Add(players[ran].SteamId);
                             players.Remove(players[ran]);
                         }
+
                         foreach (Player player in players)
                         {
                             if (nerds.Contains(player.SteamId))
@@ -97,12 +99,13 @@ namespace Bomber
                         break;
                 }
             }
-            Timing.Run(Functions.singleton.SpawnGrenades(30));
+            Timing.Run(plugin.Functions.SpawnGrenades(30));
         }
         public void OnSetRole(PlayerSetRoleEvent ev)
         {
-            if (!Bomber.enabled || !Bomber.roundstarted) return;
-            if (Bomber.warmode)
+            if (!plugin.Enabled || !plugin.RoundStarted) return;
+
+            if (plugin.Warmode)
             {
                 plugin.Server.Map.ClearBroadcasts();
                 plugin.Server.Map.Broadcast(15, "Half of you are Class-D, the other half are nerds. Yor goal is to kill the opposing team with your grenades!", false);
@@ -115,34 +118,41 @@ namespace Bomber
         }
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (!Bomber.enabled && !Bomber.roundstarted) return;
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
             plugin.Info("Round Ended.");
-            Functions.singleton.EndGamemodeRound();
+            plugin.Functions.EndGamemodeRound();
         }
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
-            if (!Bomber.enabled || Bomber.roundstarted) return;
+            if (!plugin.Enabled || plugin.RoundStarted) return;
+
             plugin.Server.Map.ClearBroadcasts();
             plugin.Server.Map.Broadcast(25, "<color=#c50000>Bomberman Gamemode</color> is starting..", false);
         }
         public void OnPlayerHurt(PlayerHurtEvent ev)
         {
-            if (!Bomber.enabled || !Bomber.roundstarted) return;
-            if (ev.Player.SteamId == ev.Attacker.SteamId && Bomber.warmode)
+            if (!plugin.Enabled || !plugin.RoundStarted) return;
+
+            if (ev.Player.SteamId == ev.Attacker.SteamId && plugin.Warmode)
                 ev.Damage = 0;
-            ev.Damage = (ev.Damage * Bomber.grenade_multi);
+
+            ev.Damage = (ev.Damage * plugin.GrenadeMulti);
         }
         public void OnPlayerDie(PlayerDeathEvent ev)
         {
-            if (!Bomber.enabled && !Bomber.roundstarted) return;
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
             if (ev.Player.Name == "Sever" || ev.Player.Name == "") return;
+
             List<Player> players = plugin.Server.GetPlayers();
+
             plugin.Server.Map.ClearBroadcasts();
             plugin.Server.Map.Broadcast(10, "There are " + (players.Count - 1) + " players alive!", false);
         }
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (!Bomber.enabled && !Bomber.roundstarted) return;
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
             bool classdAlive = false;
             bool sciAlive = false;
             int alive_count = 0;
@@ -158,30 +168,32 @@ namespace Bomber
                 {
                     sciAlive = true;
                 }
-                if (Functions.singleton.IsAlive(player))
+                if (plugin.Functions.IsAlive(player))
                 {
                     alive_count++;
                 }
             }
+
             if (ev.Server.GetPlayers().Count < 1) return;
-            if (Bomber.warmode)
+
+            if (plugin.Warmode)
             {
                 if (classdAlive && sciAlive)
                     ev.Status = ROUND_END_STATUS.ON_GOING;
                 else if (classdAlive && !sciAlive)
                 {
-                    ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.singleton.EndGamemodeRound();
+                    ev.Status = ROUND_END_STATUS.CI_VICTORY; plugin.Functions.EndGamemodeRound();
                 }
                 else if (!classdAlive && sciAlive)
                 {
-                    ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.singleton.EndGamemodeRound();
+                    ev.Status = ROUND_END_STATUS.MTF_VICTORY; plugin.Functions.EndGamemodeRound();
                 }
             }
             else if (alive_count > 1)
                 ev.Status = ROUND_END_STATUS.ON_GOING;
             else if (alive_count == 1)
             {
-                ev.Status = ROUND_END_STATUS.NO_VICTORY; Functions.singleton.EndGamemodeRound();
+                ev.Status = ROUND_END_STATUS.NO_VICTORY; plugin.Functions.EndGamemodeRound();
                 foreach (Player player in ev.Server.GetPlayers())
                 {
                     if (player.TeamRole.Team != Team.SPECTATOR)

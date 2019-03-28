@@ -18,15 +18,14 @@ namespace PresidentialEscortGamemode
 
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
-            PresidentialEscort.vip_health = this.plugin.GetConfigInt("vip_vip_health");
-            PresidentialEscort.guard_health = this.plugin.GetConfigInt("vip_guard_health");
+            plugin.ReloadConfig();
         }
 
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
-            if (PresidentialEscort.enabled)
+            if (plugin.Enabled)
             {
-                if (!PresidentialEscort.roundstarted)
+                if (!plugin.RoundStarted)
                 {
                     Server server = plugin.pluginManager.Server;
                     server.Map.ClearBroadcasts();
@@ -37,99 +36,102 @@ namespace PresidentialEscortGamemode
 
         public void OnRoundStart(RoundStartEvent ev)
         {
-            if (PresidentialEscort.enabled)
+            if (plugin.Enabled)
             {
-                PresidentialEscort.roundstarted = true;
+                plugin.RoundStarted = true;
+                List<Player> players = ev.Server.GetPlayers();
+
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Presidential Escort Gamemode Started!");
-                List<Player> players = ev.Server.GetPlayers();
 
                 // chooses and spawns VIP scientist
                 Player vip;
-                if (!(PresidentialEscort.vip is Player))
+                if (!(plugin.VIP is Player))
                 {
                     int chosenVIP = new System.Random().Next(players.Count);
                     vip = players[chosenVIP];
                 }
                 else
-                    vip = PresidentialEscort.vip;
+                    vip = plugin.VIP;
 
                 plugin.Info("" + vip.Name + " chosen as the VIP");
-                Timing.Run(Functions.singleton.SpawnVIP(vip));
+
+                Timing.Run(plugin.Functions.SpawnVIP(vip));
                 players.Remove(vip);
 
                 // spawn NTF into round
                 foreach (Player player in players)
                 {
                     if (player.TeamRole.Team != Smod2.API.Team.SCP)
-                        Timing.Run(Functions.singleton.SpawnNTF(player));
+                        Timing.Run(plugin.Functions.SpawnNTF(player));
                 }
             }
         }
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (!PresidentialEscort.enabled && !PresidentialEscort.roundstarted) return;
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
             plugin.Info("Round Ended!");
-            Functions.singleton.EndGamemodeRound();
+            plugin.Functions.EndGamemodeRound();
         }
         public void OnCheckEscape(PlayerCheckEscapeEvent ev)
         {
-            if (ev.Player.SteamId == PresidentialEscort.vip.SteamId)
-                PresidentialEscort.vipEscaped = true;
+            if (ev.Player.SteamId == plugin.VIP.SteamId)
+                plugin.VIPEscaped = true;
         }
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (PresidentialEscort.enabled || PresidentialEscort.roundstarted)
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+            bool vipAlive = false;
+            bool scpAlive = false;
+            bool vipEscaped = false;
+
+            if (!(plugin.VIP is Player))
             {
-                bool vipAlive = false;
-                bool scpAlive = false;
-                bool vipEscaped = false;
+                plugin.Info("VIP not found. Ending gamemode.");
+                ev.Status = ROUND_END_STATUS.NO_VICTORY;
+                plugin.Functions.EndGamemodeRound();
 
-                if (!(PresidentialEscort.vip is Player))
+                return;
+            }
+
+            foreach (Player player in ev.Server.GetPlayers())
+            {
+                if (player.TeamRole.Team == Smod2.API.Team.SCP)
                 {
-                    plugin.Info("VIP not found. Ending gamemode.");
-                    ev.Status = ROUND_END_STATUS.NO_VICTORY;
-                    Functions.singleton.EndGamemodeRound();
-                    return;
+                    scpAlive = true; continue;
                 }
-
-                foreach (Player player in ev.Server.GetPlayers())
+                else if (player.SteamId == plugin.VIP.SteamId)
                 {
-                    if (player.TeamRole.Team == Smod2.API.Team.SCP)
-                    {
-                        scpAlive = true; continue;
-                    }
-                    else if (player.SteamId == PresidentialEscort.vip.SteamId)
-                    {
-                        vipAlive = true;
-                    }
+                    vipAlive = true;
                 }
+            }
 
-                if (ev.Server.GetPlayers().Count > 1)
+            if (ev.Server.GetPlayers().Count > 1)
+            {
+                if (vipEscaped || (vipAlive && !scpAlive))
                 {
-                    if (vipEscaped || (vipAlive && !scpAlive))
-                    {
-                        ev.Status = ROUND_END_STATUS.MTF_VICTORY; Functions.singleton.EndGamemodeRound();
-                    }
-                    else if (vipAlive && scpAlive)
-                    {
-                        ev.Status = ROUND_END_STATUS.ON_GOING;
-                    }
-                    else if (scpAlive && !vipAlive)
-                    {
-                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.singleton.EndGamemodeRound();
-                    }
+                    ev.Status = ROUND_END_STATUS.MTF_VICTORY; plugin.Functions.EndGamemodeRound();
+                }
+                else if (vipAlive && scpAlive)
+                {
+                    ev.Status = ROUND_END_STATUS.ON_GOING;
+                }
+                else if (scpAlive && !vipAlive)
+                {
+                    ev.Status = ROUND_END_STATUS.SCP_VICTORY; plugin.Functions.EndGamemodeRound();
                 }
             }
         }
+
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            if (PresidentialEscort.enabled || PresidentialEscort.roundstarted)
-            {
-                ev.SpawnChaos = false;
-            }
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+            ev.SpawnChaos = false;
         }
     }
 }

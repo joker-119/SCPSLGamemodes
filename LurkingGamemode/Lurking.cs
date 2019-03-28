@@ -3,6 +3,8 @@ using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
 using Smod2.API;
+using System.Collections.Generic;
+using scp4aiur;
 
 namespace LurkingGamemode
 {
@@ -10,8 +12,8 @@ namespace LurkingGamemode
         author = "Joker119",
         name = "Lurking in the dark Gamemode",
         description = "Lurking in the Dark Gamemode",
-        id = "gamemode.lurking",
-        version = "1.6.0",
+        id = "lurking.Gamemode",
+        version = "1.7.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
@@ -19,15 +21,20 @@ namespace LurkingGamemode
 
     public class Lurking : Plugin
     {
-        internal static Lurking singleton;
+        public Functions Functions { get; private set; }
 
-        public static bool enabled = false;
-        public static bool roundstarted = false;
-        public static int larry_health;
-        public static int doggo_health;
-        public static int larry_count;
-        public static int doggo_count;
-        public static bool blackouts;
+        public string[] ValidRanks { get; private set; }
+
+        public bool Enabled { get; internal set; } = false;
+        public bool RoundStarted { get; internal set; } = false;
+
+        public int LarryHealth { get; private set; }
+        public int DoggoHealth { get; private set; }
+        public int LarryCount { get; private set; }
+        public int DoggoCount { get; private set; }
+
+
+        public List<Room> BlackoutRooms = new List<Room>();
 
         public override void OnDisable()
         {
@@ -36,19 +43,34 @@ namespace LurkingGamemode
 
         public override void OnEnable()
         {
-            singleton = this;
-            this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
+            this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
         }
 
         public override void Register()
         {
-            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
-            this.AddCommands(new string[] { "lurking", "lurk", "litd" }, new LurkingCommand());
-            new Functions(this);
             this.AddConfig(new ConfigSetting("lurking_106_num", 2, SettingType.NUMERIC, true, "The number of Larries to spawn"));
             this.AddConfig(new ConfigSetting("lurking_939_num", 2, SettingType.NUMERIC, true, "The number of 939's to spawn."));
             this.AddConfig(new ConfigSetting("lurking_106_health", 750, SettingType.NUMERIC, true, "The amount of health Larry should start with."));
             this.AddConfig(new ConfigSetting("lurking_939_health", 2300, SettingType.NUMERIC, true, "The amount of health Doggo should start with."));
+            this.AddConfig(new ConfigSetting("gamemode_ranks", new string[] { "owner", "admin" }, SettingType.LIST, true, "The ranks able to use commands."));
+
+            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+
+            this.AddCommands(new string[] { "lurking", "lurk", "litd" }, new LurkingCommand(this));
+
+            Timing.Init(this);
+
+            Functions = new Functions(this);
+
+        }
+
+        public void ReloadConfig()
+        {
+            LarryCount = GetConfigInt("lurking_106_num");
+            DoggoCount = GetConfigInt("lurking_939_num");
+            LarryHealth = GetConfigInt("lurking_106_health");
+            DoggoHealth = GetConfigInt("lurking_939_health");
+            ValidRanks = GetConfigList("gamemode_ranks");
         }
     }
 }

@@ -3,7 +3,7 @@ Survival Of The Fittest (SOTF)
 made by Joker 119
 ## Description
 Everyone spawns as a Class-D in Heavy Containment. 2-4 peanuts spawn in their normal spawn, awaiting to be unleashed on the Class-D.
-Auto Nuke is enabled. Ent Zone and both LCZ gates are locked. 106, Micro-HID and SCP-079 rooms are locked open., all armory doors in HCZ are locked closed.
+Auto Nuke is Enabled. Ent Zone and both LCZ gates are locked. 106, Micro-HID and SCP-079 rooms are locked open., all armory doors in HCZ are locked closed.
 
 ### Features
  - Players who join before the round has started will be notified that SOTF Gamemode is starting.
@@ -14,7 +14,7 @@ Auto Nuke is enabled. Ent Zone and both LCZ gates are locked. 106, Micro-HID and
 ### Config Settings
 Config option | Config Type | Default Value | Description
 :---: | :---: | :---: | :------
-survival_peanut_delay | Int | 120 | The amount of time (in seconds) should pass before the blackout is enabled and peanuts are released.
+survival_peanut_delay | Int | 120 | The amount of time (in seconds) should pass before the blackout is Enabled and peanuts are released.
 survival_peanut_health | Int | 173 | The amount of health Peanuts should have when they spawn. The lower the amount, the faster they move.
 
 ### Commands

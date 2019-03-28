@@ -12,25 +12,29 @@ namespace ZombielandGamemode
         author = "Joker119",
         name = "Zombieland Gamemode",
         description = "Gamemode Template",
-        id = "gamemode.zombieland",
-        version = "1.6.0",
+        id = "zombieland.Gamemode",
+        version = "1.7.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
     )]
     public class Zombieland : Plugin
     {
-        internal static Zombieland singleton;
-        public static int zombie_health;
-        public static int child_health;
-        public static int zombie_damage;
-        public static int child_damage;
-        public static List<Player> Alpha = new List<Player>();
-        public static bool AlphaDoorDestroy;
+        public Functions Functions { get; private set; }
 
-        public static bool
-            enabled = false,
-            roundstarted = false;
+        public List<Player> Alphas = new List<Player>();
+
+        public string[] ValidRanks { get; private set; }
+
+        public bool Enabled { get; internal set; }
+        public bool RoundStarted { get; internal set; }
+        public bool AlphaDoorDestroy { get; private set; }
+
+        public int AlphaHealth { get; private set; }
+        public int ChildHealth { get; private set; }
+        public int AlphaDamage { get; private set; }
+        public int ChildDamage { get; private set; }
+
 
         public override void OnDisable()
         {
@@ -39,21 +43,35 @@ namespace ZombielandGamemode
 
         public override void OnEnable()
         {
-            singleton = this;
-            this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
+            this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
         }
 
         public override void Register()
         {
-            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
-            this.AddCommands(new string[] { "zombie", "zombieland", "zl" }, new ZombielandCommand());
-            Timing.Init(this);
-            new Functions(this);
             this.AddConfig(new ConfigSetting("zombieland_zombie_health", 3000, SettingType.NUMERIC, true, "The amount of health the starting zombies have."));
             this.AddConfig(new ConfigSetting("zombieland_child_health", 500, SettingType.NUMERIC, true, "The amoutn of health child zombies should have."));
             this.AddConfig(new ConfigSetting("zombieland_alphas_destroy_doors", true, SettingType.BOOL, true, "If Alpha zombies should destroy locked doors."));
             this.AddConfig(new ConfigSetting("zombieland_zombie_damage", 100, SettingType.NUMERIC, true, "The amount of damage the starting zombies deal."));
             this.AddConfig(new ConfigSetting("zombieland_child_damage", 100, SettingType.NUMERIC, true, "The amount of damage the child zombies should deal."));
+            this.AddConfig(new ConfigSetting("gamemode_ranks", new string[] { "owner", "admin", }, SettingType.LIST, true, "The ranks able to use gamemode commands."));
+
+            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+
+            this.AddCommands(new string[] { "zombie", "zombieland", "zl" }, new ZombielandCommand(this));
+
+            Timing.Init(this);
+
+            Functions = new Functions(this);
+        }
+
+        public void ReloadConfig()
+        {
+            AlphaHealth = GetConfigInt("zombieland_zombie_health");
+            ChildHealth = GetConfigInt("zombieland_child_health");
+            AlphaDamage = GetConfigInt("zombieland_zombie_damage");
+            ChildDamage = GetConfigInt("zombieland_child_damage");
+            AlphaDoorDestroy = GetConfigBool("zombieland_alphas_destroy_doors");
+            ValidRanks = GetConfigList("gamemode_ranks");
         }
     }
 }

@@ -9,7 +9,8 @@ using UnityEngine;
 
 namespace ZombielandGamemode
 {
-    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerDoorAccess, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerHurt, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerSetRole, IEventHandlerWaitingForPlayers
+    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerDoorAccess, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerHurt, IEventHandlerPlayerJoin, IEventHandlerRoundEnd,
+        IEventHandlerWaitingForPlayers
     {
         private readonly Zombieland plugin;
 
@@ -17,9 +18,9 @@ namespace ZombielandGamemode
 
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
-            if (Zombieland.enabled)
+            if (plugin.Enabled)
             {
-                if (!Zombieland.roundstarted)
+                if (!plugin.RoundStarted)
                 {
                     Server server = plugin.pluginManager.Server;
                     server.Map.ClearBroadcasts();
@@ -29,38 +30,18 @@ namespace ZombielandGamemode
                     (ev.Player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
             }
         }
-        public void OnSetRole(PlayerSetRoleEvent ev)
-        {
-            if (Zombieland.enabled || Zombieland.roundstarted)
-            {
-                if (ev.TeamRole.Team == Smod2.API.Team.SCP && ev.TeamRole.Role != Role.SCP_049_2)
-                {
-                    Timing.Run(Functions.singleton.SpawnAlpha(ev.Player));
-                }
-                else if (ev.TeamRole.Team != Smod2.API.Team.SPECTATOR)
-                {
-                    ev.Player.PersonalBroadcast(25, "You are a human! You must escape the zombie outbreak! Any human deaths from any cause will result in more zombies! When killed, zombies respawn as Chaos! Good Luck!", false);
-                }
-                else if (ev.TeamRole.Team == Smod2.API.Team.SPECTATOR)
-                {
-                    ev.Player.PersonalBroadcast(25, "You are dead! But don't worry, you'll respawn as Chaos soon to fight the zombies!", false);
-                }
-            }
-        }
+
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
-            Zombieland.zombie_health = this.plugin.GetConfigInt("zombieland_zombie_health");
-            Zombieland.child_health = this.plugin.GetConfigInt("zombieland_child_health");
-            Zombieland.zombie_damage = this.plugin.GetConfigInt("zombieland_zombie_damage");
-            Zombieland.child_damage = this.plugin.GetConfigInt("zombieland_child_damage");
-            Zombieland.AlphaDoorDestroy = this.plugin.GetConfigBool("zombieland_alphas_destroy_doors");
+            plugin.ReloadConfig();
         }
         public void OnRoundStart(RoundStartEvent ev)
         {
 
-            if (Zombieland.enabled)
+            if (plugin.Enabled)
             {
-                Zombieland.roundstarted = true;
+                plugin.RoundStarted = true;
+
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Zombieland Gamemode Started!");
 
@@ -68,18 +49,19 @@ namespace ZombielandGamemode
                 {
                     if (player.TeamRole.Team == Smod2.API.Team.SCP)
                     {
-                        Timing.Run(Functions.singleton.SpawnAlpha(player));
+                        Timing.Run(plugin.Functions.SpawnAlpha(player));
                     }
                     (player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
                 }
-                Timing.Run(Functions.singleton.AliveCounter(90));
-                Timing.Run(Functions.singleton.OpenGates(240));
+
+                Timing.Run(plugin.Functions.AliveCounter(90));
+                Timing.Run(plugin.Functions.OpenGates(240));
             }
         }
 
         public void OnDoorAccess(PlayerDoorAccessEvent ev)
         {
-            if (ev.Door.Locked && Zombieland.Alpha.Contains(ev.Player) && Zombieland.AlphaDoorDestroy)
+            if (ev.Door.Locked && plugin.Alphas.Contains(ev.Player) && plugin.AlphaDoorDestroy)
             {
                 ev.Destroy = true;
                 ev.Door.Destroyed = true;
@@ -89,56 +71,58 @@ namespace ZombielandGamemode
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (!Zombieland.enabled && !Zombieland.roundstarted) return;
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
             plugin.Info("Round Ended!");
-            Functions.singleton.EndGamemodeRound();
+            plugin.Functions.EndGamemodeRound();
         }
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (Zombieland.enabled || Zombieland.roundstarted)
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+            bool zombieAlive = false;
+            bool humanAlive = false;
+
+            foreach (Player player in ev.Server.GetPlayers())
             {
-                bool zombieAlive = false;
-                bool humanAlive = false;
-
-                foreach (Player player in ev.Server.GetPlayers())
+                if (player.TeamRole.Team == Smod2.API.Team.SCP)
                 {
-                    if (player.TeamRole.Team == Smod2.API.Team.SCP)
-                    {
-                        zombieAlive = true; continue;
-                    }
-
-                    else if (player.TeamRole.Team != Smod2.API.Team.SCP && player.TeamRole.Team != Smod2.API.Team.SPECTATOR)
-                        humanAlive = true;
+                    zombieAlive = true; continue;
                 }
-                if (ev.Server.GetPlayers().Count > 1)
+
+                else if (player.TeamRole.Team != Smod2.API.Team.SCP && player.TeamRole.Team != Smod2.API.Team.SPECTATOR)
+                    humanAlive = true;
+            }
+
+            if (ev.Server.GetPlayers().Count > 1)
+            {
+                if (zombieAlive && humanAlive)
                 {
-                    if (zombieAlive && humanAlive)
-                    {
-                        ev.Status = ROUND_END_STATUS.ON_GOING;
-                    }
-                    else if (zombieAlive && humanAlive == false)
-                    {
-                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.singleton.EndGamemodeRound();
-                    }
-                    else if (zombieAlive == false && humanAlive)
-                    {
-                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.singleton.EndGamemodeRound();
-                    }
+                    ev.Status = ROUND_END_STATUS.ON_GOING;
+                }
+                else if (zombieAlive && humanAlive == false)
+                {
+                    ev.Status = ROUND_END_STATUS.SCP_VICTORY; plugin.Functions.EndGamemodeRound();
+                }
+                else if (zombieAlive == false && humanAlive)
+                {
+                    ev.Status = ROUND_END_STATUS.CI_VICTORY; plugin.Functions.EndGamemodeRound();
                 }
             }
         }
 
         public void OnPlayerHurt(PlayerHurtEvent ev)
         {
-            if (!Zombieland.enabled && !Zombieland.roundstarted) return;
-            if (ev.Attacker.TeamRole.Team == Smod2.API.Team.SCP)
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+            if (ev.Attacker.TeamRole.Role == Role.SCP_049_2)
             {
-                if (Zombieland.Alpha.Contains(ev.Attacker)) ev.Damage = Zombieland.zombie_damage;
-                else ev.Damage = Zombieland.child_damage;
+                if (plugin.Alphas.Contains(ev.Attacker)) ev.Damage = plugin.AlphaDamage;
+                else ev.Damage = plugin.ChildDamage;
             }
 
-            if ((Zombieland.enabled || Zombieland.roundstarted) && ev.Player.TeamRole.Team != Smod2.API.Team.SCP && ev.Damage > ev.Player.GetHealth())
+            if ((plugin.Enabled || plugin.RoundStarted) && ev.Player.TeamRole.Team != Smod2.API.Team.SCP && ev.Damage >= ev.Player.GetHealth())
             {
                 if (ev.Attacker == ev.Player || ev.DamageType == DamageType.TESLA || ev.DamageType == DamageType.NUKE || ev.DamageType == DamageType.LURE || ev.DamageType == DamageType.DECONT)
                 {
@@ -147,16 +131,15 @@ namespace ZombielandGamemode
                 else
                 {
                     ev.Damage = 0;
-                    Timing.Run(Functions.singleton.SpawnChild(ev.Player, ev.Attacker));
+                    Timing.Run(plugin.Functions.SpawnChild(ev.Player, ev.Attacker));
                 }
             }
         }
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            if (Zombieland.enabled || Zombieland.roundstarted)
-            {
-                ev.SpawnChaos = true;
-            }
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+            ev.SpawnChaos = true;
         }
     }
 }

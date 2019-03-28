@@ -17,66 +17,80 @@ namespace Gungame
 
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
-            GunGame.zone = this.plugin.GetConfigString("gun_spawn_zone");
-            GunGame.reversed = this.plugin.GetConfigBool("gun_reversed");
-            GunGame.health = this.plugin.GetConfigInt("gun_health");
+            plugin.ReloadConfig();
         }
+
         public void OnRoundStart(RoundStartEvent ev)
         {
-            if (!GunGame.enabled) return;
-            GunGame.roundstarted = true;
+            if (!plugin.Enabled) return;
+
+            plugin.RoundStarted = true;
             List<Player> players = ev.Server.GetPlayers();
+
             foreach (Player player in players)
             {
-                Timing.Run(Functions.singleton.Spawn(player));
+                Timing.Run(plugin.Functions.Spawn(player));
                 (player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
             }
         }
+
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
-            if (!GunGame.roundstarted) return;
+            if (!plugin.RoundStarted) return;
+
             (ev.Player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
-            Timing.Run(Functions.singleton.Spawn(ev.Player));
+            Timing.Run(plugin.Functions.Spawn(ev.Player));
         }
+
         public void OnThrowGrenade(PlayerThrowGrenadeEvent ev)
         {
-            if (!GunGame.enabled && !GunGame.roundstarted) return;
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
             ev.Player.GiveItem(ItemType.FRAG_GRENADE);
         }
+
         public void OnPlayerDie(PlayerDeathEvent ev)
         {
-            if (!GunGame.enabled && !GunGame.roundstarted) return;
-            Functions.singleton.ReplaceGun(ev.Killer);
-            if (!GunGame.reversed && ev.DamageTypeVar == DamageType.E11_STANDARD_RIFLE)
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+            plugin.Functions.ReplaceGun(ev.Killer);
+
+            if (!plugin.Reversed && ev.DamageTypeVar == DamageType.E11_STANDARD_RIFLE)
             {
-                Functions.singleton.AnnounceWinner(ev.Killer);
-                GunGame.winner = ev.Killer;
+                plugin.Functions.AnnounceWinner(ev.Killer);
+                plugin.Winner = ev.Killer;
             }
-            else if (GunGame.reversed && ev.DamageTypeVar == DamageType.FRAG)
+            else if (plugin.Reversed && ev.DamageTypeVar == DamageType.FRAG)
             {
-                Functions.singleton.AnnounceWinner(ev.Killer);
-                GunGame.winner = ev.Killer;
+                plugin.Functions.AnnounceWinner(ev.Killer);
+                plugin.Winner = ev.Killer;
             }
             else
-                Timing.Run(Functions.singleton.Spawn(ev.Player));
+                Timing.Run(plugin.Functions.Spawn(ev.Player));
         }
+
         public void OnPlayerHurt(PlayerHurtEvent ev)
         {
-            if (!GunGame.enabled && !GunGame.roundstarted) return;
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
             if (ev.Player.SteamId == ev.Attacker.SteamId && ev.DamageType == DamageType.FRAG)
                 ev.Damage = 0;
 
         }
+
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (!GunGame.enabled && !GunGame.roundstarted) return;
-            if (!(GunGame.winner is Player))
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+            if (!(plugin.Winner is Player))
                 ev.Status = ROUND_END_STATUS.ON_GOING;
         }
+
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (!GunGame.enabled && !GunGame.roundstarted) return;
-            Functions.singleton.EndGamemodeRound();
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+            plugin.Functions.EndGamemodeRound();
         }
     }
 }

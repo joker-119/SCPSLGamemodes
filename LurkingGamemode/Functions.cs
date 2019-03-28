@@ -1,61 +1,108 @@
+using System.Collections.Generic;
 using Smod2;
 using Smod2.API;
+using Smod2.Commands;
+using System.Linq;
 
 namespace LurkingGamemode
 {
     public class Functions
     {
-        public static Functions singleton;
-        public Lurking Lurking;
-        public Functions(Lurking plugin)
+        private readonly Lurking plugin;
+        public Functions(Lurking plugin) => this.plugin = plugin;
+
+        public bool IsAllowed(ICommandSender sender)
         {
-            this.Lurking = plugin;
-            Functions.singleton = this;
+            Player player = (sender is Player) ? sender as Player : null;
+
+            if (player != null)
+            {
+                List<string> roleList = (plugin.ValidRanks != null && plugin.ValidRanks.Length > 0) ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
+
+                if (roleList != null && roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
+                    return true;
+                else if (roleList == null || roleList.Count == 0)
+                    return true;
+                else
+                    return false;
+            }
+            return true;
         }
+
         public void EndGamemodeRound()
         {
-            Lurking.Info("EndgameRound Function");
-            Lurking.roundstarted = false;
-            Lurking.Server.Round.EndRound();
+            plugin.Info("EndgameRound Function");
+            plugin.RoundStarted = false;
+            plugin.Server.Round.EndRound();
+        }
 
-            if (Lurking.blackouts)
+        public void Get079Rooms()
+        {
+            foreach (Room room in PluginManager.Manager.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA))
             {
-                SCP575.Functions.singleton.EnableBlackouts();
-                Lurking.Info("Enabling timed Blackouts.");
+                if (room.ZoneType == ZoneType.LCZ)
+                    plugin.BlackoutRooms.Add(room);
+            }
+        }
+
+        public IEnumerable<float> HCZBlackout()
+        {
+            while (plugin.Enabled || plugin.RoundStarted)
+            {
+                Generator079.generators[0].CallRpcOvercharge();
+                yield return 11f;
+            }
+        }
+
+        public IEnumerable<float> LCZBlackout()
+        {
+            while (plugin.Enabled || plugin.RoundStarted)
+            {
+                foreach (Room room in plugin.BlackoutRooms)
+                    room.FlickerLights();
+
+                yield return 8f;
             }
         }
 
         public void SpawnLarry(Player player)
         {
             player.ChangeRole(Role.SCP_106, false, true, false, false);
-            player.SetHealth(Lurking.larry_health);
+
+            player.SetHealth(plugin.LarryHealth);
+
             player.PersonalClearBroadcasts();
             player.PersonalBroadcast(25, "You are <color=#2D2B2B> what lurks in the dark</color>, your job is to kill the Scientists before they escape.", false);
         }
+
         public void SpawnDoggo(Player player)
         {
             if (player.TeamRole.Role != Role.SCP_106)
             {
                 player.ChangeRole(Role.SCP_939_53, false, true, false, false);
-                player.SetHealth(Lurking.doggo_health);
+
+                player.SetHealth(plugin.DoggoHealth);
+
                 player.PersonalClearBroadcasts();
                 player.PersonalBroadcast(25, "You are <color=#2D2B2B> what lurks in the dark</color>, your job is to kill the Scientists before they escape.", false);
             }
         }
+
         public void EnableGamemode()
         {
-            Lurking.enabled = true;
-            if (!Lurking.roundstarted)
+            plugin.Enabled = true;
+
+            if (!plugin.RoundStarted)
             {
-                Lurking.Server.Map.ClearBroadcasts();
-                Lurking.Server.Map.Broadcast(25, "<color=#2D2B2B> Lurking in the Dark</color> Gamemode starting..", false);
+                plugin.Server.Map.ClearBroadcasts();
+                plugin.Server.Map.Broadcast(25, "<color=#2D2B2B> Lurking in the Dark</color> Gamemode starting..", false);
             }
         }
 
         public void DisableGamemode()
         {
-            Lurking.enabled = false;
-            Lurking.Server.Map.ClearBroadcasts();
+            plugin.Enabled = false;
+            plugin.Server.Map.ClearBroadcasts();
         }
     }
 }

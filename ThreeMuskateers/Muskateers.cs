@@ -13,8 +13,8 @@ namespace MuskateersGamemode
         author = "Joker119",
         name = "Three Muskateers Gamemode",
         description = "3 NTF Vs. a crap load of Class-D",
-        id = "muskateers.gamemode",
-        version = "1.6.0",
+        id = "muskateers.Gamemode",
+        version = "1.7.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
@@ -22,13 +22,17 @@ namespace MuskateersGamemode
 
     public class Muskateers : Plugin
     {
-        internal static Muskateers singleton;
-        public static bool
-            enabled = false,
-            roundstarted = false;
-        public static int ntf_health;
-        public static int classd_health;
-        public static Random generator = new System.Random();
+        public Functions Functions { get; private set; }
+
+        public Random Gen = new System.Random();
+
+        public string[] ValidRanks { get; private set; }
+
+        public bool Enabled { get; internal set; } = false;
+        public bool RoundStarted { get; internal set; } = false;
+
+        public int NTFHealth { get; private set; }
+        public int ClassDHealth { get; private set; }
 
         public override void OnDisable()
         {
@@ -36,17 +40,28 @@ namespace MuskateersGamemode
         }
         public override void OnEnable()
         {
-            singleton = this;
-            this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
+            this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
         }
         public override void Register()
         {
-            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
-            new Functions(this);
-            Timing.Init(this);
-            this.AddCommands(new string[] { "3muskateers", "muskateers", "3musk" }, new MuskateersCommand());
             this.AddConfig(new ConfigSetting("musk_ntf_health", 4500, SettingType.NUMERIC, true, "How much Health NTF spawn with."));
             this.AddConfig(new ConfigSetting("musk_classd_health", 100, SettingType.NUMERIC, true, "How much health Class-D spawn with."));
+            this.AddConfig(new ConfigSetting("gamemode_ranks", new string[] { "owner", "admin" }, SettingType.LIST, true, "The ranks able to use gamemode commands."));
+
+            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+
+            this.AddCommands(new string[] { "3muskateers", "muskateers", "3musk" }, new MuskateersCommand(this));
+
+            Timing.Init(this);
+
+            Functions = new Functions(this);
+        }
+
+        public void ReloadConfig()
+        {
+            NTFHealth = GetConfigInt("musk_ntf_health");
+            ClassDHealth = GetConfigInt("musk_classd_health");
+            ValidRanks = GetConfigList("gamemode_ranks");
         }
     }
 }

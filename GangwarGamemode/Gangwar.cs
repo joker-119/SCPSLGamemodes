@@ -11,8 +11,8 @@ namespace Gangwar
         author = "Joker119",
         name = "Gangwar Gamemode",
         description = "Gangwar Gamemode",
-        id = "gamemode.gangwar",
-        version = "1.6.0",
+        id = "gangwar.Gamemode",
+        version = "1.7.0",
         SmodMajor = 3,
         SmodMinor = 3,
         SmodRevision = 0
@@ -20,14 +20,17 @@ namespace Gangwar
 
     public class Gangwar : Plugin
     {
-        internal static Gangwar singleton;
-        public static bool
-            enabled = false,
-            roundstarted = false;
+        public Functions Functions { get; private set; }
+        public Random Gen = new System.Random();
 
-        public static int ci_health;
-        public static int ntf_health;
-        public static Random gen = new System.Random();
+        public string[] ValidRanks;
+
+        public bool Enabled { get; internal set; }
+        public bool RoundStarted { get; internal set; }
+
+        public int CIHealth { get; private set; }
+        public int NTFHealth { get; private set; }
+
 
         public override void OnDisable()
         {
@@ -36,18 +39,28 @@ namespace Gangwar
 
         public override void OnEnable()
         {
-            singleton = this;
-            this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
+            this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
         }
 
         public override void Register()
         {
-            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
-            this.AddCommands(new string[] { "gangwar", "gang", "gw" }, new GangwarCommand());
             this.AddConfig(new ConfigSetting("gangwar_ci_health", 120, SettingType.NUMERIC, true, "The amount of health CI have."));
             this.AddConfig(new ConfigSetting("gangwar_ntf_health", 150, SettingType.NUMERIC, true, "The amount of health NTF have."));
+            this.AddConfig(new ConfigSetting("gamemode_ranks", new string[] { "owner", "admin" }, SettingType.LIST, true, "The ranks able to use commands."));
+
+            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+            this.AddCommands(new string[] { "gangwar", "gang", "gw" }, new GangwarCommand(this));
+
             Timing.Init(this);
-            new Functions(this);
+
+            Functions = new Functions(this);
+        }
+
+        public void ReloadConfig()
+        {
+            CIHealth = GetConfigInt("gangwar_ci_health");
+            NTFHealth = GetConfigInt("gangwar_ntf_health");
+            ValidRanks = GetConfigList("gamemode_ranks");
         }
     }
 }

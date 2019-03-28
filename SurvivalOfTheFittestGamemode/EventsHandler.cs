@@ -9,17 +9,16 @@ using scp4aiur;
 
 namespace SurvivalGamemode
 {
-    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSetRole, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie
+    internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie
     {
         private readonly Survival plugin;
-        public static Player winner = null;
 
         public EventsHandler(Survival plugin) => this.plugin = plugin;
         public void OnPlayerJoin(PlayerJoinEvent ev)
         {
-            if (Survival.enabled)
+            if (plugin.Enabled)
             {
-                if (!Survival.roundstarted)
+                if (!plugin.RoundStarted)
                 {
                     Server server = plugin.pluginManager.Server;
                     server.Map.ClearBroadcasts();
@@ -27,46 +26,21 @@ namespace SurvivalGamemode
                 }
             }
         }
-        public void OnSetRole(PlayerSetRoleEvent ev)
-        {
-            if (Survival.enabled || Survival.roundstarted)
-            {
-                if (ev.TeamRole.Role == Role.SCP_173)
-                {
-                    ev.Player.SetHealth(Survival.nut_health);
-                }
-            }
-        }
 
         public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
-            Survival.nut_delay = this.plugin.GetConfigFloat("survival_peanut_delay");
-            Survival.nut_health = this.plugin.GetConfigInt("survival_peanut_health");
-            Survival.zone = this.plugin.GetConfigString("survival_zone_type");
+            plugin.ReloadConfig();
+            plugin.Functions.Get079Rooms();
         }
 
         public void OnRoundStart(RoundStartEvent ev)
         {
-            if (Survival.enabled)
+            if (plugin.Enabled)
             {
+                Timing.Run(plugin.Functions.TeleportNuts(plugin.NutDelay));
 
-                foreach (Smod2.Plugin p in PluginManager.Manager.EnabledPlugins)
-                {
-                    if (p.Details.id == "joker.SCP575" && p is SCP575.SCP575)
-                    {
-                        if (SCP575.SCP575.Timed)
-                        {
-                            SCP575.Functions.singleton.DisableBlackouts();
-                            plugin.Info("Disabling timed blackouts.");
-                            Survival.blackouts = true;
-                        }
-                    }
-                }
-                Timing.Run(Functions.singleton.TeleportNuts(Survival.nut_delay));
-                plugin.Info("Timer Initialized..");
-                plugin.Info("Timer set to " + Survival.nut_delay + "s.");
+                plugin.RoundStarted = true;
 
-                Survival.roundstarted = true;
                 plugin.pluginManager.Server.Map.ClearBroadcasts();
                 plugin.Info("Survival of the Fittest Gamemode Started!");
 
@@ -74,7 +48,7 @@ namespace SurvivalGamemode
 
                 foreach (string d in dlist)
                 {
-                    foreach (Door door in ev.Server.Map.GetDoors())
+                    foreach (Smod2.API.Door door in ev.Server.Map.GetDoors())
                     {
                         if (d == door.Name)
                         {
@@ -89,7 +63,7 @@ namespace SurvivalGamemode
 
                 foreach (string o in olist)
                 {
-                    foreach (Door door in ev.Server.Map.GetDoors())
+                    foreach (Smod2.API.Door door in ev.Server.Map.GetDoors())
                     {
                         if (o == door.Name)
                         {
@@ -100,16 +74,15 @@ namespace SurvivalGamemode
                     }
                 }
 
-
                 foreach (Player player in ev.Server.GetPlayers())
                 {
-                    if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR && player != winner)
+                    if (player.TeamRole.Team != Smod2.API.Team.SCP && player.TeamRole.Team != Smod2.API.Team.SPECTATOR)
                     {
-                        Functions.singleton.SpawnDboi(player);
+                        plugin.Functions.SpawnDboi(player);
                     }
-                    else if (player.TeamRole.Team == Team.SCP || (player == winner && winner is Player))
+                    else if (player.TeamRole.Team == Smod2.API.Team.SCP)
                     {
-                        Functions.singleton.SpawnNut(player);
+                        plugin.Functions.SpawnNut(player);
                     }
                 }
             }
@@ -117,88 +90,84 @@ namespace SurvivalGamemode
 
         public void OnRoundEnd(RoundEndEvent ev)
         {
-            if (Survival.enabled || Survival.roundstarted)
-            {
-                plugin.Info("Round Ended!");
-                Functions.singleton.EndGamemodeRound();
-                SCP575.Functions.singleton.ToggleBlackout();
-            }
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+            plugin.Info("Round Ended!");
+            plugin.Functions.EndGamemodeRound();
         }
 
         public void OnPlayerDie(PlayerDeathEvent ev)
         {
-            if (Survival.enabled || Survival.roundstarted)
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+            if (ev.Player.TeamRole.Role == Role.CLASSD)
             {
-                if (ev.Player.TeamRole.Role == Role.CLASSD)
-                {
-                    plugin.Server.Map.ClearBroadcasts();
-                    ev.Player.PersonalClearBroadcasts();
-                    ev.Player.PersonalBroadcast(5, "Skiddaddle, skidacted, your neck is now [REDACTED]!", false);
-                    plugin.Server.Map.Broadcast(5, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
-                }
+                plugin.Server.Map.ClearBroadcasts();
+                plugin.Server.Map.Broadcast(5, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
+
+                ev.Player.PersonalClearBroadcasts();
+                ev.Player.PersonalBroadcast(5, "Skiddaddle, skidacted, your neck is now [REDACTED]!", false);
             }
         }
 
         public void OnCheckRoundEnd(CheckRoundEndEvent ev)
         {
-            if (Survival.enabled || Survival.roundstarted)
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+            bool peanutAlive = false;
+            bool humanAlive = false;
+            int humanCount = 0;
+
+            foreach (Player player in ev.Server.GetPlayers())
             {
-                bool peanutAlive = false;
-                bool humanAlive = false;
-                int humanCount = 0;
-
-                foreach (Player player in ev.Server.GetPlayers())
+                if (player.TeamRole.Team == Smod2.API.Team.SCP)
                 {
-                    if (player.TeamRole.Team == Team.SCP)
-                    {
-                        peanutAlive = true; continue;
-                    }
-
-                    else if (player.TeamRole.Team != Team.SCP && player.TeamRole.Team != Team.SPECTATOR)
-                    {
-                        humanAlive = true;
-                        humanCount++;
-                    }
-
+                    peanutAlive = true; continue;
                 }
-                if (ev.Server.GetPlayers().Count > 1)
+
+                else if (player.TeamRole.Team != Smod2.API.Team.SCP && player.TeamRole.Team != Smod2.API.Team.SPECTATOR)
                 {
-                    if (peanutAlive && humanAlive && humanCount > 1)
+                    humanAlive = true;
+                    humanCount++;
+                }
+
+            }
+
+            if (ev.Server.GetPlayers().Count > 1)
+            {
+                if (peanutAlive && humanAlive && humanCount > 1)
+                {
+                    ev.Status = ROUND_END_STATUS.ON_GOING;
+                }
+                else if (peanutAlive && humanAlive && humanCount == 1)
+                {
+                    ev.Status = ROUND_END_STATUS.OTHER_VICTORY; plugin.Functions.EndGamemodeRound();
+                    foreach (Player player in ev.Server.GetPlayers())
                     {
-                        ev.Status = ROUND_END_STATUS.ON_GOING;
-                    }
-                    else if (peanutAlive && humanAlive && humanCount == 1)
-                    {
-                        ev.Status = ROUND_END_STATUS.OTHER_VICTORY; Functions.singleton.EndGamemodeRound();
-                        foreach (Player player in ev.Server.GetPlayers())
+                        if (player.TeamRole.Team == Smod2.API.Team.CLASSD)
                         {
-                            if (player.TeamRole.Team == Team.CLASSD)
-                            {
-                                ev.Server.Map.ClearBroadcasts();
-                                ev.Server.Map.Broadcast(10, player.Name + " Winner, winner, chicken dinner!", false);
-                                winner = player;
-                            }
+                            ev.Server.Map.ClearBroadcasts();
+                            ev.Server.Map.Broadcast(10, player.Name + " Winner, winner, chicken dinner!", false);
                         }
                     }
-                    else if (peanutAlive && humanAlive == false)
-                    {
-                        ev.Status = ROUND_END_STATUS.SCP_VICTORY; Functions.singleton.EndGamemodeRound();
-                    }
-                    else if (peanutAlive == false && humanAlive)
-                    {
-                        ev.Status = ROUND_END_STATUS.CI_VICTORY; Functions.singleton.EndGamemodeRound();
-                    }
+                }
+                else if (peanutAlive && humanAlive == false)
+                {
+                    ev.Status = ROUND_END_STATUS.SCP_VICTORY; plugin.Functions.EndGamemodeRound();
+                }
+                else if (peanutAlive == false && humanAlive)
+                {
+                    ev.Status = ROUND_END_STATUS.CI_VICTORY; plugin.Functions.EndGamemodeRound();
                 }
             }
         }
 
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            if (Survival.enabled || Survival.roundstarted)
-            {
-                ev.SpawnChaos = true;
-                ev.PlayerList = new List<Player>();
-            }
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+            ev.SpawnChaos = true;
+            ev.PlayerList = new List<Player>();
         }
     }
 }

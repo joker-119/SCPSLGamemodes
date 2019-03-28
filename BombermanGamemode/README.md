@@ -8,7 +8,7 @@ Various ways of blowing up all your friends.
  - Settings+commands to set spawn type.
  - Supports normal rounds aswell as unique ones.
  - Configurable delays for grenade drops.
- - Grenades drop faster and in larger quantities until there's one person left alive (or one team in warmode).
+ - Grenades drop faster and in larger quantities until there's one person left alive (or one team in Warmode).
 
 ### Config Settings
 Config option | Config Type | Default Value | Description

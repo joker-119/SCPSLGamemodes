@@ -12,25 +12,26 @@ namespace PresidentialEscortGamemode
         author = "mkrzy",
         name = "Presidential Escort Gamemode",
         description = "Scientist (VIP) has to escape from SCPs with help of NTF",
-        id = "mkrzy.gamemode.presidential",
-        version = "1.6.0",
+        id = "presidential.Gamemode",
+        version = "1.7.0",
         SmodMajor = 3,
         SmodMinor = 2,
         SmodRevision = 2
     )]
     public class PresidentialEscort : Plugin
     {
-        internal static PresidentialEscort singleton;
-        public static Player vip = null;
-        public static bool vipEscaped = false;
+        public Functions Functions { get; private set; }
 
-        public static bool
-            enabled = false,
-            roundstarted = false;
+        public Player VIP { get; internal set; } = null;
 
-        public static int
-            vip_health,
-            guard_health;
+        public string[] ValidRanks { get; private set; }
+
+        public bool VIPEscaped { get; internal set; } = false;
+        public bool Enabled { get; internal set; } = false;
+        public bool RoundStarted { get; internal set; } = false;
+
+        public int VIPHealth { get; private set; }
+        public int GuardHealth { get; private set; }
 
         public override void OnDisable()
         {
@@ -39,18 +40,29 @@ namespace PresidentialEscortGamemode
 
         public override void OnEnable()
         {
-            singleton = this;
-            this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
+            this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
         }
 
         public override void Register()
         {
-            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
-            this.AddCommands(new string[] { "presidentialescort", "presidential", "escort", "pe" }, new PresidentialEscortCommand());
             this.AddConfig(new ConfigSetting("vip_vip_health", 2500, SettingType.NUMERIC, true, "The amount of health VIP's start with."));
             this.AddConfig(new ConfigSetting("vip_guard_health", 200, SettingType.NUMERIC, true, "The amount of health guards have."));
+            this.AddConfig(new ConfigSetting("gamemode_ranks", new string[] { "owner", "admin" }, SettingType.LIST, true, "The ranks able to use gamemode commands."));
+
+            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+
+            this.AddCommands(new string[] { "presidentialescort", "presidential", "escort", "pe" }, new PresidentialEscortCommand(this));
+
             Timing.Init(this);
-            new Functions(this);
+
+            Functions = new Functions(this);
+        }
+
+        public void ReloadConfig()
+        {
+            VIPHealth = GetConfigInt("vip_vip_health");
+            GuardHealth = GetConfigInt("vip_guard_health");
+            ValidRanks = GetConfigList("gamemode_ranks");
         }
     }
 }

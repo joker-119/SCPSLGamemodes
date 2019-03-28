@@ -4,6 +4,10 @@ namespace LurkingGamemode
 {
     class LurkingCommand : ICommandHandler
     {
+        private readonly Lurking plugin;
+
+        public LurkingCommand(Lurking plugin) => this.plugin = plugin;
+
         public string GetCommandDescription()
         {
             return "";
@@ -11,7 +15,7 @@ namespace LurkingGamemode
 
         public string GetUsage()
         {
-            return "Lurking Enabled : " + Lurking.enabled + "\n" +
+            return "Lurking Enabled : " + plugin.Enabled + "\n" +
                 "[Lurking / lurk / litd] HELP \n" +
                 "Lurking ENABLE \n" +
                 "Lurking DISABLE";
@@ -19,42 +23,28 @@ namespace LurkingGamemode
 
         public string[] OnCall(ICommandSender sender, string[] args)
         {
-            if (args.Length > 0)
+            if (args.Length <= 0) return new string[] { GetUsage() };
+            if (!plugin.Functions.IsAllowed(sender)) return new string[] { "Permission Denied." };
+
+            switch (args[0].ToLower())
             {
-                switch (args[0].ToLower())
-                {
-                    case "help":
-                        return new string[]
-                        {
-                            "Lurking Command List \n"+
-                            "Lurking enable - Enables the Lurking gamemode. \n"+
-                            "Lurking disable - Disables the Lurking gamemode. \n"
-                        };
-                    case "enable":
-                        Functions.singleton.EnableGamemode();
-                        return new string[]
-                        {
-                            "Lurking will be enabled for the next round!"
-                        };
-                    case "disable":
-                        Functions.singleton.DisableGamemode();
-                        return new string[]
-                        {
-                            "Lurking gamemode now disabled."
-                        };
-                    default:
-                        return new string[]
-                        {
-                            GetUsage()
-                        };
-                }
-            }
-            else
-            {
-                return new string[]
-                {
-                    GetUsage()
-                };
+                case "help":
+                    return new string[]
+                    {
+                        "Lurking Command List",
+                        "Lurking enable - Enables the Lurking gamemode.",
+                        "Lurking disable - Disables the Lurking gamemode."
+                    };
+                case "enable":
+                    plugin.Functions.EnableGamemode();
+
+                    return new string[] { "Lurking gamemode enabled." };
+                case "disable":
+                    plugin.Functions.DisableGamemode();
+
+                    return new string[] { "Lurking gamemode disabled." };
+                default:
+                    return new string[] { GetUsage() };
             }
         }
     }
