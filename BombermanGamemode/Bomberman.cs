@@ -9,72 +9,72 @@ using System;
 
 namespace Bomber
 {
-    [PluginDetails(
-        author = "Joker119",
-        name = "Bomberman Gamemode",
-        description = "Run from the bombs!",
-        id = "bomberman.Gamemode",
-        version = "1.7.0",
-        SmodMajor = 3,
-        SmodMinor = 2,
-        SmodRevision = 0
-    )]
+	[PluginDetails(
+		author = "Joker119",
+		name = "Bomberman Gamemode",
+		description = "Run from the bombs!",
+		id = "bomberman.Gamemode",
+		version = "1.7.0",
+		SmodMajor = 3,
+		SmodMinor = 2,
+		SmodRevision = 0
+	)]
 
-    public class Bomber : Plugin
-    {
-        public Functions Functions { get; private set; }
-        public Random Gen = new System.Random();
+	public class Bomber : Plugin
+	{
+		public Functions Functions { get; private set; }
+		public Random Gen = new System.Random();
 
-        public string[] ValidRanks;
+		public string[] ValidRanks;
 
-        public bool Enabled { get; internal set; } = false;
-        public bool Medkits { get; private set; }
-        public bool Warmode { get; internal set; }
-        public bool RoundStarted { get; internal set; } = false;
+		public bool Enabled { get; internal set; } = false;
+		public bool Medkits { get; private set; }
+		public bool Warmode { get; internal set; }
+		public bool RoundStarted { get; internal set; } = false;
 
-        public int Count { get; internal set; } = 1;
-        public int Min { get; private set; }
-        public int Max { get; private set; }
-        public int Timer { get; internal set; } = 0;
+		public int Count { get; internal set; } = 1;
+		public int Min { get; private set; }
+		public int Max { get; private set; }
+		public int Timer { get; internal set; } = 0;
 
-        public string SpawnClass { get; internal set; }
-        public float GrenadeMulti { get; private set; }
-        public List<Player> players = new List<Player>();
+		public string SpawnClass { get; internal set; }
+		public float GrenadeMulti { get; private set; }
+		public List<Player> players = new List<Player>();
 
-        public override void OnDisable()
-        {
-            this.Info(this.Details.name + " v." + this.Details.version + " has been diisabled.");
-        }
+		public override void OnDisable()
+		{
+			this.Info(this.Details.name + " v." + this.Details.version + " has been diisabled.");
+		}
 
-        public override void OnEnable()
-        {
-            this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
-        }
-        public override void Register()
-        {
-            this.AddConfig(new ConfigSetting("bomb_class", "", SettingType.STRING, true, "The class everyone spawns as. If empty, normal game round."));
-            this.AddConfig(new ConfigSetting("bomb_min", 15, SettingType.NUMERIC, true, "The minimum time before the first drop."));
-            this.AddConfig(new ConfigSetting("bomb_max", 30, SettingType.NUMERIC, true, "The maximum time before the first drop."));
-            this.AddConfig(new ConfigSetting("bomb_medkits", true, SettingType.BOOL, true, "If players should spawn with a medkit."));
-            this.AddConfig(new ConfigSetting("bomb_grenade_multi", 0.5f, SettingType.FLOAT, true, "The number to multiply grenade damage bu."));
-            this.AddConfig(new ConfigSetting("gamemode_ranks", new string[] { "owner", "admin" }, SettingType.LIST, true, "The ranks able to use commands."));
+		public override void OnEnable()
+		{
+			this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
+		}
+		public override void Register()
+		{
+			this.AddConfig(new ConfigSetting("bomb_class", "", SettingType.STRING, true, "The class everyone spawns as. If empty, normal game round."));
+			this.AddConfig(new ConfigSetting("bomb_min", 15, SettingType.NUMERIC, true, "The minimum time before the first drop."));
+			this.AddConfig(new ConfigSetting("bomb_max", 30, SettingType.NUMERIC, true, "The maximum time before the first drop."));
+			this.AddConfig(new ConfigSetting("bomb_medkits", true, SettingType.BOOL, true, "If players should spawn with a medkit."));
+			this.AddConfig(new ConfigSetting("bomb_grenade_multi", 0.5f, SettingType.FLOAT, true, "The number to multiply grenade damage bu."));
+			this.AddConfig(new ConfigSetting("bomb_gamemode_ranks", new string[] { }, SettingType.LIST, true, "The ranks able to use commands."));
 
-            this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 
-            this.AddCommands(new string[] { "bomberman", "bomb" }, new BomberCommand(this));
-            Timing.Init(this);
+			this.AddCommands(new string[] { "bomberman", "bomb" }, new BomberCommand(this));
+			Timing.Init(this);
 
-            Functions = new Functions(this);
-        }
+			Functions = new Functions(this);
+		}
 
-        public void ReloadConfig()
-        {
-            SpawnClass = GetConfigString("bomb_class");
-            Medkits = GetConfigBool("bomb_medkits");
-            Min = GetConfigInt("bomb_min");
-            Max = GetConfigInt("bomb_max");
-            GrenadeMulti = GetConfigFloat("bomb_grenade_multi");
-            ValidRanks = GetConfigList("gamemode_ranks");
-        }
-    }
+		public void ReloadConfig()
+		{
+			SpawnClass = GetConfigString("bomb_class");
+			Medkits = GetConfigBool("bomb_medkits");
+			Min = GetConfigInt("bomb_min");
+			Max = GetConfigInt("bomb_max");
+			GrenadeMulti = GetConfigFloat("bomb_grenade_multi");
+			ValidRanks = GetConfigList("bomb_gamemode_ranks");
+		}
+	}
 }

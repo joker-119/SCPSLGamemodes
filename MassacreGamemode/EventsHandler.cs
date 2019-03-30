@@ -140,6 +140,7 @@ namespace MassacreGamemode
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
             if (!plugin.Enabled && !plugin.RoundStarted) return;
+            plugin.Info("Mass Respawn.");
 
             ev.SpawnChaos = true;
             ev.PlayerList = new List<Player>();

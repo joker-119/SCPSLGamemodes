@@ -102,6 +102,7 @@ namespace Gangwar
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
             if (!plugin.Enabled && !plugin.RoundStarted) return;
+            plugin.Info("Gang Respawn.");
 
             if (plugin.Round.Stats.CiAlive >= plugin.Round.Stats.NTFAlive)
             {

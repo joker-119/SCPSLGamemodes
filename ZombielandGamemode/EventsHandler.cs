@@ -138,6 +138,7 @@ namespace ZombielandGamemode
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
             if (!plugin.Enabled && !plugin.RoundStarted) return;
+            plugin.Info("Zombie Respawn.");
 
             ev.SpawnChaos = true;
         }

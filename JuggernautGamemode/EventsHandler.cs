@@ -299,6 +299,7 @@ namespace JuggernautGamemode
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
             if (!plugin.Enabled && !plugin.RoundStarted) return;
+            plugin.Info("Jugg Respawn.");
 
             ev.SpawnChaos = false;
 

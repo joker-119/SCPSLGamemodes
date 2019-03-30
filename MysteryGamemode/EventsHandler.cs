@@ -152,6 +152,7 @@ namespace Mystery
         {
             if (plugin.Enabled || plugin.RoundStarted)
             {
+                plugin.Info("Myst Respawn.");
                 ev.SpawnChaos = true;
                 foreach (Player player in ev.PlayerList)
                 {

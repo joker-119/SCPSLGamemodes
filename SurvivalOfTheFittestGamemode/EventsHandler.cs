@@ -165,6 +165,7 @@ namespace SurvivalGamemode
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
             if (!plugin.Enabled && !plugin.RoundStarted) return;
+            plugin.Info("Surv Respawn.");
 
             ev.SpawnChaos = true;
             ev.PlayerList = new List<Player>();

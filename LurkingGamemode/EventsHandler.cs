@@ -36,6 +36,8 @@ namespace LurkingGamemode
 
         public void OnRoundStart(RoundStartEvent ev)
         {
+            if (!plugin.Enabled) return;
+
             plugin.RoundStarted = true;
 
             plugin.Info("Lurking in the Dark gamemode started!");
@@ -125,7 +127,8 @@ namespace LurkingGamemode
 
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
-            if (plugin.Enabled && plugin.RoundStarted) return;
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+            plugin.Info("Lurk respawn.");
 
             ev.SpawnChaos = false;
             ev.PlayerList = new List<Player>();

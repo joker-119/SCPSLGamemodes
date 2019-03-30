@@ -77,6 +77,8 @@ namespace PresidentialEscortGamemode
         }
         public void OnCheckEscape(PlayerCheckEscapeEvent ev)
         {
+            if (!plugin.Enabled && !plugin.RoundStarted) return;
+
             if (ev.Player.SteamId == plugin.VIP.SteamId)
                 plugin.VIPEscaped = true;
         }
@@ -130,6 +132,7 @@ namespace PresidentialEscortGamemode
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
             if (!plugin.Enabled && !plugin.RoundStarted) return;
+            plugin.Info("President Respawn.");
 
             ev.SpawnChaos = false;
         }

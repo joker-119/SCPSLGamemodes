@@ -53,7 +53,7 @@ namespace ZombielandGamemode
             this.AddConfig(new ConfigSetting("zombieland_alphas_destroy_doors", true, SettingType.BOOL, true, "If Alpha zombies should destroy locked doors."));
             this.AddConfig(new ConfigSetting("zombieland_zombie_damage", 100, SettingType.NUMERIC, true, "The amount of damage the starting zombies deal."));
             this.AddConfig(new ConfigSetting("zombieland_child_damage", 100, SettingType.NUMERIC, true, "The amount of damage the child zombies should deal."));
-            this.AddConfig(new ConfigSetting("gamemode_ranks", new string[] { "owner", "admin", }, SettingType.LIST, true, "The ranks able to use gamemode commands."));
+            this.AddConfig(new ConfigSetting("zombie_gamemode_ranks", new string[] {}, SettingType.LIST, true, "The ranks able to use gamemode commands."));
 
             this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 
@@ -71,7 +71,7 @@ namespace ZombielandGamemode
             AlphaDamage = GetConfigInt("zombieland_zombie_damage");
             ChildDamage = GetConfigInt("zombieland_child_damage");
             AlphaDoorDestroy = GetConfigBool("zombieland_alphas_destroy_doors");
-            ValidRanks = GetConfigList("gamemode_ranks");
+            ValidRanks = GetConfigList("zombie_gamemode_ranks");
         }
     }
 }

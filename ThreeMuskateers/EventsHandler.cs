@@ -67,6 +67,7 @@ namespace MuskateersGamemode
         public void OnTeamRespawn(TeamRespawnEvent ev)
         {
             if (!plugin.Enabled && !plugin.RoundStarted) return;
+            plugin.Info("Musk Respawn.");
 
             ev.SpawnChaos = true;
             ev.PlayerList = new List<Player>();
