@@ -15,7 +15,7 @@ namespace SurvivalGamemode
 
 		public bool IsAllowed(ICommandSender sender)
 		{
-			Player player = (sender is Player) ? sender as Player : null;
+			Player player = sender as Player;
 
 			if (player != null)
 			{
