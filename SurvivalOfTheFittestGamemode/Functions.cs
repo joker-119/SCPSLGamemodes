@@ -89,13 +89,9 @@ namespace SurvivalGamemode
 			Vector spawn;
 
 			if (plugin.Zone == "lcz")
-			{
 				spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCIENTIST);
-			}
 			else
-			{
 				spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_096);
-			}
 
 			player.ChangeRole(Role.CLASSD, false, false, false, true);
 
@@ -163,7 +159,8 @@ namespace SurvivalGamemode
 			{
 				if (player.TeamRole.Role == Role.SCP_173)
 				{
-					player.Teleport(NutSpawn());
+					Vector spawn = NutSpawn();
+					player.Teleport(new Vector(spawn.x, spawn.y + 2, spawn.z));
 					player.SetHealth(plugin.NutHealth);
 					player.PersonalBroadcast(15, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the Class-D before the auto-nuke goes off!", false);
 				}

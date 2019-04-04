@@ -56,6 +56,7 @@ namespace Gangwar
 
 		public IEnumerable<float> SpawnChaos(Player player, float delay)
 		{
+			plugin.Spawning.Add(player.SteamId, true);
 			yield return delay;
 
 			player.ChangeRole(Role.CHAOS_INSURGENCY, false, true, false, true);
@@ -71,6 +72,7 @@ namespace Gangwar
 			player.GiveItem(ItemType.FRAG_GRENADE);
 			player.GiveItem(ItemType.MEDKIT);
 			player.GiveItem(ItemType.FLASHBANG);
+			player.GiveItem(ItemType.WEAPON_MANAGER_TABLET);
 
 			player.SetAmmo(AmmoType.DROPPED_5, 500);
 			player.SetAmmo(AmmoType.DROPPED_7, 500);
@@ -81,6 +83,7 @@ namespace Gangwar
 
 		public IEnumerable<float> SpawnNTF(Player player, float delay)
 		{
+			plugin.Spawning.Add(player.SteamId, true);
 			yield return delay;
 
 			player.ChangeRole(Role.NTF_COMMANDER, false, true, false, false);
@@ -96,6 +99,7 @@ namespace Gangwar
 			player.GiveItem(ItemType.FRAG_GRENADE);
 			player.GiveItem(ItemType.MEDKIT);
 			player.GiveItem(ItemType.FLASHBANG);
+			player.GiveItem(ItemType.WEAPON_MANAGER_TABLET);
 
 			player.SetAmmo(AmmoType.DROPPED_5, 500);
 			player.SetAmmo(AmmoType.DROPPED_7, 500);

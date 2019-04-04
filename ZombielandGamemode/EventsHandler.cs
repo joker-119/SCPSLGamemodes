@@ -66,6 +66,7 @@ namespace ZombielandGamemode
 				ev.Destroy = true;
 				ev.Door.Destroyed = true;
 				ev.Door.Open = true;
+				((Door)ev.Door.GetComponent()).Networkdestroyed = true;
 			}
 		}
 

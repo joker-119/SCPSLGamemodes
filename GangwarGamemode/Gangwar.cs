@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Smod2;
 using Smod2.Events;
 using Smod2.Attributes;
@@ -22,6 +23,8 @@ namespace Gangwar
 	{
 		public Functions Functions { get; private set; }
 		public Random Gen = new System.Random();
+
+		public Dictionary<string, bool> Spawning = new Dictionary<string, bool>();
 
 		public string[] ValidRanks;
 

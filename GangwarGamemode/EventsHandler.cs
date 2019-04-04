@@ -50,8 +50,23 @@ namespace Gangwar
 
 				foreach (Player player in players)
 				{
-					if (player.TeamRole.Role != Role.NTF_COMMANDER)
+					if (player.TeamRole.Role != Role.NTF_COMMANDER && !plugin.Spawning[player.SteamId])
 						Timing.Run(plugin.Functions.SpawnChaos(player, 0));
+				}
+
+				string[] dList = new string[] { "GATE_A", "GATE_B" };
+
+				foreach (string d in dList)
+				{
+					foreach (Door door in ev.Server.Map.GetDoors())
+					{
+						if (d == door.Name)
+						{
+							plugin.Debug("Locking " + door.Name + ".");
+							door.Open = false;
+							door.Locked = true;
+						}
+					}
 				}
 			}
 		}

@@ -34,6 +34,7 @@ namespace SurvivalGamemode
 		public float NutDelay { get; private set; }
 
 		public int NutHealth { get; private set; }
+		public int NutLimit { get; private set; }
 
 		public string Zone { get; internal set; }
 

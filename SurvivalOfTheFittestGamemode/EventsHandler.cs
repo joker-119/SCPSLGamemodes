@@ -14,6 +14,7 @@ namespace SurvivalGamemode
 		private readonly Survival plugin;
 
 		public EventsHandler(Survival plugin) => this.plugin = plugin;
+
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
 			if (plugin.Enabled)
@@ -76,16 +77,20 @@ namespace SurvivalGamemode
 					}
 				}
 
+				int nutCount = 0;
+
 				foreach (Player player in ev.Server.GetPlayers())
 				{
 					if (player.TeamRole.Team != Smod2.API.Team.SCP && player.TeamRole.Team != Smod2.API.Team.SPECTATOR)
 					{
 						plugin.Functions.SpawnDboi(player);
 					}
-					else if (player.TeamRole.Team == Smod2.API.Team.SCP)
+					else if (player.TeamRole.Team == Smod2.API.Team.SCP && nutCount > plugin.NutLimit)
 					{
 						plugin.Functions.SpawnNut(player);
 					}
+					else
+						plugin.Functions.SpawnDboi(player);
 				}
 			}
 		}

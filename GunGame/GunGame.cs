@@ -28,7 +28,21 @@ namespace Gungame
 
 		public string[] ValidRanks { get; private set; }
 
-		public List<RoomType> ValidRooms = new List<RoomType>() { RoomType.CLASS_D_CELLS, RoomType.CAFE, RoomType.AIRLOCK_00, RoomType.AIRLOCK_01, RoomType.INTERCOM, RoomType.PC_LARGE, RoomType.PC_SMALL, RoomType.SCP_049, RoomType.SCP_096, RoomType.SCP_173, RoomType.SCP_372, RoomType.SCP_939 };
+		public List<RoomType> ValidRooms = new List<RoomType>()
+			{
+				RoomType.CLASS_D_CELLS,
+				RoomType.CAFE,
+				RoomType.AIRLOCK_00,
+				RoomType.AIRLOCK_01,
+				RoomType.INTERCOM,
+				RoomType.PC_LARGE,
+				RoomType.PC_SMALL,
+				RoomType.SCP_049,
+				RoomType.SCP_096,
+				RoomType.SCP_173,
+				RoomType.SCP_372,
+				RoomType.SCP_939
+			 };
 		public List<Room> Rooms = new List<Room>();
 
 		public Player Winner { get; internal set; } = null;

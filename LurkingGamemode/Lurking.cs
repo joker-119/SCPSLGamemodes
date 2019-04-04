@@ -27,6 +27,7 @@ namespace LurkingGamemode
 
 		public bool Enabled { get; internal set; } = false;
 		public bool RoundStarted { get; internal set; } = false;
+		public bool FlashlightsOnSpawn { get; private set; }
 
 		public int LarryHealth { get; private set; }
 		public int DoggoHealth { get; private set; }
@@ -53,6 +54,7 @@ namespace LurkingGamemode
 			this.AddConfig(new ConfigSetting("lurking_106_health", 750, SettingType.NUMERIC, true, "The amount of health Larry should start with."));
 			this.AddConfig(new ConfigSetting("lurking_939_health", 2300, SettingType.NUMERIC, true, "The amount of health Doggo should start with."));
 			this.AddConfig(new ConfigSetting("lurk_gamemode_ranks", new string[] { }, SettingType.LIST, true, "The ranks able to use commands."));
+			this.AddConfig(new ConfigSetting("lurking_flashlights", true, SettingType.BOOL, true, "If players should spawn with flashlights."));
 
 			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 

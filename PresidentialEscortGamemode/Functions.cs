@@ -58,6 +58,35 @@ namespace PresidentialEscortGamemode
 			plugin.VIPEscaped = false;
 		}
 
+		public IEnumerable<float> AnnounceLocation()
+		{
+			while (plugin.RoundStarted)
+			{
+				Vector loc = plugin.VIP.GetPosition();
+				ZoneType zone;
+
+				foreach (Room room in plugin.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA).Where(r => Vector.Distance(loc, r.Position) <= 10f))
+				{
+					zone = room.ZoneType;
+
+					if (zone == ZoneType.HCZ)
+					{
+						plugin.Server.Map.Broadcast(10, "The VIP is in Heavy Containment!", false);
+					}
+					else if (zone == ZoneType.LCZ)
+					{
+						plugin.Server.Map.Broadcast(10, "The VIP is in Light Containment!", false);
+					}
+					else if (zone == ZoneType.ENTRANCE)
+					{
+						plugin.Server.Map.Broadcast(10, "The VIP is in Entrance Zone!", false);
+					}
+					break;
+				}
+				yield return 120f;
+			}
+		}
+
 		public IEnumerable<float> SpawnVIP(Player player)
 		{
 			plugin.VIP = player;
@@ -77,6 +106,8 @@ namespace PresidentialEscortGamemode
 			player.GiveItem(ItemType.MEDKIT);
 			player.GiveItem(ItemType.RADIO);
 			player.GiveItem(ItemType.FLASHLIGHT);
+
+			player.SetHealth(plugin.VIPHealth);
 
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(15, "You are the <color=#f8ea56>VIP</color> Escape the facility with the help of " +

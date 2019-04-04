@@ -56,7 +56,7 @@ namespace Mystery
 			plugin.Info("Endgame function.");
 			plugin.RoundStarted = false;
 			plugin.Server.Round.EndRound();
-			plugin.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] { "friendly_fire", "false" });
+			plugin.murd.Clear();
 		}
 
 		public IEnumerable<float> SpawnMurd(Player player)
