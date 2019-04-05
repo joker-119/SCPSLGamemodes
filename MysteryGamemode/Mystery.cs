@@ -15,7 +15,7 @@ namespace Mystery
 		id = "mystery.Gamemode",
 		version = "1.7.0",
 		SmodMajor = 3,
-		SmodMinor = 3,
+		SmodMinor = 4,
 		SmodRevision = 0
 	)]
 
@@ -53,15 +53,15 @@ namespace Mystery
 
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("myst_murd_health", 150, SettingType.NUMERIC, true, "How much health murderers should have."));
-			this.AddConfig(new ConfigSetting("myst_civ_health", 100, SettingType.NUMERIC, true, "The amount of health civilians have."));
-			this.AddConfig(new ConfigSetting("myst_det_health", 150, SettingType.NUMERIC, true, "How much health detectives should have."));
-			this.AddConfig(new ConfigSetting("myst_murd_num", 3, SettingType.NUMERIC, true, "The number of murderers to have."));
-			this.AddConfig(new ConfigSetting("myst_det_num", 2, SettingType.NUMERIC, true, "The number of detectives to have."));
-			this.AddConfig(new ConfigSetting("myst_monster_num", 3, SettingType.NUMERIC, true, "The number of monsters that should be in the game."));
-			this.AddConfig(new ConfigSetting("myst_murd_respawn", true, SettingType.BOOL, true, "If a random murderer should be respawned."));
-			this.AddConfig(new ConfigSetting("myst_det_respawn", true, SettingType.BOOL, true, "If a random Detective should be respawned."));
-			this.AddConfig(new ConfigSetting("myst_gamemode_ranks", new string[] { }, SettingType.LIST, true, "The ranks able to use commands."));
+			this.AddConfig(new ConfigSetting("myst_murd_health", 150, true, "How much health murderers should have."));
+			this.AddConfig(new ConfigSetting("myst_civ_health", 100, true, "The amount of health civilians have."));
+			this.AddConfig(new ConfigSetting("myst_det_health", 150, true, "How much health detectives should have."));
+			this.AddConfig(new ConfigSetting("myst_murd_num", 3, true, "The number of murderers to have."));
+			this.AddConfig(new ConfigSetting("myst_det_num", 2, true, "The number of detectives to have."));
+			this.AddConfig(new ConfigSetting("myst_monster_num", 3, true, "The number of monsters that should be in the game."));
+			this.AddConfig(new ConfigSetting("myst_murd_respawn", true, true, "If a random murderer should be respawned."));
+			this.AddConfig(new ConfigSetting("myst_det_respawn", true, true, "If a random Detective should be respawned."));
+			this.AddConfig(new ConfigSetting("myst_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
 
 			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 

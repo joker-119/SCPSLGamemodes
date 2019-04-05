@@ -15,7 +15,7 @@ namespace LurkingGamemode
 		id = "lurking.Gamemode",
 		version = "1.7.0",
 		SmodMajor = 3,
-		SmodMinor = 3,
+		SmodMinor = 4,
 		SmodRevision = 0
 	)]
 
@@ -49,12 +49,12 @@ namespace LurkingGamemode
 
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("lurking_106_num", 2, SettingType.NUMERIC, true, "The number of Larries to spawn"));
-			this.AddConfig(new ConfigSetting("lurking_939_num", 2, SettingType.NUMERIC, true, "The number of 939's to spawn."));
-			this.AddConfig(new ConfigSetting("lurking_106_health", 750, SettingType.NUMERIC, true, "The amount of health Larry should start with."));
-			this.AddConfig(new ConfigSetting("lurking_939_health", 2300, SettingType.NUMERIC, true, "The amount of health Doggo should start with."));
-			this.AddConfig(new ConfigSetting("lurk_gamemode_ranks", new string[] { }, SettingType.LIST, true, "The ranks able to use commands."));
-			this.AddConfig(new ConfigSetting("lurking_flashlights", true, SettingType.BOOL, true, "If players should spawn with flashlights."));
+			this.AddConfig(new ConfigSetting("lurking_106_num", 2, true, "The number of Larries to spawn"));
+			this.AddConfig(new ConfigSetting("lurking_939_num", 2, true, "The number of 939's to spawn."));
+			this.AddConfig(new ConfigSetting("lurking_106_health", 750, true, "The amount of health Larry should start with."));
+			this.AddConfig(new ConfigSetting("lurking_939_health", 2300, true, "The amount of health Doggo should start with."));
+			this.AddConfig(new ConfigSetting("lurk_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
+			this.AddConfig(new ConfigSetting("lurking_flashlights", true, true, "If players should spawn with flashlights."));
 
 			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 

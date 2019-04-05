@@ -26,7 +26,7 @@ namespace Mystery
 			{
 				if (!plugin.RoundStarted)
 				{
-					Server server = plugin.pluginManager.Server;
+					Server server = plugin.Server;
 					server.Map.ClearBroadcasts();
 					server.Map.Broadcast(25, "<color=#c50000>Murder Mystery</color> gamemode is starting...", false);
 				}
@@ -39,7 +39,7 @@ namespace Mystery
 			if (plugin.Enabled)
 			{
 				plugin.RoundStarted = true;
-				plugin.pluginManager.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.ClearBroadcasts();
 				plugin.Info("Mystery Gamemode started!");
 
 				List<Player> players = ev.Server.GetPlayers();

@@ -34,14 +34,14 @@ namespace MuskateersGamemode
 			plugin.Enabled = true;
 			if (!plugin.RoundStarted)
 			{
-				plugin.pluginManager.Server.Map.ClearBroadcasts();
-				plugin.pluginManager.Server.Map.Broadcast(25, "<color=#308ADA> Three Muskateers</color> gamemode starting..", false);
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(25, "<color=#308ADA> Three Muskateers</color> gamemode starting..", false);
 			}
 		}
 		public void DisableGamemode()
 		{
 			plugin.Enabled = false;
-			plugin.pluginManager.Server.Map.ClearBroadcasts();
+			plugin.Server.Map.ClearBroadcasts();
 		}
 		public IEnumerable<float> SpawnNTF(Player player)
 		{

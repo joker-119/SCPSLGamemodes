@@ -16,7 +16,7 @@ namespace MuskateersGamemode
 		id = "muskateers.Gamemode",
 		version = "1.7.0",
 		SmodMajor = 3,
-		SmodMinor = 3,
+		SmodMinor = 4,
 		SmodRevision = 0
 	)]
 
@@ -44,9 +44,9 @@ namespace MuskateersGamemode
 		}
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("musk_ntf_health", 4500, SettingType.NUMERIC, true, "How much Health NTF spawn with."));
-			this.AddConfig(new ConfigSetting("musk_classd_health", 100, SettingType.NUMERIC, true, "How much health Class-D spawn with."));
-			this.AddConfig(new ConfigSetting("musk_gamemode_ranks", new string[] { }, SettingType.LIST, true, "The ranks able to use gamemode commands."));
+			this.AddConfig(new ConfigSetting("musk_ntf_health", 4500, true, "How much Health NTF spawn with."));
+			this.AddConfig(new ConfigSetting("musk_classd_health", 100, true, "How much health Class-D spawn with."));
+			this.AddConfig(new ConfigSetting("musk_gamemode_ranks", new string[] { }, true, "The ranks able to use gamemode commands."));
 
 			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 

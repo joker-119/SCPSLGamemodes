@@ -16,7 +16,7 @@ namespace MassacreGamemode
 		id = "massacre.Gamemode",
 		version = "1.7.0",
 		SmodMajor = 3,
-		SmodMinor = 3,
+		SmodMinor = 4,
 		SmodRevision = 0
 	)]
 	public class Massacre : Plugin
@@ -53,10 +53,10 @@ namespace MassacreGamemode
 
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("mass_spawn_room", "jail", false, SettingType.STRING, true, "Where everyone should spawn."));
-			this.AddConfig(new ConfigSetting("mass_peanut_health", 1, SettingType.NUMERIC, true, "How much health Peanuts spawn with."));
-			this.AddConfig(new ConfigSetting("mass_peanut_count", 3, SettingType.NUMERIC, true, "The number of peanuts selected."));
-			this.AddConfig(new ConfigSetting("mass_gamemode_ranks", new string[] { }, SettingType.LIST, true, "The ranks able to use commands."));
+			this.AddConfig(new ConfigSetting("mass_spawn_room", "jail", false, true, "Where everyone should spawn."));
+			this.AddConfig(new ConfigSetting("mass_peanut_health", 1, true, "How much health Peanuts spawn with."));
+			this.AddConfig(new ConfigSetting("mass_peanut_count", 3, true, "The number of peanuts selected."));
+			this.AddConfig(new ConfigSetting("mass_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
 
 			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 

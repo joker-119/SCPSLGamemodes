@@ -38,15 +38,15 @@ namespace PresidentialEscortGamemode
 
 			if (!plugin.RoundStarted)
 			{
-				plugin.pluginManager.Server.Map.ClearBroadcasts();
-				plugin.pluginManager.Server.Map.Broadcast(25, "<color=#f8ea56>Presidential Escort</color> gamemode is starting...", false);
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(25, "<color=#f8ea56>Presidential Escort</color> gamemode is starting...", false);
 			}
 		}
 
 		public void DisableGamemode()
 		{
 			plugin.Enabled = false;
-			plugin.pluginManager.Server.Map.ClearBroadcasts();
+			plugin.Server.Map.ClearBroadcasts();
 		}
 
 		public void EndGamemodeRound()

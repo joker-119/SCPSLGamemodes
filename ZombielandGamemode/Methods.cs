@@ -37,14 +37,14 @@ namespace ZombielandGamemode
 
 			if (!plugin.RoundStarted)
 			{
-				plugin.pluginManager.Server.Map.ClearBroadcasts();
-				plugin.pluginManager.Server.Map.Broadcast(25, "<color=#50c878>Zombieland Gamemode</color> is starting..", false);
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(25, "<color=#50c878>Zombieland Gamemode</color> is starting..", false);
 			}
 		}
 		public void DisableGamemode()
 		{
 			plugin.Enabled = false;
-			plugin.pluginManager.Server.Map.ClearBroadcasts();
+			plugin.Server.Map.ClearBroadcasts();
 		}
 
 		public void EndGamemodeRound()
@@ -52,7 +52,7 @@ namespace ZombielandGamemode
 			plugin.Info("EndgameRound Function");
 			plugin.RoundStarted = false;
 			plugin.Server.Round.EndRound();
-			plugin.pluginManager.CommandManager.CallCommand(null, "SETCONFIG", new string[] { "friendly_fire", "false" });
+			plugin.CommandManager.CallCommand(null, "SETCONFIG", new string[] { "friendly_fire", "false" });
 		}
 
 		public IEnumerable<float> SpawnChild(Player player, Player killer)

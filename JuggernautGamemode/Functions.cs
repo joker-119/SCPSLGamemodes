@@ -36,15 +36,15 @@ namespace JuggernautGamemode
 			plugin.Enabled = true;
 			if (!plugin.RoundStarted)
 			{
-				plugin.pluginManager.Server.Map.ClearBroadcasts();
-				plugin.pluginManager.Server.Map.Broadcast(25, "<color=#228B22>Juggernaut Gamemode</color> is starting...", false);
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(25, "<color=#228B22>Juggernaut Gamemode</color> is starting...", false);
 			}
 		}
 
 		public void DisableGamemode()
 		{
 			plugin.Enabled = false;
-			plugin.pluginManager.Server.Map.ClearBroadcasts();
+			plugin.Server.Map.ClearBroadcasts();
 		}
 
 		public bool IsJuggernaut(Player player)
@@ -62,7 +62,7 @@ namespace JuggernautGamemode
 
 		public Player GetJuggernautPlayer()
 		{
-			foreach (Player player in plugin.pluginManager.Server.GetPlayers())
+			foreach (Player player in plugin.Server.GetPlayers())
 			{
 				if (IsJuggernaut(player))
 				{
@@ -102,7 +102,7 @@ namespace JuggernautGamemode
 
 			player.Teleport(position);
 
-			plugin.pluginManager.Server.Map.Broadcast(10, "The <color=#228B22>Juggernaut</color> take a <b>critical hit <i><color=#ff0000> -" + damage + "</color></i></b> and has been <b>transported</b> across the facility!", false);
+			plugin.Server.Map.Broadcast(10, "The <color=#228B22>Juggernaut</color> take a <b>critical hit <i><color=#ff0000> -" + damage + "</color></i></b> and has been <b>transported</b> across the facility!", false);
 			plugin.Debug("Juggernaut Disarmed & Teleported");
 		}
 
@@ -115,7 +115,7 @@ namespace JuggernautGamemode
 
 			player.Teleport(position);
 
-			plugin.pluginManager.Server.Map.Broadcast(10, "" + activator.Name + " has sacrifieced themselves and made the <color=#228B22>Juggernaut</color> take a <b>critical hit <i><color=#ff0000> -" + damage + "</color></i></b> and has been <b>transported</b> across the facility!", false);
+			plugin.Server.Map.Broadcast(10, "" + activator.Name + " has sacrifieced themselves and made the <color=#228B22>Juggernaut</color> take a <b>critical hit <i><color=#ff0000> -" + damage + "</color></i></b> and has been <b>transported</b> across the facility!", false);
 			plugin.Debug("Juggernaut Disarmed & Teleported");
 		}
 

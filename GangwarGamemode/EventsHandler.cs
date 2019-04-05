@@ -18,7 +18,7 @@ namespace Gangwar
 		{
 			if (plugin.Enabled && !plugin.RoundStarted)
 			{
-				Server server = plugin.pluginManager.Server;
+				Server server = plugin.Server;
 				server.Map.ClearBroadcasts();
 				server.Map.Broadcast(25, "<color=00FFFF> Gangwar Gamemode</color> is starting..", false);
 			}
@@ -35,7 +35,7 @@ namespace Gangwar
 			{
 				plugin.RoundStarted = true;
 				plugin.Server.Map.StartWarhead();
-				plugin.pluginManager.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.ClearBroadcasts();
 				plugin.Info("Gangwar Gamemode started!");
 				List<Player> players = ev.Server.GetPlayers();
 				int num = players.Count / 2;

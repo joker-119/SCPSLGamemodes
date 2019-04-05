@@ -36,15 +36,15 @@ namespace MassacreGamemode
 
 			if (!plugin.RoundStarted)
 			{
-				plugin.pluginManager.Server.Map.ClearBroadcasts();
-				plugin.pluginManager.Server.Map.Broadcast(25, "<color=#50c878>Massacre of the D-Bois Gamemode</color> is starting..", false);
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(25, "<color=#50c878>Massacre of the D-Bois Gamemode</color> is starting..", false);
 			}
 		}
 
 		public void DisableGamemode()
 		{
 			plugin.Enabled = false;
-			plugin.pluginManager.Server.Map.ClearBroadcasts();
+			plugin.Server.Map.ClearBroadcasts();
 		}
 
 		public Vector SpawnLoc()

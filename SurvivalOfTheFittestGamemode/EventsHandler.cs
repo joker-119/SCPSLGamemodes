@@ -21,7 +21,7 @@ namespace SurvivalGamemode
 			{
 				if (!plugin.RoundStarted)
 				{
-					Server server = plugin.pluginManager.Server;
+					Server server = plugin.Server;
 					server.Map.ClearBroadcasts();
 					server.Map.Broadcast(25, "<color=#50c878>Survival Gamemode</color> is starting...", false);
 				}
@@ -44,7 +44,7 @@ namespace SurvivalGamemode
 
 				plugin.RoundStarted = true;
 
-				plugin.pluginManager.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.ClearBroadcasts();
 				plugin.Info("Survival of the Fittest Gamemode Started!");
 
 				string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173", "HCZ_ARMORY", "NUKE_ARMORY", "049_ARMORY" };

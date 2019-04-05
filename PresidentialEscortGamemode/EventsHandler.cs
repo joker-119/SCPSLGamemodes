@@ -27,7 +27,7 @@ namespace PresidentialEscortGamemode
 			{
 				if (!plugin.RoundStarted)
 				{
-					Server server = plugin.pluginManager.Server;
+					Server server = plugin.Server;
 					server.Map.ClearBroadcasts();
 					server.Map.Broadcast(25, "<color=#f8ea56>Presidential Escort</color> gamemode is starting...", false);
 				}
@@ -41,7 +41,7 @@ namespace PresidentialEscortGamemode
 				plugin.RoundStarted = true;
 				List<Player> players = ev.Server.GetPlayers();
 
-				plugin.pluginManager.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.ClearBroadcasts();
 				plugin.Info("Presidential Escort Gamemode Started!");
 
 				// chooses and spawns VIP scientist

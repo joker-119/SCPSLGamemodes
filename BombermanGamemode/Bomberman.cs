@@ -16,7 +16,7 @@ namespace Bomber
 		id = "bomberman.Gamemode",
 		version = "1.7.0",
 		SmodMajor = 3,
-		SmodMinor = 2,
+		SmodMinor = 4,
 		SmodRevision = 0
 	)]
 
@@ -52,12 +52,12 @@ namespace Bomber
 		}
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("bomb_class", "", SettingType.STRING, true, "The class everyone spawns as. If empty, normal game round."));
-			this.AddConfig(new ConfigSetting("bomb_min", 15, SettingType.NUMERIC, true, "The minimum time before the first drop."));
-			this.AddConfig(new ConfigSetting("bomb_max", 30, SettingType.NUMERIC, true, "The maximum time before the first drop."));
-			this.AddConfig(new ConfigSetting("bomb_medkits", true, SettingType.BOOL, true, "If players should spawn with a medkit."));
-			this.AddConfig(new ConfigSetting("bomb_grenade_multi", 0.5f, SettingType.FLOAT, true, "The number to multiply grenade damage bu."));
-			this.AddConfig(new ConfigSetting("bomb_gamemode_ranks", new string[] { }, SettingType.LIST, true, "The ranks able to use commands."));
+			this.AddConfig(new ConfigSetting("bomb_class", "", true, "The class everyone spawns as. If empty, normal game round."));
+			this.AddConfig(new ConfigSetting("bomb_min", 15, true, "The minimum time before the first drop."));
+			this.AddConfig(new ConfigSetting("bomb_max", 30, true, "The maximum time before the first drop."));
+			this.AddConfig(new ConfigSetting("bomb_medkits", true, true, "If players should spawn with a medkit."));
+			this.AddConfig(new ConfigSetting("bomb_grenade_multi", 0.5f, true, "The number to multiply grenade damage bu."));
+			this.AddConfig(new ConfigSetting("bomb_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
 
 			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 

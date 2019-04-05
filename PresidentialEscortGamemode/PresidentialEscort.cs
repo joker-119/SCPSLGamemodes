@@ -45,9 +45,9 @@ namespace PresidentialEscortGamemode
 
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("vip_vip_health", 2500, SettingType.NUMERIC, true, "The amount of health VIP's start with."));
-			this.AddConfig(new ConfigSetting("vip_guard_health", 200, SettingType.NUMERIC, true, "The amount of health guards have."));
-			this.AddConfig(new ConfigSetting("vip_gamemode_ranks", new string[] { }, SettingType.LIST, true, "The ranks able to use gamemode commands."));
+			this.AddConfig(new ConfigSetting("vip_vip_health", 2500, true, "The amount of health VIP's start with."));
+			this.AddConfig(new ConfigSetting("vip_guard_health", 200, true, "The amount of health guards have."));
+			this.AddConfig(new ConfigSetting("vip_gamemode_ranks", new string[] { }, true, "The ranks able to use gamemode commands."));
 
 			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 

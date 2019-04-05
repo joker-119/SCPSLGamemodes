@@ -15,7 +15,7 @@ namespace Gangwar
 		id = "gangwar.Gamemode",
 		version = "1.7.0",
 		SmodMajor = 3,
-		SmodMinor = 3,
+		SmodMinor = 4,
 		SmodRevision = 0
 	)]
 
@@ -47,9 +47,9 @@ namespace Gangwar
 
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("gangwar_ci_health", 120, SettingType.NUMERIC, true, "The amount of health CI have."));
-			this.AddConfig(new ConfigSetting("gangwar_ntf_health", 150, SettingType.NUMERIC, true, "The amount of health NTF have."));
-			this.AddConfig(new ConfigSetting("gang_gamemode_ranks", new string[] { }, SettingType.LIST, true, "The ranks able to use commands."));
+			this.AddConfig(new ConfigSetting("gangwar_ci_health", 120, true, "The amount of health CI have."));
+			this.AddConfig(new ConfigSetting("gangwar_ntf_health", 150, true, "The amount of health NTF have."));
+			this.AddConfig(new ConfigSetting("gang_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
 
 			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 			this.AddCommands(new string[] { "gangwar", "gang", "gw" }, new GangwarCommand(this));

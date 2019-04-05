@@ -17,7 +17,7 @@ namespace SurvivalGamemode
 		id = "survival.Gamemode",
 		version = "1.7.0",
 		SmodMajor = 3,
-		SmodMinor = 3,
+		SmodMinor = 4,
 		SmodRevision = 0
 	)]
 	public class Survival : Plugin
@@ -52,10 +52,10 @@ namespace SurvivalGamemode
 
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("survival_peanut_delay", 120f, SettingType.FLOAT, true, "The amount of time to wait before unleading peanuts."));
-			this.AddConfig(new ConfigSetting("survival_peanut_health", 173, SettingType.NUMERIC, true, "The amount of health peanuts should have (lower values move faster"));
-			this.AddConfig(new ConfigSetting("survival_zone_type", "hcz", false, SettingType.STRING, true, "The zone the event should take place in."));
-			this.AddConfig(new ConfigSetting("surv_gamemode_ranks", new string[] { }, SettingType.LIST, true, "The ranks that can use gamemode commands."));
+			this.AddConfig(new ConfigSetting("survival_peanut_delay", 120f, true, "The amount of time to wait before unleading peanuts."));
+			this.AddConfig(new ConfigSetting("survival_peanut_health", 173, true, "The amount of health peanuts should have (lower values move faster"));
+			this.AddConfig(new ConfigSetting("survival_zone_type", "hcz", false, true, "The zone the event should take place in."));
+			this.AddConfig(new ConfigSetting("surv_gamemode_ranks", new string[] { }, true, "The ranks that can use gamemode commands."));
 
 			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
 

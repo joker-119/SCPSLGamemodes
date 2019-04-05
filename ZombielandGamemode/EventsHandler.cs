@@ -22,7 +22,7 @@ namespace ZombielandGamemode
 			{
 				if (!plugin.RoundStarted)
 				{
-					Server server = plugin.pluginManager.Server;
+					Server server = plugin.Server;
 					server.Map.ClearBroadcasts();
 					server.Map.Broadcast(25, "<color=#50c878>Zombieland Gamemode</color> is starting...", false);
 				}
@@ -42,7 +42,7 @@ namespace ZombielandGamemode
 			{
 				plugin.RoundStarted = true;
 
-				plugin.pluginManager.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.ClearBroadcasts();
 				plugin.Info("Zombieland Gamemode Started!");
 
 				foreach (Player player in ev.Server.GetPlayers())
