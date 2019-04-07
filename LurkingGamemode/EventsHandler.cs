@@ -8,7 +8,8 @@ using scp4aiur;
 
 namespace LurkingGamemode
 {
-	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSpawn, IEventHandlerCheckEscape, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers
+	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSpawn, IEventHandlerCheckEscape, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin,
+		IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerRoundRestart
 	{
 		public readonly Lurking plugin;
 
@@ -107,6 +108,14 @@ namespace LurkingGamemode
 			if (!plugin.Enabled && !plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
+			plugin.Functions.EndGamemodeRound();
+		}
+
+		public void OnRoundRestart(RoundRestartEvent ev)
+		{
+			if (!plugin.RoundStarted) return;
+
+			plugin.Info("Round Restarted.");
 			plugin.Functions.EndGamemodeRound();
 		}
 

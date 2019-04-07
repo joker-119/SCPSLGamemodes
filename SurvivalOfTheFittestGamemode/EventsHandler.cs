@@ -9,7 +9,8 @@ using scp4aiur;
 
 namespace SurvivalGamemode
 {
-	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerPlayerTriggerTesla, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie
+	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerPlayerTriggerTesla, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerRoundRestart,
+		 IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie
 	{
 		private readonly Survival plugin;
 
@@ -100,6 +101,14 @@ namespace SurvivalGamemode
 			if (!plugin.Enabled && !plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
+			plugin.Functions.EndGamemodeRound();
+		}
+
+		public void OnRoundRestart(RoundRestartEvent ev)
+		{
+			if (!plugin.RoundStarted) return;
+
+			plugin.Info("Round Restarted.");
 			plugin.Functions.EndGamemodeRound();
 		}
 

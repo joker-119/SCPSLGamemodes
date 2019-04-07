@@ -8,7 +8,8 @@ using scp4aiur;
 
 namespace Gangwar
 {
-	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerPlayerJoin, IEventHandlerWaitingForPlayers
+	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerPlayerJoin, IEventHandlerWaitingForPlayers,
+		IEventHandlerRoundRestart
 	{
 		private readonly Gangwar plugin;
 
@@ -76,6 +77,14 @@ namespace Gangwar
 			if (!plugin.Enabled && !plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
+			plugin.Functions.EndGamemodeRound();
+		}
+
+		public void OnRoundRestart(RoundRestartEvent ev)
+		{
+			if (!plugin.RoundStarted) return;
+
+			plugin.Info("Round Restarted.");
 			plugin.Functions.EndGamemodeRound();
 		}
 

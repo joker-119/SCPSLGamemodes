@@ -12,6 +12,6 @@ Gamemodes for SCP:SL. Requires Smod
  - Murder Mystery [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/MysteryGamemode#mystery)]
  - Bomberman [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/BombermanGamemode#bomberman)]
  - GunGame [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/GunGame#gungame)]
- - Presidential Escort [[Info] (https://github.com/Mozeman/SCPSLGamemodes/tree/master/PresidentialEscortGamemode#presidentialescortgamemode)]
+ - Presidential Escort [[Info](https://github.com/Mozeman/SCPSLGamemodes/tree/master/PresidentialEscortGamemode#presidentialescortgamemode)]
 
  

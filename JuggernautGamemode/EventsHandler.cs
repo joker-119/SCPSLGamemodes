@@ -10,8 +10,9 @@ using scp4aiur;
 
 namespace JuggernautGamemode
 {
-	internal class EventsHandler : IEventHandlerReload, IEventHandlerWaitingForPlayers, IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerSetRoleMaxHP, IEventHandlerSetRole,
-		IEventHandlerLure, IEventHandlerContain106, IEventHandlerThrowGrenade
+	internal class EventsHandler : IEventHandlerReload, IEventHandlerWaitingForPlayers, IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart,
+		IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerSetRoleMaxHP, IEventHandlerSetRole, IEventHandlerLure, IEventHandlerContain106,
+		IEventHandlerThrowGrenade, IEventHandlerRoundRestart
 	{
 		private readonly Juggernaut plugin;
 
@@ -47,20 +48,19 @@ namespace JuggernautGamemode
 
 		public void OnReload(PlayerReloadEvent ev)
 		{
-			if (plugin.Enabled || plugin.RoundStarted && plugin.Jugg != null)
+			if (!plugin.RoundStarted) return;
+
+			if (ev.Player.Name == plugin.Jugg.Name || ev.Player.SteamId == plugin.Jugg.SteamId)
 			{
-				if (ev.Player.Name == plugin.Jugg.Name || ev.Player.SteamId == plugin.Jugg.SteamId)
-				{
-					ev.Player.SetAmmo(AmmoType.DROPPED_7, 2000);
-					ev.Player.SetAmmo(AmmoType.DROPPED_5, 2000);
-					ev.Player.SetAmmo(AmmoType.DROPPED_9, 2000);
-				}
+				ev.Player.SetAmmo(AmmoType.DROPPED_7, 2000);
+				ev.Player.SetAmmo(AmmoType.DROPPED_5, 2000);
+				ev.Player.SetAmmo(AmmoType.DROPPED_9, 2000);
 			}
 		}
 
 		public void OnThrowGrenade(PlayerThrowGrenadeEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			if (ev.Player.SteamId == plugin.Jugg.SteamId && plugin.JuggInfiniteNades)
 			{
@@ -90,11 +90,6 @@ namespace JuggernautGamemode
 				plugin.Info("Juggernaut Gamemode Started!");
 
 				List<Player> players = ev.Server.GetPlayers();
-
-				if (plugin.JuggKiller != null && plugin.JuggKiller is Player)
-				{
-					plugin.SelectedJugg = plugin.JuggKiller;
-				}
 
 				if (plugin.SelectedJugg == null)
 				{
@@ -156,15 +151,23 @@ namespace JuggernautGamemode
 
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
 			plugin.Functions.EndGamemodeRound();
 		}
 
+		public void OnRoundRestart(RoundRestartEvent ev)
+		{
+			if (!plugin.RoundStarted) return;
+
+			plugin.Info("Round Restarted.");
+			plugin.Functions.EndGamemodeRound();
+		}
+
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			bool juggernautAlive = false;
 			bool mtfAllive = false;
@@ -209,8 +212,6 @@ namespace JuggernautGamemode
 				plugin.Server.Map.Broadcast(20, "<color=#228B22>Juggernaut " + plugin.Jugg.Name + "</color> has been killed by " + ev.Killer.Name + "!", false);
 
 				plugin.Functions.ResetJuggernaut(ev.Player);
-
-				plugin.JuggKiller = ev.Killer;
 			}
 			else
 			{
@@ -298,14 +299,24 @@ namespace JuggernautGamemode
 
 		public void OnTeamRespawn(TeamRespawnEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
+
 			plugin.Info("Jugg Respawn.");
+			List<Player> respawn = new List<Player>();
+
+			foreach (Player player in ev.PlayerList)
+			{
+				respawn.Add(player);
+			}
+
+			ev.PlayerList = new List<Player>();
+			ev.PlayerList = respawn;
 
 			ev.SpawnChaos = false;
 
 			foreach (Player player in ev.PlayerList)
 			{
-				plugin.Functions.SpawnAsNTFCommander(player);
+				Timing.Run(plugin.Functions.SpawnAsNTFCommander(player));
 			}
 
 			ev.PlayerList.Clear();

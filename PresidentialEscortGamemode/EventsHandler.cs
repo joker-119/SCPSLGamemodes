@@ -1,3 +1,4 @@
+using System.Data;
 using System.Runtime.CompilerServices;
 using Smod2.API;
 using Smod2.EventHandlers;
@@ -10,7 +11,8 @@ using System.Linq;
 
 namespace PresidentialEscortGamemode
 {
-	internal class EventsHandler : IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerCheckEscape, IEventHandlerWaitingForPlayers
+	internal class EventsHandler : IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerRoundRestart,
+		 IEventHandlerCheckEscape, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie
 	{
 		private readonly PresidentialEscort plugin;
 
@@ -68,6 +70,14 @@ namespace PresidentialEscortGamemode
 			}
 		}
 
+		public void OnPlayerDie(PlayerDeathEvent ev)
+		{
+			if (!plugin.RoundStarted) return;
+
+			if (ev.Player.SteamId == plugin.VIP.SteamId)
+				plugin.VIP = null;
+		}
+
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
 			if (!plugin.Enabled && !plugin.RoundStarted) return;
@@ -75,6 +85,15 @@ namespace PresidentialEscortGamemode
 			plugin.Info("Round Ended!");
 			plugin.Functions.EndGamemodeRound();
 		}
+
+		public void OnRoundRestart(RoundRestartEvent ev)
+		{
+			if (!plugin.RoundStarted) return;
+
+			plugin.Info("Round Restarted.");
+			plugin.Functions.EndGamemodeRound();
+		}
+
 		public void OnCheckEscape(PlayerCheckEscapeEvent ev)
 		{
 			if (!plugin.Enabled && !plugin.RoundStarted) return;
@@ -131,6 +150,7 @@ namespace PresidentialEscortGamemode
 		public void OnTeamRespawn(TeamRespawnEvent ev)
 		{
 			if (!plugin.Enabled && !plugin.RoundStarted) return;
+
 			plugin.Info("President Respawn.");
 
 			ev.SpawnChaos = false;

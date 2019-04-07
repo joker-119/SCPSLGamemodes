@@ -10,7 +10,7 @@ using scp4aiur;
 
 namespace MuskateersGamemode
 {
-	internal class EventsHandler : IEventHandlerWaitingForPlayers, IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerTeamRespawn, IEventHandlerPlayerJoin, IEventHandlerPlayerDie
+	internal class EventsHandler : IEventHandlerWaitingForPlayers, IEventHandlerRoundStart, IEventHandlerRoundRestart, IEventHandlerRoundEnd, IEventHandlerTeamRespawn, IEventHandlerPlayerJoin, IEventHandlerPlayerDie
 	{
 		private readonly Muskateers plugin;
 		public EventsHandler(Muskateers plugin) => this.plugin = plugin;
@@ -32,6 +32,7 @@ namespace MuskateersGamemode
 		{
 			plugin.ReloadConfig();
 		}
+
 		public void OnRoundStart(RoundStartEvent ev)
 		{
 			if (plugin.Enabled)
@@ -72,6 +73,7 @@ namespace MuskateersGamemode
 			ev.SpawnChaos = true;
 			ev.PlayerList = new List<Player>();
 		}
+
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
 			if (!plugin.Enabled && !plugin.RoundStarted) return;
@@ -79,6 +81,15 @@ namespace MuskateersGamemode
 			plugin.Info("Round Ended!");
 			plugin.Functions.EndGamemodeRound();
 		}
+
+		public void OnRoundRestart(RoundRestartEvent ev)
+		{
+			if (!plugin.RoundStarted) return;
+
+			plugin.Info("Round Restarted.");
+			plugin.Functions.EndGamemodeRound();
+		}
+
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
 			if (!plugin.Enabled && !plugin.RoundStarted) return;
@@ -116,6 +127,7 @@ namespace MuskateersGamemode
 				}
 			}
 		}
+
 		public void OnPlayerDie(PlayerDeathEvent ev)
 		{
 			if (!plugin.Enabled && !plugin.RoundStarted) return;

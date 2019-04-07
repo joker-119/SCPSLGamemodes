@@ -11,7 +11,8 @@ using System.Linq;
 
 namespace Mystery
 {
-	public class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie
+	public class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers,
+		IEventHandlerPlayerDie, IEventHandlerRoundRestart
 	{
 		private readonly Mystery plugin;
 		public EventsHandler(Mystery plugin) => this.plugin = plugin;
@@ -20,6 +21,7 @@ namespace Mystery
 		{
 			plugin.ReloadConfig();
 		}
+
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
 			if (plugin.Enabled)
@@ -34,6 +36,7 @@ namespace Mystery
 					(ev.Player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
 			}
 		}
+
 		public void OnRoundStart(RoundStartEvent ev)
 		{
 			if (plugin.Enabled)
@@ -73,20 +76,30 @@ namespace Mystery
 				}
 			}
 		}
+
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
 			if (plugin.Enabled || plugin.RoundStarted)
 			{
 				plugin.Info("Round Ended!");
-				plugin.Functions.EnableGamemode();
+				plugin.Functions.EndGamemoderound();
 			}
 		}
+
+		public void OnRoundRestart(RoundRestartEvent ev)
+		{
+			if (!plugin.RoundStarted) return;
+
+			plugin.Info("Round Restarted.");
+			plugin.Functions.EndGamemoderound();
+		}
+
 		public void OnPlayerDie(PlayerDeathEvent ev)
 		{
 			if (!plugin.Enabled && !plugin.RoundStarted) return;
 			if (ev.Player.TeamRole.Role == Role.CLASSD)
 			{
-				if (plugin.murd[ev.Player.SteamId])
+				if (plugin.murd.ContainsKey(ev.Player.SteamId))
 				{
 					plugin.Server.Map.ClearBroadcasts();
 					plugin.Server.Map.Broadcast(15, "A murderer, " + ev.Player.Name + " has been eliminated by " + ev.Killer.Name + "!", false);
@@ -96,7 +109,7 @@ namespace Mystery
 				{
 					plugin.Server.Map.ClearBroadcasts();
 					plugin.Server.Map.Broadcast(25, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Civilians alive.", false);
-					if (!plugin.murd[ev.Killer.SteamId] && (ev.Killer is Player))
+					if (!plugin.murd.ContainsKey(ev.Killer.SteamId) && (ev.Killer is Player))
 					{
 						ev.Killer.ChangeRole(Role.SPECTATOR);
 						ev.Killer.PersonalClearBroadcasts();
@@ -108,7 +121,7 @@ namespace Mystery
 			{
 				plugin.Server.Map.ClearBroadcasts();
 				plugin.Server.Map.Broadcast(15, "A detective, " + ev.Player.Name + " has been killed!", false);
-				if (!plugin.murd[ev.Killer.SteamId] && (ev.Killer is Player))
+				if (!plugin.murd.ContainsKey(ev.Killer.SteamId) && (ev.Killer is Player))
 				{
 					ev.Killer.Kill();
 					ev.Player.PersonalClearBroadcasts();
@@ -116,6 +129,7 @@ namespace Mystery
 				}
 			}
 		}
+
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
 			if (!plugin.Enabled && !plugin.RoundStarted) return;
@@ -149,30 +163,32 @@ namespace Mystery
 				plugin.Info("All the Civilians are dead!");
 			}
 		}
+
 		public void OnTeamRespawn(TeamRespawnEvent ev)
 		{
-			if (plugin.Enabled || plugin.RoundStarted)
+			if (!plugin.RoundStarted) return;
+
+			plugin.Info("Myst Respawn.");
+			ev.SpawnChaos = true;
+
+
+			foreach (Player player in ev.PlayerList)
 			{
-				plugin.Info("Myst Respawn.");
-				ev.SpawnChaos = true;
-				foreach (Player player in ev.PlayerList)
-				{
-					int random = plugin.gen.Next(ev.PlayerList.Count);
-					Player ranmurd = ev.PlayerList[random];
-					ev.PlayerList.Remove(ranmurd);
-					int Random = plugin.gen.Next(ev.PlayerList.Count);
-					Player randet = ev.PlayerList[random];
-					ev.PlayerList.Remove(randet);
+				int random = plugin.gen.Next(ev.PlayerList.Count);
+				Player ranmurd = ev.PlayerList[random];
+				ev.PlayerList.Remove(ranmurd);
+				int Random = plugin.gen.Next(ev.PlayerList.Count);
+				Player randet = ev.PlayerList[random];
+				ev.PlayerList.Remove(randet);
 
-					Timing.Run(plugin.Functions.SpawnMurd(ranmurd));
-					Timing.Run(plugin.Functions.SpawnDet(randet));
-				}
-				foreach (Player player in ev.PlayerList)
-				{
-					Timing.Run(plugin.Functions.SpawnCiv(player));
-				}
-
+				Timing.Run(plugin.Functions.SpawnMurd(ranmurd));
+				Timing.Run(plugin.Functions.SpawnDet(randet));
 			}
+			foreach (Player player in ev.PlayerList)
+			{
+				Timing.Run(plugin.Functions.SpawnCiv(player));
+			}
+
 		}
 	}
 }

@@ -9,8 +9,8 @@ using UnityEngine;
 
 namespace ZombielandGamemode
 {
-	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerDoorAccess, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerHurt, IEventHandlerPlayerJoin, IEventHandlerRoundEnd,
-		IEventHandlerWaitingForPlayers
+	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerDoorAccess, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerHurt, IEventHandlerPlayerJoin,
+		IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerRoundRestart
 	{
 		private readonly Zombieland plugin;
 
@@ -35,6 +35,7 @@ namespace ZombielandGamemode
 		{
 			plugin.ReloadConfig();
 		}
+
 		public void OnRoundStart(RoundStartEvent ev)
 		{
 
@@ -75,6 +76,14 @@ namespace ZombielandGamemode
 			if (!plugin.Enabled && !plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
+			plugin.Functions.EndGamemodeRound();
+		}
+
+		public void OnRoundRestart(RoundRestartEvent ev)
+		{
+			if (!plugin.RoundStarted) return;
+
+			plugin.Info("Round Restarted.");
 			plugin.Functions.EndGamemodeRound();
 		}
 

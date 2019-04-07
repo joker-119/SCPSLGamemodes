@@ -8,201 +8,217 @@ using scp4aiur;
 
 namespace Bomber
 {
-    internal class EventsHandler : IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie, IEventHandlerSetRole, IEventHandlerPlayerHurt, IEventHandlerCheckRoundEnd, IEventHandlerPlayerJoin
-    {
-        private readonly Bomber plugin;
-        public EventsHandler(Bomber plugin) => this.plugin = plugin;
+	internal class EventsHandler : IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie, IEventHandlerSetRole, IEventHandlerPlayerHurt,
+		IEventHandlerCheckRoundEnd, IEventHandlerPlayerJoin, IEventHandlerRoundRestart
+	{
+		private readonly Bomber plugin;
+		public EventsHandler(Bomber plugin) => this.plugin = plugin;
 
-        public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
-        {
-            plugin.ReloadConfig();
-        }
-        public void OnRoundStart(RoundStartEvent ev)
-        {
-            if (!plugin.Enabled) return;
+		public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
+		{
+			plugin.ReloadConfig();
+		}
 
-            plugin.RoundStarted = true;
-            plugin.Server.Map.ClearBroadcasts();
-            plugin.Info("Bomberman Gamemode started!");
+		public void OnRoundStart(RoundStartEvent ev)
+		{
+			if (!plugin.Enabled) return;
 
-            List<Player> players = plugin.Server.GetPlayers();
+			plugin.RoundStarted = true;
+			plugin.Server.Map.ClearBroadcasts();
+			plugin.Info("Bomberman Gamemode started!");
 
-            if (!(plugin.SpawnClass == ""))
-            {
-                switch (plugin.SpawnClass.ToLower().Trim())
-                {
-                    case "classd":
-                        plugin.Info("Class-D spawn selected.");
-                        foreach (Player player in players)
-                        {
-                            player.ChangeRole(Role.CLASSD, false, true, false, false);
-                        }
-                        break;
-                    case "sci":
-                    case "nerd":
-                    case "scientist":
-                        plugin.Info("Scientists spawn selected.");
-                        foreach (Player player in players)
-                        {
-                            player.ChangeRole(Role.SCIENTIST, false, true, false, false);
-                        }
-                        break;
-                    case "guard":
-                        plugin.Info("Guard spawn selected.");
-                        foreach (Player player in players)
-                        {
-                            player.ChangeRole(Role.FACILITY_GUARD, false, true, false, false);
-                        }
-                        break;
-                    case "ntf":
-                        plugin.Info("NTF spawn selected.");
-                        foreach (Player player in players)
-                        {
-                            player.ChangeRole(Role.NTF_COMMANDER, false, true, false, false);
-                        }
-                        break;
-                    case "chaos":
-                        plugin.Info("Chaos spawn selected.");
-                        foreach (Player player in players)
-                        {
-                            player.ChangeRole(Role.CHAOS_INSURGENCY, false, true, false, false);
-                        }
-                        break;
-                    case "war":
-                        plugin.Info("Warmode initiated.");
-                        plugin.Warmode = true;
+			List<Player> players = plugin.Server.GetPlayers();
 
-                        List<string> nerds = new List<string>();
-                        int num = (players.Count / 2);
+			if (!(plugin.SpawnClass == ""))
+			{
+				switch (plugin.SpawnClass.ToLower().Trim())
+				{
+					case "classd":
+						plugin.Info("Class-D spawn selected.");
+						foreach (Player player in players)
+						{
+							player.ChangeRole(Role.CLASSD, false, true, false, false);
+						}
+						break;
+					case "sci":
+					case "nerd":
+					case "scientist":
+						plugin.Info("Scientists spawn selected.");
+						foreach (Player player in players)
+						{
+							player.ChangeRole(Role.SCIENTIST, false, true, false, false);
+						}
+						break;
+					case "guard":
+						plugin.Info("Guard spawn selected.");
+						foreach (Player player in players)
+						{
+							player.ChangeRole(Role.FACILITY_GUARD, false, true, false, false);
+						}
+						break;
+					case "ntf":
+						plugin.Info("NTF spawn selected.");
+						foreach (Player player in players)
+						{
+							player.ChangeRole(Role.NTF_COMMANDER, false, true, false, false);
+						}
+						break;
+					case "chaos":
+						plugin.Info("Chaos spawn selected.");
+						foreach (Player player in players)
+						{
+							player.ChangeRole(Role.CHAOS_INSURGENCY, false, true, false, false);
+						}
+						break;
+					case "war":
+						plugin.Info("Warmode initiated.");
+						plugin.Warmode = true;
 
-                        if (num == 0)
-                            plugin.Error("Ya dun goofed, kid!");
+						List<string> nerds = new List<string>();
+						int num = (players.Count / 2);
 
-                        for (int i = 0; i < num; i++)
-                        {
-                            int ran = plugin.Gen.Next(players.Count);
-                            nerds.Add(players[ran].SteamId);
-                            players.Remove(players[ran]);
-                        }
+						if (num == 0)
+							plugin.Error("Ya dun goofed, kid!");
 
-                        foreach (Player player in players)
-                        {
-                            if (nerds.Contains(player.SteamId))
-                                player.ChangeRole(Role.SCIENTIST, false, true, false, false);
-                            else
-                                player.ChangeRole(Role.CLASSD, false, true, false, false);
-                        }
-                        break;
-                    case "":
-                    default:
-                        plugin.Info("Normal round selected.");
-                        break;
-                }
-            }
-            Timing.Run(plugin.Functions.SpawnGrenades(30));
-        }
-        public void OnSetRole(PlayerSetRoleEvent ev)
-        {
-            if (!plugin.Enabled || !plugin.RoundStarted) return;
+						for (int i = 0; i < num; i++)
+						{
+							int ran = plugin.Gen.Next(players.Count);
+							nerds.Add(players[ran].SteamId);
+							players.Remove(players[ran]);
+						}
 
-            if (plugin.Warmode)
-            {
-                plugin.Server.Map.ClearBroadcasts();
-                plugin.Server.Map.Broadcast(15, "Half of you are Class-D, the other half are nerds. Yor goal is to kill the opposing team with your grenades!", false);
-            }
-            else
-            {
-                plugin.Server.Map.ClearBroadcasts();
-                plugin.Server.Map.Broadcast(15, "Grenades will start spawning under you shortly. Survive the rain of fire!", false);
-            }
-        }
-        public void OnRoundEnd(RoundEndEvent ev)
-        {
-            if (!plugin.Enabled && !plugin.RoundStarted) return;
+						foreach (Player player in players)
+						{
+							if (nerds.Contains(player.SteamId))
+								player.ChangeRole(Role.SCIENTIST, false, true, false, false);
+							else
+								player.ChangeRole(Role.CLASSD, false, true, false, false);
+						}
+						break;
+					case "":
+					default:
+						plugin.Info("Normal round selected.");
+						break;
+				}
+			}
+			Timing.Run(plugin.Functions.SpawnGrenades(30));
+		}
 
-            plugin.Info("Round Ended.");
-            plugin.Functions.EndGamemodeRound();
-        }
-        public void OnPlayerJoin(PlayerJoinEvent ev)
-        {
-            if (!plugin.Enabled || plugin.RoundStarted) return;
+		public void OnSetRole(PlayerSetRoleEvent ev)
+		{
+			if (!plugin.Enabled || !plugin.RoundStarted) return;
 
-            plugin.Server.Map.ClearBroadcasts();
-            plugin.Server.Map.Broadcast(25, "<color=#c50000>Bomberman Gamemode</color> is starting..", false);
-        }
-        public void OnPlayerHurt(PlayerHurtEvent ev)
-        {
-            if (!plugin.Enabled || !plugin.RoundStarted) return;
+			if (plugin.Warmode)
+			{
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(15, "Half of you are Class-D, the other half are nerds. Yor goal is to kill the opposing team with your grenades!", false);
+			}
+			else
+			{
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(15, "Grenades will start spawning under you shortly. Survive the rain of fire!", false);
+			}
+		}
 
-            if (ev.Player.SteamId == ev.Attacker.SteamId && plugin.Warmode)
-                ev.Damage = 0;
+		public void OnRoundEnd(RoundEndEvent ev)
+		{
+			if (!plugin.Enabled && !plugin.RoundStarted) return;
 
-            ev.Damage = (ev.Damage * plugin.GrenadeMulti);
-        }
-        public void OnPlayerDie(PlayerDeathEvent ev)
-        {
-            if (!plugin.Enabled && !plugin.RoundStarted) return;
-            if (ev.Player.Name == "Sever" || ev.Player.Name == "") return;
+			plugin.Info("Round Ended.");
+			plugin.Functions.EndGamemodeRound();
+		}
 
-            List<Player> players = plugin.Server.GetPlayers();
+		public void OnRoundRestart(RoundRestartEvent ev)
+		{
+			if (!plugin.RoundStarted) return;
 
-            plugin.Server.Map.ClearBroadcasts();
-            plugin.Server.Map.Broadcast(10, "There are " + (players.Count - 1) + " players alive!", false);
-        }
-        public void OnCheckRoundEnd(CheckRoundEndEvent ev)
-        {
-            if (!plugin.Enabled && !plugin.RoundStarted) return;
+			plugin.Info("Round Restarted.");
+			plugin.Functions.EndGamemodeRound();
+		}
 
-            bool classdAlive = false;
-            bool sciAlive = false;
-            int alive_count = 0;
+		public void OnPlayerJoin(PlayerJoinEvent ev)
+		{
+			if (!plugin.Enabled || plugin.RoundStarted) return;
 
-            foreach (Player player in ev.Server.GetPlayers())
-            {
-                if (player.TeamRole.Team == Team.CLASSD)
-                {
-                    classdAlive = true;
-                    continue;
-                }
-                else if (player.TeamRole.Team == Team.SCIENTIST)
-                {
-                    sciAlive = true;
-                }
-                if (plugin.Functions.IsAlive(player))
-                {
-                    alive_count++;
-                }
-            }
+			plugin.Server.Map.ClearBroadcasts();
+			plugin.Server.Map.Broadcast(25, "<color=#c50000>Bomberman Gamemode</color> is starting..", false);
+		}
 
-            if (ev.Server.GetPlayers().Count < 1) return;
+		public void OnPlayerHurt(PlayerHurtEvent ev)
+		{
+			if (!plugin.Enabled || !plugin.RoundStarted) return;
 
-            if (plugin.Warmode)
-            {
-                if (classdAlive && sciAlive)
-                    ev.Status = ROUND_END_STATUS.ON_GOING;
-                else if (classdAlive && !sciAlive)
-                {
-                    ev.Status = ROUND_END_STATUS.CI_VICTORY; plugin.Functions.EndGamemodeRound();
-                }
-                else if (!classdAlive && sciAlive)
-                {
-                    ev.Status = ROUND_END_STATUS.MTF_VICTORY; plugin.Functions.EndGamemodeRound();
-                }
-            }
-            else if (alive_count > 1)
-                ev.Status = ROUND_END_STATUS.ON_GOING;
-            else if (alive_count == 1)
-            {
-                ev.Status = ROUND_END_STATUS.NO_VICTORY; plugin.Functions.EndGamemodeRound();
-                foreach (Player player in ev.Server.GetPlayers())
-                {
-                    if (player.TeamRole.Team != Team.SPECTATOR)
-                    {
-                        ev.Server.Map.ClearBroadcasts();
-                        ev.Server.Map.Broadcast(10, player.Name + " Winner, winner, chicken.. Oh you still exploded.", false);
-                    }
-                }
-            }
-        }
-    }
+			if (ev.Player.SteamId == ev.Attacker.SteamId && plugin.Warmode)
+				ev.Damage = 0;
+
+			ev.Damage = (ev.Damage * plugin.GrenadeMulti);
+		}
+
+		public void OnPlayerDie(PlayerDeathEvent ev)
+		{
+			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (ev.Player.Name == "Sever" || ev.Player.Name == "") return;
+
+			List<Player> players = plugin.Server.GetPlayers();
+
+			plugin.Server.Map.ClearBroadcasts();
+			plugin.Server.Map.Broadcast(10, "There are " + (players.Count - 1) + " players alive!", false);
+		}
+
+		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
+		{
+			if (!plugin.Enabled && !plugin.RoundStarted) return;
+
+			bool classdAlive = false;
+			bool sciAlive = false;
+			int alive_count = 0;
+
+			foreach (Player player in ev.Server.GetPlayers())
+			{
+				if (player.TeamRole.Team == Team.CLASSD)
+				{
+					classdAlive = true;
+					continue;
+				}
+				else if (player.TeamRole.Team == Team.SCIENTIST)
+				{
+					sciAlive = true;
+				}
+				if (plugin.Functions.IsAlive(player))
+				{
+					alive_count++;
+				}
+			}
+
+			if (ev.Server.GetPlayers().Count < 1) return;
+
+			if (plugin.Warmode)
+			{
+				if (classdAlive && sciAlive)
+					ev.Status = ROUND_END_STATUS.ON_GOING;
+				else if (classdAlive && !sciAlive)
+				{
+					ev.Status = ROUND_END_STATUS.CI_VICTORY; plugin.Functions.EndGamemodeRound();
+				}
+				else if (!classdAlive && sciAlive)
+				{
+					ev.Status = ROUND_END_STATUS.MTF_VICTORY; plugin.Functions.EndGamemodeRound();
+				}
+			}
+			else if (alive_count > 1)
+				ev.Status = ROUND_END_STATUS.ON_GOING;
+			else if (alive_count == 1)
+			{
+				ev.Status = ROUND_END_STATUS.NO_VICTORY; plugin.Functions.EndGamemodeRound();
+				foreach (Player player in ev.Server.GetPlayers())
+				{
+					if (player.TeamRole.Team != Team.SPECTATOR)
+					{
+						ev.Server.Map.ClearBroadcasts();
+						ev.Server.Map.Broadcast(10, player.Name + " Winner, winner, chicken.. Oh you still exploded.", false);
+					}
+				}
+			}
+		}
+	}
 }

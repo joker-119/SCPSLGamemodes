@@ -43,7 +43,6 @@ namespace JuggernautGamemode
 		public Player Jugg { get; internal set; } = null;
 		public Player Activator { get; internal set; } = null;
 		public Player SelectedJugg { get; internal set; } = null;
-		public Player JuggKiller { get; internal set; } = null;
 
 		public float CriticalDamage { get; private set; }
 

@@ -133,6 +133,7 @@ namespace JuggernautGamemode
 			plugin.Info("Resetting plugin.");
 			plugin.Jugg = null;
 			plugin.JuggernautPrevRank = null;
+			plugin.SelectedJugg = null;
 			plugin.JuggHealth = 0;
 		}
 
@@ -184,7 +185,6 @@ namespace JuggernautGamemode
 
 		public void SpawnAsJuggernaut(Player player)
 		{
-			plugin.Jugg = player;
 
 			//Spawned as Juggernaut in 939s spawn location
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_939_53);

@@ -7,7 +7,8 @@ using scp4aiur;
 
 namespace MassacreGamemode
 {
-	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie
+	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd,
+		IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie, IEventHandlerRoundRestart
 	{
 		private readonly Massacre plugin;
 
@@ -67,6 +68,14 @@ namespace MassacreGamemode
 			if (!plugin.Enabled && !plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
+			plugin.Functions.EndGamemodeRound();
+		}
+
+		public void OnRoundRestart(RoundRestartEvent ev)
+		{
+			if (!plugin.RoundStarted) return;
+
+			plugin.Info("Round Restarted.");
 			plugin.Functions.EndGamemodeRound();
 		}
 
