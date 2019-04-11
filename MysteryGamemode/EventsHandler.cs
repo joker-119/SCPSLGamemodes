@@ -79,11 +79,11 @@ namespace Mystery
 
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
-			if (plugin.Enabled || plugin.RoundStarted)
-			{
-				plugin.Info("Round Ended!");
-				plugin.Functions.EndGamemoderound();
-			}
+			if (!plugin.RoundStarted) return;
+
+			plugin.Info("Round Ended!");
+			plugin.Functions.EndGamemoderound();
+
 		}
 
 		public void OnRoundRestart(RoundRestartEvent ev)
@@ -96,7 +96,8 @@ namespace Mystery
 
 		public void OnPlayerDie(PlayerDeathEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
+
 			if (ev.Player.TeamRole.Role == Role.CLASSD)
 			{
 				if (plugin.murd.ContainsKey(ev.Player.SteamId))
@@ -132,7 +133,8 @@ namespace Mystery
 
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
+
 			bool civAlive = false;
 			bool murdAlive = false;
 

@@ -74,7 +74,7 @@ namespace Gangwar
 
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
 			plugin.Functions.EndGamemodeRound();
@@ -90,7 +90,8 @@ namespace Gangwar
 
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
+
 
 			bool ciAlive = false;
 			bool ntfAlive = false;
@@ -128,17 +129,14 @@ namespace Gangwar
 
 		public void OnTeamRespawn(TeamRespawnEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
+
 			plugin.Info("Gang Respawn.");
 
 			if (plugin.Round.Stats.CiAlive >= plugin.Round.Stats.NTFAlive)
-			{
 				ev.SpawnChaos = false;
-			}
 			else if (plugin.Round.Stats.CiAlive < plugin.Round.Stats.NTFAlive)
-			{
 				ev.SpawnChaos = true;
-			}
 		}
 	}
 }

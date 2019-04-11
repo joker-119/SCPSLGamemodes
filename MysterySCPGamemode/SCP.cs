@@ -15,7 +15,7 @@ namespace SCP
 		name = "Mystery SCP Gamemode",
 		description = "All SCP's are a single SCP type.",
 		id = "scp.Gamemode",
-		version = "1.7.5",
+		version = "1.8.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -38,21 +38,21 @@ namespace SCP
 
 		public override void OnDisable()
 		{
-			this.Info(this.Details.name + " v." + this.Details.version + " has been disabled.");
+			Info(Details.name + " v." + Details.version + " has been disabled.");
 		}
 
 		public override void OnEnable()
 		{
-			this.Info(this.Details.name + " v." + this.Details.version + " has been enabled.");
+			Info(Details.name + " v." + Details.version + " has been Enabled.");
 		}
 
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("scp_gamemode_ranks", new string[] { }, true, "The roles able to use gamemode commands."));
+			AddConfig(new ConfigSetting("scp_gamemode_ranks", new string[] { }, true, "The roles able to use gamemode commands."));
 
-			this.AddEventHandlers(new EventHandler(this), Priority.Normal);
+			AddEventHandlers(new EventHandler(this), Priority.Normal);
 
-			this.AddCommands(new string[] { "mysteryscp", "scp" }, new SCPCommand(this));
+			AddCommands(new string[] { "mysteryscp", "scp" }, new SCPCommand(this));
 
 			Functions = new Methods(this);
 		}

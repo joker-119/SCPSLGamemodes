@@ -14,7 +14,7 @@ namespace Gungame
 		name = "GunGame Gamemode",
 		description = "Kill EVERYONE!",
 		id = "gungame.Gamemode",
-		version = "1.7.0",
+		version = "1.8.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -28,21 +28,6 @@ namespace Gungame
 
 		public string[] ValidRanks { get; private set; }
 
-		public List<RoomType> ValidRooms = new List<RoomType>()
-			{
-				RoomType.CLASS_D_CELLS,
-				RoomType.CAFE,
-				RoomType.AIRLOCK_00,
-				RoomType.AIRLOCK_01,
-				RoomType.INTERCOM,
-				RoomType.PC_LARGE,
-				RoomType.PC_SMALL,
-				RoomType.SCP_049,
-				RoomType.SCP_096,
-				RoomType.SCP_173,
-				RoomType.SCP_372,
-				RoomType.SCP_939
-			 };
 		public List<Room> Rooms = new List<Room>();
 
 		public Player Winner { get; internal set; } = null;
@@ -57,23 +42,23 @@ namespace Gungame
 
 		public override void OnDisable()
 		{
-			this.Info(this.Details.name + " v." + this.Details.version + " has been diisabled.");
+			Info(Details.name + " v." + Details.version + " has been diisabled.");
 		}
 
 		public override void OnEnable()
 		{
-			this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
+			Info(Details.name + " v." + Details.version + " has been Enabled.");
 		}
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("gun_reversed", true, true, "If the traditional gungame mode should be reversed."));
-			this.AddConfig(new ConfigSetting("gun_spawn_zone", "lcz", true, "Where you should spawn."));
-			this.AddConfig(new ConfigSetting("gun_health", 100, true, "How much healt you will have."));
-			this.AddConfig(new ConfigSetting("gun_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
+			AddConfig(new ConfigSetting("gun_reversed", true, true, "If the traditional gungame mode should be reversed."));
+			AddConfig(new ConfigSetting("gun_spawn_zone", "lcz", true, "Where you should spawn."));
+			AddConfig(new ConfigSetting("gun_health", 100, true, "How much healt you will have."));
+			AddConfig(new ConfigSetting("gun_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
 
-			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+			AddEventHandlers(new EventsHandler(this), Priority.Normal);
 
-			this.AddCommands(new string[] { " gungame", "gun" }, new GunGameCommand(this));
+			AddCommands(new string[] { " gungame", "gun" }, new GunGameCommand(this));
 
 			Timing.Init(this);
 

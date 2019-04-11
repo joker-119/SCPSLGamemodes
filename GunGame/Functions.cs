@@ -174,9 +174,11 @@ namespace Gungame
 		{
 			List<Room> rooms = new List<Room>();
 
+			List<RoomType> validRooms = new List<RoomType>() { RoomType.SCP_096, RoomType.SERVER_ROOM, RoomType.ENTRANCE_CHECKPOINT, RoomType.HCZ_ARMORY, RoomType.MICROHID };
+
 			foreach (Room room in plugin.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA).Where(rm => rm.ZoneType == zone))
 			{
-				if (plugin.ValidRooms.Contains(room.RoomType))
+				if (validRooms.Contains(room.RoomType))
 					rooms.Add(room);
 			}
 
@@ -189,12 +191,12 @@ namespace Gungame
 			switch (plugin.Zone.ToLower())
 			{
 				case "lcz":
-					return GetRooms(ZoneType.LCZ).Position;
+					return plugin.Server.Map.GetRandomSpawnPoint(Role.SCIENTIST);
 				case "hzc":
 					return GetRooms(ZoneType.HCZ).Position;
 				case "enterance":
 				case "ent":
-					return GetRooms(ZoneType.ENTRANCE).Position;
+					return plugin.Server.Map.GetRandomSpawnPoint(Role.FACILITY_GUARD);
 				default:
 					return new Vector(53, 1020, -44);
 			}

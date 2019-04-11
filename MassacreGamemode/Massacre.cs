@@ -14,7 +14,7 @@ namespace MassacreGamemode
 		name = "Massacre of the D-Bois Gamemode",
 		description = "Gamemode Template",
 		id = "massacre.Gamemode",
-		version = "1.7.0",
+		version = "1.8.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -43,24 +43,24 @@ namespace MassacreGamemode
 
 		public override void OnDisable()
 		{
-			this.Info(this.Details.name + " v." + this.Details.version + " has been disabled.");
+			Info(Details.name + " v." + Details.version + " has been disabled.");
 		}
 
 		public override void OnEnable()
 		{
-			this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
+			Info(Details.name + " v." + Details.version + " has been Enabled.");
 		}
 
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("mass_spawn_room", "jail", false, true, "Where everyone should spawn."));
-			this.AddConfig(new ConfigSetting("mass_peanut_health", 1, true, "How much health Peanuts spawn with."));
-			this.AddConfig(new ConfigSetting("mass_peanut_count", 3, true, "The number of peanuts selected."));
-			this.AddConfig(new ConfigSetting("mass_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
+			AddConfig(new ConfigSetting("mass_spawn_room", "jail", false, true, "Where everyone should spawn."));
+			AddConfig(new ConfigSetting("mass_peanut_health", 1, true, "How much health Peanuts spawn with."));
+			AddConfig(new ConfigSetting("mass_peanut_count", 3, true, "The number of peanuts selected."));
+			AddConfig(new ConfigSetting("mass_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
 
-			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+			AddEventHandlers(new EventsHandler(this), Priority.Normal);
 
-			this.AddCommands(new string[] { "massacre", "motdb", "mascr" }, new MassacreCommand(this));
+			AddCommands(new string[] { "massacre", "motdb", "mascr" }, new MassacreCommand(this));
 
 			Timing.Init(this);
 

@@ -81,7 +81,8 @@ namespace Gungame
 
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
+
 
 			if (!(plugin.Winner is Player))
 				ev.Status = ROUND_END_STATUS.ON_GOING;

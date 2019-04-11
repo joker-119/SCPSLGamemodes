@@ -128,7 +128,8 @@ namespace SurvivalGamemode
 
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
+
 
 			bool peanutAlive = false;
 			bool humanAlive = false;

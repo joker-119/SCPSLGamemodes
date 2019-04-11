@@ -99,8 +99,10 @@ namespace LurkingGamemode
 
 		public void OnCheckEscape(PlayerCheckEscapeEvent ev)
 		{
+			if (!plugin.RoundStarted) return;
+
 			if (ev.AllowEscape)
-				plugin.Server.Map.StartWarhead();
+				plugin.Server.Map.DetonateWarhead();
 		}
 
 		public void OnRoundEnd(RoundEndEvent ev)
@@ -121,7 +123,8 @@ namespace LurkingGamemode
 
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
+
 
 			bool scpAlive = false;
 			bool humanAlive = false;

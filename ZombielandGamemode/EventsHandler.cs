@@ -89,7 +89,8 @@ namespace ZombielandGamemode
 
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
+
 
 			bool zombieAlive = false;
 			bool humanAlive = false;
@@ -124,9 +125,9 @@ namespace ZombielandGamemode
 
 		public void OnPlayerHurt(PlayerHurtEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
-			if (ev.Attacker.TeamRole.Role == Role.SCP_049_2)
+			if (ev.Attacker.TeamRole.Role == Role.SCP_049_2 && ev.Player != ev.Attacker)
 			{
 				if (plugin.Alphas.Contains(ev.Attacker.SteamId))
 					ev.Damage = plugin.AlphaDamage;
@@ -149,7 +150,7 @@ namespace ZombielandGamemode
 		}
 		public void OnTeamRespawn(TeamRespawnEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 			plugin.Info("Zombie Respawn.");
 
 			ev.SpawnChaos = true;

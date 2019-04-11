@@ -151,7 +151,7 @@ namespace JuggernautGamemode
 
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
-			if (plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
 			plugin.Functions.EndGamemodeRound();
@@ -168,6 +168,7 @@ namespace JuggernautGamemode
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
 			if (!plugin.RoundStarted) return;
+
 
 			bool juggernautAlive = false;
 			bool mtfAllive = false;

@@ -13,7 +13,7 @@ namespace LurkingGamemode
 		name = "Lurking in the dark Gamemode",
 		description = "Lurking in the Dark Gamemode",
 		id = "lurking.Gamemode",
-		version = "1.7.0",
+		version = "1.8.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -44,21 +44,21 @@ namespace LurkingGamemode
 
 		public override void OnEnable()
 		{
-			this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
+			Info(Details.name + " v." + Details.version + " has been Enabled.");
 		}
 
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("lurking_106_num", 2, true, "The number of Larries to spawn"));
-			this.AddConfig(new ConfigSetting("lurking_939_num", 2, true, "The number of 939's to spawn."));
-			this.AddConfig(new ConfigSetting("lurking_106_health", 750, true, "The amount of health Larry should start with."));
-			this.AddConfig(new ConfigSetting("lurking_939_health", 2300, true, "The amount of health Doggo should start with."));
-			this.AddConfig(new ConfigSetting("lurk_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
-			this.AddConfig(new ConfigSetting("lurking_flashlights", true, true, "If players should spawn with flashlights."));
+			AddConfig(new ConfigSetting("lurking_106_num", 2, true, "The number of Larries to spawn"));
+			AddConfig(new ConfigSetting("lurking_939_num", 2, true, "The number of 939's to spawn."));
+			AddConfig(new ConfigSetting("lurking_106_health", 750, true, "The amount of health Larry should start with."));
+			AddConfig(new ConfigSetting("lurking_939_health", 2300, true, "The amount of health Doggo should start with."));
+			AddConfig(new ConfigSetting("lurk_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
+			AddConfig(new ConfigSetting("lurking_flashlights", true, true, "If players should spawn with flashlights."));
 
-			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+			AddEventHandlers(new EventsHandler(this), Priority.Normal);
 
-			this.AddCommands(new string[] { "lurking", "lurk", "litd" }, new LurkingCommand(this));
+			AddCommands(new string[] { "lurking", "lurk", "litd" }, new LurkingCommand(this));
 
 			Timing.Init(this);
 

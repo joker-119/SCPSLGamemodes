@@ -10,7 +10,8 @@ using scp4aiur;
 
 namespace MuskateersGamemode
 {
-	internal class EventsHandler : IEventHandlerWaitingForPlayers, IEventHandlerRoundStart, IEventHandlerRoundRestart, IEventHandlerRoundEnd, IEventHandlerTeamRespawn, IEventHandlerPlayerJoin, IEventHandlerPlayerDie
+	internal class EventsHandler : IEventHandlerWaitingForPlayers, IEventHandlerRoundStart, IEventHandlerRoundRestart, IEventHandlerRoundEnd, IEventHandlerTeamRespawn, IEventHandlerPlayerJoin,
+		 IEventHandlerPlayerDie, IEventHandlerCheckRoundEnd
 	{
 		private readonly Muskateers plugin;
 		public EventsHandler(Muskateers plugin) => this.plugin = plugin;
@@ -92,7 +93,8 @@ namespace MuskateersGamemode
 
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
+
 
 			bool muskyAlive = false;
 			bool classDAlive = false;

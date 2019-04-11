@@ -13,7 +13,7 @@ namespace ZombielandGamemode
 		name = "Zombieland Gamemode",
 		description = "Gamemode Template",
 		id = "zombieland.Gamemode",
-		version = "1.7.0",
+		version = "1.8.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -38,26 +38,26 @@ namespace ZombielandGamemode
 
 		public override void OnDisable()
 		{
-			this.Info(this.Details.name + " v." + this.Details.version + " has been disabled.");
+			Info(Details.name + " v." + Details.version + " has been disabled.");
 		}
 
 		public override void OnEnable()
 		{
-			this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
+			Info(Details.name + " v." + Details.version + " has been Enabled.");
 		}
 
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("zombieland_zombie_health", 3000, true, "The amount of health the starting zombies have."));
-			this.AddConfig(new ConfigSetting("zombieland_child_health", 500, true, "The amoutn of health child zombies should have."));
-			this.AddConfig(new ConfigSetting("zombieland_alphas_destroy_doors", true, true, "If Alpha zombies should destroy locked doors."));
-			this.AddConfig(new ConfigSetting("zombieland_zombie_damage", 100, true, "The amount of damage the starting zombies deal."));
-			this.AddConfig(new ConfigSetting("zombieland_child_damage", 100, true, "The amount of damage the child zombies should deal."));
-			this.AddConfig(new ConfigSetting("zombie_gamemode_ranks", new string[] { }, true, "The ranks able to use gamemode commands."));
+			AddConfig(new ConfigSetting("zombieland_zombie_health", 3000, true, "The amount of health the starting zombies have."));
+			AddConfig(new ConfigSetting("zombieland_child_health", 500, true, "The amoutn of health child zombies should have."));
+			AddConfig(new ConfigSetting("zombieland_alphas_destroy_doors", true, true, "If Alpha zombies should destroy locked doors."));
+			AddConfig(new ConfigSetting("zombieland_zombie_damage", 100, true, "The amount of damage the starting zombies deal."));
+			AddConfig(new ConfigSetting("zombieland_child_damage", 100, true, "The amount of damage the child zombies should deal."));
+			AddConfig(new ConfigSetting("zombie_gamemode_ranks", new string[] { }, true, "The ranks able to use gamemode commands."));
 
-			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+			AddEventHandlers(new EventsHandler(this), Priority.Normal);
 
-			this.AddCommands(new string[] { "zombie", "zombieland", "zl" }, new ZombielandCommand(this));
+			AddCommands(new string[] { "zombie", "zombieland", "zl" }, new ZombielandCommand(this));
 
 			Timing.Init(this);
 

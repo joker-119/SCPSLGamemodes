@@ -96,7 +96,7 @@ namespace PresidentialEscortGamemode
 
 		public void OnCheckEscape(PlayerCheckEscapeEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			if (ev.Player.SteamId == plugin.VIP.SteamId)
 				plugin.VIPEscaped = true;
@@ -104,7 +104,8 @@ namespace PresidentialEscortGamemode
 
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
+
 
 			bool vipAlive = false;
 			bool scpAlive = false;

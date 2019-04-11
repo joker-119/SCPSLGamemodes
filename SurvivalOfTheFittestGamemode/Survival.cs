@@ -15,7 +15,7 @@ namespace SurvivalGamemode
 		name = "Survival of the Fittest Gamemode",
 		description = "Gamemode Template",
 		id = "survival.Gamemode",
-		version = "1.7.0",
+		version = "1.8.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -42,24 +42,25 @@ namespace SurvivalGamemode
 
 		public override void OnDisable()
 		{
-			this.Info(this.Details.name + " v." + this.Details.version + " has been disabled.");
+			Info(Details.name + " v." + Details.version + " has been disabled.");
 		}
 
 		public override void OnEnable()
 		{
-			this.Info(this.Details.name + " v." + this.Details.version + " has been Enabled.");
+			Info(Details.name + " v." + Details.version + " has been Enabled.");
 		}
 
 		public override void Register()
 		{
-			this.AddConfig(new ConfigSetting("survival_peanut_delay", 120f, true, "The amount of time to wait before unleading peanuts."));
-			this.AddConfig(new ConfigSetting("survival_peanut_health", 173, true, "The amount of health peanuts should have (lower values move faster"));
-			this.AddConfig(new ConfigSetting("survival_zone_type", "hcz", false, true, "The zone the event should take place in."));
-			this.AddConfig(new ConfigSetting("surv_gamemode_ranks", new string[] { }, true, "The ranks that can use gamemode commands."));
+			AddConfig(new ConfigSetting("survival_peanut_delay", 120f, true, "The amount of time to wait before unleading peanuts."));
+			AddConfig(new ConfigSetting("survival_peanut_health", 173, true, "The amount of health peanuts should have (lower values move faster"));
+			AddConfig(new ConfigSetting("survival_peanut_limit", 3, true, "The maximum number of peanuts that can spawn."));
+			AddConfig(new ConfigSetting("survival_zone_type", "hcz", false, true, "The zone the event should take place in."));
+			AddConfig(new ConfigSetting("surv_gamemode_ranks", new string[] { }, true, "The ranks that can use gamemode commands."));
 
-			this.AddEventHandlers(new EventsHandler(this), Priority.Normal);
+			AddEventHandlers(new EventsHandler(this), Priority.Normal);
 
-			this.AddCommands(new string[] { "survival", "sotf", "surv" }, new SurvivalCommand(this));
+			AddCommands(new string[] { "survival", "sotf", "surv" }, new SurvivalCommand(this));
 
 			Timing.Init(this);
 
@@ -72,6 +73,7 @@ namespace SurvivalGamemode
 			NutHealth = GetConfigInt("survival_peanut_health");
 			Zone = GetConfigString("survival_zone_type");
 			ValidRanks = GetConfigList("surv_gamemode_ranks");
+			NutLimit = GetConfigInt("surv_peanut_limit");
 		}
 	}
 }
