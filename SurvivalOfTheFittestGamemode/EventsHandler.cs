@@ -78,18 +78,15 @@ namespace SurvivalGamemode
 					}
 				}
 
-				int nutCount = 0;
-
 				foreach (Player player in ev.Server.GetPlayers())
 				{
 					if (player.TeamRole.Team != Smod2.API.Team.SCP && player.TeamRole.Team != Smod2.API.Team.SPECTATOR)
 					{
 						plugin.Functions.SpawnDboi(player);
 					}
-					else if (player.TeamRole.Team == Smod2.API.Team.SCP && nutCount < plugin.NutLimit)
+					else if (player.TeamRole.Team == Smod2.API.Team.SCP)
 					{
 						plugin.Functions.SpawnNut(player);
-						nutCount++;
 					}
 					else
 						plugin.Functions.SpawnDboi(player);

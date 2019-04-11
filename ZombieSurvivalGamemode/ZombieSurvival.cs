@@ -6,7 +6,7 @@ using Smod2.Events;
 using Smod2.Attributes;
 using System;
 using System.Collections.Generic;
-using MEC;
+using scp4aiur;
 
 namespace ZombieSurvival
 {
@@ -84,6 +84,8 @@ namespace ZombieSurvival
 			AddEventHandlers(new EventHandler(this), Priority.Normal);
 
 			AddCommands(new string[] { "zombiesurvival", "zsurv", "zs", "za" }, new ZombieCommand(this));
+
+			Timing.Init(this);
 
 			Functions = new Methods(this);
 		}

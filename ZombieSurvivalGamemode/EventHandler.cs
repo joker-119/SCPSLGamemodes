@@ -7,7 +7,7 @@ using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using UnityEngine;
-using MEC;
+using scp4aiur;
 
 namespace ZombieSurvival
 {
@@ -43,9 +43,9 @@ namespace ZombieSurvival
 			plugin.Info("Zombie Survival round started.");
 			PlayerManager.localPlayer.GetComponent<DecontaminationLCZ>().time = 666f;
 
-			Timing.RunCoroutine(plugin.Functions.EndRound());
-			Timing.RunCoroutine(plugin.Functions.SpawnAmmo());
-			Timing.RunCoroutine(plugin.Functions.SpawnCarePackage());
+			Timing.Run(plugin.Functions.EndRound());
+			Timing.Run(plugin.Functions.SpawnAmmo());
+			Timing.Run(plugin.Functions.SpawnCarePackage());
 
 			List<Player> players = ev.Server.GetPlayers();
 			List<Player> ntf = new List<Player>();
@@ -59,9 +59,9 @@ namespace ZombieSurvival
 			}
 
 			foreach (Player player in players)
-				Timing.RunCoroutine(plugin.Functions.SpawnZombie(player));
+				Timing.Run(plugin.Functions.SpawnZombie(player));
 			foreach (Player player in ntf)
-				Timing.RunCoroutine(plugin.Functions.SpawnNTF(player));
+				Timing.Run(plugin.Functions.SpawnNTF(player));
 		}
 
 		public void OnRoundRestart(RoundRestartEvent ev)
@@ -101,7 +101,7 @@ namespace ZombieSurvival
 			ev.PlayerList = respawn;
 
 			foreach (Player player in ev.PlayerList)
-				Timing.RunCoroutine(plugin.Functions.SpawnZombie(player));
+				Timing.Run(plugin.Functions.SpawnZombie(player));
 
 			ev.PlayerList.Clear();
 		}

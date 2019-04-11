@@ -119,10 +119,6 @@ namespace Gungame
 							item.Remove();
 							player.GiveItem(ItemType.FRAG_GRENADE);
 							break;
-						case ItemType.FRAG_GRENADE:
-							item.Remove();
-							player.GiveItem(ItemType.DISARMER);
-							break;
 					}
 				}
 			}

@@ -3,7 +3,7 @@ using Smod2;
 using Smod2.API;
 using Smod2.Commands;
 using System.Collections.Generic;
-using MEC;
+using scp4aiur;
 
 namespace ZombieSurvival
 {
@@ -54,9 +54,9 @@ namespace ZombieSurvival
 			return spawn;
 		}
 
-		public IEnumerator<float> SpawnNTF(Player player)
+		public IEnumerable<float> SpawnNTF(Player player)
 		{
-			yield return Timing.WaitForOneFrame;
+			yield return 0.1f;
 
 			plugin.NTF.Add(player);
 
@@ -75,9 +75,9 @@ namespace ZombieSurvival
 				player.GiveItem(item);
 		}
 
-		public IEnumerator<float> SpawnZombie(Player player)
+		public IEnumerable<float> SpawnZombie(Player player)
 		{
-			yield return Timing.WaitForOneFrame;
+			yield return 0.1f;
 
 			int r = plugin.Gen.Next(1, plugin.Rooms.Count);
 			Vector spawn = new Vector(plugin.Rooms[r].Position.x, plugin.Rooms[r].Position.y + 2, plugin.Rooms[r].Position.z);
@@ -89,9 +89,9 @@ namespace ZombieSurvival
 			player.SetHealth(plugin.ZHealth);
 		}
 
-		public IEnumerator<float> SpawnAmmo()
+		public IEnumerable<float> SpawnAmmo()
 		{
-			yield return Timing.WaitForSeconds(plugin.AmmoTimer);
+			yield return plugin.AmmoTimer;
 
 			foreach (Player player in plugin.NTF)
 				player.SetAmmo(AmmoType.DROPPED_5, plugin.NTFAmmo);
@@ -99,9 +99,9 @@ namespace ZombieSurvival
 			plugin.Server.Map.Broadcast(10, "An ammo drop has occured!", false);
 		}
 
-		public IEnumerator<float> SpawnCarePackage()
+		public IEnumerable<float> SpawnCarePackage()
 		{
-			yield return Timing.WaitForSeconds(plugin.CarePackageTimer);
+			yield return plugin.CarePackageTimer;
 
 			foreach (Player player in plugin.NTF)
 				plugin.Server.Map.SpawnItem(plugin.CarePackage, GetCarePackageDrop(player), Vector.Zero);
@@ -114,9 +114,9 @@ namespace ZombieSurvival
 			return player.GetPosition();
 		}
 
-		public IEnumerator<float> EndRound()
+		public IEnumerable<float> EndRound()
 		{
-			yield return Timing.WaitForSeconds(plugin.RoundTimer);
+			yield return plugin.RoundTimer;
 
 			plugin.Server.Map.Broadcast(10, "The NTF have survived the outbreak!", false);
 			EndGamemodeRound();
