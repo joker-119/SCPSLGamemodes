@@ -1,40 +1,31 @@
-Bomberman
+Zombie Survival
 ======
 made by Joker 119
 ## Description
-Various ways of blowing up all your friends.
+A small amount of NTF will spawn in a random location in the facility. Everyone else will spawn as zombies. The NTF must survive for a configured 
 
 ### Features
- - Settings+commands to set spawn type.
- - Supports normal rounds aswell as unique ones.
- - Configurable delays for grenade drops.
- - Grenades drop faster and in larger quantities until there's one person left alive (or one team in Warmode).
+ - 
 
 ### Config Settings
 Config option | Config Type | Default Value | Description
 :---: | :---: | :---: | :------
-bomber_min | Int | 15 | The minimum period of time between grenade drops.
-bomber_max | Int | 30 | The maximum period of time between grenade drops.
-bomber_class | String | | The type of class to spawn for the round. See description below.
-bomber_medkit | Bool | True | If players should spawn with an extra medkit.
+zsurv_ntf_ammo | Int | 250 | The amount of ammo NTF start with.
+zsurv_ntf_health | Int | 150 | The amount of health NTF start with.
+zsurv_ntf_max | Int | 3 | The maximum number of NTF that will spawn.
+zsurv_zombie_health | Int | 1500 | The amount of health Zombies will spawn with.
+zsurv_zombie_maxrespawn | Int | -1 | The maximum number of zombies that will respawn.
+zsurv_zombie_resistance | Float | 0.8 | The percentage of normal damage Zombies will take.
+zsurv_carepackage_timer | Float | 180 | The amount of time between carepackage drops.
+zsurv_carepackage_item | String | logicer | The item dropped by the carepackage.
+zsurv_ammo_timer | Float | 180 | The amount of time between ammo drops.
+zsurv_round_timer | Float | 600 | The amount of time before the round will end.
+zsurv_gamemode_ranks | String | | The ranks able to run gamemode commands, empty permits everyone with RA command access.
 
 ### Commands
   Command |  |  | Description
 :---: | :---: | :---: | :------
-**Aliases** | **bomberman** | **bomb**
-bomb enable | | | Enables the gamemode.
-bomb disable | | | Disables the gamemode.
-bomb drop | | | Repeates the previous grenade drop.
-bomb flash | | | Drops a flash grenade on everyone.
-bomb select ClassName | | | Selects the class to spawn for this round. (See below).
-bomb bosswave | | | Cuts the drop times in half.
+**Aliases** | **zombiesurvival** | **zsurv** | **zs** | **za**
+zsurv enable | | | Enables the gamemode.
+zsurv disable | | | Disables the gamemode.
 
-### Class Options
-Class Name | | | Description
-:---: | :---: | :---: | :------
-classd | | | Spawns everyone as Class-D in Light Containment CD-01.
-sci | | | Spawns everyone as Scientists in their normal random locations.
-guard | | | Spawns everyone as Facility Guards in their normal random locations.
-ntf | | | Spawns everyone as NTF commanders in the NTF spawn.
-chaos | | | Spawns everyone as Chaos Insurgency at their normal spawn.
-war | | | Half the server spawns as Sci, the other half as Class-D. They are immune to their own grenades, and must use them to kill the other team.

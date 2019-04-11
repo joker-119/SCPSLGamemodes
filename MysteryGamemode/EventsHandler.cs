@@ -134,6 +134,7 @@ namespace Mystery
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)
 		{
 			if (!plugin.RoundStarted) return;
+			if (plugin.Server.Round.Duration < 5) return;
 
 			bool civAlive = false;
 			bool murdAlive = false;

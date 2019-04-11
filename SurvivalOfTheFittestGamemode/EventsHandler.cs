@@ -86,9 +86,10 @@ namespace SurvivalGamemode
 					{
 						plugin.Functions.SpawnDboi(player);
 					}
-					else if (player.TeamRole.Team == Smod2.API.Team.SCP && nutCount > plugin.NutLimit)
+					else if (player.TeamRole.Team == Smod2.API.Team.SCP && nutCount < plugin.NutLimit)
 					{
 						plugin.Functions.SpawnNut(player);
+						nutCount++;
 					}
 					else
 						plugin.Functions.SpawnDboi(player);

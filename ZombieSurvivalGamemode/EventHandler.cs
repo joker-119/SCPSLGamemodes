@@ -48,18 +48,20 @@ namespace ZombieSurvival
 			Timing.RunCoroutine(plugin.Functions.SpawnCarePackage());
 
 			List<Player> players = ev.Server.GetPlayers();
+			List<Player> ntf = new List<Player>();
 
-			for (int i = 0; i < plugin.MaxNTFCount; i++)
+			for (int i = 0; i < plugin.MaxNTFCount && players.Count > 1; i++)
 			{
-				if (i == players.Count - 1) break;
-
 				int r = plugin.Gen.Next(1, players.Count);
-				Timing.RunCoroutine(plugin.Functions.SpawnNTF(players[r]));
-				players.RemoveAt(r);
+
+				players.Remove(players[r]);
+				ntf.Add(players[r]);
 			}
 
 			foreach (Player player in players)
 				Timing.RunCoroutine(plugin.Functions.SpawnZombie(player));
+			foreach (Player player in ntf)
+				Timing.RunCoroutine(plugin.Functions.SpawnNTF(player));
 		}
 
 		public void OnRoundRestart(RoundRestartEvent ev)

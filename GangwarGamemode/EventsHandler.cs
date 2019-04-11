@@ -51,7 +51,7 @@ namespace Gangwar
 
 				foreach (Player player in players)
 				{
-					if (player.TeamRole.Role != Role.NTF_COMMANDER && !plugin.Spawning[player.SteamId])
+					if (player.TeamRole.Role != Role.NTF_COMMANDER && !plugin.Spawning.ContainsKey(player.SteamId))
 						Timing.Run(plugin.Functions.SpawnChaos(player, 0));
 				}
 
