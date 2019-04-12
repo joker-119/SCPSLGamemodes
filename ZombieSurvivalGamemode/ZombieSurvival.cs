@@ -6,7 +6,6 @@ using Smod2.Events;
 using Smod2.Attributes;
 using System;
 using System.Collections.Generic;
-using scp4aiur;
 
 namespace ZombieSurvival
 {
@@ -73,19 +72,17 @@ namespace ZombieSurvival
 			AddConfig(new ConfigSetting("zsurv_zombie_maxrespawn", -1, true, "The maximum number of zombies that can respawn."));
 			AddConfig(new ConfigSetting("zsurv_zombie_resistance", 0.8f, true, "The percent amount of damage dealt to zombies."));
 
-			AddConfig(new ConfigSetting("zsurv_carepackage_timer", 180, true, "The time in seconds between carepackages."));
+			AddConfig(new ConfigSetting("zsurv_carepackage_timer", 180f, true, "The time in seconds between carepackages."));
 			AddConfig(new ConfigSetting("zsurv_carepackage_item", "logicer", true, "The item spawned by the carepackage."));
 
-			AddConfig(new ConfigSetting("zsurv_ammo_timer", 180, true, "The amount of time between ammo drops."));
-			AddConfig(new ConfigSetting("zsurv_round_timer", 600, true, "The amount of time the round will last."));
+			AddConfig(new ConfigSetting("zsurv_ammo_timer", 180f, true, "The amount of time between ammo drops."));
+			AddConfig(new ConfigSetting("zsurv_round_timer", 600f, true, "The amount of time the round will last."));
 
 			AddConfig(new ConfigSetting("zsurv_gamemode_ranks", new string[] { }, true, "The ranks able to use gamemode commands."));
 
 			AddEventHandlers(new EventHandler(this), Priority.Normal);
 
 			AddCommands(new string[] { "zombiesurvival", "zsurv", "zs", "za" }, new ZombieCommand(this));
-
-			Timing.Init(this);
 
 			Functions = new Methods(this);
 		}

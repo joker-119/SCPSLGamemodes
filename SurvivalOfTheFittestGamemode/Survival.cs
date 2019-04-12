@@ -73,7 +73,7 @@ namespace SurvivalGamemode
 			NutHealth = GetConfigInt("survival_peanut_health");
 			Zone = GetConfigString("survival_zone_type");
 			ValidRanks = GetConfigList("surv_gamemode_ranks");
-			NutLimit = GetConfigInt("surv_peanut_limit");
+			NutLimit = GetConfigInt("survival_peanut_limit");
 		}
 	}
 }

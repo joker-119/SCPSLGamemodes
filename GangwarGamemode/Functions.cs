@@ -52,6 +52,7 @@ namespace Gangwar
 			plugin.Info("EndgameRound Function.");
 			plugin.RoundStarted = false;
 			plugin.Server.Round.EndRound();
+			plugin.Spawning.Clear();
 		}
 
 		public IEnumerable<float> SpawnChaos(Player player, float delay)

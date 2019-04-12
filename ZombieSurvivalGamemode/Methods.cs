@@ -3,7 +3,7 @@ using Smod2;
 using Smod2.API;
 using Smod2.Commands;
 using System.Collections.Generic;
-using scp4aiur;
+using MEC;
 
 namespace ZombieSurvival
 {
@@ -54,9 +54,9 @@ namespace ZombieSurvival
 			return spawn;
 		}
 
-		public IEnumerable<float> SpawnNTF(Player player)
+		public IEnumerator<float> SpawnNTF(Player player)
 		{
-			yield return 0.1f;
+			yield return Timing.WaitForOneFrame;
 
 			plugin.NTF.Add(player);
 
@@ -75,9 +75,9 @@ namespace ZombieSurvival
 				player.GiveItem(item);
 		}
 
-		public IEnumerable<float> SpawnZombie(Player player)
+		public IEnumerator<float> SpawnZombie(Player player)
 		{
-			yield return 0.1f;
+			yield return Timing.WaitForOneFrame;
 
 			int r = plugin.Gen.Next(1, plugin.Rooms.Count);
 			Vector spawn = new Vector(plugin.Rooms[r].Position.x, plugin.Rooms[r].Position.y + 2, plugin.Rooms[r].Position.z);
@@ -89,9 +89,12 @@ namespace ZombieSurvival
 			player.SetHealth(plugin.ZHealth);
 		}
 
-		public IEnumerable<float> SpawnAmmo()
+		public IEnumerator<float> SpawnAmmo(float delay)
 		{
-			yield return plugin.AmmoTimer;
+			plugin.Info("Ammo Delay: " + delay);
+			yield return Timing.WaitForSeconds(delay);
+
+			if (!plugin.RoundStarted) yield break;
 
 			foreach (Player player in plugin.NTF)
 				player.SetAmmo(AmmoType.DROPPED_5, plugin.NTFAmmo);
@@ -99,9 +102,12 @@ namespace ZombieSurvival
 			plugin.Server.Map.Broadcast(10, "An ammo drop has occured!", false);
 		}
 
-		public IEnumerable<float> SpawnCarePackage()
+		public IEnumerator<float> SpawnCarePackage(float delay)
 		{
-			yield return plugin.CarePackageTimer;
+			plugin.Info("Package Delay: " + delay);
+			yield return Timing.WaitForSeconds(delay);
+
+			if (!plugin.RoundStarted) yield break;
 
 			foreach (Player player in plugin.NTF)
 				plugin.Server.Map.SpawnItem(plugin.CarePackage, GetCarePackageDrop(player), Vector.Zero);
@@ -114,12 +120,23 @@ namespace ZombieSurvival
 			return player.GetPosition();
 		}
 
-		public IEnumerable<float> EndRound()
+		public IEnumerator<float> EndRound(float delay)
 		{
-			yield return plugin.RoundTimer;
+			plugin.Info("Round Delay: " + delay);
+			yield return Timing.WaitForSeconds(delay);
+
+			if (!plugin.RoundStarted) yield break;
 
 			plugin.Server.Map.Broadcast(10, "The NTF have survived the outbreak!", false);
 			EndGamemodeRound();
+		}
+
+		public IEnumerator<float> LCZDecon(float delay)
+		{
+			plugin.Info("LCZ Delay: " + delay);
+			yield return Timing.WaitForSeconds(delay);
+
+			PlayerManager.localPlayer.GetComponent<DecontaminationLCZ>().time = 666f;
 		}
 
 		public void EndGamemodeRound()
