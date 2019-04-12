@@ -86,7 +86,7 @@ namespace Bomber
 			plugin.players = plugin.Server.GetPlayers();
 		}
 
-		public IEnumerable<float> GiveMedkits()
+		public IEnumerator<float> GiveMedkits()
 		{
 			if (!plugin.Medkits) yield break;
 
@@ -100,7 +100,7 @@ namespace Bomber
 
 		}
 
-		public IEnumerable<float> SpawnGrenades(float delay)
+		public IEnumerator<float> SpawnGrenades(float delay)
 		{
 			yield return delay;
 

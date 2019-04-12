@@ -34,34 +34,36 @@ namespace ZombieSurvival
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (!plugin.Enabled) return;
-
-			plugin.RoundStarted = true;
-
-			plugin.Server.Map.ClearBroadcasts();
-
-			plugin.Info("Zombie Survival round started.");
-
-			Timing.RunCoroutine(plugin.Functions.LCZDecon(10));
-			Timing.RunCoroutine(plugin.Functions.EndRound(plugin.RoundTimer));
-			Timing.RunCoroutine(plugin.Functions.SpawnAmmo(plugin.AmmoTimer));
-			Timing.RunCoroutine(plugin.Functions.SpawnCarePackage(plugin.CarePackageTimer));
-
-			List<Player> players = ev.Server.GetPlayers();
-			List<Player> ntf = new List<Player>();
-
-			for (int i = 0; i < plugin.MaxNTFCount && players.Count > 1; i++)
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
 			{
-				int r = plugin.Gen.Next(1, players.Count);
 
-				players.Remove(players[r]);
-				ntf.Add(players[r]);
+				plugin.RoundStarted = true;
+
+				plugin.Server.Map.ClearBroadcasts();
+
+				plugin.Info("Zombie Survival round started.");
+
+				Timing.RunCoroutine(plugin.Functions.LCZDecon(10));
+				Timing.RunCoroutine(plugin.Functions.EndRound(plugin.RoundTimer));
+				Timing.RunCoroutine(plugin.Functions.SpawnAmmo(plugin.AmmoTimer));
+				Timing.RunCoroutine(plugin.Functions.SpawnCarePackage(plugin.CarePackageTimer));
+
+				List<Player> players = ev.Server.GetPlayers();
+				List<Player> ntf = new List<Player>();
+
+				for (int i = 0; i < plugin.MaxNTFCount && players.Count > 1; i++)
+				{
+					int r = plugin.Gen.Next(1, players.Count);
+
+					players.Remove(players[r]);
+					ntf.Add(players[r]);
+				}
+
+				foreach (Player player in players)
+					Timing.RunCoroutine(plugin.Functions.SpawnZombie(player));
+				foreach (Player player in ntf)
+					Timing.RunCoroutine(plugin.Functions.SpawnNTF(player));
 			}
-
-			foreach (Player player in players)
-				Timing.RunCoroutine(plugin.Functions.SpawnZombie(player));
-			foreach (Player player in ntf)
-				Timing.RunCoroutine(plugin.Functions.SpawnNTF(player));
 		}
 
 		public void OnRoundRestart(RoundRestartEvent ev)

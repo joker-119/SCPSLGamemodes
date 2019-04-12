@@ -58,7 +58,7 @@ namespace PresidentialEscortGamemode
 			plugin.VIPEscaped = false;
 		}
 
-		public IEnumerable<float> AnnounceLocation()
+		public  IEnumerator<float> AnnounceLocation()
 		{
 			while (plugin.RoundStarted)
 			{
@@ -87,7 +87,7 @@ namespace PresidentialEscortGamemode
 			}
 		}
 
-		public IEnumerable<float> SpawnVIP(Player player)
+		public  IEnumerator<float> SpawnVIP(Player player)
 		{
 			plugin.VIP = player;
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
@@ -115,7 +115,7 @@ namespace PresidentialEscortGamemode
 
 		}
 
-		public IEnumerable<float> SpawnNTF(Player player)
+		public  IEnumerator<float> SpawnNTF(Player player)
 		{
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
 			player.ChangeRole(Role.FACILITY_GUARD, false, true, false, false);

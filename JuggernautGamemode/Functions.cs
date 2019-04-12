@@ -145,7 +145,7 @@ namespace JuggernautGamemode
 			plugin.Server.Round.EndRound();
 		}
 
-		public IEnumerable<float> SpawnAsNTFCommander(Player player)
+		public  IEnumerator<float> SpawnAsNTFCommander(Player player)
 		{
 			player.ChangeRole(Role.NTF_COMMANDER, false, true, false, false);
 			yield return 2;

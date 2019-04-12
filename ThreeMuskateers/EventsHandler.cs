@@ -5,7 +5,7 @@ using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
-using scp4aiur;
+using MEC;
 
 
 namespace MuskateersGamemode
@@ -18,7 +18,7 @@ namespace MuskateersGamemode
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (plugin.Enabled)
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
 			{
 				if (!plugin.RoundStarted)
 				{
@@ -36,7 +36,7 @@ namespace MuskateersGamemode
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (plugin.Enabled)
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
 			{
 				plugin.RoundStarted = true;
 				List<Player> players = ev.Server.GetPlayers();
@@ -50,12 +50,12 @@ namespace MuskateersGamemode
 						int random = plugin.Gen.Next(players.Count);
 						Player randomPlayer = players[random];
 						players.Remove(randomPlayer);
-						Timing.Run(plugin.Functions.SpawnNTF(randomPlayer));
+						Timing.RunCoroutine(plugin.Functions.SpawnNTF(randomPlayer));
 					}
 
 					foreach (Player player in players)
 					{
-						Timing.Run(plugin.Functions.SpawnClassD(player));
+						Timing.RunCoroutine(plugin.Functions.SpawnClassD(player));
 					}
 				}
 				else

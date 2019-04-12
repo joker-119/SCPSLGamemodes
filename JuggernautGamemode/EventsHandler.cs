@@ -6,7 +6,7 @@ using Smod2.Events;
 using System;
 using System.Timers;
 using UnityEngine;
-using scp4aiur;
+using MEC;
 
 namespace JuggernautGamemode
 {
@@ -22,7 +22,7 @@ namespace JuggernautGamemode
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (plugin.Enabled)
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
 			{
 				if (!plugin.RoundStarted)
 				{
@@ -83,7 +83,7 @@ namespace JuggernautGamemode
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (plugin.Enabled)
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
 			{
 				plugin.RoundStarted = true;
 				plugin.Server.Map.ClearBroadcasts();
@@ -116,7 +116,7 @@ namespace JuggernautGamemode
 						{
 							// Spawned as normal NTF Commander
 							plugin.Debug("Spawning " + player.Name + "as an NTF Commander");
-							Timing.Run(plugin.Functions.SpawnAsNTFCommander(player));
+							Timing.RunCoroutine(plugin.Functions.SpawnAsNTFCommander(player));
 						}
 					}
 				}
@@ -133,7 +133,7 @@ namespace JuggernautGamemode
 						else
 						{
 							plugin.Debug("Spawning " + player.Name + "as an NTF Commander");
-							Timing.Run(plugin.Functions.SpawnAsNTFCommander(player));
+							Timing.RunCoroutine(plugin.Functions.SpawnAsNTFCommander(player));
 						}
 					}
 				}
@@ -317,7 +317,7 @@ namespace JuggernautGamemode
 
 			foreach (Player player in ev.PlayerList)
 			{
-				Timing.Run(plugin.Functions.SpawnAsNTFCommander(player));
+				Timing.RunCoroutine(plugin.Functions.SpawnAsNTFCommander(player));
 			}
 
 			ev.PlayerList.Clear();

@@ -5,7 +5,7 @@ using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
-using scp4aiur;
+using MEC;
 using UnityEngine;
 using System.Linq;
 
@@ -25,7 +25,7 @@ namespace PresidentialEscortGamemode
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (plugin.Enabled)
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
 			{
 				if (!plugin.RoundStarted)
 				{
@@ -38,7 +38,7 @@ namespace PresidentialEscortGamemode
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (plugin.Enabled)
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
 			{
 				plugin.RoundStarted = true;
 				List<Player> players = ev.Server.GetPlayers();
@@ -58,14 +58,14 @@ namespace PresidentialEscortGamemode
 
 				plugin.Info("" + vip.Name + " chosen as the VIP");
 
-				Timing.Run(plugin.Functions.SpawnVIP(vip));
+				Timing.RunCoroutine(plugin.Functions.SpawnVIP(vip));
 				players.Remove(vip);
 
 				// spawn NTF into round
 				foreach (Player player in players)
 				{
 					if (player.TeamRole.Team != Smod2.API.Team.SCP)
-						Timing.Run(plugin.Functions.SpawnNTF(player));
+						Timing.RunCoroutine(plugin.Functions.SpawnNTF(player));
 				}
 			}
 		}

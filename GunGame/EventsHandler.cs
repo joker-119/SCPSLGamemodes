@@ -4,7 +4,7 @@ using Smod2.Events;
 using Smod2.EventSystem;
 using Smod2.EventHandlers;
 using System.Collections.Generic;
-using scp4aiur;
+using MEC;
 using UnityEngine;
 
 namespace Gungame
@@ -23,15 +23,16 @@ namespace Gungame
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (!plugin.Enabled) return;
-
-			plugin.RoundStarted = true;
-			List<Player> players = ev.Server.GetPlayers();
-
-			foreach (Player player in players)
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
 			{
-				Timing.Run(plugin.Functions.Spawn(player));
-				(player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
+				plugin.RoundStarted = true;
+				List<Player> players = ev.Server.GetPlayers();
+
+				foreach (Player player in players)
+				{
+					Timing.RunCoroutine(plugin.Functions.Spawn(player));
+					(player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
+				}
 			}
 		}
 
@@ -40,7 +41,7 @@ namespace Gungame
 			if (!plugin.RoundStarted) return;
 
 			(ev.Player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
-			Timing.Run(plugin.Functions.Spawn(ev.Player));
+			Timing.RunCoroutine(plugin.Functions.Spawn(ev.Player));
 		}
 
 		public void OnThrowGrenade(PlayerThrowGrenadeEvent ev)
@@ -67,7 +68,7 @@ namespace Gungame
 				plugin.Winner = ev.Killer;
 			}
 			else
-				Timing.Run(plugin.Functions.Spawn(ev.Player));
+				Timing.RunCoroutine(plugin.Functions.Spawn(ev.Player));
 		}
 
 		public void OnPlayerHurt(PlayerHurtEvent ev)

@@ -3,7 +3,7 @@ using Smod2.API;
 using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
-using scp4aiur;
+using MEC;
 using System.Collections.Generic;
 using System;
 
@@ -13,8 +13,8 @@ namespace Gungame
 		author = "Joker119",
 		name = "GunGame Gamemode",
 		description = "Kill EVERYONE!",
-		id = "gungame.Gamemode",
-		version = "1.8.0",
+		id = "gungame.gamemode",
+		version = "2.0.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -60,7 +60,7 @@ namespace Gungame
 
 			AddCommands(new string[] { " gungame", "gun" }, new GunGameCommand(this));
 
-			Timing.Init(this);
+			GamemodeManager.GamemodeManager.RegisterMode(this, "-1");
 
 			Functions = new Functions(this);
 		}

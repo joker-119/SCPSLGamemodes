@@ -5,7 +5,7 @@ using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
 using System;
-using scp4aiur;
+using MEC;
 
 namespace SurvivalGamemode
 {
@@ -18,7 +18,7 @@ namespace SurvivalGamemode
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (plugin.Enabled)
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
 			{
 				if (!plugin.RoundStarted)
 				{
@@ -37,11 +37,11 @@ namespace SurvivalGamemode
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (plugin.Enabled)
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
 			{
-				Timing.Run(plugin.Functions.TeleportNuts(plugin.NutDelay));
-				Timing.Run(plugin.Functions.LCZBlackout());
-				Timing.Run(plugin.Functions.HCZBlackout());
+				Timing.RunCoroutine(plugin.Functions.TeleportNuts(plugin.NutDelay));
+				Timing.RunCoroutine(plugin.Functions.LCZBlackout());
+				Timing.RunCoroutine(plugin.Functions.HCZBlackout());
 
 				plugin.RoundStarted = true;
 

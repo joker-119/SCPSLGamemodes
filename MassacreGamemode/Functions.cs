@@ -109,7 +109,7 @@ namespace MassacreGamemode
 					}
 			}
 		}
-		public IEnumerable<float> SpawnDboi(Player player, float delay)
+		public  IEnumerator<float> SpawnDboi(Player player, float delay)
 		{
 			player.ChangeRole(Role.CLASSD, false, false, false, true);
 
@@ -128,7 +128,7 @@ namespace MassacreGamemode
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Get ready to die!", false);
 		}
-		public IEnumerable<float> SpawnNut(Player player, float delay)
+		public  IEnumerator<float> SpawnNut(Player player, float delay)
 		{
 			player.ChangeRole(Role.SCP_173, false, false, false, false);
 

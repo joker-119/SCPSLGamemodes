@@ -43,7 +43,7 @@ namespace MuskateersGamemode
 			plugin.Enabled = false;
 			plugin.Server.Map.ClearBroadcasts();
 		}
-		public IEnumerable<float> SpawnNTF(Player player)
+		public  IEnumerator<float> SpawnNTF(Player player)
 		{
 			player.ChangeRole(Role.NTF_COMMANDER, true, true, false, true);
 			yield return 2;
@@ -53,7 +53,7 @@ namespace MuskateersGamemode
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(25, "You are a <color=#308ADA>Muskateer</color>. Enter the facility and eliminate all Class-D.", false);
 		}
-		public IEnumerable<float> SpawnClassD(Player player)
+		public  IEnumerator<float> SpawnClassD(Player player)
 		{
 			player.ChangeRole(Role.CLASSD, true, true, false, true);
 			yield return 2;

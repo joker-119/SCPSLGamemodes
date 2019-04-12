@@ -5,7 +5,7 @@ using Smod2.API;
 using Smod2.Commands;
 using System;
 using System.Linq;
-using scp4aiur;
+using MEC;
 using System.Collections.Generic;
 
 namespace Mystery
@@ -59,7 +59,7 @@ namespace Mystery
 			plugin.murd.Clear();
 		}
 
-		public IEnumerable<float> SpawnMurd(Player player)
+		public IEnumerator<float> SpawnMurd(Player player)
 		{
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
 
@@ -90,7 +90,7 @@ namespace Mystery
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(15, "You are a <color=#c50000> Murderer</color>. You must murder all of the Civilians before the detectives find and kill you.", false);
 		}
-		public IEnumerable<float> SpawnDet(Player player)
+		public IEnumerator<float> SpawnDet(Player player)
 		{
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCIENTIST);
 
@@ -120,7 +120,7 @@ namespace Mystery
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(15, "You are a <color=#DAD530> Detective</color>. You must find all of the Murderers before they kill all of the Civilians!", false);
 		}
-		public IEnumerable<float> SpawnCiv(Player player)
+		public IEnumerator<float> SpawnCiv(Player player)
 		{
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
 

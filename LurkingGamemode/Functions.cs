@@ -45,7 +45,7 @@ namespace LurkingGamemode
 			}
 		}
 
-		public IEnumerable<float> HCZBlackout()
+		public  IEnumerator<float> HCZBlackout()
 		{
 			while (plugin.RoundStarted)
 			{
@@ -54,7 +54,7 @@ namespace LurkingGamemode
 			}
 		}
 
-		public IEnumerable<float> LCZBlackout()
+		public  IEnumerator<float> LCZBlackout()
 		{
 			while (plugin.RoundStarted)
 			{

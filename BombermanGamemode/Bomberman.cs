@@ -3,7 +3,7 @@ using Smod2.API;
 using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
-using scp4aiur;
+using MEC;
 using System.Collections.Generic;
 using System;
 
@@ -13,8 +13,8 @@ namespace Bomber
 		author = "Joker119",
 		name = "Bomberman Gamemode",
 		description = "Run from the bombs!",
-		id = "bomberman.Gamemode",
-		version = "1.8.0",
+		id = "bomberman.gamemode",
+		version = "2.0.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -62,7 +62,8 @@ namespace Bomber
 			AddEventHandlers(new EventsHandler(this), Priority.Normal);
 
 			AddCommands(new string[] { "bomberman", "bomb" }, new BomberCommand(this));
-			Timing.Init(this);
+
+			GamemodeManager.GamemodeManager.RegisterMode(this, "-1");
 
 			Functions = new Functions(this);
 		}

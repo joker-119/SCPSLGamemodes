@@ -55,7 +55,7 @@ namespace ZombielandGamemode
 			plugin.CommandManager.CallCommand(null, "SETCONFIG", new string[] { "friendly_fire", "false" });
 		}
 
-		public IEnumerable<float> SpawnChild(Player player, Player killer)
+		public  IEnumerator<float> SpawnChild(Player player, Player killer)
 		{
 			Vector spawn = player.GetPosition();
 
@@ -70,7 +70,7 @@ namespace ZombielandGamemode
 			player.PersonalBroadcast(15, killer.Name + " killed you, and you became a <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);
 		}
 
-		public IEnumerable<float> AliveCounter(float delay)
+		public  IEnumerator<float> AliveCounter(float delay)
 		{
 			while (plugin.Enabled || plugin.RoundStarted)
 			{
@@ -81,7 +81,7 @@ namespace ZombielandGamemode
 				yield return delay;
 			}
 		}
-		public IEnumerable<float> SpawnAlpha(Player player)
+		public  IEnumerator<float> SpawnAlpha(Player player)
 		{
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
 
@@ -98,7 +98,7 @@ namespace ZombielandGamemode
 			player.PersonalBroadcast(15, "You are an alpha <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);
 		}
 
-		public IEnumerable<float> OpenGates(float delay)
+		public  IEnumerator<float> OpenGates(float delay)
 		{
 			yield return delay;
 

@@ -38,7 +38,7 @@ namespace SurvivalGamemode
 					plugin.BlackoutRooms.Add(room);
 		}
 
-		public IEnumerable<float> HCZBlackout()
+		public  IEnumerator<float> HCZBlackout()
 		{
 			yield return plugin.NutDelay;
 			while (plugin.RoundStarted)
@@ -48,7 +48,7 @@ namespace SurvivalGamemode
 			}
 		}
 
-		public IEnumerable<float> LCZBlackout()
+		public  IEnumerator<float> LCZBlackout()
 		{
 			yield return plugin.NutDelay;
 			while (plugin.RoundStarted)
@@ -149,7 +149,7 @@ namespace SurvivalGamemode
 
 			return spawn;
 		}
-		public IEnumerable<float> TeleportNuts(float delay)
+		public  IEnumerator<float> TeleportNuts(float delay)
 		{
 			yield return delay;
 

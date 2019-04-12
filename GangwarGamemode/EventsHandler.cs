@@ -4,7 +4,7 @@ using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using Smod2.Events;
 using System.Collections.Generic;
-using scp4aiur;
+using MEC;
 
 namespace Gangwar
 {
@@ -32,7 +32,7 @@ namespace Gangwar
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (plugin.Enabled)
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
 			{
 				plugin.RoundStarted = true;
 				plugin.Server.Map.StartWarhead();
@@ -46,13 +46,13 @@ namespace Gangwar
 					int random = plugin.Gen.Next(players.Count);
 					Player randomplayer = players[random];
 					players.Remove(randomplayer);
-					Timing.Run(plugin.Functions.SpawnNTF(randomplayer, 0));
+					Timing.RunCoroutine(plugin.Functions.SpawnNTF(randomplayer, 0));
 				}
 
 				foreach (Player player in players)
 				{
 					if (player.TeamRole.Role != Role.NTF_COMMANDER && !plugin.Spawning.ContainsKey(player.SteamId))
-						Timing.Run(plugin.Functions.SpawnChaos(player, 0));
+						Timing.RunCoroutine(plugin.Functions.SpawnChaos(player, 0));
 				}
 
 				string[] dList = new string[] { "GATE_A", "GATE_B" };

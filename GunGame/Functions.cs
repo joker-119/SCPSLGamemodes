@@ -54,7 +54,7 @@ namespace Gungame
 			plugin.Winner = null;
 		}
 
-		public IEnumerable<float> Spawn(Player player)
+		public IEnumerator<float> Spawn(Player player)
 		{
 			player.ChangeRole(Role.CLASSD, false, false, false, false);
 			player.Teleport(new Vector(GetSpawn().x, (GetSpawn().y + 3), GetSpawn().z));

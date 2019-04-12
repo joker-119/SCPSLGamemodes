@@ -14,8 +14,8 @@ namespace SCP
 		author = "Joker119",
 		name = "Mystery SCP Gamemode",
 		description = "All SCP's are a single SCP type.",
-		id = "scp.Gamemode",
-		version = "1.8.0",
+		id = "scp.gamemode",
+		version = "2.0.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -53,6 +53,8 @@ namespace SCP
 			AddEventHandlers(new EventHandler(this), Priority.Normal);
 
 			AddCommands(new string[] { "mysteryscp", "scp" }, new SCPCommand(this));
+
+			GamemodeManager.GamemodeManager.RegisterMode(this, "-1");
 
 			Functions = new Methods(this);
 		}

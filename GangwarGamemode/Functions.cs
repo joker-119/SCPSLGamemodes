@@ -55,7 +55,7 @@ namespace Gangwar
 			plugin.Spawning.Clear();
 		}
 
-		public IEnumerable<float> SpawnChaos(Player player, float delay)
+		public  IEnumerator<float> SpawnChaos(Player player, float delay)
 		{
 			plugin.Spawning.Add(player.SteamId, true);
 			yield return delay;
@@ -82,7 +82,7 @@ namespace Gangwar
 			player.SetHealth(plugin.CIHealth);
 		}
 
-		public IEnumerable<float> SpawnNTF(Player player, float delay)
+		public  IEnumerator<float> SpawnNTF(Player player, float delay)
 		{
 			plugin.Spawning.Add(player.SteamId, true);
 			yield return delay;
