@@ -115,7 +115,7 @@ namespace SurvivalGamemode
 
 		public void OnPlayerDie(PlayerDeathEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			if (ev.Player.TeamRole.Role == Role.CLASSD)
 			{

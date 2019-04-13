@@ -3,6 +3,7 @@ using Smod2.API;
 using Smod2.Commands;
 using System.Linq;
 using System.Collections.Generic;
+using MEC;
 
 namespace MassacreGamemode
 {
@@ -109,13 +110,13 @@ namespace MassacreGamemode
 					}
 			}
 		}
-		public  IEnumerator<float> SpawnDboi(Player player, float delay)
+		public IEnumerator<float> SpawnDboi(Player player, float delay)
 		{
 			player.ChangeRole(Role.CLASSD, false, false, false, true);
 
 			player.Teleport(plugin.SpawnLoc);
 
-			yield return 2;
+			yield return Timing.WaitForSeconds(2);
 
 			foreach (Item item in player.GetInventory())
 			{
@@ -128,11 +129,11 @@ namespace MassacreGamemode
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Get ready to die!", false);
 		}
-		public  IEnumerator<float> SpawnNut(Player player, float delay)
+		public IEnumerator<float> SpawnNut(Player player, float delay)
 		{
 			player.ChangeRole(Role.SCP_173, false, false, false, false);
 
-			yield return 5.5f;
+			yield return Timing.WaitForSeconds(5.5f);
 
 			player.SetGodmode(false);
 

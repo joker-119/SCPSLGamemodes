@@ -4,6 +4,7 @@ using Smod2.API;
 using Smod2.Commands;
 using System.Linq;
 using System.Collections.Generic;
+using MEC;
 
 
 namespace ZombielandGamemode
@@ -55,12 +56,12 @@ namespace ZombielandGamemode
 			plugin.CommandManager.CallCommand(null, "SETCONFIG", new string[] { "friendly_fire", "false" });
 		}
 
-		public  IEnumerator<float> SpawnChild(Player player, Player killer)
+		public IEnumerator<float> SpawnChild(Player player, Player killer)
 		{
 			Vector spawn = player.GetPosition();
 
 			player.ChangeRole(Role.SCP_049_2, false, false, false, false);
-			yield return 2;
+			yield return Timing.WaitForSeconds(2);
 
 			player.SetHealth(plugin.ChildHealth);
 
@@ -70,7 +71,7 @@ namespace ZombielandGamemode
 			player.PersonalBroadcast(15, killer.Name + " killed you, and you became a <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);
 		}
 
-		public  IEnumerator<float> AliveCounter(float delay)
+		public IEnumerator<float> AliveCounter(float delay)
 		{
 			while (plugin.Enabled || plugin.RoundStarted)
 			{
@@ -78,15 +79,15 @@ namespace ZombielandGamemode
 
 				plugin.Server.Map.ClearBroadcasts();
 				plugin.Server.Map.Broadcast(10, "There are currently " + plugin.Round.Stats.Zombies + " zombies and " + human_count + " humans alive.", false);
-				yield return delay;
+				yield return Timing.WaitForSeconds(delay);
 			}
 		}
-		public  IEnumerator<float> SpawnAlpha(Player player)
+		public IEnumerator<float> SpawnAlpha(Player player)
 		{
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
 
 			player.ChangeRole(Role.SCP_049_2, false, false, false, false);
-			yield return 2;
+			yield return Timing.WaitForSeconds(2);
 
 			player.Teleport(spawn);
 
@@ -98,9 +99,9 @@ namespace ZombielandGamemode
 			player.PersonalBroadcast(15, "You are an alpha <color=#c50000>Zombie</color>! Attacking or killing humans creates more zombies! Death to the living!", false);
 		}
 
-		public  IEnumerator<float> OpenGates(float delay)
+		public IEnumerator<float> OpenGates(float delay)
 		{
-			yield return delay;
+			yield return Timing.WaitForSeconds(delay);
 
 			foreach (Smod2.API.Door door in plugin.Server.Map.GetDoors())
 			{

@@ -33,6 +33,25 @@ namespace Gungame
 					Timing.RunCoroutine(plugin.Functions.Spawn(player));
 					(player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
 				}
+
+				string[] dlist = { "914", "GATE_A", "GATE_B" };
+				string[] olist = { "CHECKPOINT_ENT", "CHECKPOINT_LCZ_A", "CHECKPOINT__LCZB" };
+
+				foreach (string d in dlist)
+					foreach (Smod2.API.Door door in ev.Server.Map.GetDoors())
+						if (d == door.Name)
+						{
+							door.Open = false;
+							door.Locked = true;
+						}
+
+				foreach (string o in olist)
+					foreach (Smod2.API.Door door in ev.Server.Map.GetDoors())
+						if (o == door.Name)
+						{
+							door.Open = true;
+							door.Locked = true;
+						}
 			}
 		}
 

@@ -65,7 +65,7 @@ namespace Mystery
 
 			player.ChangeRole(Role.CLASSD, false, false, false, false);
 
-			yield return 1;
+			yield return Timing.WaitForSeconds(1);
 
 			player.Teleport(spawn);
 
@@ -87,6 +87,8 @@ namespace Mystery
 
 			player.SetHealth(plugin.MurdHealth);
 
+			plugin.murd.Add(player.SteamId, true);
+
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(15, "You are a <color=#c50000> Murderer</color>. You must murder all of the Civilians before the detectives find and kill you.", false);
 		}
@@ -96,7 +98,7 @@ namespace Mystery
 
 			player.ChangeRole(Role.SCIENTIST, false, false, false, false);
 
-			yield return 1;
+			yield return Timing.WaitForSeconds(1);
 
 			player.Teleport(spawn);
 
@@ -115,8 +117,6 @@ namespace Mystery
 
 			player.SetAmmo(AmmoType.DROPPED_9, 500);
 
-			plugin.murd.Add(player.SteamId, true);
-
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(15, "You are a <color=#DAD530> Detective</color>. You must find all of the Murderers before they kill all of the Civilians!", false);
 		}
@@ -126,7 +126,7 @@ namespace Mystery
 
 			player.ChangeRole(Role.CLASSD, false, false, false, false);
 
-			yield return 1;
+			yield return Timing.WaitForSeconds(1);
 
 			player.Teleport(spawn);
 
@@ -139,8 +139,6 @@ namespace Mystery
 			player.GiveItem(ItemType.JANITOR_KEYCARD);
 			player.GiveItem(ItemType.COIN);
 			player.GiveItem(ItemType.CUP);
-
-			plugin.murd.Add(player.SteamId, false);
 
 			player.SetHealth(plugin.MurdHealth);
 

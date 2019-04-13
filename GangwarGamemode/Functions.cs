@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Smod2.Commands;
+using MEC;
 
 
 namespace Gangwar
@@ -55,15 +56,15 @@ namespace Gangwar
 			plugin.Spawning.Clear();
 		}
 
-		public  IEnumerator<float> SpawnChaos(Player player, float delay)
+		public IEnumerator<float> SpawnChaos(Player player, float delay)
 		{
 			plugin.Spawning.Add(player.SteamId, true);
-			yield return delay;
+			yield return Timing.WaitForSeconds(delay);
 
 			player.ChangeRole(Role.CHAOS_INSURGENCY, false, true, false, true);
-			yield return 2;
+			yield return Timing.WaitForSeconds(2);
 
-			foreach (Item item in player.GetInventory())
+			foreach (Smod2.API.Item item in player.GetInventory())
 			{
 				item.Remove();
 			}
@@ -82,15 +83,15 @@ namespace Gangwar
 			player.SetHealth(plugin.CIHealth);
 		}
 
-		public  IEnumerator<float> SpawnNTF(Player player, float delay)
+		public IEnumerator<float> SpawnNTF(Player player, float delay)
 		{
 			plugin.Spawning.Add(player.SteamId, true);
-			yield return delay;
+			yield return Timing.WaitForSeconds(delay);
 
 			player.ChangeRole(Role.NTF_COMMANDER, false, true, false, false);
-			yield return 2;
+			yield return Timing.WaitForSeconds(2);
 
-			foreach (Item item in player.GetInventory())
+			foreach (Smod2.API.Item item in player.GetInventory())
 			{
 				item.Remove();
 			}

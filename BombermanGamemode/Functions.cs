@@ -4,6 +4,7 @@ using Smod2.API;
 using System.Collections.Generic;
 using System;
 using Smod2.Commands;
+using MEC;
 
 namespace Bomber
 {
@@ -91,7 +92,7 @@ namespace Bomber
 			if (!plugin.Medkits) yield break;
 
 			plugin.Info("Giving medkits!");
-			yield return 5;
+			yield return Timing.WaitForSeconds(5);
 
 			List<Player> players = plugin.Server.GetPlayers();
 
@@ -102,18 +103,18 @@ namespace Bomber
 
 		public IEnumerator<float> SpawnGrenades(float delay)
 		{
-			yield return delay;
+			yield return Timing.WaitForSeconds(delay);
 
 			while (plugin.Enabled || plugin.RoundStarted)
 			{
 				int ran = plugin.Gen.Next(1, 100);
 				if (ran > 50)
 
-					yield return 0.5f;
+					yield return Timing.WaitForSeconds(0.5f);
 				for (int i = 0; i < plugin.Count; i++)
 				{
 					DropGrenades();
-					yield return 0.5f;
+					yield return Timing.WaitForSeconds(0.5f);
 				}
 				plugin.Count++;
 				plugin.Timer++;
@@ -123,7 +124,7 @@ namespace Bomber
 					min = 1;
 				if (max < 1)
 					max = 2;
-				yield return GetTimer(min, max);
+				yield return Timing.WaitForSeconds(GetTimer(min, max));
 			}
 		}
 

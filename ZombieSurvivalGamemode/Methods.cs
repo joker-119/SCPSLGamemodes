@@ -77,12 +77,11 @@ namespace ZombieSurvival
 
 		public IEnumerator<float> SpawnZombie(Player player)
 		{
-			yield return Timing.WaitForOneFrame;
-
 			int r = plugin.Gen.Next(1, plugin.Rooms.Count);
 			Vector spawn = new Vector(plugin.Rooms[r].Position.x, plugin.Rooms[r].Position.y + 2, plugin.Rooms[r].Position.z);
 
 			player.ChangeRole(Role.SCP_049_2, false, false, false, false);
+			yield return Timing.WaitForSeconds(2);
 
 			player.Teleport(spawn);
 

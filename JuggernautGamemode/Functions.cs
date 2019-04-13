@@ -5,6 +5,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 using Smod2.Commands;
+using MEC;
 
 namespace JuggernautGamemode
 {
@@ -145,10 +146,10 @@ namespace JuggernautGamemode
 			plugin.Server.Round.EndRound();
 		}
 
-		public  IEnumerator<float> SpawnAsNTFCommander(Player player)
+		public IEnumerator<float> SpawnAsNTFCommander(Player player)
 		{
 			player.ChangeRole(Role.NTF_COMMANDER, false, true, false, false);
-			yield return 2;
+			yield return Timing.WaitForSeconds(2);
 
 			foreach (Smod2.API.Item item in player.GetInventory())
 			{
