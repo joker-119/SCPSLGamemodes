@@ -4,7 +4,7 @@ using Smod2.EventSystem;
 using Smod2.EventHandlers;
 using System.Collections.Generic;
 using System.Linq;
-using scp4aiur;
+using MEC;
 
 namespace Bomber
 {
@@ -21,87 +21,89 @@ namespace Bomber
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (!plugin.Enabled) return;
-
-			plugin.RoundStarted = true;
-			plugin.Server.Map.ClearBroadcasts();
-			plugin.Info("Bomberman Gamemode started!");
-
-			List<Player> players = plugin.Server.GetPlayers();
-
-			if (!(plugin.SpawnClass == ""))
+			if (plugin.Enabled)
 			{
-				switch (plugin.SpawnClass.ToLower().Trim())
+
+				plugin.RoundStarted = true;
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Info("Bomberman Gamemode started!");
+
+				List<Player> players = plugin.Server.GetPlayers();
+
+				if (!(plugin.SpawnClass == ""))
 				{
-					case "classd":
-						plugin.Info("Class-D spawn selected.");
-						foreach (Player player in players)
-						{
-							player.ChangeRole(Role.CLASSD, false, true, false, false);
-						}
-						break;
-					case "sci":
-					case "nerd":
-					case "scientist":
-						plugin.Info("Scientists spawn selected.");
-						foreach (Player player in players)
-						{
-							player.ChangeRole(Role.SCIENTIST, false, true, false, false);
-						}
-						break;
-					case "guard":
-						plugin.Info("Guard spawn selected.");
-						foreach (Player player in players)
-						{
-							player.ChangeRole(Role.FACILITY_GUARD, false, true, false, false);
-						}
-						break;
-					case "ntf":
-						plugin.Info("NTF spawn selected.");
-						foreach (Player player in players)
-						{
-							player.ChangeRole(Role.NTF_COMMANDER, false, true, false, false);
-						}
-						break;
-					case "chaos":
-						plugin.Info("Chaos spawn selected.");
-						foreach (Player player in players)
-						{
-							player.ChangeRole(Role.CHAOS_INSURGENCY, false, true, false, false);
-						}
-						break;
-					case "war":
-						plugin.Info("Warmode initiated.");
-						plugin.Warmode = true;
-
-						List<string> nerds = new List<string>();
-						int num = (players.Count / 2);
-
-						if (num == 0)
-							plugin.Error("Ya dun goofed, kid!");
-
-						for (int i = 0; i < num; i++)
-						{
-							int ran = plugin.Gen.Next(players.Count);
-							nerds.Add(players[ran].SteamId);
-							players.Remove(players[ran]);
-						}
-
-						foreach (Player player in players)
-						{
-							if (nerds.Contains(player.SteamId))
-								player.ChangeRole(Role.SCIENTIST, false, true, false, false);
-							else
+					switch (plugin.SpawnClass.ToLower().Trim())
+					{
+						case "classd":
+							plugin.Info("Class-D spawn selected.");
+							foreach (Player player in players)
+							{
 								player.ChangeRole(Role.CLASSD, false, true, false, false);
-						}
-						break;
-					case "":
-					default:
-						plugin.Info("Normal round selected.");
-						break;
+							}
+							break;
+						case "sci":
+						case "nerd":
+						case "scientist":
+							plugin.Info("Scientists spawn selected.");
+							foreach (Player player in players)
+							{
+								player.ChangeRole(Role.SCIENTIST, false, true, false, false);
+							}
+							break;
+						case "guard":
+							plugin.Info("Guard spawn selected.");
+							foreach (Player player in players)
+							{
+								player.ChangeRole(Role.FACILITY_GUARD, false, true, false, false);
+							}
+							break;
+						case "ntf":
+							plugin.Info("NTF spawn selected.");
+							foreach (Player player in players)
+							{
+								player.ChangeRole(Role.NTF_COMMANDER, false, true, false, false);
+							}
+							break;
+						case "chaos":
+							plugin.Info("Chaos spawn selected.");
+							foreach (Player player in players)
+							{
+								player.ChangeRole(Role.CHAOS_INSURGENCY, false, true, false, false);
+							}
+							break;
+						case "war":
+							plugin.Info("Warmode initiated.");
+							plugin.Warmode = true;
+
+							List<string> nerds = new List<string>();
+							int num = (players.Count / 2);
+
+							if (num == 0)
+								plugin.Error("Ya dun goofed, kid!");
+
+							for (int i = 0; i < num; i++)
+							{
+								int ran = plugin.Gen.Next(players.Count);
+								nerds.Add(players[ran].SteamId);
+								players.Remove(players[ran]);
+							}
+
+							foreach (Player player in players)
+							{
+								if (nerds.Contains(player.SteamId))
+									player.ChangeRole(Role.SCIENTIST, false, true, false, false);
+								else
+									player.ChangeRole(Role.CLASSD, false, true, false, false);
+							}
+							break;
+						case "":
+						default:
+							plugin.Info("Normal round selected.");
+							break;
+					}
 				}
+				Timing.RunCoroutine(plugin.Functions.SpawnGrenades(30));
 			}
-			Timing.Run(plugin.Functions.SpawnGrenades(30));
 		}
 
 		public void OnSetRole(PlayerSetRoleEvent ev)

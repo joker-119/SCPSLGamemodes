@@ -3,7 +3,7 @@ using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
-using scp4aiur;
+using MEC;
 
 namespace MassacreGamemode
 {
@@ -53,12 +53,12 @@ namespace MassacreGamemode
 					int random = plugin.Gen.Next(players.Count);
 					Player randomplayer = players[random];
 					players.Remove(randomplayer);
-					Timing.Run(plugin.Functions.SpawnNut(randomplayer, 0));
+					Timing.RunCoroutine(plugin.Functions.SpawnNut(randomplayer, 0));
 				}
 
 				foreach (Player player in players)
 				{
-					Timing.Run(plugin.Functions.SpawnDboi(player, 0));
+					Timing.RunCoroutine(plugin.Functions.SpawnDboi(player, 0));
 				}
 			}
 		}

@@ -5,7 +5,7 @@ using Smod2.Config;
 using Smod2.API;
 using UnityEngine;
 using System.Collections.Generic;
-using scp4aiur;
+using MEC;
 using System;
 
 namespace JuggernautGamemode
@@ -14,8 +14,8 @@ namespace JuggernautGamemode
 		author = "Mozeman",
 		name = "Juggernaut Gamemode",
 		description = "Gamemode Template",
-		id = "juggernaut.Gamemode",
-		version = "1.8.0",
+		id = "juggernaut.gamemode",
+		version = "2.0.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -83,7 +83,7 @@ namespace JuggernautGamemode
 
 			AddCommands(new string[] { "jug", "jugg", "juggernaut" }, new JuggernautCommand(this));
 
-			Timing.Init(this);
+
 
 			Functions = new Functions(this);
 		}

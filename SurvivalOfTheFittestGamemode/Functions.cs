@@ -3,6 +3,7 @@ using Smod2.API;
 using Smod2.Commands;
 using System.Linq;
 using System.Collections.Generic;
+using MEC;
 
 
 namespace SurvivalGamemode
@@ -38,24 +39,24 @@ namespace SurvivalGamemode
 					plugin.BlackoutRooms.Add(room);
 		}
 
-		public IEnumerable<float> HCZBlackout()
+		public IEnumerator<float> HCZBlackout()
 		{
-			yield return plugin.NutDelay;
+			yield return Timing.WaitForSeconds(plugin.NutDelay);
 			while (plugin.RoundStarted)
 			{
 				Generator079.generators[0].CallRpcOvercharge();
-				yield return 11f;
+				yield return Timing.WaitForSeconds(11f);
 			}
 		}
 
-		public IEnumerable<float> LCZBlackout()
+		public IEnumerator<float> LCZBlackout()
 		{
-			yield return plugin.NutDelay;
+			yield return Timing.WaitForSeconds(plugin.NutDelay);
 			while (plugin.RoundStarted)
 			{
 				foreach (Room room in plugin.BlackoutRooms)
 					room.FlickerLights();
-				yield return 8f;
+				yield return Timing.WaitForSeconds(8f);
 			}
 		}
 
@@ -149,9 +150,9 @@ namespace SurvivalGamemode
 
 			return spawn;
 		}
-		public IEnumerable<float> TeleportNuts(float delay)
+		public IEnumerator<float> TeleportNuts(float delay)
 		{
-			yield return delay;
+			yield return Timing.WaitForSeconds(delay);
 
 			plugin.Info("Timer completed!");
 

@@ -4,7 +4,7 @@ using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
-using scp4aiur;
+using MEC;
 using UnityEngine;
 
 namespace ZombielandGamemode
@@ -50,13 +50,13 @@ namespace ZombielandGamemode
 				{
 					if (player.TeamRole.Team == Smod2.API.Team.SCP)
 					{
-						Timing.Run(plugin.Functions.SpawnAlpha(player));
+						Timing.RunCoroutine(plugin.Functions.SpawnAlpha(player));
 					}
 					(player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
 				}
 
-				Timing.Run(plugin.Functions.AliveCounter(90));
-				Timing.Run(plugin.Functions.OpenGates(240));
+				Timing.RunCoroutine(plugin.Functions.AliveCounter(90));
+				Timing.RunCoroutine(plugin.Functions.OpenGates(240));
 			}
 		}
 
@@ -73,7 +73,7 @@ namespace ZombielandGamemode
 
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
 			plugin.Functions.EndGamemodeRound();
@@ -144,7 +144,7 @@ namespace ZombielandGamemode
 				else
 				{
 					ev.Damage = 0;
-					Timing.Run(plugin.Functions.SpawnChild(ev.Player, ev.Attacker));
+					Timing.RunCoroutine(plugin.Functions.SpawnChild(ev.Player, ev.Attacker));
 				}
 			}
 		}

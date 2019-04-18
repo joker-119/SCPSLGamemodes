@@ -5,6 +5,7 @@ using Smod2.Commands;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using MEC;
 
 namespace PresidentialEscortGamemode
 {
@@ -58,7 +59,7 @@ namespace PresidentialEscortGamemode
 			plugin.VIPEscaped = false;
 		}
 
-		public IEnumerable<float> AnnounceLocation()
+		public IEnumerator<float> AnnounceLocation()
 		{
 			while (plugin.RoundStarted)
 			{
@@ -83,18 +84,18 @@ namespace PresidentialEscortGamemode
 					}
 					break;
 				}
-				yield return 120f;
+				yield return Timing.WaitForSeconds(120f);
 			}
 		}
 
-		public IEnumerable<float> SpawnVIP(Player player)
+		public IEnumerator<float> SpawnVIP(Player player)
 		{
 			plugin.VIP = player;
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
 
 			player.ChangeRole(Role.SCIENTIST, false, false, true, false);
 
-			yield return 2;
+			yield return Timing.WaitForSeconds(2);
 			player.Teleport(spawn);
 
 			foreach (Smod2.API.Item item in player.GetInventory())
@@ -115,12 +116,12 @@ namespace PresidentialEscortGamemode
 
 		}
 
-		public IEnumerable<float> SpawnNTF(Player player)
+		public IEnumerator<float> SpawnNTF(Player player)
 		{
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
 			player.ChangeRole(Role.FACILITY_GUARD, false, true, false, false);
 
-			yield return 2;
+			yield return Timing.WaitForSeconds(2);
 			player.Teleport(spawn);
 
 			foreach (Smod2.API.Item item in player.GetInventory())

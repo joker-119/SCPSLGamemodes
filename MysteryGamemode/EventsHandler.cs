@@ -4,7 +4,7 @@ using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
-using scp4aiur;
+using MEC;
 using UnityEngine;
 using Smod2.Commands;
 using System.Linq;
@@ -60,7 +60,7 @@ namespace Mystery
 					int random = plugin.gen.Next(players.Count);
 					Player ranplayer = players[random];
 					players.Remove(ranplayer);
-					Timing.Run(plugin.Functions.SpawnMurd(ranplayer));
+					Timing.RunCoroutine(plugin.Functions.SpawnMurd(ranplayer));
 				}
 				for (int i = 0; i < plugin.DetectiveNum; i++)
 				{
@@ -68,11 +68,11 @@ namespace Mystery
 					int random = plugin.gen.Next(players.Count);
 					Player ranplayer = players[random];
 					players.Remove(ranplayer);
-					Timing.Run(plugin.Functions.SpawnDet(ranplayer));
+					Timing.RunCoroutine(plugin.Functions.SpawnDet(ranplayer));
 				}
 				foreach (Player player in players)
 				{
-					Timing.Run(plugin.Functions.SpawnCiv(player));
+					Timing.RunCoroutine(plugin.Functions.SpawnCiv(player));
 				}
 			}
 		}
@@ -184,12 +184,12 @@ namespace Mystery
 				Player randet = ev.PlayerList[random];
 				ev.PlayerList.Remove(randet);
 
-				Timing.Run(plugin.Functions.SpawnMurd(ranmurd));
-				Timing.Run(plugin.Functions.SpawnDet(randet));
+				Timing.RunCoroutine(plugin.Functions.SpawnMurd(ranmurd));
+				Timing.RunCoroutine(plugin.Functions.SpawnDet(randet));
 			}
 			foreach (Player player in ev.PlayerList)
 			{
-				Timing.Run(plugin.Functions.SpawnCiv(player));
+				Timing.RunCoroutine(plugin.Functions.SpawnCiv(player));
 			}
 
 		}

@@ -6,7 +6,7 @@ using Smod2.Config;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using scp4aiur;
+using MEC;
 
 namespace SurvivalGamemode
 {
@@ -14,8 +14,8 @@ namespace SurvivalGamemode
 		author = "Joker119",
 		name = "Survival of the Fittest Gamemode",
 		description = "Gamemode Template",
-		id = "survival.Gamemode",
-		version = "1.8.0",
+		id = "survival.gamemode",
+		version = "2.0.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -62,7 +62,7 @@ namespace SurvivalGamemode
 
 			AddCommands(new string[] { "survival", "sotf", "surv" }, new SurvivalCommand(this));
 
-			Timing.Init(this);
+
 
 			Functions = new Functions(this);
 		}

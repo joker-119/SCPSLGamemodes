@@ -6,7 +6,7 @@ using Smod2.Events;
 using System;
 using System.Timers;
 using UnityEngine;
-using scp4aiur;
+using MEC;
 
 namespace JuggernautGamemode
 {
@@ -116,7 +116,7 @@ namespace JuggernautGamemode
 						{
 							// Spawned as normal NTF Commander
 							plugin.Debug("Spawning " + player.Name + "as an NTF Commander");
-							Timing.Run(plugin.Functions.SpawnAsNTFCommander(player));
+							Timing.RunCoroutine(plugin.Functions.SpawnAsNTFCommander(player));
 						}
 					}
 				}
@@ -133,7 +133,7 @@ namespace JuggernautGamemode
 						else
 						{
 							plugin.Debug("Spawning " + player.Name + "as an NTF Commander");
-							Timing.Run(plugin.Functions.SpawnAsNTFCommander(player));
+							Timing.RunCoroutine(plugin.Functions.SpawnAsNTFCommander(player));
 						}
 					}
 				}
@@ -317,7 +317,7 @@ namespace JuggernautGamemode
 
 			foreach (Player player in ev.PlayerList)
 			{
-				Timing.Run(plugin.Functions.SpawnAsNTFCommander(player));
+				Timing.RunCoroutine(plugin.Functions.SpawnAsNTFCommander(player));
 			}
 
 			ev.PlayerList.Clear();

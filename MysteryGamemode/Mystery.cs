@@ -4,7 +4,7 @@ using Smod2.Config;
 using Smod2.Events;
 using System;
 using System.Collections.Generic;
-using scp4aiur;
+using MEC;
 
 namespace Mystery
 {
@@ -12,8 +12,8 @@ namespace Mystery
 		author = "Joker119",
 		name = "Mystery Gamemode",
 		description = "Murder Mystery Gamemode",
-		id = "mystery.Gamemode",
-		version = "1.8.0",
+		id = "mystery.gamemode",
+		version = "2.0.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -67,7 +67,7 @@ namespace Mystery
 
 			AddCommands(new string[] { "mystery", "murder" }, new MysteryCommand(this));
 
-			Timing.Init(this);
+
 
 			Functions = new Functions(this);
 		}

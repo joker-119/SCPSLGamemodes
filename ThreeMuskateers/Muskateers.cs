@@ -5,7 +5,7 @@ using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
 using System;
-using scp4aiur;
+using MEC;
 
 namespace MuskateersGamemode
 {
@@ -13,8 +13,8 @@ namespace MuskateersGamemode
 		author = "Joker119",
 		name = "Three Muskateers Gamemode",
 		description = "3 NTF Vs. a crap load of Class-D",
-		id = "muskateers.Gamemode",
-		version = "1.8.0",
+		id = "muskateers.gamemode",
+		version = "2.0.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -52,7 +52,7 @@ namespace MuskateersGamemode
 
 			AddCommands(new string[] { "3muskateers", "muskateers", "3musk" }, new MuskateersCommand(this));
 
-			Timing.Init(this);
+
 
 			Functions = new Functions(this);
 		}

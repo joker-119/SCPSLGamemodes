@@ -4,6 +4,7 @@ using Smod2.API;
 using System.Collections.Generic;
 using System;
 using Smod2.Commands;
+using MEC;
 
 namespace Gungame
 {
@@ -54,11 +55,11 @@ namespace Gungame
 			plugin.Winner = null;
 		}
 
-		public IEnumerable<float> Spawn(Player player)
+		public IEnumerator<float> Spawn(Player player)
 		{
 			player.ChangeRole(Role.CLASSD, false, false, false, false);
 			player.Teleport(new Vector(GetSpawn().x, (GetSpawn().y + 3), GetSpawn().z));
-			yield return 1;
+			yield return Timing.WaitForSeconds(1);
 
 			player.SetGodmode(false);
 			player.SetHealth(plugin.Health);
@@ -74,6 +75,10 @@ namespace Gungame
 				player.GiveItem(ItemType.FRAG_GRENADE);
 
 			player.GiveItem(ItemType.MEDKIT);
+
+			player.SetAmmo(AmmoType.DROPPED_5, 500);
+			player.SetAmmo(AmmoType.DROPPED_7, 500);
+			player.SetAmmo(AmmoType.DROPPED_9, 500);
 		}
 
 		public void LockDoors()
@@ -162,7 +167,7 @@ namespace Gungame
 		public void AnnounceWinner(Player player)
 		{
 			plugin.Server.Map.ClearBroadcasts();
-			plugin.Server.Map.Broadcast(15, "We have out champion! Congratulations " + player.Name + "!", false);
+			plugin.Server.Map.Broadcast(15, "We have our champion! Congratulations " + player.Name + "!", false);
 			EndGamemodeRound();
 		}
 

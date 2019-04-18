@@ -3,7 +3,7 @@ using Smod2;
 using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
-using scp4aiur;
+using MEC;
 using System;
 
 namespace Gangwar
@@ -12,8 +12,8 @@ namespace Gangwar
 		author = "Joker119",
 		name = "Gangwar Gamemode",
 		description = "Gangwar Gamemode",
-		id = "gangwar.Gamemode",
-		version = "1.8.0",
+		id = "gangwar.gamemode",
+		version = "2.0.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -54,7 +54,7 @@ namespace Gangwar
 			AddEventHandlers(new EventsHandler(this), Priority.Normal);
 			AddCommands(new string[] { "gangwar", "gang", "gw" }, new GangwarCommand(this));
 
-			Timing.Init(this);
+
 
 			Functions = new Functions(this);
 		}

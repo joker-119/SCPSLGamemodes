@@ -4,7 +4,8 @@ using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using Smod2.Events;
 using System.Collections.Generic;
-using scp4aiur;
+using UnityEngine;
+using MEC;
 
 namespace Gangwar
 {
@@ -35,7 +36,8 @@ namespace Gangwar
 			if (plugin.Enabled)
 			{
 				plugin.RoundStarted = true;
-				plugin.Server.Map.StartWarhead();
+
+				PlayerManager.localPlayer.GetComponent<AlphaWarheadController>().StartDetonation();
 				plugin.Server.Map.ClearBroadcasts();
 				plugin.Info("Gangwar Gamemode started!");
 				List<Player> players = ev.Server.GetPlayers();
@@ -46,20 +48,20 @@ namespace Gangwar
 					int random = plugin.Gen.Next(players.Count);
 					Player randomplayer = players[random];
 					players.Remove(randomplayer);
-					Timing.Run(plugin.Functions.SpawnNTF(randomplayer, 0));
+					Timing.RunCoroutine(plugin.Functions.SpawnNTF(randomplayer, 0));
 				}
 
 				foreach (Player player in players)
 				{
 					if (player.TeamRole.Role != Role.NTF_COMMANDER && !plugin.Spawning.ContainsKey(player.SteamId))
-						Timing.Run(plugin.Functions.SpawnChaos(player, 0));
+						Timing.RunCoroutine(plugin.Functions.SpawnChaos(player, 0));
 				}
 
 				string[] dList = new string[] { "GATE_A", "GATE_B" };
 
 				foreach (string d in dList)
 				{
-					foreach (Door door in ev.Server.Map.GetDoors())
+					foreach (Smod2.API.Door door in ev.Server.Map.GetDoors())
 					{
 						if (d == door.Name)
 						{
@@ -98,11 +100,11 @@ namespace Gangwar
 
 			foreach (Player player in ev.Server.GetPlayers())
 			{
-				if (player.TeamRole.Team == Team.CHAOS_INSURGENCY)
+				if (player.TeamRole.Team == Smod2.API.Team.CHAOS_INSURGENCY)
 				{
 					ciAlive = true; continue;
 				}
-				else if (player.TeamRole.Team == Team.NINETAILFOX)
+				else if (player.TeamRole.Team == Smod2.API.Team.NINETAILFOX)
 				{
 					ntfAlive = true;
 				}

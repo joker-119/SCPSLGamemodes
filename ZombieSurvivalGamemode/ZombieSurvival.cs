@@ -13,8 +13,8 @@ namespace ZombieSurvival
 		author = "Joker119",
 		name = "Zombie Survival gamemode.",
 		description = "3 NTF vs a horde of zombies.",
-		id = "zombiesurvival.Gamemode",
-		version = "1.8.0",
+		id = "zombiesurvival.gamemode",
+		version = "2.0.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -85,6 +85,8 @@ namespace ZombieSurvival
 			AddCommands(new string[] { "zombiesurvival", "zsurv", "zs", "za" }, new ZombieCommand(this));
 
 			Functions = new Methods(this);
+
+
 		}
 
 		public void ReloadConfig()

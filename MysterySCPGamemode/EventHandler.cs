@@ -25,18 +25,20 @@ namespace SCP
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (!plugin.Enabled) return;
+			if (plugin.Enabled)
+			{
 
-			plugin.RoundStarted = true;
+				plugin.RoundStarted = true;
 
-			foreach (Player player in ev.Server.GetPlayers())
-				if (player.TeamRole.Team == Smod2.API.Team.SCP)
-					Timing.RunCoroutine(plugin.Functions.SpawnSCP(player));
-				else
-				{
-					player.PersonalClearBroadcasts();
-					player.PersonalBroadcast(15, "You are a human. All the <color=#c50000>SCP's</color> are the same type. There are currently " + ev.Server.Round.Stats.SCPAlive + " SCP's. Good luck.", false);
-				}
+				foreach (Player player in ev.Server.GetPlayers())
+					if (player.TeamRole.Team == Smod2.API.Team.SCP)
+						Timing.RunCoroutine(plugin.Functions.SpawnSCP(player));
+					else
+					{
+						player.PersonalClearBroadcasts();
+						player.PersonalBroadcast(15, "You are a human. All the <color=#c50000>SCP's</color> are the same type. There are currently " + ev.Server.Round.Stats.SCPAlive + " SCP's. Good luck.", false);
+					}
+			}
 		}
 
 		public void OnRoundRestart(RoundRestartEvent ev)

@@ -4,7 +4,8 @@ using Smod2.Attributes;
 using Smod2.Config;
 using Smod2.API;
 using System.Collections.Generic;
-using scp4aiur;
+using MEC;
+
 
 namespace ZombielandGamemode
 {
@@ -12,8 +13,8 @@ namespace ZombielandGamemode
 		author = "Joker119",
 		name = "Zombieland Gamemode",
 		description = "Gamemode Template",
-		id = "zombieland.Gamemode",
-		version = "1.8.0",
+		id = "zombieland.gamemode",
+		version = "2.0.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -59,9 +60,11 @@ namespace ZombielandGamemode
 
 			AddCommands(new string[] { "zombie", "zombieland", "zl" }, new ZombielandCommand(this));
 
-			Timing.Init(this);
+
 
 			Functions = new Methods(this);
+
+
 		}
 
 		public void ReloadConfig()

@@ -4,7 +4,7 @@ using Smod2.EventHandlers;
 using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using Smod2.Events;
-using scp4aiur;
+using MEC;
 
 namespace LurkingGamemode
 {
@@ -76,8 +76,8 @@ namespace LurkingGamemode
 				}
 			}
 
-			Timing.Run(plugin.Functions.HCZBlackout());
-			Timing.Run(plugin.Functions.LCZBlackout());
+			Timing.RunCoroutine(plugin.Functions.HCZBlackout());
+			Timing.RunCoroutine(plugin.Functions.LCZBlackout());
 		}
 
 		public void OnSpawn(PlayerSpawnEvent ev)

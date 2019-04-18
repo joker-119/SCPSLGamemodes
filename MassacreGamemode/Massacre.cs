@@ -5,7 +5,7 @@ using Smod2.Attributes;
 using Smod2.Config;
 using System.Collections.Generic;
 using System;
-using scp4aiur;
+using MEC;
 
 namespace MassacreGamemode
 {
@@ -13,8 +13,8 @@ namespace MassacreGamemode
 		author = "Joker119",
 		name = "Massacre of the D-Bois Gamemode",
 		description = "Gamemode Template",
-		id = "massacre.Gamemode",
-		version = "1.8.0",
+		id = "massacre.gamemode",
+		version = "2.0.0",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -62,7 +62,7 @@ namespace MassacreGamemode
 
 			AddCommands(new string[] { "massacre", "motdb", "mascr" }, new MassacreCommand(this));
 
-			Timing.Init(this);
+
 
 			Functions = new Functions(this);
 		}
