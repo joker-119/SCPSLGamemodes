@@ -49,7 +49,7 @@ namespace JuggernautGamemode
 
 					return new string[] { "Juggernaut will be disabled for the next round." };
 				case "select":
-					if (GamemodeManager.GamemodeManager.CurrentMode == plugin && args.Length > 1)
+					if (plugin.Enabled && args.Length > 1)
 					{
 						List<Player> players = plugin.Server.GetPlayers(args[1]);
 						Player player;
