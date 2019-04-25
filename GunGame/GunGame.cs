@@ -60,8 +60,6 @@ namespace Gungame
 
 			AddCommands(new string[] { " gungame", "gun" }, new GunGameCommand(this));
 
-
-
 			Functions = new Functions(this);
 		}
 

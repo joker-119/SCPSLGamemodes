@@ -54,8 +54,6 @@ namespace Gangwar
 			AddEventHandlers(new EventsHandler(this), Priority.Normal);
 			AddCommands(new string[] { "gangwar", "gang", "gw" }, new GangwarCommand(this));
 
-
-
 			Functions = new Functions(this);
 		}
 

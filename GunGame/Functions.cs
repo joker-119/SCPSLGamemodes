@@ -57,17 +57,24 @@ namespace Gungame
 
 		public IEnumerator<float> Spawn(Player player)
 		{
+			player.PersonalBroadcast(5, "You will respawn shortly..", false);
+			yield return Timing.WaitForSeconds(3);
+
+			plugin.Info("Spawning player: " + player.Name);
 			player.ChangeRole(Role.CLASSD, false, false, false, false);
-			player.Teleport(new Vector(GetSpawn().x, (GetSpawn().y + 3), GetSpawn().z));
+			plugin.Info("Teleporting player: " + player.Name);
+			player.Teleport(GetSpawn());
 			yield return Timing.WaitForSeconds(1);
 
 			player.SetGodmode(false);
+			plugin.Info("Setting health for player: " + player.Name);
 			player.SetHealth(plugin.Health);
 
 			foreach (Smod2.API.Item item in player.GetInventory())
 			{
 				item.Remove();
 			}
+			plugin.Info("Setting inventory for player: " + player.Name);
 
 			if (plugin.Reversed)
 				player.GiveItem(ItemType.E11_STANDARD_RIFLE);
@@ -158,10 +165,6 @@ namespace Gungame
 							break;
 					}
 				}
-
-			player.SetAmmo(AmmoType.DROPPED_5, 500);
-			player.SetAmmo(AmmoType.DROPPED_7, 500);
-			player.SetAmmo(AmmoType.DROPPED_9, 500);
 		}
 
 		public void AnnounceWinner(Player player)

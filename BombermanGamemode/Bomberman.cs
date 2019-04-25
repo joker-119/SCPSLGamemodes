@@ -63,8 +63,6 @@ namespace Bomber
 
 			AddCommands(new string[] { "bomberman", "bomb" }, new BomberCommand(this));
 
-
-
 			Functions = new Functions(this);
 		}
 

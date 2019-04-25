@@ -53,10 +53,10 @@ namespace ZombieSurvival
 
 				for (int i = 0; i < plugin.MaxNTFCount && players.Count > 1; i++)
 				{
-					int r = plugin.Gen.Next(1, players.Count);
+					int r = plugin.Gen.Next(players.Count);
 
-					players.Remove(players[r]);
 					ntf.Add(players[r]);
+					players.Remove(players[r]);
 				}
 
 				foreach (Player player in players)

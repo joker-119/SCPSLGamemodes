@@ -54,8 +54,6 @@ namespace SCP
 
 			AddCommands(new string[] { "mysteryscp", "scp" }, new SCPCommand(this));
 
-
-
 			Functions = new Methods(this);
 		}
 

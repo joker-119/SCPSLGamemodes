@@ -26,6 +26,7 @@ namespace Bomber
 
 				plugin.RoundStarted = true;
 				plugin.Server.Map.ClearBroadcasts();
+				plugin.Functions.GetPlayers();
 				plugin.Info("Bomberman Gamemode started!");
 
 				List<Player> players = plugin.Server.GetPlayers();

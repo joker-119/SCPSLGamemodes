@@ -62,8 +62,6 @@ namespace SurvivalGamemode
 
 			AddCommands(new string[] { "survival", "sotf", "surv" }, new SurvivalCommand(this));
 
-
-
 			Functions = new Functions(this);
 		}
 

@@ -67,8 +67,6 @@ namespace Mystery
 
 			AddCommands(new string[] { "mystery", "murder" }, new MysteryCommand(this));
 
-
-
 			Functions = new Functions(this);
 		}
 

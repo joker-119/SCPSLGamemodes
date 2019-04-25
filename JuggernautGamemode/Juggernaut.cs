@@ -83,8 +83,6 @@ namespace JuggernautGamemode
 
 			AddCommands(new string[] { "jug", "jugg", "juggernaut" }, new JuggernautCommand(this));
 
-
-
 			Functions = new Functions(this);
 		}
 

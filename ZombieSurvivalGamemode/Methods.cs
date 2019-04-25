@@ -48,15 +48,15 @@ namespace ZombieSurvival
 
 		public Vector Spawn()
 		{
-			int r = plugin.Gen.Next(1, plugin.Rooms.Count);
-			Vector spawn = new Vector(plugin.Rooms[r].Position.x, plugin.Rooms[r].Position.y + 2, plugin.Rooms[r].Position.z);
+			// int r = plugin.Gen.Next(1, plugin.Rooms.Count);
+			// Vector spawn = new Vector(plugin.Rooms[r].Position.x, plugin.Rooms[r].Position.y + 2, plugin.Rooms[r].Position.z);
 
-			return spawn;
+			return plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
 		}
 
 		public IEnumerator<float> SpawnNTF(Player player)
 		{
-			yield return Timing.WaitForOneFrame;
+			yield return Timing.WaitForSeconds(1.5f);
 
 			plugin.NTF.Add(player);
 
@@ -71,19 +71,26 @@ namespace ZombieSurvival
 			foreach (Smod2.API.Item item in player.GetInventory())
 				item.Remove();
 
+			yield return Timing.WaitForSeconds(1);
+
 			foreach (ItemType item in plugin.NTFItems)
+			{
 				player.GiveItem(item);
+				yield return Timing.WaitForOneFrame;
+			}
 		}
 
 		public IEnumerator<float> SpawnZombie(Player player)
 		{
+			yield return Timing.WaitForSeconds(1f);
+
 			int r = plugin.Gen.Next(1, plugin.Rooms.Count);
 			Vector spawn = new Vector(plugin.Rooms[r].Position.x, plugin.Rooms[r].Position.y + 2, plugin.Rooms[r].Position.z);
 
 			player.ChangeRole(Role.SCP_049_2, false, false, false, false);
 			yield return Timing.WaitForSeconds(2);
 
-			player.Teleport(spawn);
+			player.Teleport(plugin.Server.Map.GetRandomSpawnPoint(Role.FACILITY_GUARD));
 
 			player.SetHealth(plugin.ZHealth);
 		}
@@ -91,25 +98,28 @@ namespace ZombieSurvival
 		public IEnumerator<float> SpawnAmmo(float delay)
 		{
 			plugin.Info("Ammo Delay: " + delay);
-			yield return Timing.WaitForSeconds(delay);
+			while (plugin.RoundStarted)
+			{
+				yield return Timing.WaitForSeconds(delay);
 
-			if (!plugin.RoundStarted) yield break;
+				foreach (Player player in plugin.NTF)
+					player.SetAmmo(AmmoType.DROPPED_5, plugin.NTFAmmo);
 
-			foreach (Player player in plugin.NTF)
-				player.SetAmmo(AmmoType.DROPPED_5, plugin.NTFAmmo);
-
-			plugin.Server.Map.Broadcast(10, "An ammo drop has occured!", false);
+				plugin.Server.Map.Broadcast(10, "An ammo drop has occured!", false);
+			}
 		}
 
 		public IEnumerator<float> SpawnCarePackage(float delay)
 		{
 			plugin.Info("Package Delay: " + delay);
-			yield return Timing.WaitForSeconds(delay);
 
-			if (!plugin.RoundStarted) yield break;
+			while (plugin.RoundStarted)
+			{
+				yield return Timing.WaitForSeconds(delay);
 
-			foreach (Player player in plugin.NTF)
-				plugin.Server.Map.SpawnItem(plugin.CarePackage, GetCarePackageDrop(player), Vector.Zero);
+				foreach (Player player in plugin.NTF)
+					plugin.Server.Map.SpawnItem(plugin.CarePackage, GetCarePackageDrop(player), Vector.Zero);
+			}
 		}
 
 		public Vector GetCarePackageDrop(Player player)

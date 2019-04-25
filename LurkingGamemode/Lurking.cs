@@ -60,10 +60,7 @@ namespace LurkingGamemode
 
 			AddCommands(new string[] { "lurking", "lurk", "litd" }, new LurkingCommand(this));
 
-
-
 			Functions = new Functions(this);
-
 		}
 
 		public void ReloadConfig()

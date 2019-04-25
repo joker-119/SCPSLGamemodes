@@ -47,12 +47,13 @@ namespace MuskateersGamemode
 		public IEnumerator<float> SpawnNTF(Player player)
 		{
 			player.ChangeRole(Role.NTF_COMMANDER, true, true, false, true);
-			yield return Timing.WaitForSeconds(2);
-
-			player.SetHealth(plugin.NTFHealth);
 
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(25, "You are a <color=#308ADA>Muskateer</color>. Enter the facility and eliminate all Class-D.", false);
+
+			yield return Timing.WaitForSeconds(10);
+
+			player.SetHealth(plugin.NTFHealth);
 		}
 		public IEnumerator<float> SpawnClassD(Player player)
 		{

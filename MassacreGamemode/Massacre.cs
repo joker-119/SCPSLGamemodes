@@ -62,8 +62,6 @@ namespace MassacreGamemode
 
 			AddCommands(new string[] { "massacre", "motdb", "mascr" }, new MassacreCommand(this));
 
-
-
 			Functions = new Functions(this);
 		}
 

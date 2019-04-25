@@ -85,8 +85,6 @@ namespace ZombieSurvival
 			AddCommands(new string[] { "zombiesurvival", "zsurv", "zs", "za" }, new ZombieCommand(this));
 
 			Functions = new Methods(this);
-
-
 		}
 
 		public void ReloadConfig()

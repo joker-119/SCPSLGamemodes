@@ -59,7 +59,6 @@ namespace SCP
 			{
 				case "random":
 					roles.Add(Role.SCP_049);
-					roles.Add(Role.SCP_096);
 					roles.Add(Role.SCP_106);
 					roles.Add(Role.SCP_173);
 					roles.Add(Role.SCP_939_53);
@@ -73,8 +72,6 @@ namespace SCP
 					return Role.SCP_173;
 				case "106":
 					return Role.SCP_106;
-				case "096":
-					return Role.SCP_096;
 				case "049":
 					return Role.SCP_049;
 

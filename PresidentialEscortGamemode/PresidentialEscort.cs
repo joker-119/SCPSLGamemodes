@@ -53,8 +53,6 @@ namespace PresidentialEscortGamemode
 
 			AddCommands(new string[] { "presidentialescort", "presidential", "escort", "pe" }, new PresidentialEscortCommand(this));
 
-
-
 			Functions = new Functions(this);
 		}
 

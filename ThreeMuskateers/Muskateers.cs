@@ -52,8 +52,6 @@ namespace MuskateersGamemode
 
 			AddCommands(new string[] { "3muskateers", "muskateers", "3musk" }, new MuskateersCommand(this));
 
-
-
 			Functions = new Functions(this);
 		}
 
