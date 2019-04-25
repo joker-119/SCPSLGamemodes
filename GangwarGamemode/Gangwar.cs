@@ -13,7 +13,7 @@ namespace Gangwar
 		name = "Gangwar Gamemode",
 		description = "Gangwar Gamemode",
 		id = "gangwar.gamemode",
-		version = "2.0.0",
+		version = "2.0.0-gmm",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
