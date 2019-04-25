@@ -3,6 +3,7 @@ using Smod2.API;
 using Smod2.Events;
 using Smod2.EventSystem;
 using Smod2.EventHandlers;
+using Smod2.EventSystem.Events;
 using System.Collections.Generic;
 using MEC;
 using UnityEngine;
@@ -10,7 +11,7 @@ using UnityEngine;
 namespace Gungame
 {
 	internal class EventsHandler : IEventHandlerRoundStart, IEventHandlerRoundRestart, IEventHandlerRoundEnd, IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerCheckRoundEnd,
-		IEventHandlerThrowGrenade, IEventHandlerPlayerHurt, IEventHandlerWaitingForPlayers
+		IEventHandlerThrowGrenade, IEventHandlerPlayerHurt, IEventHandlerWaitingForPlayers, IEventHandlerTeamRespawn
 	{
 		private readonly GunGame plugin;
 
@@ -72,9 +73,10 @@ namespace Gungame
 
 		public void OnPlayerDie(PlayerDeathEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			plugin.Functions.ReplaceGun(ev.Killer);
+			plugin.Info("Replaced gun.");
 
 			if (!plugin.Reversed && ev.DamageTypeVar == DamageType.E11_STANDARD_RIFLE)
 			{
@@ -87,7 +89,10 @@ namespace Gungame
 				plugin.Winner = ev.Killer;
 			}
 			else
+			{
 				Timing.RunCoroutine(plugin.Functions.Spawn(ev.Player));
+				plugin.Info("Spawned player.");
+			}
 		}
 
 		public void OnPlayerHurt(PlayerHurtEvent ev)
@@ -97,6 +102,14 @@ namespace Gungame
 			if (ev.Player.SteamId == ev.Attacker.SteamId && ev.DamageType == DamageType.FRAG)
 				ev.Damage = 0;
 
+		}
+
+		public void OnTeamRespawn(TeamRespawnEvent ev)
+		{
+			if (!plugin.RoundStarted) return;
+
+			ev.SpawnChaos = true;
+			ev.PlayerList = new List<Player>();
 		}
 
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)

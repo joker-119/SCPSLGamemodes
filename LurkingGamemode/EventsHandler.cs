@@ -37,47 +37,49 @@ namespace LurkingGamemode
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (!plugin.Enabled) return;
-
-			plugin.RoundStarted = true;
-
-			plugin.Info("Lurking in the Dark gamemode started!");
-
-			foreach (Player player in ev.Server.GetPlayers())
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
 			{
-				if (player.TeamRole.Team == Smod2.API.Team.SCP)
-				{
-					for (int i = 0; i < plugin.LarryCount; i++)
-					{
-						if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 && player.TeamRole.Role != Role.SCP_939_89)
-						{
-							plugin.Functions.SpawnLarry(player);
-						}
-					}
-					for (int i = 0; i < plugin.DoggoCount; i++)
-					{
-						if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 && player.TeamRole.Role != Role.SCP_939_89)
-						{
-							plugin.Functions.SpawnDoggo(player);
-						}
-					}
-				}
-				else if (player.TeamRole.Team == Smod2.API.Team.NINETAILFOX || player.TeamRole.Team == Smod2.API.Team.CHAOS_INSURGENCY)
-				{
-					player.ChangeRole(Role.FACILITY_GUARD, true, true, true, true);
-					player.PersonalClearBroadcasts();
-					player.PersonalBroadcast(25, "You are a <color=#2D2B2B> Facility Guard</color>, your job is to protect the scientists and get them outside safely.", false);
-				}
-				else if (player.TeamRole.Team == Smod2.API.Team.CLASSD)
-				{
-					player.ChangeRole(Role.SCIENTIST, true, true, true, true);
-					player.PersonalClearBroadcasts();
-					player.PersonalBroadcast(25, "You are a <color=#C3DA30> Scientist</color>, your job is to escape the facility and terminate the SCP's.", false);
-				}
-			}
 
-			Timing.RunCoroutine(plugin.Functions.HCZBlackout());
-			Timing.RunCoroutine(plugin.Functions.LCZBlackout());
+				plugin.RoundStarted = true;
+
+				plugin.Info("Lurking in the Dark gamemode started!");
+
+				foreach (Player player in ev.Server.GetPlayers())
+				{
+					if (player.TeamRole.Team == Smod2.API.Team.SCP)
+					{
+						for (int i = 0; i < plugin.LarryCount; i++)
+						{
+							if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 && player.TeamRole.Role != Role.SCP_939_89)
+							{
+								plugin.Functions.SpawnLarry(player);
+							}
+						}
+						for (int i = 0; i < plugin.DoggoCount; i++)
+						{
+							if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 && player.TeamRole.Role != Role.SCP_939_89)
+							{
+								plugin.Functions.SpawnDoggo(player);
+							}
+						}
+					}
+					else if (player.TeamRole.Team == Smod2.API.Team.NINETAILFOX || player.TeamRole.Team == Smod2.API.Team.CHAOS_INSURGENCY)
+					{
+						player.ChangeRole(Role.FACILITY_GUARD, true, true, true, true);
+						player.PersonalClearBroadcasts();
+						player.PersonalBroadcast(25, "You are a <color=#2D2B2B> Facility Guard</color>, your job is to protect the scientists and get them outside safely.", false);
+					}
+					else if (player.TeamRole.Team == Smod2.API.Team.CLASSD)
+					{
+						player.ChangeRole(Role.SCIENTIST, true, true, true, true);
+						player.PersonalClearBroadcasts();
+						player.PersonalBroadcast(25, "You are a <color=#C3DA30> Scientist</color>, your job is to escape the facility and terminate the SCP's.", false);
+					}
+				}
+
+				Timing.RunCoroutine(plugin.Functions.HCZBlackout());
+				Timing.RunCoroutine(plugin.Functions.LCZBlackout());
+			}
 		}
 
 		public void OnSpawn(PlayerSpawnEvent ev)

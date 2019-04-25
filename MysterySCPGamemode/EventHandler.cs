@@ -17,10 +17,14 @@ namespace SCP
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (!plugin.Enabled || plugin.RoundStarted) return;
-
-			plugin.Server.Map.ClearBroadcasts();
-			plugin.Server.Map.Broadcast(15, "<color=#c50000>Mystery SCP</color> gamemode is starting..", false);
+			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
+			{
+				if (!plugin.RoundStarted)
+				{
+					plugin.Server.Map.ClearBroadcasts();
+					plugin.Server.Map.Broadcast(15, "<color=#c50000>Mystery SCP</color> gamemode is starting..", false);
+				}
+			}
 		}
 
 		public void OnRoundStart(RoundStartEvent ev)

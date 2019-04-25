@@ -40,7 +40,7 @@ namespace JuggernautGamemode
 
 		public void OnSetRoleMaxHP(SetRoleMaxHPEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			if (ev.Role == Role.CHAOS_INSURGENCY)
 				ev.MaxHP = plugin.JuggHealth;
@@ -50,7 +50,7 @@ namespace JuggernautGamemode
 		{
 			if (!plugin.RoundStarted) return;
 
-			if (ev.Player.Name == plugin.Jugg.Name || ev.Player.SteamId == plugin.Jugg.SteamId)
+			if (plugin.Functions.IsJuggernaut(ev.Player))
 			{
 				ev.Player.SetAmmo(AmmoType.DROPPED_7, 2000);
 				ev.Player.SetAmmo(AmmoType.DROPPED_5, 2000);
@@ -72,9 +72,10 @@ namespace JuggernautGamemode
 		{
 			plugin.ReloadConfig();
 		}
+
 		public void OnSetRole(PlayerSetRoleEvent ev)
 		{
-			if (!plugin.Enabled || !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 			if (!plugin.Functions.IsJuggernaut(ev.Player)) return;
 
 			if (ev.TeamRole.Team != Smod2.API.Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Smod2.API.Team.SPECTATOR)
