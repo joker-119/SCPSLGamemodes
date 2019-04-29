@@ -1,5 +1,3 @@
-using Smod2;
-using Smod2.API;
 using Smod2.Commands;
 
 namespace ZombieSurvival
@@ -9,18 +7,13 @@ namespace ZombieSurvival
 		private readonly Zombie plugin;
 		public ZombieCommand(Zombie plugin) => this.plugin = plugin;
 
-		public string GetCommandDescription()
-		{
-			return "";
-		}
+		public string GetCommandDescription() => "";
 
-		public string GetUsage()
-		{
-			return "Zombie Survival Enabled : " + plugin.Enabled + "\n" +
-				"[zombiesurvival / zsurv / zs / za] HELP \n" +
-				"zsurv ENABLE \n" +
-				"zsurv DISABLE";
-		}
+		public string GetUsage() =>
+			"Zombie Survival Enabled : " + plugin.Enabled + "\n" +
+			"[zombiesurvival / zsurv / zs / za] HELP \n" +
+			"zsurv ENABLE \n" +
+			"zsurv DISABLE";
 
 		public string[] OnCall(ICommandSender sender, string[] args)
 		{

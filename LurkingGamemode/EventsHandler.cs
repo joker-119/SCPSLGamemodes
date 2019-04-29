@@ -1,32 +1,29 @@
-using Smod2;
+using System.Collections.Generic;
+using MEC;
 using Smod2.API;
 using Smod2.EventHandlers;
-using Smod2.EventSystem.Events;
-using System.Collections.Generic;
 using Smod2.Events;
-using MEC;
+using Smod2.EventSystem.Events;
 
 namespace LurkingGamemode
 {
-	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSpawn, IEventHandlerCheckEscape, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin,
-		IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerRoundRestart
+	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerSpawn, IEventHandlerCheckEscape,
+		IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd,
+		IEventHandlerWaitingForPlayers, IEventHandlerRoundRestart
 	{
-		public readonly Lurking plugin;
+		private readonly Lurking plugin;
 
 		public EventsHandler(Lurking plugin) => this.plugin = plugin;
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
-			{
-				if (!plugin.RoundStarted)
-				{
-					Server server = plugin.Server;
+			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (plugin.RoundStarted) return;
+			
+			Server server = plugin.Server;
 
-					server.Map.ClearBroadcasts();
-					server.Map.Broadcast(25, "<color=#2D2B2B> Lurking in the dark</color> gamemode starting..", false);
-				}
-			}
+			server.Map.ClearBroadcasts();
+			server.Map.Broadcast(25, "<color=#2D2B2B> Lurking in the dark</color> gamemode starting..", false);
 		}
 
 		public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
@@ -37,49 +34,47 @@ namespace LurkingGamemode
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
-			{
+			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			
+			plugin.RoundStarted = true;
 
-				plugin.RoundStarted = true;
+			plugin.Info("Lurking in the Dark gamemode started!");
 
-				plugin.Info("Lurking in the Dark gamemode started!");
-
-				foreach (Player player in ev.Server.GetPlayers())
+			foreach (Player player in ev.Server.GetPlayers())
+				switch (player.TeamRole.Team)
 				{
-					if (player.TeamRole.Team == Smod2.API.Team.SCP)
+					case Smod2.API.Team.SCP:
 					{
 						for (int i = 0; i < plugin.LarryCount; i++)
-						{
-							if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 && player.TeamRole.Role != Role.SCP_939_89)
-							{
+							if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 &&
+							    player.TeamRole.Role != Role.SCP_939_89)
 								plugin.Functions.SpawnLarry(player);
-							}
-						}
+
 						for (int i = 0; i < plugin.DoggoCount; i++)
-						{
-							if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 && player.TeamRole.Role != Role.SCP_939_89)
-							{
+							if (player.TeamRole.Role != Role.SCP_106 && player.TeamRole.Role != Role.SCP_939_53 &&
+							    player.TeamRole.Role != Role.SCP_939_89)
 								plugin.Functions.SpawnDoggo(player);
-							}
-						}
+						break;
 					}
-					else if (player.TeamRole.Team == Smod2.API.Team.NINETAILFOX || player.TeamRole.Team == Smod2.API.Team.CHAOS_INSURGENCY)
-					{
+					case Smod2.API.Team.NINETAILFOX:
+					case Smod2.API.Team.CHAOS_INSURGENCY:
 						player.ChangeRole(Role.FACILITY_GUARD, true, true, true, true);
 						player.PersonalClearBroadcasts();
-						player.PersonalBroadcast(25, "You are a <color=#2D2B2B> Facility Guard</color>, your job is to protect the scientists and get them outside safely.", false);
-					}
-					else if (player.TeamRole.Team == Smod2.API.Team.CLASSD)
-					{
+						player.PersonalBroadcast(25,
+							"You are a <color=#2D2B2B> Facility Guard</color>, your job is to protect the scientists and get them outside safely.",
+							false);
+						break;
+					case Smod2.API.Team.CLASSD:
 						player.ChangeRole(Role.SCIENTIST, true, true, true, true);
 						player.PersonalClearBroadcasts();
-						player.PersonalBroadcast(25, "You are a <color=#C3DA30> Scientist</color>, your job is to escape the facility and terminate the SCP's.", false);
-					}
+						player.PersonalBroadcast(25,
+							"You are a <color=#C3DA30> Scientist</color>, your job is to escape the facility and terminate the SCP's.",
+							false);
+						break;
 				}
 
-				Timing.RunCoroutine(plugin.Functions.HCZBlackout());
-				Timing.RunCoroutine(plugin.Functions.LCZBlackout());
-			}
+			Timing.RunCoroutine(plugin.Functions.HczBlackout());
+			Timing.RunCoroutine(plugin.Functions.LczBlackout());
 		}
 
 		public void OnSpawn(PlayerSpawnEvent ev)
@@ -88,12 +83,8 @@ namespace LurkingGamemode
 
 			bool hasLight = false;
 			foreach (Smod2.API.Item item in ev.Player.GetInventory())
-			{
 				if (item.ItemType == ItemType.FLASHLIGHT)
-				{
 					hasLight = true;
-				}
-			}
 
 			if (!hasLight)
 				ev.Player.GiveItem(ItemType.FLASHLIGHT);
@@ -109,7 +100,7 @@ namespace LurkingGamemode
 
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
 			plugin.Functions.EndGamemodeRound();
@@ -130,41 +121,32 @@ namespace LurkingGamemode
 
 			bool scpAlive = false;
 			bool humanAlive = false;
-			int humanCount = 0;
 
 			foreach (Player player in ev.Server.GetPlayers())
-			{
 				if (player.TeamRole.Team == Smod2.API.Team.SCP)
-				{
-					scpAlive = true; continue;
-				}
-				else if (player.TeamRole.Team != Smod2.API.Team.SCP && player.TeamRole.Team != Smod2.API.Team.SPECTATOR && player.TeamRole.Role != Role.FACILITY_GUARD)
-				{
+					scpAlive = true;
+				else if (player.TeamRole.Team != Smod2.API.Team.SCP && player.TeamRole.Team != Smod2.API.Team.SPECTATOR && player.TeamRole.Role != Role.FACILITY_GUARD) 
 					humanAlive = true;
-					humanCount = humanCount++;
-				}
-			}
 
-			if (ev.Server.GetPlayers().Count > 1)
+			if (ev.Server.GetPlayers().Count <= 1) return;
+			
+			if (scpAlive && humanAlive)
+				ev.Status = ROUND_END_STATUS.ON_GOING;
+			else if (scpAlive && !humanAlive)
 			{
-				if (scpAlive && humanAlive)
-				{
-					ev.Status = ROUND_END_STATUS.ON_GOING;
-				}
-				else if (scpAlive && humanAlive == false)
-				{
-					ev.Status = ROUND_END_STATUS.SCP_VICTORY; plugin.Functions.EndGamemodeRound();
-				}
-				else if (scpAlive == false && humanAlive)
-				{
-					ev.Status = ROUND_END_STATUS.MTF_VICTORY; plugin.Functions.EndGamemodeRound();
-				}
+				ev.Status = ROUND_END_STATUS.SCP_VICTORY; 
+				plugin.Functions.EndGamemodeRound();
+			}
+			else if (!scpAlive && humanAlive)
+			{
+				ev.Status = ROUND_END_STATUS.MTF_VICTORY; 
+				plugin.Functions.EndGamemodeRound();
 			}
 		}
 
 		public void OnTeamRespawn(TeamRespawnEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 			plugin.Info("Lurk respawn.");
 
 			ev.SpawnChaos = false;

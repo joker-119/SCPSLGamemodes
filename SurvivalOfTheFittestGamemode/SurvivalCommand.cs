@@ -2,24 +2,19 @@ using Smod2.Commands;
 
 namespace SurvivalGamemode
 {
-    class SurvivalCommand : ICommandHandler
+    internal class SurvivalCommand : ICommandHandler
     {
         private readonly Survival plugin;
 
         public SurvivalCommand(Survival plugin) => this.plugin = plugin;
 
-        public string GetCommandDescription()
-        {
-            return "";
-        }
+        public string GetCommandDescription() => "";
 
-        public string GetUsage()
-        {
-            return "Survival Enabled : " + plugin.Enabled + "\n" +
-                "[Survival / suv / sotf] HELP \n" +
-                "Survival ENABLE \n" +
-                "Survival DISABLE";
-        }
+        public string GetUsage() =>
+            "Survival Enabled : " + plugin.Enabled + "\n" +
+            "[Survival / suv / sotf] HELP \n" +
+            "Survival ENABLE \n" +
+            "Survival DISABLE";
 
         public string[] OnCall(ICommandSender sender, string[] args)
         {

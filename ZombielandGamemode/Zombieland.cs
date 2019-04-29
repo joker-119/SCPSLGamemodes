@@ -1,11 +1,7 @@
+using System.Collections.Generic;
 using Smod2;
-using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
-using Smod2.API;
-using System.Collections.Generic;
-using MEC;
-
 
 namespace ZombielandGamemode
 {
@@ -25,9 +21,6 @@ namespace ZombielandGamemode
 
 		public List<string> Alphas = new List<string>();
 
-		public string[] ValidRanks { get; private set; }
-
-		public bool Enabled { get; internal set; }
 		public bool RoundStarted { get; internal set; }
 		public bool AlphaDoorDestroy { get; private set; }
 
@@ -50,21 +43,17 @@ namespace ZombielandGamemode
 		public override void Register()
 		{
 			AddConfig(new ConfigSetting("zombieland_zombie_health", 3000, true, "The amount of health the starting zombies have."));
-			AddConfig(new ConfigSetting("zombieland_child_health", 500, true, "The amoutn of health child zombies should have."));
+			AddConfig(new ConfigSetting("zombieland_child_health", 500, true, "The amount of health child zombies should have."));
 			AddConfig(new ConfigSetting("zombieland_alphas_destroy_doors", true, true, "If Alpha zombies should destroy locked doors."));
 			AddConfig(new ConfigSetting("zombieland_zombie_damage", 100, true, "The amount of damage the starting zombies deal."));
 			AddConfig(new ConfigSetting("zombieland_child_damage", 100, true, "The amount of damage the child zombies should deal."));
 			AddConfig(new ConfigSetting("zombie_gamemode_ranks", new string[] { }, true, "The ranks able to use gamemode commands."));
 
-			AddEventHandlers(new EventsHandler(this), Priority.Normal);
-
-			// AddCommands(new string[] { "zombie", "zombieland", "zl" }, new ZombielandCommand(this));
-
-
+			AddEventHandlers(new EventsHandler(this));
 
 			Functions = new Methods(this);
 
-			GamemodeManager.GamemodeManager.RegisterMode(this, "-1");
+			GamemodeManager.GamemodeManager.RegisterMode(this);
 		}
 
 		public void ReloadConfig()
@@ -74,7 +63,7 @@ namespace ZombielandGamemode
 			AlphaDamage = GetConfigInt("zombieland_zombie_damage");
 			ChildDamage = GetConfigInt("zombieland_child_damage");
 			AlphaDoorDestroy = GetConfigBool("zombieland_alphas_destroy_doors");
-			ValidRanks = GetConfigList("zombie_gamemode_ranks");
+			GetConfigList("zombie_gamemode_ranks");
 		}
 	}
 }

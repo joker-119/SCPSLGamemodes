@@ -1,9 +1,8 @@
 using Smod2.Commands;
 
-
 namespace ZombielandGamemode
 {
-    class ZombielandCommand : ICommandHandler
+    internal class ZombielandCommand : ICommandHandler
     {
         private readonly Zombieland plugin;
 

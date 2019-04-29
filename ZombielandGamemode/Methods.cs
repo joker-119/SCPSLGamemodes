@@ -1,11 +1,6 @@
-using Smod2;
-using UnityEngine;
-using Smod2.API;
-using Smod2.Commands;
-using System.Linq;
 using System.Collections.Generic;
 using MEC;
-
+using Smod2.API;
 
 namespace ZombielandGamemode
 {
@@ -14,24 +9,26 @@ namespace ZombielandGamemode
 		private readonly Zombieland plugin;
 		public Methods(Zombieland plugin) => this.plugin = plugin;
 
+/*
 		public bool IsAllowed(ICommandSender sender)
 		{
 			Player player = sender as Player;
 
 			if (player != null)
 			{
-				List<string> roleList = (plugin.ValidRanks != null && plugin.ValidRanks.Length > 0) ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
+				List<string> roleList = plugin.ValidRanks != null && plugin.ValidRanks.Length > 0 ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
 
 				if (roleList != null && roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
 					return true;
-				else if (roleList == null || roleList.Count == 0)
+				if (roleList == null || roleList.Count == 0)
 					return true;
-				else
-					return false;
+				return false;
 			}
 			return true;
 		}
+*/
 
+/*
 		public void EnableGamemode()
 		{
 			plugin.Enabled = true;
@@ -42,25 +39,27 @@ namespace ZombielandGamemode
 				plugin.Server.Map.Broadcast(25, "<color=#50c878>Zombieland Gamemode</color> is starting..", false);
 			}
 		}
+*/
+/*
 		public void DisableGamemode()
 		{
 			plugin.Enabled = false;
 			plugin.Server.Map.ClearBroadcasts();
 		}
+*/
 
 		public void EndGamemodeRound()
 		{
 			plugin.Info("EndgameRound Function");
 			plugin.RoundStarted = false;
 			plugin.Server.Round.EndRound();
-			plugin.CommandManager.CallCommand(null, "SETCONFIG", new string[] { "friendly_fire", "false" });
 		}
 
 		public IEnumerator<float> SpawnChild(Player player, Player killer)
 		{
 			Vector spawn = player.GetPosition();
 
-			player.ChangeRole(Role.SCP_049_2, false, false, false, false);
+			player.ChangeRole(Role.SCP_049_2, false, false, false);
 			yield return Timing.WaitForSeconds(2);
 
 			player.SetHealth(plugin.ChildHealth);
@@ -73,12 +72,12 @@ namespace ZombielandGamemode
 
 		public IEnumerator<float> AliveCounter(float delay)
 		{
-			while (plugin.Enabled || plugin.RoundStarted)
+			while (plugin.RoundStarted)
 			{
-				int human_count = (plugin.Round.Stats.NTFAlive + plugin.Round.Stats.ScientistsAlive + plugin.Round.Stats.ClassDAlive + plugin.Round.Stats.CiAlive);
+				int humanCount = plugin.Round.Stats.NTFAlive + plugin.Round.Stats.ScientistsAlive + plugin.Round.Stats.ClassDAlive + plugin.Round.Stats.CiAlive;
 
 				plugin.Server.Map.ClearBroadcasts();
-				plugin.Server.Map.Broadcast(10, "There are currently " + plugin.Round.Stats.Zombies + " zombies and " + human_count + " humans alive.", false);
+				plugin.Server.Map.Broadcast(10, "There are currently " + plugin.Round.Stats.Zombies + " zombies and " + humanCount + " humans alive.", false);
 				yield return Timing.WaitForSeconds(delay);
 			}
 		}
@@ -86,7 +85,7 @@ namespace ZombielandGamemode
 		{
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
 
-			player.ChangeRole(Role.SCP_049_2, false, false, false, false);
+			player.ChangeRole(Role.SCP_049_2, false, false, false);
 			yield return Timing.WaitForSeconds(2);
 
 			player.Teleport(spawn);
@@ -104,13 +103,11 @@ namespace ZombielandGamemode
 			yield return Timing.WaitForSeconds(delay);
 
 			foreach (Smod2.API.Door door in plugin.Server.Map.GetDoors())
-			{
 				if (door.Name == "GATE_A" || door.Name == "GATE_B")
 				{
 					door.Open = true;
 					door.Locked = true;
 				}
-			}
 		}
 	}
 }

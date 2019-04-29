@@ -1,18 +1,17 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
+using MEC;
 using Smod2.API;
 using Smod2.EventHandlers;
-using Smod2.EventSystem.Events;
-using System.Collections.Generic;
 using Smod2.Events;
-using MEC;
+using Smod2.EventSystem.Events;
 using UnityEngine;
-using Smod2.Commands;
-using System.Linq;
 
 namespace Mystery
 {
-	public class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers,
-		IEventHandlerPlayerDie, IEventHandlerRoundRestart
+	public class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart,
+		IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerWaitingForPlayers, IEventHandlerPlayerDie,
+		IEventHandlerRoundRestart
 	{
 		private readonly Mystery plugin;
 		public EventsHandler(Mystery plugin) => this.plugin = plugin;
@@ -24,57 +23,48 @@ namespace Mystery
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
+			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			
+			if (!plugin.RoundStarted)
 			{
-				if (!plugin.RoundStarted)
-				{
-					Server server = plugin.Server;
-					server.Map.ClearBroadcasts();
-					server.Map.Broadcast(25, "<color=#c50000>Murder Mystery</color> gamemode is starting...", false);
-				}
-				else
-					(ev.Player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
+				Server server = plugin.Server;
+				server.Map.ClearBroadcasts();
+				server.Map.Broadcast(25, "<color=#c50000>Murder Mystery</color> gamemode is starting...", false);
 			}
+			else
+				((GameObject)ev.Player.GetGameObject()).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
 		}
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
+			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			
+			plugin.RoundStarted = true;
+			plugin.Server.Map.ClearBroadcasts();
+			plugin.Info("Mystery Gamemode started!");
+
+			List<Player> players = ev.Server.GetPlayers();
+
+			foreach (GameObject player in PlayerManager.singleton.players) player.GetComponent<WeaponManager>().NetworkfriendlyFire = true;
+
+			for (int i = 0; i < plugin.MurdererNum; i++)
 			{
-				plugin.RoundStarted = true;
-				plugin.Server.Map.ClearBroadcasts();
-				plugin.Info("Mystery Gamemode started!");
-
-				List<Player> players = ev.Server.GetPlayers();
-				List<string> murds = new List<string>();
-				List<string> dets = new List<string>();
-
-				foreach (GameObject player in PlayerManager.singleton.players)
-				{
-					player.GetComponent<WeaponManager>().NetworkfriendlyFire = true;
-				}
-
-				for (int i = 0; i < plugin.MurdererNum; i++)
-				{
-					if (players.Count == 0) break;
-					int random = plugin.gen.Next(players.Count);
-					Player ranplayer = players[random];
-					players.Remove(ranplayer);
-					Timing.RunCoroutine(plugin.Functions.SpawnMurd(ranplayer));
-				}
-				for (int i = 0; i < plugin.DetectiveNum; i++)
-				{
-					if (players.Count == 0) break;
-					int random = plugin.gen.Next(players.Count);
-					Player ranplayer = players[random];
-					players.Remove(ranplayer);
-					Timing.RunCoroutine(plugin.Functions.SpawnDet(ranplayer));
-				}
-				foreach (Player player in players)
-				{
-					Timing.RunCoroutine(plugin.Functions.SpawnCiv(player));
-				}
+				if (players.Count == 0) break;
+				int random = plugin.Gen.Next(players.Count);
+				Player player = players[random];
+				players.Remove(player);
+				Timing.RunCoroutine(plugin.Functions.SpawnMurd(player));
 			}
+			for (int i = 0; i < plugin.DetectiveNum; i++)
+			{
+				if (players.Count == 0) break;
+				int random = plugin.Gen.Next(players.Count);
+				Player player = players[random];
+				players.Remove(player);
+				Timing.RunCoroutine(plugin.Functions.SpawnDet(player));
+			}
+			
+			foreach (Player player in players) Timing.RunCoroutine(plugin.Functions.SpawnCiv(player));
 		}
 
 		public void OnRoundEnd(RoundEndEvent ev)
@@ -82,7 +72,7 @@ namespace Mystery
 			if (!plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
-			plugin.Functions.EndGamemoderound();
+			plugin.Functions.EndGamemodeRound();
 
 		}
 
@@ -91,42 +81,45 @@ namespace Mystery
 			if (!plugin.RoundStarted) return;
 
 			plugin.Info("Round Restarted.");
-			plugin.Functions.EndGamemoderound();
+			plugin.Functions.EndGamemodeRound();
 		}
 
 		public void OnPlayerDie(PlayerDeathEvent ev)
 		{
 			if (!plugin.RoundStarted) return;
 
-			if (ev.Player.TeamRole.Role == Role.CLASSD)
+			switch (ev.Player.TeamRole.Role)
 			{
-				if (plugin.murd.ContainsKey(ev.Player.SteamId))
-				{
+				case Role.CLASSD when plugin.Murd.ContainsKey(ev.Player.SteamId):
 					plugin.Server.Map.ClearBroadcasts();
 					plugin.Server.Map.Broadcast(15, "A murderer, " + ev.Player.Name + " has been eliminated by " + ev.Killer.Name + "!", false);
-					plugin.murd.Remove(ev.Player.SteamId);
-				}
-				else
+					plugin.Murd.Remove(ev.Player.SteamId);
+					break;
+				case Role.CLASSD:
 				{
 					plugin.Server.Map.ClearBroadcasts();
 					plugin.Server.Map.Broadcast(25, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Civilians alive.", false);
-					if (!plugin.murd.ContainsKey(ev.Killer.SteamId) && (ev.Killer is Player))
+					if (!plugin.Murd.ContainsKey(ev.Killer.SteamId) && ev.Killer != null)
 					{
 						ev.Killer.ChangeRole(Role.SPECTATOR);
 						ev.Killer.PersonalClearBroadcasts();
 						ev.Killer.PersonalBroadcast(10, "<color=#c50000>You killed an innocent person! You monster!", false);
 					}
+
+					break;
 				}
-			}
-			else if (ev.Player.TeamRole.Role == Role.SCIENTIST)
-			{
-				plugin.Server.Map.ClearBroadcasts();
-				plugin.Server.Map.Broadcast(15, "A detective, " + ev.Player.Name + " has been killed!", false);
-				if (!plugin.murd.ContainsKey(ev.Killer.SteamId) && (ev.Killer is Player))
+				case Role.SCIENTIST:
 				{
-					ev.Killer.Kill();
-					ev.Player.PersonalClearBroadcasts();
-					ev.Player.PersonalBroadcast(10, "<color=#c50000>You were innocent and killed a Detective! How rude!", false);
+					plugin.Server.Map.ClearBroadcasts();
+					plugin.Server.Map.Broadcast(15, "A detective, " + ev.Player.Name + " has been killed!", false);
+					if (!plugin.Murd.ContainsKey(ev.Killer.SteamId) && ev.Killer != null)
+					{
+						ev.Killer.Kill();
+						ev.Player.PersonalClearBroadcasts();
+						ev.Player.PersonalBroadcast(10, "<color=#c50000>You were innocent and killed a Detective! How rude!", false);
+					}
+
+					break;
 				}
 			}
 		}
@@ -140,29 +133,21 @@ namespace Mystery
 			bool murdAlive = false;
 
 			foreach (Player player in ev.Server.GetPlayers().Where(ply => ply.TeamRole.Team != Smod2.API.Team.SPECTATOR))
-			{
-				if (plugin.murd.ContainsKey(player.SteamId))
-				{
-					murdAlive = true; continue;
-				}
-				else if (player.TeamRole.Role == Smod2.API.Role.CLASSD)
-				{
+				if (plugin.Murd.ContainsKey(player.SteamId))
+					murdAlive = true;
+				else if (player.TeamRole.Role == Role.CLASSD && !plugin.Murd.ContainsKey(player.SteamId)) 
 					civAlive = true;
-				}
-			}
 
 			if (murdAlive && civAlive)
-			{
 				ev.Status = ROUND_END_STATUS.ON_GOING;
-			}
 			else if (!murdAlive && civAlive)
 			{
-				ev.Status = ROUND_END_STATUS.MTF_VICTORY; plugin.Functions.EndGamemoderound();
+				ev.Status = ROUND_END_STATUS.MTF_VICTORY; plugin.Functions.EndGamemodeRound();
 				plugin.Info("All of the murderers are dead!");
 			}
 			else if (murdAlive && !civAlive)
 			{
-				ev.Status = ROUND_END_STATUS.SCP_VICTORY; plugin.Functions.EndGamemoderound();
+				ev.Status = ROUND_END_STATUS.SCP_VICTORY; plugin.Functions.EndGamemodeRound();
 				plugin.Info("All the Civilians are dead!");
 			}
 		}
@@ -174,24 +159,22 @@ namespace Mystery
 			plugin.Info("Myst Respawn.");
 			ev.SpawnChaos = true;
 
-
-			foreach (Player player in ev.PlayerList)
+			if (plugin.MurdRespawn)
 			{
-				int random = plugin.gen.Next(ev.PlayerList.Count);
-				Player ranmurd = ev.PlayerList[random];
-				ev.PlayerList.Remove(ranmurd);
-				int Random = plugin.gen.Next(ev.PlayerList.Count);
-				Player randet = ev.PlayerList[random];
-				ev.PlayerList.Remove(randet);
-
-				Timing.RunCoroutine(plugin.Functions.SpawnMurd(ranmurd));
-				Timing.RunCoroutine(plugin.Functions.SpawnDet(randet));
+				int r1 = plugin.Gen.Next(ev.PlayerList.Count);
+				Timing.RunCoroutine(plugin.Functions.SpawnMurd(ev.PlayerList[r1]));
+				ev.PlayerList.RemoveAt(r1);
 			}
-			foreach (Player player in ev.PlayerList)
+
+			if (plugin.DetRespawn)
 			{
+				int r2 = plugin.Gen.Next(ev.PlayerList.Count);
+				Timing.RunCoroutine(plugin.Functions.SpawnDet(ev.PlayerList[r2]));
+				ev.PlayerList.RemoveAt(r2);
+			}
+
+			foreach (Player player in ev.PlayerList) 
 				Timing.RunCoroutine(plugin.Functions.SpawnCiv(player));
-			}
-
 		}
 	}
 }

@@ -1,11 +1,9 @@
-using System.Linq;
-using Smod2;
-using Smod2.API;
-using Smod2.Config;
-using Smod2.Events;
-using Smod2.Attributes;
 using System;
 using System.Collections.Generic;
+using Smod2;
+using Smod2.API;
+using Smod2.Attributes;
+using Smod2.Config;
 
 namespace ZombieSurvival
 {
@@ -24,31 +22,30 @@ namespace ZombieSurvival
 	{
 		public Methods Functions { get; private set; }
 
-		public Random Gen = new System.Random();
+		public Random Gen = new Random();
 
 		public string[] ValidRanks { get; private set; }
 
 		public bool Enabled { get; internal set; }
 		public bool RoundStarted { get; internal set; }
 
-		public int NTFAmmo { get; private set; }
-		public int NTFHealth { get; private set; }
-		public int MaxNTFCount { get; private set; }
+		public int NtfAmmo { get; private set; }
+		public int NtfHealth { get; private set; }
+		public int MaxNtfCount { get; private set; }
 		public int ZHealth { get; private set; }
-		public int MaxZRespawn { get; private set; }
 
 		public float CarePackageTimer { get; private set; }
 		public float AmmoTimer { get; private set; }
 		public float RoundTimer { get; private set; }
 		public float ZDamageMultiplier { get; private set; }
 
-		public List<ItemType> NTFItems = new List<ItemType>();
+		public List<ItemType> NtfItems = new List<ItemType>();
 		public List<Room> Rooms = new List<Room>();
-		public List<Player> NTF = new List<Player>();
+		public List<Player> Ntf = new List<Player>();
 
 		public ItemType CarePackage { get; private set; }
 
-		public Vector NTFSpawn { get; private set; }
+		public Vector NtfSpawn { get; private set; }
 
 
 		public override void OnDisable()
@@ -69,7 +66,6 @@ namespace ZombieSurvival
 			AddConfig(new ConfigSetting("zsurv_ntf_items", new int[] { 8, 14, 14, 14, 14, 20 }, true, "The starting items for NTF"));
 
 			AddConfig(new ConfigSetting("zsurv_zombie_health", 1500, true, "The health Zombies spawn with."));
-			AddConfig(new ConfigSetting("zsurv_zombie_maxrespawn", -1, true, "The maximum number of zombies that can respawn."));
 			AddConfig(new ConfigSetting("zsurv_zombie_resistance", 0.8f, true, "The percent amount of damage dealt to zombies."));
 
 			AddConfig(new ConfigSetting("zsurv_carepackage_timer", 180f, true, "The time in seconds between carepackages."));
@@ -80,22 +76,21 @@ namespace ZombieSurvival
 
 			AddConfig(new ConfigSetting("zsurv_gamemode_ranks", new string[] { }, true, "The ranks able to use gamemode commands."));
 
-			AddEventHandlers(new EventHandler(this), Priority.Normal);
+			AddEventHandlers(new EventHandler(this));
 
 			AddCommands(new string[] { "zombiesurvival", "zsurv", "zs", "za" }, new ZombieCommand(this));
 
 			Functions = new Methods(this);
 
-			GamemodeManager.GamemodeManager.RegisterMode(this, "-1");
+			GamemodeManager.GamemodeManager.RegisterMode(this);
 		}
 
 		public void ReloadConfig()
 		{
-			NTFAmmo = GetConfigInt("zsurv_ntf_ammo");
-			NTFHealth = GetConfigInt("zsurv_ntf_health");
-			MaxNTFCount = GetConfigInt("zsurv_ntf_max");
+			NtfAmmo = GetConfigInt("zsurv_ntf_ammo");
+			NtfHealth = GetConfigInt("zsurv_ntf_health");
+			MaxNtfCount = GetConfigInt("zsurv_ntf_max");
 			ZHealth = GetConfigInt("zsurv_zombie_health");
-			MaxZRespawn = GetConfigInt("zsurv_zombie_maxrespawn");
 			ZDamageMultiplier = GetConfigFloat("zsurv_zombie_resistance");
 			CarePackageTimer = GetConfigFloat("zsurv_carepackage_timer");
 			AmmoTimer = GetConfigFloat("zsurv_ammo_timer");
@@ -103,15 +98,13 @@ namespace ZombieSurvival
 			CarePackage = (ItemType)GetConfigInt("zsurv_carepackage_item");
 			ValidRanks = GetConfigList("zsurv_gamemode_ranks");
 			Functions.Get079Rooms();
-			NTFSpawn = Functions.Spawn();
+			NtfSpawn = Functions.Spawn();
 
 			int[] items = GetConfigIntList("zsurv_ntf_items");
 
 			foreach (int i in items)
-			{
 				if (Enum.IsDefined(typeof(ItemType), i))
-					NTFItems.Add((ItemType)i);
-			}
+					NtfItems.Add((ItemType)i);
 		}
 	}
 }
