@@ -48,9 +48,9 @@ namespace SurvivalGamemode
 				plugin.Server.Map.ClearBroadcasts();
 				plugin.Info("Survival of the Fittest Gamemode Started!");
 
-				string[] dlist = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173", "HCZ_ARMORY", "NUKE_ARMORY", "049_ARMORY" };
+				string[] dList = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173", "HCZ_ARMORY", "NUKE_ARMORY", "049_ARMORY" };
 
-				foreach (string d in dlist)
+				foreach (string d in dList)
 				{
 					foreach (Smod2.API.Door door in ev.Server.Map.GetDoors())
 					{
@@ -63,9 +63,9 @@ namespace SurvivalGamemode
 					}
 				}
 
-				string[] olist = new string[] { "HID", "106_BOTTOM", "106_PRIMARY", "106_SECONDARY", "079_SECOND", "079_FIRST", "096" };
+				string[] oList = new string[] { "HID", "106_BOTTOM", "106_PRIMARY", "106_SECONDARY", "079_SECOND", "079_FIRST", "096" };
 
-				foreach (string o in olist)
+				foreach (string o in oList)
 				{
 					foreach (Smod2.API.Door door in ev.Server.Map.GetDoors())
 					{
@@ -182,7 +182,7 @@ namespace SurvivalGamemode
 
 		public void OnPlayerTriggerTesla(PlayerTriggerTeslaEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			ev.Triggerable = false;
 		}
