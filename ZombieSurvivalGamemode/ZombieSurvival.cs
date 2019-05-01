@@ -12,7 +12,7 @@ namespace ZombieSurvival
 		name = "Zombie Survival gamemode.",
 		description = "3 NTF vs a horde of zombies.",
 		id = "zombiesurvival.gamemode",
-		version = "2.0.0-gmm",
+		version = "2.0.1-gmm",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -100,11 +100,19 @@ namespace ZombieSurvival
 			Functions.Get079Rooms();
 			NtfSpawn = Functions.Spawn();
 
-			int[] items = GetConfigIntList("zsurv_ntf_items");
+//			int[] items = GetConfigIntList("zsurv_ntf_items");
+//
+//			foreach (int i in items)
+//				if (Enum.IsDefined(typeof(ItemType), i))
+//					NtfItems.Add((ItemType)i);
 
-			foreach (int i in items)
-				if (Enum.IsDefined(typeof(ItemType), i))
-					NtfItems.Add((ItemType)i);
+			NtfItems.Add((ItemType)8);
+			NtfItems.Add((ItemType)20);
+			NtfItems.Add((ItemType)14);
+			NtfItems.Add((ItemType)14);
+			NtfItems.Add((ItemType)14);
+			NtfItems.Add((ItemType)14);
+			
 		}
 	}
 }

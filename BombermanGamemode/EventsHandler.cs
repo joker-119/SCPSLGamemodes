@@ -161,9 +161,11 @@ namespace Bomber
 				{
 					case Team.CLASSD:
 						classdAlive = true;
+						aliveCount++;
 						continue;
 					case Team.SCIENTIST:
 						sciAlive = true;
+						aliveCount++;
 						break;
 				}
 
