@@ -5,7 +5,7 @@ using Smod2.EventHandlers;
 using Smod2.Events;
 using Smod2.EventSystem.Events;
 
-namespace ZombieSurvival
+namespace ZombielandGamemode
 {
 	internal class EventHandler : IEventHandlerWaitingForPlayers, IEventHandlerPlayerJoin, IEventHandlerRoundStart, IEventHandlerRoundRestart, IEventHandlerRoundEnd, IEventHandlerTeamRespawn,
 		IEventHandlerPlayerHurt

@@ -72,4 +72,7 @@
     <Compile Include="Functions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>rm -rf Assembly* Smod* *.pdb Unity* GamemodeManager.dll</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -75,6 +75,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-      <PreBuildEvent>rm -rf *</PreBuildEvent>
+    <PostBuildEvent>rm -rf Assembly* Smod* *.pdb Unity* GamemodeManager.dll</PostBuildEvent>
   </PropertyGroup>
 </Project>

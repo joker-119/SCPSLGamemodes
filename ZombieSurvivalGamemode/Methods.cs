@@ -4,7 +4,7 @@ using MEC;
 using Smod2.API;
 using Smod2.Commands;
 
-namespace ZombieSurvival
+namespace ZombielandGamemode
 {
 	public class Methods
 	{

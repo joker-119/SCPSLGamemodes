@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using MEC;
 using Smod2.API;
 
-namespace ZombielandGamemode
+namespace OutbreakGamemode
 {
 	public class Methods
 	{
-		private readonly Zombieland plugin;
-		public Methods(Zombieland plugin) => this.plugin = plugin;
+		private readonly Outbreak plugin;
+		public Methods(Outbreak plugin) => this.plugin = plugin;
 
 /*
 		public bool IsAllowed(ICommandSender sender)

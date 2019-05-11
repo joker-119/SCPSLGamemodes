@@ -5,15 +5,15 @@ using Smod2.Events;
 using Smod2.EventSystem.Events;
 using UnityEngine;
 
-namespace ZombielandGamemode
+namespace OutbreakGamemode
 {
 	internal class EventsHandler : IEventHandlerTeamRespawn, IEventHandlerDoorAccess, IEventHandlerCheckRoundEnd,
 		IEventHandlerRoundStart, IEventHandlerPlayerHurt, IEventHandlerPlayerJoin, IEventHandlerRoundEnd,
 		IEventHandlerWaitingForPlayers, IEventHandlerRoundRestart
 	{
-		private readonly Zombieland plugin;
+		private readonly Outbreak plugin;
 
-		public EventsHandler(Zombieland plugin) => this.plugin = plugin;
+		public EventsHandler(Outbreak plugin) => this.plugin = plugin;
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
@@ -23,10 +23,10 @@ namespace ZombielandGamemode
 			{
 				Server server = plugin.Server;
 				server.Map.ClearBroadcasts();
-				server.Map.Broadcast(25, "<color=#50c878>Zombieland Gamemode</color> is starting...", false);
+				server.Map.Broadcast(25, "<color=#50c878>Outbreak Gamemode</color> is starting...", false);
 			}
 			else
-				(ev.Player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
+				((GameObject) ev.Player.GetGameObject()).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
 		}
 
 		public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
@@ -41,12 +41,12 @@ namespace ZombielandGamemode
 			plugin.RoundStarted = true;
 
 			plugin.Server.Map.ClearBroadcasts();
-			plugin.Info("Zombieland Gamemode Started!");
+			plugin.Info("Outbreak Gamemode Started!");
 
 			foreach (Player player in ev.Server.GetPlayers())
 			{
 				if (player.TeamRole.Team == Smod2.API.Team.SCP) Timing.RunCoroutine(plugin.Functions.SpawnAlpha(player));
-				(player.GetGameObject() as GameObject).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
+				((GameObject) player.GetGameObject()).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
 			}
 
 			Timing.RunCoroutine(plugin.Functions.AliveCounter(90));

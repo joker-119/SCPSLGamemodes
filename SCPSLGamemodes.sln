@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurvivalGamemode", "SurvivalOfTheFittestGamemode\SurvivalGamemode.csproj", "{F91DA6B0-EA34-4DDC-8F5D-2FBF875D7E08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZombielandGamemode", "ZombielandGamemode\ZombielandGamemode.csproj", "{A8548F9F-67B5-4A00-B466-916932A273FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutbreakGamemode", "OutbreakGamemode\OutbreakGamemode.csproj", "{A8548F9F-67B5-4A00-B466-916932A273FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GangwarGamemode", "GangwarGamemode\GangwarGamemode.csproj", "{7A74B013-C364-4A08-8CB6-5A2DC414C941}"
 EndProject
@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresidentialEscort", "Presi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MysterySCP", "MysterySCPGamemode/SCP.csproj", "{0292F12C-7066-4562-92EC-FA4D85B01C99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZombieSurvivalgamemode", "ZombieSurvivalGamemode/ZombieSurvival.csproj", "{D04EACC1-FDF8-4C67-B75E-4F1872B880D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZombielandGamemode", "ZombieSurvivalGamemode\ZombielandGamemode.csproj", "{D04EACC1-FDF8-4C67-B75E-4F1872B880D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeMusketeersGamemode", "ThreeMusketeers\ThreeMusketeersGamemode.csproj", "{A5E666F3-C82A-42CC-AD12-5DD41F06DDB1}"
 EndProject
