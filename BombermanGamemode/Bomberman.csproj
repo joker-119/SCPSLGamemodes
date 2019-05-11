@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0FD23BBD-7AA3-4F17-9A9C-EB2D49ED10CC}</ProjectGuid>
     <OutputType>Library</OutputType>
-       <OutputType>Library</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BombermanGamemode</RootNamespace>
     <AssemblyName>BombermanGamemode</AssemblyName>
@@ -15,23 +15,29 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
-    <DebugType></DebugType>
+    <DebugType>
+    </DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\bin\GamemodesGMM</OutputPath>
-    <DefineConstants></DefineConstants>
-    <WarningLevel></WarningLevel>
+    <DefineConstants>
+    </DefineConstants>
+    <WarningLevel>
+    </WarningLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <ConsolePause>true</ConsolePause>
     <ExternalConsole>false</ExternalConsole>
-    <Commandlineparameters></Commandlineparameters>
+    <Commandlineparameters>
+    </Commandlineparameters>
     <RunWithWarnings>true</RunWithWarnings>
-    <NoWarn></NoWarn>
+    <NoWarn>
+    </NoWarn>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <LangVersion>Default</LangVersion>
     <NoStdLib>false</NoStdLib>
     <PlatformTarget>anycpu</PlatformTarget>
-    <WarningsNotAsErrors></WarningsNotAsErrors>
+    <WarningsNotAsErrors>
+    </WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Smod2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -52,10 +58,10 @@
     <Reference Include="UnityEngine">
       <HintPath>..\References\UnityEngine.dll</HintPath>
     </Reference>
-	<Reference Include="GamemodeManager">
-		<HintPath>..\References\GamemodeManager.dll</HintPath>
-	</Reference>
-	<Reference Include="Assembly-CSharp-firstpass">
+    <Reference Include="GamemodeManager">
+      <HintPath>..\References\GamemodeManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\References\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -63,7 +69,7 @@
     <Compile Include="EventsHandler.cs" />
     <Compile Include="Bomberman.cs" />
     <Compile Include="Commands.cs" />
-	<Compile Include="Functions.cs" />
+    <Compile Include="Functions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
