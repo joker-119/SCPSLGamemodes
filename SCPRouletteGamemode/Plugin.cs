@@ -26,6 +26,8 @@ namespace SCPRouletteGamemode
 			AddEventHandlers(new EventHandlers(this));
 
 			Functions = new Methods(this);
+			
+			GamemodeManager.GamemodeManager.RegisterMode(this);
 		}
 
 		public override void OnEnable()

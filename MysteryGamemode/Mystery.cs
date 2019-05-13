@@ -11,7 +11,7 @@ namespace Mystery
 		name = "Mystery Gamemode",
 		description = "Murder Mystery Gamemode",
 		id = "mystery.gamemode",
-		version = "2.1.0-gmm",
+		version = "2.1.1-gmm",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0

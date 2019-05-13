@@ -36,6 +36,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeMusketeersGamemode", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCPRouletteGamemode", "SCPRouletteGamemode\SCPRouletteGamemode.csproj", "{CFA05265-398A-43F6-9DB0-9D289829F37F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RisingLavaGamemode", "RisingLavaGamemode\RisingLavaGamemode.csproj", "{D3E7C4FB-A319-49D2-BD8E-8605D9C06738}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostageGamemode", "HostageGamemode\HostageGamemode.csproj", "{24F7B65F-0C76-402F-8983-0395B4EA6A83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,10 @@ Global
 		{A5E666F3-C82A-42CC-AD12-5DD41F06DDB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFA05265-398A-43F6-9DB0-9D289829F37F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CFA05265-398A-43F6-9DB0-9D289829F37F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3E7C4FB-A319-49D2-BD8E-8605D9C06738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3E7C4FB-A319-49D2-BD8E-8605D9C06738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F7B65F-0C76-402F-8983-0395B4EA6A83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F7B65F-0C76-402F-8983-0395B4EA6A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
