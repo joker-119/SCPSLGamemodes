@@ -3,7 +3,6 @@ using System.Linq;
 using MEC;
 using Smod2.API;
 using Smod2.Commands;
-using MEC;
 
 namespace Bomber
 {
