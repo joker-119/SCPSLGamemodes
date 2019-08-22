@@ -22,7 +22,7 @@ namespace PresidentialEscortGamemode
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			if (plugin.RoundStarted) return;
 			
 			Server server = plugin.Server;
@@ -32,7 +32,7 @@ namespace PresidentialEscortGamemode
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			
 			plugin.RoundStarted = true;
 			List<Player> players = ev.Server.GetPlayers();

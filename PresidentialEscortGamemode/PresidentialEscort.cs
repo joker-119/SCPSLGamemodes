@@ -10,7 +10,7 @@ namespace PresidentialEscortGamemode
 		name = "Presidential Escort Gamemode",
 		description = "Scientist (VIP) has to escape from SCPs with help of NTF",
 		id = "presidential.gamemode",
-		version = "2.1.1-gmm",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 2,
 		SmodRevision = 2
@@ -25,6 +25,7 @@ namespace PresidentialEscortGamemode
 
 		public bool VipEscaped { get; internal set; }
 		public bool RoundStarted { get; internal set; }
+		public bool Enabled { get; internal set; }
 
 		public int VipHealth { get; private set; }
 		public int GuardHealth { get; private set; }
@@ -48,8 +49,6 @@ namespace PresidentialEscortGamemode
 			AddEventHandlers(new EventsHandler(this));
 
 			AddCommands(new string[] { "presidentialescort", "presidential", "escort", "pe" }, new PresidentialEscortCommand(this));
-
-			GamemodeManager.GamemodeManager.RegisterMode(this);
 
 			Functions = new Functions(this);
 		}

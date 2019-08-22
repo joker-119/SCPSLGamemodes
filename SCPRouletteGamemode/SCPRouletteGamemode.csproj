@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\GamemodesGMM</OutputPath>
+    <OutputPath>..\..\bin\Gamemodes</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -37,10 +37,7 @@
     <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\References\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="GamemodeManager, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\References\GamemodeManager.dll</HintPath>
-    </Reference>
-    <Reference Include="Smod2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="Smod2, Version=3.5.1.3, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\References\Smod2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -61,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands.cs" />
     <Compile Include="EventHandlers.cs" />
     <Compile Include="Methods.cs" />
     <Compile Include="Plugin.cs" />

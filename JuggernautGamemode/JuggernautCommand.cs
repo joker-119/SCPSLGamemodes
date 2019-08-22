@@ -30,8 +30,16 @@ namespace JuggernautGamemode
 						"Juggernaut Command List",
 						"Juggernaut select [PlayerName] - Selects the player to be the Juggernaut"
 					};
+				case "enable":
+					plugin.Functions.EnableGamemode();
+
+					return new string[] { "Gungame gamemode will be Enabled for the next round!" };
+				case "disable":
+					plugin.Functions.DisableGamemode();
+
+					return new string[] { "Gungame gamemode now disabled." };
 				case "select":
-					if (GamemodeManager.GamemodeManager.CurrentMode != plugin || args.Length <= 1)
+					if (!plugin.Enabled || args.Length <= 1)
 						return new string[] { "A player name must be specified, and the gamemode must be Enabled!" };
 					
 					List<Player> players = plugin.Server.GetPlayers(args[1]);

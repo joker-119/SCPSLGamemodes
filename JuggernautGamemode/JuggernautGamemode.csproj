@@ -15,23 +15,29 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
-    <DebugType></DebugType>
+    <DebugType>
+    </DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\GamemodesGMM</OutputPath>
-    <DefineConstants></DefineConstants>
-    <WarningLevel></WarningLevel>
+    <OutputPath>..\..\bin\Gamemodes</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <WarningLevel>
+    </WarningLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <ConsolePause>true</ConsolePause>
     <ExternalConsole>false</ExternalConsole>
-    <Commandlineparameters></Commandlineparameters>
+    <Commandlineparameters>
+    </Commandlineparameters>
     <RunWithWarnings>true</RunWithWarnings>
-    <NoWarn></NoWarn>
+    <NoWarn>
+    </NoWarn>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <LangVersion>Default</LangVersion>
     <NoStdLib>false</NoStdLib>
     <PlatformTarget>anycpu</PlatformTarget>
-    <WarningsNotAsErrors></WarningsNotAsErrors>
+    <WarningsNotAsErrors>
+    </WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Smod2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -58,10 +64,7 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\References\Assembly-CSharp.dll</HintPath>
     </Reference>
-	<Reference Include="GamemodeManager">
-		<HintPath>..\References\GamemodeManager.dll</HintPath>
-	</Reference>
-	<Reference Include="Assembly-CSharp-firstpass">
+    <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\References\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -70,8 +73,7 @@
     <Compile Include="Juggernaut.cs" />
     <Compile Include="JuggernautCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-	
-	<Compile Include="Functions.cs" />
+    <Compile Include="Functions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

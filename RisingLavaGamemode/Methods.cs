@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MEC;
 using Smod2.API;
+using Smod2.Commands;
 using UnityEngine;
 
 namespace RisingLavaGamemode
@@ -10,6 +11,41 @@ namespace RisingLavaGamemode
 	{
 		private readonly RisingLavaGamemode plugin;
 		public Methods(RisingLavaGamemode plugin) => this.plugin = plugin;
+		
+		public bool IsAllowed(ICommandSender sender)
+		{
+			Player player = sender as Player;
+
+			if (player != null)
+			{
+				List<string> roleList = (plugin.ValidRanks != null && plugin.ValidRanks.Length > 0) ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
+
+				if (roleList != null && roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
+					return true;
+				else if (roleList == null || roleList.Count == 0)
+					return true;
+				else
+					return false;
+			}
+			return true;
+		}
+
+		public void EnableGamemode()
+		{
+			plugin.Enabled = true;
+			if (!plugin.RoundStarted)
+			{
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(25, "<color=#123456>Rising Lava Gamemode is starting..</color>", false);
+			}
+		}
+
+		public void DisableGamemode()
+		{
+			plugin.Enabled = false;
+			plugin.Server.Map.ClearBroadcasts();
+		}
+
 
 		public void Get079Rooms()
 		{
@@ -79,7 +115,7 @@ namespace RisingLavaGamemode
 			{
 				if (player.TeamRole.Role == Role.SPECTATOR) break;
 				
-				player.ThrowGrenade(ItemType.FRAG_GRENADE, false, Vector.Zero, true, player.GetPosition(), false, 0f);
+				player.ThrowGrenade(GrenadeType.FRAG_GRENADE, false, Vector.Zero, true, player.GetPosition(), false, 0f);
 
 				yield return Timing.WaitForSeconds(0.5f);
 			}

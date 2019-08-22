@@ -17,7 +17,7 @@ namespace LurkingGamemode
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			if (plugin.RoundStarted) return;
 			
 			Server server = plugin.Server;
@@ -34,7 +34,7 @@ namespace LurkingGamemode
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			
 			plugin.RoundStarted = true;
 
@@ -79,7 +79,7 @@ namespace LurkingGamemode
 
 		public void OnSpawn(PlayerSpawnEvent ev)
 		{
-			if (!plugin.FlashlightsOnSpawn) return;
+			if (!plugin.FlashlightsOnSpawn || !plugin.RoundStarted) return;
 
 			bool hasLight = false;
 			foreach (Smod2.API.Item item in ev.Player.GetInventory())

@@ -15,7 +15,7 @@ namespace ThreeMusketeers
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 
 			if (plugin.RoundStarted) return;
 			
@@ -31,7 +31,7 @@ namespace ThreeMusketeers
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			
 			plugin.RoundStarted = true;
 			List<Player> players = ev.Server.GetPlayers();
@@ -57,7 +57,7 @@ namespace ThreeMusketeers
 
 		public void OnTeamRespawn(TeamRespawnEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 			plugin.Info("Musk Respawn.");
 
 			ev.SpawnChaos = true;
@@ -66,7 +66,7 @@ namespace ThreeMusketeers
 
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
 			plugin.Functions.EndGamemodeRound();
@@ -118,7 +118,7 @@ namespace ThreeMusketeers
 
 		public void OnPlayerDie(PlayerDeathEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			plugin.Server.Map.ClearBroadcasts();
 			if (ev.Player.TeamRole.Team == Team.NINETAILFOX)

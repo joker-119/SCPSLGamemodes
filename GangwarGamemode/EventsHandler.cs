@@ -16,7 +16,7 @@ namespace Gangwar
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			if (plugin.RoundStarted) return;
 			
 			Server server = plugin.Server;
@@ -31,7 +31,7 @@ namespace Gangwar
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			
 			plugin.RoundStarted = true;
 

@@ -16,7 +16,7 @@ namespace HostageGamemode
 
 		public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			
 			plugin.CriminalSpawn = ev.Server.Map.GetRandomSpawnPoint(Role.FACILITY_GUARD);
 			plugin.PoliceSpawn = ev.Server.Map.GetRandomSpawnPoint(Role.FACILITY_GUARD);
@@ -24,12 +24,12 @@ namespace HostageGamemode
 			if (plugin.CriminalSpawn == plugin.PoliceSpawn)
 				plugin.PoliceSpawn = ev.Server.Map.GetRandomSpawnPoint(Role.FACILITY_GUARD);
 			
-			ev.Server.Map.Broadcast(25, "Hostage Situation gamemode is starting..", false);
+			ev.Server.Map.Broadcast(25, "<color=#123456>Hostage Situation gamemode is starting..</color>", false);
 		}
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 
 			plugin.RoundStarted = true;
 
@@ -130,11 +130,11 @@ namespace HostageGamemode
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			if (plugin.RoundStarted) return;
 			
 			plugin.Server.Map.ClearBroadcasts();
-			plugin.Server.Map.Broadcast(15, "Hostage Situation gamemode is starting..", false);
+			plugin.Server.Map.Broadcast(25, "<color=#123456>Hostage Situation gamemode is starting..</color>", false);
 		}
 	}
 }

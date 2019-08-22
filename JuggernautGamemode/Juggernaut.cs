@@ -11,7 +11,7 @@ namespace JuggernautGamemode
 		name = "Juggernaut Gamemode",
 		description = "Gamemode Template",
 		id = "juggernaut.gamemode",
-		version = "2.1.1-gmm",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -27,6 +27,7 @@ namespace JuggernautGamemode
 		public bool NtfDisarmer { get; private set; }
 		public bool JuggInfiniteNades { get; private set; }
 		public bool RoundStarted { get; internal set; }
+		public bool Enabled { get; internal set; }
 
 		public int JuggBase { get; private set; }
 		public int JuggIncrease { get; private set; }
@@ -77,8 +78,6 @@ namespace JuggernautGamemode
 			AddEventHandlers(new EventsHandler(this));
 
 			AddCommands(new string[] { "jug", "jugg", "juggernaut" }, new JuggernautCommand(this));
-
-			GamemodeManager.GamemodeManager.RegisterMode(this);
 
 			Functions = new Functions(this);
 		}

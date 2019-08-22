@@ -22,6 +22,22 @@ namespace Bomber
 			
 			return roleList.Count == 0;
 		}
+		
+		public void EnableGamemode()
+		{
+			plugin.Enabled = true;
+			if (!plugin.RoundStarted)
+			{
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(25, "<color=#00ffff> Bomberman Gamemode is starting..</color>", false);
+			}
+		}
+
+		public void DisableGamemode()
+		{
+			plugin.Enabled = false;
+			plugin.Server.Map.ClearBroadcasts();
+		}
 
 		public void EndGamemodeRound()
 		{
@@ -37,7 +53,7 @@ namespace Bomber
 			plugin.Info("Dropping grenades.");
 			foreach (Player player in plugin.Players)
 				if (IsAlive(player))
-					player.ThrowGrenade(ItemType.FRAG_GRENADE, false, new Vector(0f, 0f, 0f), true, player.GetPosition(), true, 0f);
+					player.ThrowGrenade(GrenadeType.FRAG_GRENADE, false, new Vector(0f, 0f, 0f), true, player.GetPosition(), true, 0f);
 		}
 
 		public void DropFlash()
@@ -45,7 +61,7 @@ namespace Bomber
 			plugin.Info("Dropping flash.");
 			foreach (Player player in plugin.Players)
 				if (IsAlive(player))
-					player.ThrowGrenade(ItemType.FLASHBANG, false, new Vector(0f, 0f, 0f), true, player.GetPosition(), true, 0f);
+					player.ThrowGrenade(GrenadeType.FLASHBANG, false, new Vector(0f, 0f, 0f), true, player.GetPosition(), true, 0f);
 		}
 
 		public void GetPlayers()

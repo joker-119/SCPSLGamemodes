@@ -23,7 +23,7 @@ namespace Mystery
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			
 			if (!plugin.RoundStarted)
 			{
@@ -37,7 +37,7 @@ namespace Mystery
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			
 			plugin.RoundStarted = true;
 			plugin.Server.Map.ClearBroadcasts();

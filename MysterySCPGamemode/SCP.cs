@@ -11,7 +11,7 @@ namespace SCP
 		name = "Mystery SCP Gamemode",
 		description = "All SCP's are a single SCP type.",
 		id = "scp.gamemode",
-		version = "2.1.1-gmm",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -26,6 +26,7 @@ namespace SCP
 		public string[] ValidRanks { get; private set; }
 
 		public bool RoundStarted { get; internal set; }
+		public bool Enabled { get; internal set; }
 
 		public string ScpType { get; internal set; } = "random";
 
@@ -48,8 +49,6 @@ namespace SCP
 			AddEventHandlers(new EventHandler(this));
 			
 			AddCommands(new string[] { "mysteryscp", "scp" }, new ScpCommand(this));
-
-			GamemodeManager.GamemodeManager.RegisterMode(this);
 
 			Functions = new Methods(this);
 		}

@@ -30,6 +30,14 @@ namespace PresidentialEscortGamemode
                             "Presidential Escort Command List",
                             "escort select - Selects who will be the next VIP."
                     };
+                case "enable":
+                    plugin.Functions.EnableGamemode();
+
+                    return new string[] { "Presidential Escort gamemode will be Enabled for the next round!" };
+                case "disable":
+                    plugin.Functions.DisableGamemode();
+
+                    return new string[] { "Presidential Escort gamemode now disabled." };
                 case "select":
                     {
                         if (args.Length <= 1) return new string[] { "Invalid player name." };

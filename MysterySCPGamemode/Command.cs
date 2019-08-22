@@ -24,6 +24,14 @@ namespace SCP
 						"Mystery SCP Command List",
 						"scp select - Selects the SCP to be spawned."
 					};
+				case "enable":
+					plugin.Functions.EnableGamemode();
+
+					return new string[] { "MysterySCP gamemode will be Enabled for the next round!" };
+				case "disable":
+					plugin.Functions.DisableGamemode();
+
+					return new string[] { "MysterySCP gamemode now disabled." };
 				case "select":
 					if (args.Length < 1) return new string[] { "You must specify an SCP role." };
 

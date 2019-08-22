@@ -10,7 +10,7 @@ namespace ThreeMusketeers
 		name = "Three Musketeers Gamemode",
 		description = "3 NTF Vs. a crap load of Class-D",
 		id = "musketeers.gamemode",
-		version = "2.1.1-gmm",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -47,8 +47,6 @@ namespace ThreeMusketeers
 			AddEventHandlers(new EventsHandler(this));
 
 			AddCommands(new string[] { "3musketeers", "musketeers", "3musk" }, new MusketeersCommand(this));
-
-			GamemodeManager.GamemodeManager.RegisterMode(this);
 
 			Functions = new Functions(this);
 		}

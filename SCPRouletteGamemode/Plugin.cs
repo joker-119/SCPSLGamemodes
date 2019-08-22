@@ -16,6 +16,8 @@ namespace SCPRouletteGamemode
 		public Methods Functions { get; private set; }
 
 		public bool RoundStarted = false;
+		public bool Enabled { get; internal set; }
+		public string[] ValidRanks = new string[] {};
 
 		public Random Gen = new Random();
 		
@@ -24,10 +26,10 @@ namespace SCPRouletteGamemode
 		public override void Register()
 		{
 			AddEventHandlers(new EventHandlers(this));
+			AddCommands(new []{"roulette"}, new Commands(this));
 
 			Functions = new Methods(this);
 			
-			GamemodeManager.GamemodeManager.RegisterMode(this);
 		}
 
 		public override void OnEnable()

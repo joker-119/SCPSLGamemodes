@@ -22,12 +22,12 @@ namespace Gungame
 		
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 
 			if (!plugin.RoundStarted)
 			{
 				plugin.Server.Map.ClearBroadcasts();
-				plugin.Server.Map.Broadcast(25, "GunGame gamemode is starting...", false);
+				plugin.Server.Map.Broadcast(25, "<color=#123456>GunGame gamemode is starting...</color>", false);
 			}
 			else
 				((GameObject) ev.Player.GetGameObject()).GetComponent<WeaponManager>().NetworkfriendlyFire = true;
@@ -35,7 +35,7 @@ namespace Gungame
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			
 			plugin.RoundStarted = true;
 			List<Player> players = ev.Server.GetPlayers();

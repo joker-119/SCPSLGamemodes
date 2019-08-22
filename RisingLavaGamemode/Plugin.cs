@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace RisingLavaGamemode
 {
-	[PluginDetails(author = "Joker119", name = "RisingLavaGamemode", id = "lava.gamemode", description = "", version = "2.1.1-gmm",
+	[PluginDetails(author = "Joker119", name = "RisingLavaGamemode", id = "lava.gamemode", description = "", version = "2.1.1",
 		configPrefix = "rlava", SmodMajor = 3, SmodMinor = 4, SmodRevision = 0)]
 
 	public class RisingLavaGamemode : Plugin
@@ -19,6 +19,8 @@ namespace RisingLavaGamemode
 		
 		public List<Room> Rooms = new List<Room>();
 		public bool RoundStarted = false;
+		public bool Enabled { get; internal set; }
+		public string[] ValidRanks = new string[] { };
 
 		public override void Register()
 		{
@@ -26,8 +28,6 @@ namespace RisingLavaGamemode
 			AddCommands(new[] { "risinglava", "rising", "lava" }, new Commands(this));
 
 			Functions = new Methods(this);
-			
-			GamemodeManager.GamemodeManager.RegisterMode(this);
 		}
 
 		public override void OnEnable()

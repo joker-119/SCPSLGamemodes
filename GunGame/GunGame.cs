@@ -11,7 +11,7 @@ namespace Gungame
 		name = "GunGame Gamemode",
 		description = "Kill EVERYONE!",
 		id = "gungame.gamemode",
-		version = "2.1.1-gmm",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -29,6 +29,7 @@ namespace Gungame
 		
 		public bool RoundStarted { get; internal set; }
 		public bool Reversed { get; private set; }
+		public bool Enabled { get; internal set; }
 
 		public int Health { get; private set; }
 
@@ -54,8 +55,6 @@ namespace Gungame
 			AddEventHandlers(new EventsHandler(this));
 
 			AddCommands(new string[] { " gungame", "gun" }, new GunGameCommand(this));
-
-			GamemodeManager.GamemodeManager.RegisterMode(this);
 
 			Functions = new Functions(this);
 		}

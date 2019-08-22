@@ -11,7 +11,7 @@ namespace Gangwar
 		name = "Gangwar Gamemode",
 		description = "Gangwar Gamemode",
 		id = "gangwar.gamemode",
-		version = "2.1.1-gmm",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -25,6 +25,9 @@ namespace Gangwar
 		public Dictionary<string, bool> Spawning = new Dictionary<string, bool>();
 
 		public bool RoundStarted { get; internal set; }
+		public bool Enabled { get; internal set; }
+		
+		public string[] ValidRanks = new string[]{};
 
 		public int CiHealth { get; private set; }
 		public int NtfHealth { get; private set; }
@@ -47,8 +50,8 @@ namespace Gangwar
 			AddConfig(new ConfigSetting("gang_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
 
 			AddEventHandlers(new EventsHandler(this));
-
-			GamemodeManager.GamemodeManager.RegisterMode(this);
+			
+			AddCommands(new string[] {"gang", "gangwar"}, new Commands(this));
 
 			Functions = new Functions(this);
 		}

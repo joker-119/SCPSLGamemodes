@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MEC;
 using Smod2.API;
+using Smod2.Commands;
 
 namespace HostageGamemode
 {
@@ -10,6 +11,39 @@ namespace HostageGamemode
 		private readonly HostageGamemode plugin;
 		public Methods(HostageGamemode plugin) => this.plugin = plugin;
 
+		public bool IsAllowed(ICommandSender sender)
+		{
+			Player player = sender as Player;
+
+			if (player != null)
+			{
+				List<string> roleList = (plugin.ValidRanks != null && plugin.ValidRanks.Length > 0) ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
+
+				if (roleList != null && roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
+					return true;
+				else if (roleList == null || roleList.Count == 0)
+					return true;
+				else
+					return false;
+			}
+			return true;
+		}
+
+		public void EnableGamemode()
+		{
+			plugin.Enabled = true;
+			if (!plugin.RoundStarted)
+			{
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(10, "<color=#123456>Hostage Gamemode</color> is starting..", false);
+			}
+		}
+
+		public void DisableGamemode()
+		{
+			plugin.Enabled = false;
+			plugin.Server.Map.ClearBroadcasts();
+		}
 		public IEnumerator<float> SpawnCriminal(Player player)
 		{
 			player.ChangeRole(Role.CLASSD, false, false, false);

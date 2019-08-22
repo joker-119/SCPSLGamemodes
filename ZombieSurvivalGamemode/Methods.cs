@@ -58,11 +58,12 @@ namespace ZombielandGamemode
 
 			yield return Timing.WaitForSeconds(1);
 
-			foreach (ItemType item in plugin.NtfItems)
-			{
-				player.GiveItem(item);
-				yield return Timing.WaitForOneFrame;
-			}
+			player.GiveItem(ItemType.E11_STANDARD_RIFLE);
+			player.GiveItem(ItemType.MEDKIT);
+			player.GiveItem(ItemType.MEDKIT);
+			player.GiveItem(ItemType.MEDKIT);
+			player.GiveItem(ItemType.MEDKIT);
+			player.GiveItem(ItemType.FRAG_GRENADE);
 		}
 
 		public IEnumerator<float> SpawnZombie(Player player)

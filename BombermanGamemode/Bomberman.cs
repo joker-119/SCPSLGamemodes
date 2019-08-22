@@ -12,7 +12,7 @@ namespace Bomber
 		name = "Bomberman Gamemode",
 		description = "Run from the bombs!",
 		id = "bomberman.gamemode",
-		version = "2.1.1-gmm",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -28,6 +28,7 @@ namespace Bomber
 		public bool Medkits { get; private set; }
 		public bool Warmode { get; internal set; }
 		public bool RoundStarted { get; internal set; }
+		public bool Enabled { get; internal set; }
 
 		public int Count { get; internal set; } = 1;
 		public int Min { get; private set; }
@@ -59,8 +60,6 @@ namespace Bomber
 			AddEventHandlers(new EventsHandler(this));
 
 			AddCommands(new string[] { "bomberman", "bomb" }, new BomberCommand(this));
-
-			GamemodeManager.GamemodeManager.RegisterMode(this);
 
 			Functions = new Functions(this);
 		}

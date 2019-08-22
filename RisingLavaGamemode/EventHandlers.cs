@@ -16,16 +16,16 @@ namespace RisingLavaGamemode
 
 		public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			plugin.Functions.Get079Rooms();
 			
 			plugin.Server.Map.ClearBroadcasts();
-			plugin.Server.Map.Broadcast(25, "Rising Lava Gamemode is starting..", false);
+			plugin.Server.Map.Broadcast(25, "<color=#123456>Rising Lava Gamemode is starting..</color>", false);
 		}
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 
 			plugin.RoundStarted = true;
 			
@@ -70,13 +70,15 @@ namespace RisingLavaGamemode
 
 		public void OnTeamRespawn(TeamRespawnEvent ev)
 		{
+			if (!plugin.RoundStarted) return; 
+			
 			ev.SpawnChaos = true;
 			ev.PlayerList = new List<Player>();
 		}
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			if (plugin.RoundStarted) return;
 			
 			plugin.Server.Map.ClearBroadcasts();

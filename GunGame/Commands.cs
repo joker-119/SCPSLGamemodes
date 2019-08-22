@@ -32,6 +32,14 @@ namespace Gungame
                         "gun disable - Disables the gamemode.",
                         "gun select [zonetype] - selects a specific zone for this round. Accepts lcz, hcz and ent"
                     };
+                case "enable":
+                    plugin.Functions.EnableGamemode();
+
+                    return new string[] { "Gungame gamemode will be Enabled for the next round!" };
+                case "disable":
+                    plugin.Functions.DisableGamemode();
+
+                    return new string[] { "Gungame gamemode now disabled." };
                 case "debug":
                     if (!plugin.RoundStarted) return new string[] { "Please wait for the gungame round to begin before using this command." };
                     plugin.Functions.ReplaceGun(p);

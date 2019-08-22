@@ -23,6 +23,22 @@ namespace Mystery
 			
 			return roleList.Count == 0;
 		}
+		
+		public void EnableGamemode()
+		{
+			plugin.Enabled = true;
+			if (!plugin.RoundStarted)
+			{
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(25, "<color=#c50000>Murder Mystery</color> gamemode is starting...", false);
+			}
+		}
+
+		public void DisableGamemode()
+		{
+			plugin.Enabled = false;
+			plugin.Server.Map.ClearBroadcasts();
+		}
 
 		public void EndGamemodeRound()
 		{

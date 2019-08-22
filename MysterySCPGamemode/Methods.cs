@@ -24,6 +24,22 @@ namespace SCP
 			
 			return roleList.Count == 0;
 		}
+		
+		public void EnableGamemode()
+		{
+			plugin.Enabled = true;
+			if (!plugin.RoundStarted)
+			{
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(15, "<color=#c50000>Mystery SCP</color> gamemode is starting..", false);
+			}
+		}
+
+		public void DisableGamemode()
+		{
+			plugin.Enabled = false;
+			plugin.Server.Map.ClearBroadcasts();
+		}
 
 		public void EndGamemodeRound()
 		{

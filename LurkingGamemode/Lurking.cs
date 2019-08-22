@@ -11,7 +11,7 @@ namespace LurkingGamemode
 		name = "Lurking in the dark Gamemode",
 		description = "Lurking in the Dark Gamemode",
 		id = "lurking.gamemode",
-		version = "2.1.1-gmm",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -23,6 +23,7 @@ namespace LurkingGamemode
 
 		public bool RoundStarted { get; internal set; }
 		public bool FlashlightsOnSpawn { get; private set; }
+		public bool Enabled { get; internal set; }
 
 		public int LarryHealth { get; private set; }
 		public int DoggoHealth { get; private set; }
@@ -31,6 +32,7 @@ namespace LurkingGamemode
 
 
 		public List<Room> BlackoutRooms = new List<Room>();
+		public string[] ValidRanks = new string[] { };
 
 		public override void OnDisable()
 		{
@@ -52,8 +54,7 @@ namespace LurkingGamemode
 			AddConfig(new ConfigSetting("lurking_flashlights", true, true, "If players should spawn with flashlights."));
 
 			AddEventHandlers(new EventsHandler(this));
-
-			GamemodeManager.GamemodeManager.RegisterMode(this);
+			AddCommands(new []{"lurking", "lurk", "litd"}, new Commands(this));
 
 			Functions = new Functions(this);
 

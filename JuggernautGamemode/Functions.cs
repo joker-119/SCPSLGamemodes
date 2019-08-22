@@ -23,6 +23,23 @@ namespace JuggernautGamemode
 			
 			return roleList.Count == 0;
 		}
+		
+		public void EnableGamemode()
+		{
+			plugin.Enabled = true;
+			if (!plugin.RoundStarted)
+			{
+				plugin.Server.Map.ClearBroadcasts();
+				plugin.Server.Map.Broadcast(10, "<color=#228B22>Juggernaut Gamemode</color> is starting..", false);
+			}
+		}
+
+		public void DisableGamemode()
+		{
+			plugin.Enabled = false;
+			plugin.Server.Map.ClearBroadcasts();
+		}
+
 
 		public bool IsJuggernaut(Player player)
 		{

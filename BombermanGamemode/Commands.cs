@@ -23,6 +23,12 @@ namespace Bomber
 
             switch (args[0].ToLower())
             {
+                case "enable":
+                    plugin.Functions.EnableGamemode();
+                    return new[] { "Bomberman gamemode is now enabled." };
+                case "disable":
+                    plugin.Functions.DisableGamemode();
+                    return new[] { "Bomberman gamemode is now disabled." };
                 case "help":
                     return new string[]
                     {

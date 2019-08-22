@@ -10,7 +10,7 @@ namespace OutbreakGamemode
 		name = "Outbreak Gamemode",
 		description = "Gamemode Template",
 		id = "outbreak.gamemode",
-		version = "2.1.1-gmm",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -23,11 +23,14 @@ namespace OutbreakGamemode
 
 		public bool RoundStarted { get; internal set; }
 		public bool AlphaDoorDestroy { get; private set; }
+		public bool Enabled { get; internal set; }
 
 		public int AlphaHealth { get; private set; }
 		public int ChildHealth { get; private set; }
 		public int AlphaDamage { get; private set; }
 		public int ChildDamage { get; private set; }
+		
+		public string[] ValidRanks = new string[] {};
 
 
 		public override void OnDisable()
@@ -50,10 +53,9 @@ namespace OutbreakGamemode
 			AddConfig(new ConfigSetting("outbreak_gamemode_ranks", new string[] { }, true, "The ranks able to use gamemode commands."));
 
 			AddEventHandlers(new EventsHandler(this));
+			AddCommands(new []{"outbreak"}, new Commands(this));
 
 			Functions = new Methods(this);
-
-			GamemodeManager.GamemodeManager.RegisterMode(this);
 		}
 
 		public void ReloadConfig()

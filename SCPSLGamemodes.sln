@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RisingLavaGamemode", "Risin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostageGamemode", "HostageGamemode\HostageGamemode.csproj", "{24F7B65F-0C76-402F-8983-0395B4EA6A83}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindersKeepersGamemode", "FindersKeepersGamemode\FindersKeepersGamemode.csproj", "{67F9DB1A-33A0-4084-A876-3B9A321A221D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,8 @@ Global
 		{D3E7C4FB-A319-49D2-BD8E-8605D9C06738}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24F7B65F-0C76-402F-8983-0395B4EA6A83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{24F7B65F-0C76-402F-8983-0395B4EA6A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67F9DB1A-33A0-4084-A876-3B9A321A221D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67F9DB1A-33A0-4084-A876-3B9A321A221D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

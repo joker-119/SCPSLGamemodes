@@ -16,6 +16,14 @@ namespace RisingLavaGamemode
 
 			switch (args[0].ToLower())
 			{
+				case "enable":
+					plugin.Functions.EnableGamemode();
+
+					return new string[] { "RisingLavaGamemode will be Enabled for the next round!" };
+				case "disable":
+					plugin.Functions.DisableGamemode();
+
+					return new string[] { "RisingLavaGamemode now disabled." };
 				case "lcz":
 					Timing.RunCoroutine(plugin.Functions.LczLockdown(0f));
 					return new[] { "Lcz locked down." };

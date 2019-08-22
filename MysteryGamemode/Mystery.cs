@@ -11,7 +11,7 @@ namespace Mystery
 		name = "Mystery Gamemode",
 		description = "Murder Mystery Gamemode",
 		id = "mystery.gamemode",
-		version = "2.1.1-gmm",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -30,6 +30,7 @@ namespace Mystery
 		public bool RoundStarted { get; internal set; }
 		public bool MurdRespawn { get; private set; }
 		public bool DetRespawn { get; private set; }
+		public bool Enabled { get; internal set; }
 
 		public int MurdererNum { get; private set; }
 		public int DetectiveNum { get; private set; }
@@ -63,8 +64,6 @@ namespace Mystery
 			AddEventHandlers(new EventsHandler(this));
 
 			AddCommands(new string[] { "mystery", "murder" }, new MysteryCommand(this));
-
-			GamemodeManager.GamemodeManager.RegisterMode(this);
 
 			Functions = new Functions(this);
 		}

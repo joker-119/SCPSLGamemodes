@@ -16,7 +16,7 @@ namespace SurvivalGamemode
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 
 			if (plugin.RoundStarted) return;
 			
@@ -33,7 +33,7 @@ namespace SurvivalGamemode
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			
 			Timing.RunCoroutine(plugin.Functions.TeleportNuts(plugin.NutDelay));
 			Timing.RunCoroutine(plugin.Functions.LczBlackout());
@@ -82,7 +82,7 @@ namespace SurvivalGamemode
 
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			plugin.Info("Round Ended!");
 			plugin.Functions.EndGamemodeRound();
@@ -154,14 +154,14 @@ namespace SurvivalGamemode
 		
 		public void OnPlayerTriggerTesla(PlayerTriggerTeslaEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 
 			ev.Triggerable = false;
 		}
 
 		public void OnTeamRespawn(TeamRespawnEvent ev)
 		{
-			if (!plugin.Enabled && !plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) return;
 			plugin.Info("Surv Respawn.");
 
 			ev.SpawnChaos = true;

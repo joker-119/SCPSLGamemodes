@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using MEC;
 using Smod2.API;
+using Smod2.Commands;
 
 namespace OutbreakGamemode
 {
@@ -9,7 +11,7 @@ namespace OutbreakGamemode
 		private readonly Outbreak plugin;
 		public Methods(Outbreak plugin) => this.plugin = plugin;
 
-/*
+
 		public bool IsAllowed(ICommandSender sender)
 		{
 			Player player = sender as Player;
@@ -26,9 +28,9 @@ namespace OutbreakGamemode
 			}
 			return true;
 		}
-*/
 
-/*
+
+
 		public void EnableGamemode()
 		{
 			plugin.Enabled = true;
@@ -39,14 +41,14 @@ namespace OutbreakGamemode
 				plugin.Server.Map.Broadcast(25, "<color=#50c878>Zombieland Gamemode</color> is starting..", false);
 			}
 		}
-*/
-/*
+
+
 		public void DisableGamemode()
 		{
 			plugin.Enabled = false;
 			plugin.Server.Map.ClearBroadcasts();
 		}
-*/
+
 
 		public void EndGamemodeRound()
 		{

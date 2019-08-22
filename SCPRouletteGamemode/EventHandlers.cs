@@ -13,7 +13,7 @@ namespace SCPRouletteGamemode
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 			if (plugin.RoundStarted) return;
 			
 			plugin.Server.Map.ClearBroadcasts();
@@ -22,7 +22,7 @@ namespace SCPRouletteGamemode
 		
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode != plugin) return;
+			if (!plugin.Enabled) return;
 
 			plugin.RoundStarted = true;
 		}

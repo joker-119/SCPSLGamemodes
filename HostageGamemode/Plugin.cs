@@ -7,7 +7,7 @@ using Smod2.Attributes;
 
 namespace HostageGamemode
 {
-	[PluginDetails(author = "Joker119", name = "HostageGamemode", id = "hostage.gamemode", description = "", version = "2.1.1-gmm",
+	[PluginDetails(author = "Joker119", name = "HostageGamemode", id = "hostage.gamemode", description = "", version = "2.1.1",
 		configPrefix = "hostage", SmodMajor = 3, SmodMinor = 4, SmodRevision = 0)]
 
 	public class HostageGamemode : Plugin
@@ -26,6 +26,8 @@ namespace HostageGamemode
 		public Vector CriminalSpawn;
 		public Vector PoliceSpawn;
 		public bool RoundStarted = false;
+		public bool Enabled { get; internal set; }
+		public string[] ValidRanks = new string[] {};
 		public List<int> Hostages = new List<int>();
 		public Random Gen = new Random();
 
@@ -35,8 +37,6 @@ namespace HostageGamemode
 			AddCommands(new[] { "" }, new Commands(this));
 
 			Functions = new Methods(this);
-			
-			GamemodeManager.GamemodeManager.RegisterMode(this);
 		}
 
 		public override void OnEnable()
