@@ -10,10 +10,10 @@ namespace OutbreakGamemode
 		name = "Outbreak Gamemode",
 		description = "Gamemode Template",
 		id = "outbreak.gamemode",
-		version = "2.1.1",
+		version = "2.2.0",
 		SmodMajor = 3,
-		SmodMinor = 4,
-		SmodRevision = 0
+		SmodMinor = 5,
+		SmodRevision = 1
 	)]
 	public class Outbreak : Plugin
 	{

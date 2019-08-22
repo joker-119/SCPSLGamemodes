@@ -10,10 +10,10 @@ namespace ThreeMusketeers
 		name = "Three Musketeers Gamemode",
 		description = "3 NTF Vs. a crap load of Class-D",
 		id = "musketeers.gamemode",
-		version = "2.1.1",
+		version = "2.2.0",
 		SmodMajor = 3,
-		SmodMinor = 4,
-		SmodRevision = 0
+		SmodMinor = 5,
+		SmodRevision = 1
 	)]
 
 	public class Musketeers : Plugin

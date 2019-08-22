@@ -11,10 +11,10 @@ namespace SCP
 		name = "Mystery SCP Gamemode",
 		description = "All SCP's are a single SCP type.",
 		id = "scp.gamemode",
-		version = "2.1.1",
+		version = "2.2.0",
 		SmodMajor = 3,
-		SmodMinor = 4,
-		SmodRevision = 0
+		SmodMinor = 5,
+		SmodRevision = 1
 	)]
 
 	public class Scp : Plugin

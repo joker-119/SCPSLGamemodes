@@ -8,7 +8,7 @@ using Smod2.Attributes;
 
 namespace FindersKeepersGamemode
 {
-	[PluginDetails(author = "Joker119", name = "FindersKeepersGamemode", id = "joker.FindersKeepersGamemode", description = "", version = "1.0.0",
+	[PluginDetails(author = "Joker119", name = "FindersKeepersGamemode", id = "joker.FindersKeepersGamemode", description = "", version = "2.2.0",
 		configPrefix = "fkg", SmodMajor = 3, SmodMinor = 5, SmodRevision = 1)]
 
 	public class FindersKeepersGamemode : Plugin
