@@ -8,18 +8,13 @@ namespace LurkingGamemode
 
         public LurkingCommand(Lurking plugin) => this.plugin = plugin;
 
-        public string GetCommandDescription()
-        {
-            return "";
-        }
+        public string GetCommandDescription() => "";
 
-        public string GetUsage()
-        {
-            return "Lurking Enabled : " + plugin.Enabled + "\n" +
-                "[Lurking / lurk / litd] HELP \n" +
-                "Lurking ENABLE \n" +
-                "Lurking DISABLE";
-        }
+        public string GetUsage() =>
+            "Lurking Enabled : " + plugin.Enabled + "\n" +
+            "[Lurking / lurk / litd] HELP \n" +
+            "Lurking ENABLE \n" +
+            "Lurking DISABLE";
 
         public string[] OnCall(ICommandSender sender, string[] args)
         {

@@ -1,0 +1,95 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JuggernautGamemode", "JuggernautGamemode\JuggernautGamemode.csproj", "{E60E88F4-6174-4E4C-8E11-B7BB66DED22D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0F489A9C-9265-4800-9430-EDD303AE28CA}"
+	ProjectSection(SolutionItems) = preProject
+		GamemodeTemplate.cs = GamemodeTemplate.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurvivalGamemode", "SurvivalOfTheFittestGamemode\SurvivalGamemode.csproj", "{F91DA6B0-EA34-4DDC-8F5D-2FBF875D7E08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutbreakGamemode", "OutbreakGamemode\OutbreakGamemode.csproj", "{A8548F9F-67B5-4A00-B466-916932A273FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GangwarGamemode", "GangwarGamemode\GangwarGamemode.csproj", "{7A74B013-C364-4A08-8CB6-5A2DC414C941}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LurkingGamemode", "LurkingGamemode\LurkingGamemode.csproj", "{CE115F33-77CF-457A-B637-E75411AE7D4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassacreGamemode", "MassacreGamemode\MassacreGamemode.csproj", "{DA391902-AAF1-43DD-A128-1608701191AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MysteryGamemode", "MysteryGamemode\MysteryGamemode.csproj", "{9F56CA25-CF87-414B-8361-845D31490C1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GunGameMode", "GunGame\GunGame.csproj", "{CC316087-244D-44D0-9715-FDFBA38307CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanGamemode", "BombermanGamemode\Bomberman.csproj", "{0FD23BBD-7AA3-4F17-9A9C-EB2D49ED10CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresidentialEscort", "PresidentialEscortGamemode\President.csproj", "{882B604A-8E0B-44EB-813E-E3BFC012110C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MysterySCP", "MysterySCPGamemode/SCP.csproj", "{0292F12C-7066-4562-92EC-FA4D85B01C99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZombielandGamemode", "ZombieSurvivalGamemode\ZombielandGamemode.csproj", "{D04EACC1-FDF8-4C67-B75E-4F1872B880D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeMusketeersGamemode", "ThreeMusketeers\ThreeMusketeersGamemode.csproj", "{A5E666F3-C82A-42CC-AD12-5DD41F06DDB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCPRouletteGamemode", "SCPRouletteGamemode\SCPRouletteGamemode.csproj", "{CFA05265-398A-43F6-9DB0-9D289829F37F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RisingLavaGamemode", "RisingLavaGamemode\RisingLavaGamemode.csproj", "{D3E7C4FB-A319-49D2-BD8E-8605D9C06738}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostageGamemode", "HostageGamemode\HostageGamemode.csproj", "{24F7B65F-0C76-402F-8983-0395B4EA6A83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindersKeepersGamemode", "FindersKeepersGamemode\FindersKeepersGamemode.csproj", "{67F9DB1A-33A0-4084-A876-3B9A321A221D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E60E88F4-6174-4E4C-8E11-B7BB66DED22D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E60E88F4-6174-4E4C-8E11-B7BB66DED22D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F91DA6B0-EA34-4DDC-8F5D-2FBF875D7E08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F91DA6B0-EA34-4DDC-8F5D-2FBF875D7E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8548F9F-67B5-4A00-B466-916932A273FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8548F9F-67B5-4A00-B466-916932A273FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A74B013-C364-4A08-8CB6-5A2DC414C941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A74B013-C364-4A08-8CB6-5A2DC414C941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE115F33-77CF-457A-B637-E75411AE7D4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC316087-244D-44D0-9715-FDFBA38307CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC316087-244D-44D0-9715-FDFBA38307CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE115F33-77CF-457A-B637-E75411AE7D4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA391902-AAF1-43DD-A128-1608701191AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA391902-AAF1-43DD-A128-1608701191AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F56CA25-CF87-414B-8361-845D31490C1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F56CA25-CF87-414B-8361-845D31490C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FD23BBD-7AA3-4F17-9A9C-EB2D49ED10CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FD23BBD-7AA3-4F17-9A9C-EB2D49ED10CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{882B604A-8E0B-44EB-813E-E3BFC012110C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{882B604A-8E0B-44EB-813E-E3BFC012110C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0292F12C-7066-4562-92EC-FA4D85B01C99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0292F12C-7066-4562-92EC-FA4D85B01C99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D04EACC1-FDF8-4C67-B75E-4F1872B880D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D04EACC1-FDF8-4C67-B75E-4F1872B880D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5E666F3-C82A-42CC-AD12-5DD41F06DDB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5E666F3-C82A-42CC-AD12-5DD41F06DDB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA05265-398A-43F6-9DB0-9D289829F37F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA05265-398A-43F6-9DB0-9D289829F37F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3E7C4FB-A319-49D2-BD8E-8605D9C06738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3E7C4FB-A319-49D2-BD8E-8605D9C06738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F7B65F-0C76-402F-8983-0395B4EA6A83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F7B65F-0C76-402F-8983-0395B4EA6A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67F9DB1A-33A0-4084-A876-3B9A321A221D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67F9DB1A-33A0-4084-A876-3B9A321A221D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA76254A-BADA-4DF5-84CC-3DE161119C9C}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		outputpath = ../../bin/Gamemodes
+		BaseDirectory = ../bin/Gamemodes
+	EndGlobalSection
+EndGlobal

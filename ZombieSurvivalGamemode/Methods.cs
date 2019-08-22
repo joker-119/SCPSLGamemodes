@@ -1,11 +1,10 @@
+using System.Collections.Generic;
 using System.Linq;
-using Smod2;
+using MEC;
 using Smod2.API;
 using Smod2.Commands;
-using System.Collections.Generic;
-using MEC;
 
-namespace ZombieSurvival
+namespace ZombielandGamemode
 {
 	public class Methods
 	{
@@ -14,31 +13,23 @@ namespace ZombieSurvival
 
 		public bool IsAllowed(ICommandSender sender)
 		{
-			Player player = sender as Player;
+			if (!(sender is Player player)) return true;
+			
+			List<string> roleList = plugin.ValidRanks != null && plugin.ValidRanks.Length > 0 ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
 
-			if (player != null)
-			{
-				List<string> roleList = (plugin.ValidRanks != null && plugin.ValidRanks.Length > 0) ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
-
-				if (roleList != null && roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
-					return true;
-				else if (roleList == null || roleList.Count == 0)
-					return true;
-				else
-					return false;
-			}
-			return true;
+			if (roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
+				return true;
+			return roleList.Count == 0;
 		}
 
 		public void EnableGamemode()
 		{
 			plugin.Enabled = true;
 
-			if (!plugin.RoundStarted)
-			{
-				plugin.Server.Map.ClearBroadcasts();
-				plugin.Server.Map.Broadcast(25, "<color=#07A407>Zombie Survival</color> gamemode is starting..", false);
-			}
+			if (plugin.RoundStarted) return;
+			
+			plugin.Server.Map.ClearBroadcasts();
+			plugin.Server.Map.Broadcast(25, "<color=#07A407>Zombie Survival</color> gamemode is starting..", false);
 		}
 		public void DisableGamemode()
 		{
@@ -46,45 +37,43 @@ namespace ZombieSurvival
 			plugin.Server.Map.ClearBroadcasts();
 		}
 
-		public Vector Spawn()
+		public Vector Spawn() => plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_049);
+
+		public IEnumerator<float> SpawnNtf(Player player)
 		{
-			int r = plugin.Gen.Next(1, plugin.Rooms.Count);
-			Vector spawn = new Vector(plugin.Rooms[r].Position.x, plugin.Rooms[r].Position.y + 2, plugin.Rooms[r].Position.z);
+			yield return Timing.WaitForSeconds(1.5f);
 
-			return spawn;
-		}
+			plugin.Ntf.Add(player);
 
-		public IEnumerator<float> SpawnNTF(Player player)
-		{
-			yield return Timing.WaitForOneFrame;
+			player.ChangeRole(Role.NTF_COMMANDER, false, false, false);
 
-			plugin.NTF.Add(player);
+			player.Teleport(plugin.NtfSpawn);
 
-			player.ChangeRole(Role.NTF_COMMANDER, false, false, false, false);
+			player.SetAmmo(AmmoType.DROPPED_5, plugin.NtfAmmo);
 
-			player.Teleport(plugin.NTFSpawn);
-
-			player.SetAmmo(AmmoType.DROPPED_5, plugin.NTFAmmo);
-
-			player.SetHealth(plugin.NTFHealth);
+			player.SetHealth(plugin.NtfHealth);
 
 			foreach (Smod2.API.Item item in player.GetInventory())
 				item.Remove();
 
-			foreach (ItemType item in plugin.NTFItems)
-				player.GiveItem(item);
+			yield return Timing.WaitForSeconds(1);
+
+			player.GiveItem(ItemType.E11_STANDARD_RIFLE);
+			player.GiveItem(ItemType.MEDKIT);
+			player.GiveItem(ItemType.MEDKIT);
+			player.GiveItem(ItemType.MEDKIT);
+			player.GiveItem(ItemType.MEDKIT);
+			player.GiveItem(ItemType.FRAG_GRENADE);
 		}
 
 		public IEnumerator<float> SpawnZombie(Player player)
 		{
-			yield return Timing.WaitForOneFrame;
+			yield return Timing.WaitForSeconds(1f);
 
-			int r = plugin.Gen.Next(1, plugin.Rooms.Count);
-			Vector spawn = new Vector(plugin.Rooms[r].Position.x, plugin.Rooms[r].Position.y + 2, plugin.Rooms[r].Position.z);
+			player.ChangeRole(Role.SCP_049_2, false, false, false);
+			yield return Timing.WaitForSeconds(2);
 
-			player.ChangeRole(Role.SCP_049_2, false, false, false, false);
-
-			player.Teleport(spawn);
+			player.Teleport(plugin.Server.Map.GetRandomSpawnPoint(Role.FACILITY_GUARD));
 
 			player.SetHealth(plugin.ZHealth);
 		}
@@ -92,28 +81,31 @@ namespace ZombieSurvival
 		public IEnumerator<float> SpawnAmmo(float delay)
 		{
 			plugin.Info("Ammo Delay: " + delay);
-			yield return Timing.WaitForSeconds(delay);
+			while (plugin.RoundStarted)
+			{
+				yield return Timing.WaitForSeconds(delay);
 
-			if (!plugin.RoundStarted) yield break;
+				foreach (Player player in plugin.Ntf)
+					player.SetAmmo(AmmoType.DROPPED_5, plugin.NtfAmmo);
 
-			foreach (Player player in plugin.NTF)
-				player.SetAmmo(AmmoType.DROPPED_5, plugin.NTFAmmo);
-
-			plugin.Server.Map.Broadcast(10, "An ammo drop has occured!", false);
+				plugin.Server.Map.Broadcast(10, "An ammo drop has occured!", false);
+			}
 		}
 
 		public IEnumerator<float> SpawnCarePackage(float delay)
 		{
 			plugin.Info("Package Delay: " + delay);
-			yield return Timing.WaitForSeconds(delay);
 
-			if (!plugin.RoundStarted) yield break;
+			while (plugin.RoundStarted)
+			{
+				yield return Timing.WaitForSeconds(delay);
 
-			foreach (Player player in plugin.NTF)
-				plugin.Server.Map.SpawnItem(plugin.CarePackage, GetCarePackageDrop(player), Vector.Zero);
+				foreach (Player player in plugin.Ntf)
+					plugin.Server.Map.SpawnItem(plugin.CarePackage, GetCarePackageDrop(player), Vector.Zero);
+			}
 		}
 
-		public Vector GetCarePackageDrop(Player player)
+		private Vector GetCarePackageDrop(Player player)
 		{
 			foreach (Room room in plugin.Rooms.Where(r => Vector.Distance(player.GetPosition(), r.Position) <= 30f && Vector.Distance(player.GetPosition(), r.Position) > 10f))
 				return room.Position;
@@ -131,7 +123,7 @@ namespace ZombieSurvival
 			EndGamemodeRound();
 		}
 
-		public IEnumerator<float> LCZDecon(float delay)
+		public IEnumerator<float> LczDecon(float delay)
 		{
 			plugin.Info("LCZ Delay: " + delay);
 			yield return Timing.WaitForSeconds(delay);

@@ -8,18 +8,13 @@ namespace MassacreGamemode
 
         public MassacreCommand(Massacre plugin) => this.plugin = plugin;
 
-        public string GetCommandDescription()
-        {
-            return "";
-        }
+        public string GetCommandDescription() => "";
 
-        public string GetUsage()
-        {
-            return "Massacre Enabled : " + plugin.Enabled + "\n" +
-                "[Massacre / mascr / motdb] HELP \n" +
-                "Massacre ENABLE \n" +
-                "Massacre DISABLE";
-        }
+        public string GetUsage() =>
+            "Massacre Enabled : " + plugin.Enabled + "\n" +
+            "[Massacre / mascr / motdb] HELP \n" +
+            "Massacre ENABLE \n" +
+            "Massacre DISABLE";
 
         public string[] OnCall(ICommandSender sender, string[] args)
         {

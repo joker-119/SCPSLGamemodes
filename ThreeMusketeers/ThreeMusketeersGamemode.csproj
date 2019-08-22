@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A5E666F3-C82A-42CC-AD12-5DD41F06DDB1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ThreeMusketeers</RootNamespace>
+    <AssemblyName>ThreeMusketeers</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\Gamemodes</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <AssemblyName>ThreeMusketeersGamemode</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Musketeers.cs" />
+    <Compile Include="MusketeersCommand.cs" />
+    <Compile Include="EventsHandler.cs" />
+    <Compile Include="Functions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Smod2">
+      <HintPath>..\References\Smod2.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\References\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\References\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\References\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Networking, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\References\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>rm -rf Assembly* Smod* *.pdb Unity* GamemodeManager.dll</PostBuildEvent>
+  </PropertyGroup>
+</Project>

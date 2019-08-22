@@ -1,12 +1,9 @@
+using System;
+using System.Collections.Generic;
 using Smod2;
 using Smod2.API;
-using Smod2.Events;
 using Smod2.Attributes;
 using Smod2.Config;
-using System.Collections.Generic;
-using System.Linq;
-using System;
-using MEC;
 
 namespace SurvivalGamemode
 {
@@ -15,7 +12,7 @@ namespace SurvivalGamemode
 		name = "Survival of the Fittest Gamemode",
 		description = "Gamemode Template",
 		id = "survival.gamemode",
-		version = "2.0.0",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -24,12 +21,12 @@ namespace SurvivalGamemode
 	{
 		public Functions Functions { get; private set; }
 
-		public Random Gen = new System.Random();
+		public Random Gen = new Random();
 
 		public string[] ValidRanks { get; private set; }
 
-		public bool Enabled { get; internal set; } = false;
-		public bool RoundStarted { get; internal set; } = false;
+		public bool Enabled { get; internal set; }
+		public bool RoundStarted { get; internal set; }
 
 		public float NutDelay { get; private set; }
 
@@ -52,17 +49,15 @@ namespace SurvivalGamemode
 
 		public override void Register()
 		{
-			AddConfig(new ConfigSetting("survival_peanut_delay", 120f, true, "The amount of time to wait before unleading peanuts."));
+			AddConfig(new ConfigSetting("survival_peanut_delay", 120f, true, "The amount of time to wait before unleashing peanuts."));
 			AddConfig(new ConfigSetting("survival_peanut_health", 173, true, "The amount of health peanuts should have (lower values move faster"));
 			AddConfig(new ConfigSetting("survival_peanut_limit", 3, true, "The maximum number of peanuts that can spawn."));
 			AddConfig(new ConfigSetting("survival_zone_type", "hcz", false, true, "The zone the event should take place in."));
 			AddConfig(new ConfigSetting("surv_gamemode_ranks", new string[] { }, true, "The ranks that can use gamemode commands."));
 
-			AddEventHandlers(new EventsHandler(this), Priority.Normal);
+			AddEventHandlers(new EventsHandler(this));
 
 			AddCommands(new string[] { "survival", "sotf", "surv" }, new SurvivalCommand(this));
-
-			GamemodeManager.GamemodeManager.RegisterMode(this, "-1");
 
 			Functions = new Functions(this);
 		}

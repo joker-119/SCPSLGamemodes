@@ -2,24 +2,15 @@ using Smod2.Commands;
 
 namespace SCP
 {
-	class SCPCommand : ICommandHandler
+	internal class ScpCommand : ICommandHandler
 	{
-		private readonly SCP plugin;
-		public SCPCommand(SCP plugin) => this.plugin = plugin;
+		private readonly Scp plugin;
+		public ScpCommand(Scp plugin) => this.plugin = plugin;
 
-		public string GetCommandDescription()
-		{
-			return "";
-		}
+		public string GetCommandDescription() => "";
 
-		public string GetUsage()
-		{
-			return "Mystery SCP Enavled: " + plugin.Enabled + "\n" +
-				"[MysterySCP / SCP] HELP \n" +
-				"scp ENABLE \n" +
-				"scp DISABLE";
-		}
-
+		public string GetUsage() => "[MysterySCP / SCP] HELP \n" + "scp SELECT \n";
+		
 		public string[] OnCall(ICommandSender sender, string[] args)
 		{
 			if (args.Length <= 0) return new string[] { GetUsage() };
@@ -31,44 +22,43 @@ namespace SCP
 					return new string[]
 					{
 						"Mystery SCP Command List",
-						"scp enable - Enables the Mystery SCP gamemode.",
-						"scp disable - Disables the Mystery SCP gamemode."
+						"scp select - Selects the SCP to be spawned."
 					};
 				case "enable":
 					plugin.Functions.EnableGamemode();
 
-					return new string[] { "Mystery SCP gamemode enabled." };
+					return new string[] { "MysterySCP gamemode will be Enabled for the next round!" };
 				case "disable":
 					plugin.Functions.DisableGamemode();
 
-					return new string[] { "Mystery SCP gamemode disabled." };
+					return new string[] { "MysterySCP gamemode now disabled." };
 				case "select":
 					if (args.Length < 1) return new string[] { "You must specify an SCP role." };
 
 					switch (args[1].ToLower())
 					{
 						case "939":
-							plugin.SCPType = "939";
+							plugin.ScpType = "939";
 
 							return new string[] { "SCP 939 selected." };
 						case "106":
-							plugin.SCPType = "106";
+							plugin.ScpType = "106";
 
 							return new string[] { "SCP 106 selected." };
 						case "173":
-							plugin.SCPType = "173";
+							plugin.ScpType = "173";
 
 							return new string[] { "SCP 173 selected." };
 						case "096":
-							plugin.SCPType = "096";
+							plugin.ScpType = "096";
 
 							return new string[] { "SCP 096 selected." };
 						case "049":
-							plugin.SCPType = "049";
+							plugin.ScpType = "049";
 
 							return new string[] { "SCP 049 selected." };
 						case "random":
-							plugin.SCPType = "random";
+							plugin.ScpType = "random";
 
 							return new string[] { "Random SCP type selected." };
 						default:

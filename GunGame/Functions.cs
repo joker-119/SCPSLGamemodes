@@ -1,8 +1,7 @@
-using System.Linq;
-using Smod2;
-using Smod2.API;
 using System.Collections.Generic;
-using System;
+using System.Linq;
+using MEC;
+using Smod2.API;
 using Smod2.Commands;
 
 namespace Gungame
@@ -14,30 +13,22 @@ namespace Gungame
 
 		public bool IsAllowed(ICommandSender sender)
 		{
-			Player player = sender as Player;
+			if (!(sender is Player player)) return true;
+			
+			List<string> roleList = plugin.ValidRanks != null && plugin.ValidRanks.Length > 0 ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
 
-			if (player != null)
-			{
-				List<string> roleList = (plugin.ValidRanks != null && plugin.ValidRanks.Length > 0) ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
-
-				if (roleList != null && roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
-					return true;
-				else if (roleList == null || roleList.Count == 0)
-					return true;
-				else
-					return false;
-			}
-			return true;
+			if (roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
+				return true;
+			return roleList.Count == 0;
 		}
-
+		
 		public void EnableGamemode()
 		{
 			plugin.Enabled = true;
-			if (!plugin.RoundStarted)
-			{
-				plugin.Server.Map.ClearBroadcasts();
-				plugin.Server.Map.Broadcast(10, "<color=#5D9AAC>GunGame Gamemode</color> is starting..", false);
-			}
+			if (plugin.RoundStarted) return;
+			
+			plugin.Server.Map.ClearBroadcasts();
+			plugin.Server.Map.Broadcast(10, "<color=#5D9AAC>GunGame Gamemode</color> is starting..", false);
 		}
 
 		public void DisableGamemode()
@@ -56,43 +47,35 @@ namespace Gungame
 
 		public IEnumerator<float> Spawn(Player player)
 		{
-			player.ChangeRole(Role.CLASSD, false, false, false, false);
-			player.Teleport(new Vector(GetSpawn().x, (GetSpawn().y + 3), GetSpawn().z));
-			yield return 1;
+			player.PersonalBroadcast(5, "You will respawn shortly..", false);
+			yield return Timing.WaitForSeconds(3);
+
+			plugin.Info("Spawning player: " + player.Name);
+			player.ChangeRole(Role.CLASSD, false, false, false);
+			plugin.Info("Teleporting player: " + player.Name);
+			player.Teleport(GetSpawn());
+			yield return Timing.WaitForSeconds(1);
 
 			player.SetGodmode(false);
+			plugin.Info("Setting health for player: " + player.Name);
 			player.SetHealth(plugin.Health);
 
-			foreach (Smod2.API.Item item in player.GetInventory())
-			{
-				item.Remove();
-			}
+			foreach (Smod2.API.Item item in player.GetInventory()) item.Remove();
+			plugin.Info("Setting inventory for player: " + player.Name);
 
-			if (plugin.Reversed)
-				player.GiveItem(ItemType.E11_STANDARD_RIFLE);
-			else
-				player.GiveItem(ItemType.FRAG_GRENADE);
+			player.GiveItem(plugin.Reversed ? ItemType.E11_STANDARD_RIFLE : ItemType.FRAG_GRENADE);
 
 			player.GiveItem(ItemType.MEDKIT);
-		}
 
-		public void LockDoors()
-		{
-			foreach (Smod2.API.Door door in plugin.Server.Map.GetDoors())
-			{
-				if (door.Name.Contains("CHECKPOINT") || door.Name.Contains("079") || door.Name.Contains("106"))
-					door.Locked = true;
-				else
-					door.Locked = false;
-			}
+			player.SetAmmo(AmmoType.DROPPED_5, 500);
+			player.SetAmmo(AmmoType.DROPPED_7, 500);
+			player.SetAmmo(AmmoType.DROPPED_9, 500);
 		}
 
 		public void ReplaceGun(Player player)
 		{
 			if (plugin.Reversed)
-			{
 				foreach (Smod2.API.Item item in player.GetInventory())
-				{
 					switch (item.ItemType)
 					{
 						case ItemType.E11_STANDARD_RIFLE:
@@ -120,11 +103,8 @@ namespace Gungame
 							player.GiveItem(ItemType.FRAG_GRENADE);
 							break;
 					}
-				}
-			}
 			else
 				foreach (Smod2.API.Item item in player.GetInventory())
-				{
 					switch (item.ItemType)
 					{
 						case ItemType.FRAG_GRENADE:
@@ -152,37 +132,26 @@ namespace Gungame
 							player.GiveItem(ItemType.E11_STANDARD_RIFLE);
 							break;
 					}
-				}
-
-			player.SetAmmo(AmmoType.DROPPED_5, 500);
-			player.SetAmmo(AmmoType.DROPPED_7, 500);
-			player.SetAmmo(AmmoType.DROPPED_9, 500);
 		}
 
 		public void AnnounceWinner(Player player)
 		{
 			plugin.Server.Map.ClearBroadcasts();
-			plugin.Server.Map.Broadcast(15, "We have out champion! Congratulations " + player.Name + "!", false);
+			plugin.Server.Map.Broadcast(15, "We have our champion! Congratulations " + player.Name + "!", false);
 			EndGamemodeRound();
 		}
 
-		public Room GetRooms(ZoneType zone)
+		private Room GetRooms(ZoneType zone)
 		{
-			List<Room> rooms = new List<Room>();
+			List<RoomType> validRooms = new List<RoomType> { RoomType.SCP_096, RoomType.SERVER_ROOM, RoomType.ENTRANCE_CHECKPOINT, RoomType.HCZ_ARMORY, RoomType.MICROHID };
 
-			List<RoomType> validRooms = new List<RoomType>() { RoomType.SCP_096, RoomType.SERVER_ROOM, RoomType.ENTRANCE_CHECKPOINT, RoomType.HCZ_ARMORY, RoomType.MICROHID };
-
-			foreach (Room room in plugin.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA).Where(rm => rm.ZoneType == zone))
-			{
-				if (validRooms.Contains(room.RoomType))
-					rooms.Add(room);
-			}
+			List<Room> rooms = plugin.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA).Where(rm => rm.ZoneType == zone).Where(room => validRooms.Contains(room.RoomType)).ToList();
 
 			int r = plugin.Gen.Next(rooms.Count);
 			return rooms[r];
 		}
 
-		public Vector GetSpawn()
+		private Vector GetSpawn()
 		{
 			switch (plugin.Zone.ToLower())
 			{
@@ -190,7 +159,7 @@ namespace Gungame
 					return plugin.Server.Map.GetRandomSpawnPoint(Role.SCIENTIST);
 				case "hzc":
 					return GetRooms(ZoneType.HCZ).Position;
-				case "enterance":
+				case "entrance":
 				case "ent":
 					return plugin.Server.Map.GetRandomSpawnPoint(Role.FACILITY_GUARD);
 				default:

@@ -1,10 +1,8 @@
-using Smod2;
-using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+using MEC;
 using Smod2.API;
 using Smod2.Commands;
-using System.Collections.Generic;
-using System;
-using System.Linq;
 
 namespace PresidentialEscortGamemode
 {
@@ -16,26 +14,19 @@ namespace PresidentialEscortGamemode
 
 		public bool IsAllowed(ICommandSender sender)
 		{
-			Player player = sender as Player;
+			if (!(sender is Player player)) return true;
+			
+			List<string> roleList = plugin.ValidRanks != null && plugin.ValidRanks.Length > 0 ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
 
-			if (player != null)
-			{
-				List<string> roleList = (plugin.ValidRanks != null && plugin.ValidRanks.Length > 0) ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
-
-				if (roleList != null && roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
-					return true;
-				else if (roleList == null || roleList.Count == 0)
-					return true;
-				else
-					return false;
-			}
-			return true;
+			if (roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
+				return true;
+			
+			return roleList.Count == 0;
 		}
 
 		public void EnableGamemode()
 		{
 			plugin.Enabled = true;
-
 			if (!plugin.RoundStarted)
 			{
 				plugin.Server.Map.ClearBroadcasts();
@@ -54,60 +45,63 @@ namespace PresidentialEscortGamemode
 			plugin.Info("EndgameRound Function");
 			plugin.RoundStarted = false;
 			plugin.Server.Round.EndRound();
-			plugin.VIP = null;
-			plugin.VIPEscaped = false;
+			plugin.Vip = null;
+			plugin.VipEscaped = false;
 		}
 
-		public  IEnumerator<float> AnnounceLocation()
+		public IEnumerator<float> AnnounceLocation(float delay)
 		{
+			yield return Timing.WaitForSeconds(delay);
 			while (plugin.RoundStarted)
 			{
-				Vector loc = plugin.VIP.GetPosition();
-				ZoneType zone;
+				Vector loc = plugin.Vip.GetPosition();
 
 				foreach (Room room in plugin.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA).Where(r => Vector.Distance(loc, r.Position) <= 10f))
 				{
-					zone = room.ZoneType;
+					ZoneType zone = room.ZoneType;
 
-					if (zone == ZoneType.HCZ)
+					switch (zone)
 					{
-						plugin.Server.Map.Broadcast(10, "The VIP is in Heavy Containment!", false);
-					}
-					else if (zone == ZoneType.LCZ)
-					{
-						plugin.Server.Map.Broadcast(10, "The VIP is in Light Containment!", false);
-					}
-					else if (zone == ZoneType.ENTRANCE)
-					{
-						plugin.Server.Map.Broadcast(10, "The VIP is in Entrance Zone!", false);
+						case ZoneType.HCZ:
+							plugin.Server.Map.Broadcast(10, "The VIP is in Heavy Containment!", false);
+							break;
+						case ZoneType.LCZ:
+							plugin.Server.Map.Broadcast(10, "The VIP is in Light Containment!", false);
+							break;
+						case ZoneType.ENTRANCE:
+							plugin.Server.Map.Broadcast(10, "The VIP is in Entrance Zone!", false);
+							break;
+						case ZoneType.UNDEFINED:
+							plugin.Debug("VIP location undefined.");
+							break;
+						default:
+							plugin.Server.Map.Broadcast(10, "The VIP is on the Surface!", false);
+							break;
 					}
 					break;
 				}
-				yield return 120f;
+				yield return Timing.WaitForSeconds(120f);
 			}
 		}
 
-		public  IEnumerator<float> SpawnVIP(Player player)
+		public IEnumerator<float> SpawnVip(Player player)
 		{
-			plugin.VIP = player;
+			plugin.Vip = player;
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
 
-			player.ChangeRole(Role.SCIENTIST, false, false, true, false);
+			player.ChangeRole(Role.SCIENTIST, false, false);
 
-			yield return 2;
+			yield return Timing.WaitForSeconds(2);
 			player.Teleport(spawn);
 
-			foreach (Smod2.API.Item item in player.GetInventory())
-			{
-				item.Remove();
-			}
+			foreach (Smod2.API.Item item in player.GetInventory()) item.Remove();
 
 			player.GiveItem(ItemType.MAJOR_SCIENTIST_KEYCARD);
 			player.GiveItem(ItemType.MEDKIT);
 			player.GiveItem(ItemType.RADIO);
 			player.GiveItem(ItemType.FLASHLIGHT);
 
-			player.SetHealth(plugin.VIPHealth);
+			player.SetHealth(plugin.VipHealth);
 
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(15, "You are the <color=#f8ea56>VIP</color> Escape the facility with the help of " +
@@ -115,18 +109,15 @@ namespace PresidentialEscortGamemode
 
 		}
 
-		public  IEnumerator<float> SpawnNTF(Player player)
+		public IEnumerator<float> SpawnNtf(Player player)
 		{
 			Vector spawn = plugin.Server.Map.GetRandomSpawnPoint(Role.CLASSD);
-			player.ChangeRole(Role.FACILITY_GUARD, false, true, false, false);
+			player.ChangeRole(Role.FACILITY_GUARD, false, true, false);
 
-			yield return 2;
+			yield return Timing.WaitForSeconds(2);
 			player.Teleport(spawn);
 
-			foreach (Smod2.API.Item item in player.GetInventory())
-			{
-				item.Remove();
-			}
+			foreach (Smod2.API.Item item in player.GetInventory()) item.Remove();
 
 			player.SetAmmo(AmmoType.DROPPED_5, 500);
 			player.SetAmmo(AmmoType.DROPPED_7, 500);
@@ -138,6 +129,8 @@ namespace PresidentialEscortGamemode
 			player.GiveItem(ItemType.MEDKIT);
 			player.GiveItem(ItemType.SENIOR_GUARD_KEYCARD);
 			player.GiveItem(ItemType.FLASHLIGHT);
+			
+			player.SetHealth(plugin.GuardHealth);
 
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(15, "You are an <color=#308ADA>NTF Cadet</color>. Work with others to help the " +

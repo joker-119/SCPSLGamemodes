@@ -1,25 +1,18 @@
 using Smod2.Commands;
 
-
 namespace Gangwar
 {
-    class GangwarCommand : ICommandHandler
+    internal class GangwarCommand : ICommandHandler
     {
         private readonly Gangwar plugin;
         public GangwarCommand(Gangwar plugin) => this.plugin = plugin;
 
-        public string GetCommandDescription()
-        {
-            return "";
-        }
+        public string GetCommandDescription() => "";
 
-        public string GetUsage()
-        {
-            return "Gangwar Enabled : " + plugin.Enabled + "\n" +
-                "[Gangwar / gang / gw] HELP \n" +
-                "gang ENABLE \n" +
-                "gang DISABLE \n";
-        }
+        public string GetUsage() =>
+            "[Gangwar / gang / gw] HELP \n" +
+            "gang ENABLE \n" +
+            "gang DISABLE \n";
 
         public string[] OnCall(ICommandSender sender, string[] args)
         {

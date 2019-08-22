@@ -18,7 +18,7 @@ namespace MuskateersGamemode
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
+			if (plugin.Enabled)
 			{
 				if (!plugin.RoundStarted)
 				{
@@ -36,7 +36,7 @@ namespace MuskateersGamemode
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (GamemodeManager.GamemodeManager.CurrentMode == plugin)
+			if (plugin.Enabled)
 			{
 				plugin.RoundStarted = true;
 				List<Player> players = ev.Server.GetPlayers();

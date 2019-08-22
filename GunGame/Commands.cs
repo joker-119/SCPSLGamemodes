@@ -1,34 +1,27 @@
-using Smod2.Commands;
 using Smod2.API;
+using Smod2.Commands;
 
 namespace Gungame
 {
-    class GunGameCommand : ICommandHandler
+    internal class GunGameCommand : ICommandHandler
     {
         private readonly GunGame plugin;
 
         public GunGameCommand(GunGame plugin) => this.plugin = plugin;
 
-        public string GetCommandDescription()
-        {
-            return "";
-        }
+        public string GetCommandDescription() => "";
 
-        public string GetUsage()
-        {
-            return "GunGame Enabled : " + plugin.Enabled + "\n" +
+        public string GetUsage() =>
             "[gungame / gun] HELP \n" +
-            "gun ENABLE \n" +
-            "gun DISABLE \n" +
             "gun SELECT [ZONETYPE]";
-        }
 
         public string[] OnCall(ICommandSender sender, string[] args)
         {
             if (args.Length <= 0) return new string[] { GetUsage() };
             if (!plugin.Functions.IsAllowed(sender)) return new string[] { "Permission Denied." };
 
-            Player p = sender as Player;
+            Player p = (Player)sender;
+            
             switch (args[0].ToLower())
             {
                 case "help":
@@ -37,7 +30,7 @@ namespace Gungame
                         "GunGame Command List",
                         "gun enable - Enables the gamemode.",
                         "gun disable - Disables the gamemode.",
-                        "gun select [zonetype] - selects a specific zone for this round. Acceps lcz, hcz and ent"
+                        "gun select [zonetype] - selects a specific zone for this round. Accepts lcz, hcz and ent"
                     };
                 case "enable":
                     plugin.Functions.EnableGamemode();
@@ -60,7 +53,6 @@ namespace Gungame
                 case "select":
                     if (args.Length <= 1) return new string[] { "You must specify a zone!" };
                     if (plugin.RoundStarted) return new string[] { "This command cannot be used once the round has started." };
-                    if (!plugin.Enabled) return new string[] { "Please enable the gamemode before using this command." };
 
                     switch (args[1].ToLower())
                     {

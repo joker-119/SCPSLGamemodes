@@ -1,10 +1,8 @@
+using System;
+using System.Collections.Generic;
 using Smod2;
 using Smod2.Attributes;
 using Smod2.Config;
-using Smod2.Events;
-using System;
-using System.Collections.Generic;
-using MEC;
 
 namespace Mystery
 {
@@ -13,7 +11,7 @@ namespace Mystery
 		name = "Mystery Gamemode",
 		description = "Murder Mystery Gamemode",
 		id = "mystery.gamemode",
-		version = "2.0.0",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
@@ -23,32 +21,32 @@ namespace Mystery
 	{
 		public Functions Functions { get; private set; }
 
-		public Random gen = new System.Random();
+		public Random Gen = new Random();
 
-		public Dictionary<string, bool> murd = new Dictionary<string, bool>();
+		public Dictionary<string, bool> Murd = new Dictionary<string, bool>();
 
 		public string[] ValidRanks { get; private set; }
 
-		public bool Enabled { get; internal set; } = false;
-		public bool RoundStarted { get; internal set; } = false;
+		public bool RoundStarted { get; internal set; }
 		public bool MurdRespawn { get; private set; }
 		public bool DetRespawn { get; private set; }
+		public bool Enabled { get; internal set; }
 
 		public int MurdererNum { get; private set; }
 		public int DetectiveNum { get; private set; }
 		public int DetHealth { get; private set; }
 		public int CivHealth { get; private set; }
 		public int MurdHealth { get; private set; }
-		public int MonserNum { get; private set; }
+		public int MonsterNum { get; private set; }
 
 		public override void OnDisable()
 		{
-			this.Info(this.Details.name + "v." + this.Details.version + " has been disbaled.");
+			Info(Details.name + "v." + Details.version + " has been disabled.");
 		}
 
 		public override void OnEnable()
 		{
-			this.Info(this.Details.name + "v." + this.Details.version + " has been Enabled.");
+			Info(Details.name + "v." + Details.version + " has been Enabled.");
 		}
 
 		public override void Register()
@@ -63,11 +61,9 @@ namespace Mystery
 			AddConfig(new ConfigSetting("myst_det_respawn", true, true, "If a random Detective should be respawned."));
 			AddConfig(new ConfigSetting("myst_gamemode_ranks", new string[] { }, true, "The ranks able to use commands."));
 
-			AddEventHandlers(new EventsHandler(this), Priority.Normal);
+			AddEventHandlers(new EventsHandler(this));
 
 			AddCommands(new string[] { "mystery", "murder" }, new MysteryCommand(this));
-
-			GamemodeManager.GamemodeManager.RegisterMode(this, "-1");
 
 			Functions = new Functions(this);
 		}
@@ -78,7 +74,7 @@ namespace Mystery
 			DetHealth = GetConfigInt("myst_det_health");
 			MurdHealth = GetConfigInt("myst_murd_health");
 			DetectiveNum = GetConfigInt("myst_det_num");
-			MonserNum = GetConfigInt("myst_monster_num");
+			MonsterNum = GetConfigInt("myst_monster_num");
 			MurdererNum = GetConfigInt("myst_murd_num");
 			DetRespawn = GetConfigBool("myst_det_respawn");
 			MurdRespawn = GetConfigBool("myst_murd_respawn");

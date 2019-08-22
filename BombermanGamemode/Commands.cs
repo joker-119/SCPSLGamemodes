@@ -2,27 +2,19 @@ using Smod2.Commands;
 
 namespace Bomber
 {
-    class BomberCommand : ICommandHandler
+    internal class BomberCommand : ICommandHandler
     {
         private readonly Bomber plugin;
         public BomberCommand(Bomber plugin) => this.plugin = plugin;
 
-        public string GetCommandDescription()
-        {
-            return "";
-        }
+        public string GetCommandDescription() => "";
 
-        public string GetUsage()
-        {
-            return "Bomberman Enabled : " + plugin.Enabled + "\n" +
-                "[Bomberman / bomb] HELP \n" +
-                "bomb enable \n" +
-                "bomb disable \n" +
-                "bomb drop" +
-                "bomb flash" +
-                "bomb select" +
-                "bomb bosswave";
-        }
+        public string GetUsage() =>
+            "[Bomberman / bomb] HELP \n" +
+            "bomb drop" +
+            "bomb flash" +
+            "bomb select" +
+            "bomb bosswave";
 
         public string[] OnCall(ICommandSender sender, string[] args)
         {
@@ -31,6 +23,12 @@ namespace Bomber
 
             switch (args[0].ToLower())
             {
+                case "enable":
+                    plugin.Functions.EnableGamemode();
+                    return new[] { "Bomberman gamemode is now enabled." };
+                case "disable":
+                    plugin.Functions.DisableGamemode();
+                    return new[] { "Bomberman gamemode is now disabled." };
                 case "help":
                     return new string[]
                     {
@@ -39,18 +37,8 @@ namespace Bomber
                         "bomb disable - Disables the Bomberman gamemode.",
                         "bomb drop - Repeats the previous grenade drop.",
                         "bomb select Class - Selects the specified class as the rounds spawn. Accepts [classd, sci, guard, ntf, chaos, normal]",
-                        "bomb bosswave - Cuts the time for grenade spawns in half.",
+                        "bomb bosswave - Cuts the time for grenade spawns in half."
                     };
-                case "enable":
-                    {
-                        plugin.Functions.EnableGamemode();
-                        return new string[] { "Bomberman will be Enabled for the next round!" };
-                    }
-                case "disable":
-                    {
-                        plugin.Functions.DisableGamemode();
-                        return new string[] { "Bomberman now disabled." };
-                    }
                 case "drop":
                     {
                         plugin.Functions.GetPlayers();
@@ -70,41 +58,40 @@ namespace Bomber
                     }
                 case "select":
                     {
-                        if (args.Length > 1)
+                        if (args.Length <= 1) return new string[] { "A class must be specified." };
+                        
+                        switch (args[1].ToLower())
                         {
-                            switch (args[1].ToLower())
-                            {
-                                case "classd":
-                                    plugin.SpawnClass = "classd";
-                                    return new string[] { "Class-D spawn has been selected." };
-                                case "sci":
-                                case "nerd":
-                                case "scientist":
-                                    plugin.SpawnClass = "sci";
-                                    return new string[] { "Scientist spawn has been selected." };
-                                case "guard":
-                                    plugin.SpawnClass = "guard";
-                                    return new string[] { "Facility Guard spawn has been selected." };
-                                case "ntf":
-                                    plugin.SpawnClass = "ntf";
-                                    return new string[] { "NTF Spawn has been selected." };
-                                case "chaos":
-                                    plugin.SpawnClass = "chaos";
-                                    return new string[] { "Chaos Insurgency spawn has been selected." };
-                                case "normal":
-                                    plugin.SpawnClass = "";
-                                    return new string[] { "Normal spawning has been selected." };
-                                case "war":
-                                    plugin.SpawnClass = "war";
-                                    return new string[] { "The war has begun!" };
-                                default:
-                                    return new string[] { "An invalid class was given!" };
-                            }
+                            case "classd":
+                                plugin.SpawnClass = "classd";
+                                return new string[] { "Class-D spawn has been selected." };
+                            case "sci":
+                            case "nerd":
+                            case "scientist":
+                                plugin.SpawnClass = "sci";
+                                return new string[] { "Scientist spawn has been selected." };
+                            case "guard":
+                                plugin.SpawnClass = "guard";
+                                return new string[] { "Facility Guard spawn has been selected." };
+                            case "ntf":
+                                plugin.SpawnClass = "ntf";
+                                return new string[] { "NTF Spawn has been selected." };
+                            case "chaos":
+                                plugin.SpawnClass = "chaos";
+                                return new string[] { "Chaos Insurgency spawn has been selected." };
+                            case "normal":
+                                plugin.SpawnClass = "";
+                                return new string[] { "Normal spawning has been selected." };
+                            case "war":
+                                plugin.SpawnClass = "war";
+                                return new string[] { "The war has begun!" };
+                            default:
+                                return new string[] { "An invalid class was given!" };
                         }
-                        return new string[] { "A class must be specified." };
                     }
+                   default:
+                       return new string[] { GetUsage() };
             }
-            return new string[] { GetUsage() };
         }
     }
 }

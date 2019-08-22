@@ -3,6 +3,7 @@ using Smod2.API;
 using Smod2.Commands;
 using System.Linq;
 using System.Collections.Generic;
+using MEC;
 
 namespace MuskateersGamemode
 {
@@ -43,20 +44,21 @@ namespace MuskateersGamemode
 			plugin.Enabled = false;
 			plugin.Server.Map.ClearBroadcasts();
 		}
-		public  IEnumerator<float> SpawnNTF(Player player)
+		public IEnumerator<float> SpawnNTF(Player player)
 		{
 			player.ChangeRole(Role.NTF_COMMANDER, true, true, false, true);
-			yield return 2;
-
-			player.SetHealth(plugin.NTFHealth);
 
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(25, "You are a <color=#308ADA>Muskateer</color>. Enter the facility and eliminate all Class-D.", false);
+
+			yield return Timing.WaitForSeconds(10);
+
+			player.SetHealth(plugin.NTFHealth);
 		}
-		public  IEnumerator<float> SpawnClassD(Player player)
+		public IEnumerator<float> SpawnClassD(Player player)
 		{
 			player.ChangeRole(Role.CLASSD, true, true, false, true);
-			yield return 2;
+			yield return Timing.WaitForSeconds(2);
 
 			player.SetHealth(plugin.ClassDHealth);
 

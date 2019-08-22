@@ -58,13 +58,11 @@ namespace ZombielandGamemode
 
 			AddEventHandlers(new EventsHandler(this), Priority.Normal);
 
-			// AddCommands(new string[] { "zombie", "zombieland", "zl" }, new ZombielandCommand(this));
-
-
+			AddCommands(new string[] { "zombie", "zombieland", "zl" }, new ZombielandCommand(this));
 
 			Functions = new Methods(this);
 
-			GamemodeManager.GamemodeManager.RegisterMode(this, "-1");
+
 		}
 
 		public void ReloadConfig()

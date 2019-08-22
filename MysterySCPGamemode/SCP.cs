@@ -1,12 +1,8 @@
+using System;
 using Smod2;
 using Smod2.API;
-using Smod2.Config;
-using Smod2.Events;
 using Smod2.Attributes;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using MEC;
+using Smod2.Config;
 
 namespace SCP
 {
@@ -15,26 +11,26 @@ namespace SCP
 		name = "Mystery SCP Gamemode",
 		description = "All SCP's are a single SCP type.",
 		id = "scp.gamemode",
-		version = "2.0.0",
+		version = "2.1.1",
 		SmodMajor = 3,
 		SmodMinor = 4,
 		SmodRevision = 0
 	)]
 
-	public class SCP : Plugin
+	public class Scp : Plugin
 	{
 		public Methods Functions { get; private set; }
 
-		public Random Gen = new System.Random();
+		public Random Gen = new Random();
 
 		public string[] ValidRanks { get; private set; }
 
-		public bool Enabled { get; internal set; } = false;
-		public bool RoundStarted { get; internal set; } = false;
+		public bool RoundStarted { get; internal set; }
+		public bool Enabled { get; internal set; }
 
-		public string SCPType { get; internal set; } = "random";
+		public string ScpType { get; internal set; } = "random";
 
-		public Role role { get; internal set; }
+		public Role Role { get; private set; }
 
 		public override void OnDisable()
 		{
@@ -50,11 +46,9 @@ namespace SCP
 		{
 			AddConfig(new ConfigSetting("scp_gamemode_ranks", new string[] { }, true, "The roles able to use gamemode commands."));
 
-			AddEventHandlers(new EventHandler(this), Priority.Normal);
-
-			AddCommands(new string[] { "mysteryscp", "scp" }, new SCPCommand(this));
-
-			GamemodeManager.GamemodeManager.RegisterMode(this, "-1");
+			AddEventHandlers(new EventHandler(this));
+			
+			AddCommands(new string[] { "mysteryscp", "scp" }, new ScpCommand(this));
 
 			Functions = new Methods(this);
 		}
@@ -62,7 +56,7 @@ namespace SCP
 		public void ReloadConfig()
 		{
 			ValidRanks = GetConfigList("scp_gamemode_ranks");
-			role = Functions.SCPType();
+			Role = Functions.ScpType();
 		}
 	}
 }

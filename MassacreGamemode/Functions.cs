@@ -1,8 +1,9 @@
-using Smod2;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using MEC;
 using Smod2.API;
 using Smod2.Commands;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace MassacreGamemode
 {
@@ -11,7 +12,7 @@ namespace MassacreGamemode
 		private readonly Massacre plugin;
 
 		public Functions(Massacre plugin) => this.plugin = plugin;
-
+		
 		public bool IsAllowed(ICommandSender sender)
 		{
 			Player player = sender as Player;
@@ -33,11 +34,10 @@ namespace MassacreGamemode
 		public void EnableGamemode()
 		{
 			plugin.Enabled = true;
-
 			if (!plugin.RoundStarted)
 			{
 				plugin.Server.Map.ClearBroadcasts();
-				plugin.Server.Map.Broadcast(25, "<color=#50c878>Massacre of the D-Bois Gamemode</color> is starting..", false);
+				plugin.Server.Map.Broadcast(10, "<color=#50c878>Massacre Gamemode</color> is starting...", false);
 			}
 		}
 
@@ -46,10 +46,11 @@ namespace MassacreGamemode
 			plugin.Enabled = false;
 			plugin.Server.Map.ClearBroadcasts();
 		}
+		
 
 		public Vector SpawnLoc()
 		{
-			Vector spawn = null;
+			Vector spawn;
 
 			switch (plugin.SpawnRoom.ToLower())
 			{
@@ -96,9 +97,9 @@ namespace MassacreGamemode
 						plugin.SpawnLocs.Add(plugin.Server.Map.GetRandomSpawnPoint(Role.SCP_106));
 						plugin.SpawnLocs.Add(new Vector(53, 1020, -44));
 
-						int RandomInt = new System.Random().Next(plugin.SpawnLocs.Count);
+						int randomInt = new Random().Next(plugin.SpawnLocs.Count);
 
-						return plugin.SpawnLocs[RandomInt];
+						return plugin.SpawnLocs[randomInt];
 					}
 				default:
 					{
@@ -109,18 +110,15 @@ namespace MassacreGamemode
 					}
 			}
 		}
-		public  IEnumerator<float> SpawnDboi(Player player, float delay)
+		public IEnumerator<float> SpawnDboi(Player player)
 		{
 			player.ChangeRole(Role.CLASSD, false, false, false, true);
 
 			player.Teleport(plugin.SpawnLoc);
 
-			yield return 2;
+			yield return Timing.WaitForSeconds(2);
 
-			foreach (Item item in player.GetInventory())
-			{
-				item.Remove();
-			}
+			foreach (Item item in player.GetInventory()) item.Remove();
 
 			player.GiveItem(ItemType.FLASHLIGHT);
 			player.GiveItem(ItemType.CUP);
@@ -128,11 +126,12 @@ namespace MassacreGamemode
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(25, "You are a <color=#ffa41a>D-Boi</color>! Get ready to die!", false);
 		}
-		public  IEnumerator<float> SpawnNut(Player player, float delay)
+		
+		public IEnumerator<float> SpawnNut(Player player)
 		{
-			player.ChangeRole(Role.SCP_173, false, false, false, false);
+			player.ChangeRole(Role.SCP_173, false, false, false);
 
-			yield return 5.5f;
+			yield return Timing.WaitForSeconds(5.5f);
 
 			player.SetGodmode(false);
 
@@ -142,8 +141,9 @@ namespace MassacreGamemode
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(35, "You are a <color=#c50000>Neck-Snappy Boi</color>! Kill all of the D-bois!", false);
 
-			player.SetHealth(1);
+			player.SetHealth(plugin.NutHealth > 0? plugin.NutHealth: 1);
 		}
+		
 		public void EndGamemodeRound()
 		{
 			plugin.Info("EndgameRound Function");
