@@ -47,6 +47,7 @@ namespace FindersKeepersGamemode
 			int r = plugin.Gen.Next(plugin.Scp079Rooms.Count);
 			
 			plugin.Server.Map.SpawnItem(ItemType.COIN, plugin.Scp079Rooms[r].Position, Vector.Zero);
+			plugin.Info(plugin.Scp079Rooms[r].Position.ToString());
 			plugin.Server.Map.Broadcast(10, "The magic coin has spawned!", false);
 		}
 
@@ -59,6 +60,15 @@ namespace FindersKeepersGamemode
 			foreach (Smod2.API.Item item in player.GetInventory())
 				item.Remove();
 			player.GiveItem(ItemType.FLASHLIGHT);
+		}
+
+		public Player IsWinner()
+		{
+			foreach (Player player in plugin.Server.GetPlayers())
+				foreach (Smod2.API.Item item in player.GetInventory())
+					if (item.ItemType == ItemType.COIN)
+						return player;
+			return null;
 		}
 		
 		public void EnableGamemode()

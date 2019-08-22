@@ -14,8 +14,6 @@ namespace FindersKeepersGamemode
 				return new[] { GetUsage() };
 			if (!plugin.Functions.IsAllowed(sender))
 				return new[] { "Permission denied." };
-			
-			Player p = (Player)sender;
 
 			switch (args[0].ToLower())
 			{

@@ -24,7 +24,7 @@ namespace FindersKeepersGamemode
 		public override void Register()
 		{
 			AddEventHandlers(new EventHandlers(this));
-			AddCommands(new[] { "" }, new Commands(this));
+			AddCommands(new[] { "fk", "finders" }, new Commands(this));
 
 			Functions = new Methods(this);
 		}
