@@ -11,7 +11,7 @@ namespace Gungame
 		name = "GunGame Gamemode",
 		description = "Kill EVERYONE!",
 		id = "gungame.gamemode",
-		version = "2.2.0",
+		version = "2.3.0",
 		SmodMajor = 3,
 		SmodMinor = 5,
 		SmodRevision = 1

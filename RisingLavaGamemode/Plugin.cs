@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace RisingLavaGamemode
 {
-	[PluginDetails(author = "Joker119", name = "RisingLavaGamemode", id = "lava.gamemode", description = "", version = "2.2.0",
+	[PluginDetails(author = "Joker119", name = "RisingLavaGamemode", id = "lava.gamemode", description = "", version = "2.3.0",
 		configPrefix = "rlava", SmodMajor = 3, SmodMinor = 5, SmodRevision = 1)]
 
 	public class RisingLavaGamemode : Plugin

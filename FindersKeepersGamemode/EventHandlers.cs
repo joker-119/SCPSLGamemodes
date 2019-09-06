@@ -78,21 +78,16 @@ namespace FindersKeepersGamemode
 			if (!plugin.RoundStarted)
 				return;
 
-			if (plugin.Server.Round.Duration < 10)
+			if (plugin.Server.Round.Duration < 30 || plugin.Functions.IsWinner() == null)
 			{
 				ev.Status = ROUND_END_STATUS.ON_GOING;
 				return;
 			}
-
-			if (plugin.Functions.IsWinner() == null)
-				ev.Status = ROUND_END_STATUS.ON_GOING;
-			else
-			{
-				plugin.Server.Map.ClearBroadcasts();
-				plugin.Server.Map.Broadcast(10, $"Winner, winner, chicken dinner! {plugin.Functions.IsWinner().Name} has found the lucky coin!", false);
-				ev.Status = ROUND_END_STATUS.MTF_VICTORY;
-			}
-
+			
+			plugin.Server.Map.ClearBroadcasts();
+			plugin.Server.Map.Broadcast(10, $"Winner, winner, chicken dinner! {plugin.Functions.IsWinner().Name} has found the lucky coin!", false);
+			ev.Status = ROUND_END_STATUS.MTF_VICTORY;
+			
 		}
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)
