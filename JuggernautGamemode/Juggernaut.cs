@@ -11,7 +11,8 @@ namespace JuggernautGamemode
 		name = "Juggernaut Gamemode",
 		description = "Gamemode Template",
 		id = "juggernaut.gamemode",
-		version = "2.3.1",
+		configPrefix = "juggernaut",
+		version = "2.4.0",
 		SmodMajor = 3,
 		SmodMinor = 5,
 		SmodRevision = 1
@@ -35,6 +36,7 @@ namespace JuggernautGamemode
 		public int NtfAmmo { get; private set; }
 		public int NtfHealth { get; private set; }
 		public int JuggHealth { get; internal set; }
+		public int GenCount { get; internal set; }
 
 		public Player Jugg { get; internal set; }
 		public Player Activator { get; internal set; }
@@ -43,6 +45,8 @@ namespace JuggernautGamemode
 		public float CriticalDamage { get; private set; }
 
 		public string[] JuggernautPrevRank = new string[2];
+
+		[ConfigOption] public float DeathmatchMultiplier = 3f;
 
 		public HealthBar HealthBarType { get; private set; }
 		public enum HealthBar
@@ -93,6 +97,7 @@ namespace JuggernautGamemode
 			CriticalDamage = GetConfigFloat("juggernaut_critical_damage");
 			JuggInfiniteNades = GetConfigBool("juggernaut_infinite_jugg_nades");
 			ValidRanks = GetConfigList("jugg_gamemode_ranks");
+			GenCount = 0;
 
 			string type = GetConfigString("juggernaut_health_bar_type");
 			switch (type.ToLower().Trim())

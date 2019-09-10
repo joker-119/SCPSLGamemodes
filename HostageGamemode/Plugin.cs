@@ -7,7 +7,7 @@ using Smod2.Attributes;
 
 namespace HostageGamemode
 {
-	[PluginDetails(author = "Joker119", name = "HostageGamemode", id = "hostage.gamemode", description = "", version = "2.3.1",
+	[PluginDetails(author = "Joker119", name = "HostageGamemode", id = "hostage.gamemode", description = "", version = "2.4.0",
 		configPrefix = "hostage", SmodMajor = 3, SmodMinor = 5, SmodRevision = 1)]
 
 	public class HostageGamemode : Plugin

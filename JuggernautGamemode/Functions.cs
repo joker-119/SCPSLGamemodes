@@ -60,6 +60,19 @@ namespace JuggernautGamemode
 			return null;
 		}
 
+		public void StartDeathmatch()
+		{
+			foreach (Player player in plugin.Server.GetPlayers())
+				player.Teleport(!plugin.Functions.IsJuggernaut(player)
+					? plugin.Server.Map.GetRandomSpawnPoint(Role.NTF_COMMANDER)
+					: plugin.Server.Map.GetRandomSpawnPoint(Role.CHAOS_INSURGENCY));
+
+			Player jugg = GetJuggernautPlayer();
+			int health = jugg.GetHealth();
+			
+			jugg.SetHealth((int)(health * plugin.DeathmatchMultiplier));
+		}
+
 		private static Vector GetRandomPdExit()
 		{
 			GameObject[] exitsArray = GameObject.FindGameObjectsWithTag("RoomID");

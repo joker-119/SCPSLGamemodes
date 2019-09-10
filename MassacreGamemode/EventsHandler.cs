@@ -80,7 +80,13 @@ namespace MassacreGamemode
 			
 			plugin.Server.Map.ClearBroadcasts();
 			plugin.Server.Map.Broadcast(5, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
-			ev.Player.PersonalBroadcast(25, "You are dead! But don't worry, now you get to relax and watch your friends die!", false);
+			ev.Player.PersonalClearBroadcasts();
+			string[] lines = new[]
+			{
+				"Skidaddle, skidacted, your neck is now [REDACTED]!",
+				"Skidaddle, skidoodle, your neck is now a noodle!", "Skidaddle, skidoken, your neck is now broken!"
+			};
+			ev.Player.PersonalBroadcast(15, lines[plugin.Gen.Next(lines.Length)], false);
 		}
 
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)

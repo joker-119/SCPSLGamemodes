@@ -11,7 +11,7 @@ namespace LurkingGamemode
 		name = "Lurking in the dark Gamemode",
 		description = "Lurking in the Dark Gamemode",
 		id = "lurking.gamemode",
-		version = "2.3.1",
+		version = "2.4.0",
 		SmodMajor = 3,
 		SmodMinor = 5,
 		SmodRevision = 1

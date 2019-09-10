@@ -11,7 +11,7 @@ namespace JuggernautGamemode
 {
 	internal class EventsHandler : IEventHandlerReload, IEventHandlerWaitingForPlayers, IEventHandlerSetSCPConfig, IEventHandlerTeamRespawn, IEventHandlerCheckRoundEnd, IEventHandlerRoundStart,
 		IEventHandlerPlayerDie, IEventHandlerPlayerJoin, IEventHandlerRoundEnd, IEventHandlerPlayerHurt, IEventHandlerSetRoleMaxHP, IEventHandlerSetRole, IEventHandlerLure, IEventHandlerContain106,
-		IEventHandlerThrowGrenade, IEventHandlerRoundRestart
+		IEventHandlerThrowGrenade, IEventHandlerRoundRestart, IEventHandlerGeneratorInsertTablet, IEventHandlerGeneratorFinish
 	{
 		private readonly Juggernaut plugin;
 
@@ -297,6 +297,20 @@ namespace JuggernautGamemode
 			foreach (Player player in ev.PlayerList) Timing.RunCoroutine(plugin.Functions.SpawnAsNtfCommander(player));
 
 			ev.PlayerList.Clear();
+		}
+
+		public void OnGeneratorInsertTablet(PlayerGeneratorInsertTabletEvent ev)
+		{
+			if (!plugin.Functions.IsJuggernaut(ev.Player))
+				ev.Allow = false;
+		}
+
+		public void OnGeneratorFinish(GeneratorFinishEvent ev)
+		{
+			plugin.GenCount++;
+			
+			if (plugin.GenCount == 5)
+				plugin.Functions.StartDeathmatch();
 		}
 	}
 }

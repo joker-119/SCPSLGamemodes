@@ -12,7 +12,7 @@ namespace MassacreGamemode
 		name = "Massacre of the D-Bois Gamemode",
 		description = "Gamemode Template",
 		id = "massacre.gamemode",
-		version = "2.3.1",
+		version = "2.4.0",
 		SmodMajor = 3,
 		SmodMinor = 5,
 		SmodRevision = 1

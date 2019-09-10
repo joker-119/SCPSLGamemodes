@@ -12,7 +12,7 @@ namespace ZombielandGamemode
 		name = "Zombie Survival gamemode.",
 		description = "3 NTF vs a horde of zombies.",
 		id = "zombieland.gamemode",
-		version = "2.3.1",
+		version = "2.4.0",
 		SmodMajor = 3,
 		SmodMinor = 5,
 		SmodRevision = 1
