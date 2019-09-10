@@ -33,6 +33,7 @@ namespace MassacreGamemode
 			if (!plugin.Enabled) return;
 			plugin.RoundStarted = true;
 			List<Player> players = ev.Server.GetPlayers();
+			plugin.SpawnLoc = plugin.Functions.SpawnLoc();
 
 			foreach (Door door in ev.Server.Map.GetDoors())
 			{
@@ -51,7 +52,8 @@ namespace MassacreGamemode
 				Timing.RunCoroutine(plugin.Functions.SpawnNut(player));
 			}
 
-			foreach (Player player in players) Timing.RunCoroutine(plugin.Functions.SpawnDboi(player));
+			foreach (Player player in players)
+				Timing.RunCoroutine(plugin.Functions.SpawnDboi(player));
 		}
 
 		public void OnRoundEnd(RoundEndEvent ev)

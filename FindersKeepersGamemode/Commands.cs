@@ -1,3 +1,4 @@
+using MEC;
 using Smod2.API;
 using Smod2.Commands;
 
@@ -30,7 +31,8 @@ namespace FindersKeepersGamemode
 					plugin.Functions.DisableGamemode();
 					return new[] { "Finder's Keepers now disabled." };
 				case "spawncoin":
-					// do stuff
+					Timing.RunCoroutine(plugin.Functions.SpawnCoin(0));
+					return new[] { "Spawned a coin somewhere!" };
 				default:
 					return new[] { GetUsage() };
 			}

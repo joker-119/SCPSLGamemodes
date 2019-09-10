@@ -27,6 +27,30 @@ namespace MassacreGamemode
 				case "disable":
 					plugin.Functions.DisableGamemode();
 					return new[] { "Massacre of the D-Bois gamemode disabled." };
+				case "spawn":
+				{
+					switch (args[1].ToLower())
+					{
+						case "939":
+							plugin.SpawnRoom = "939";
+							return new[] { "SCP-939 spawn location selected." };
+						case "049":
+							plugin.SpawnRoom = "049";
+							return new[] { "SCP-049 spawn location selected." };
+						case "173":
+							plugin.SpawnRoom = "173";
+							return new[] { "SCP-173 spawn location selected." };
+						case "jail":
+							plugin.SpawnRoom = "jail";
+							return new[] { "Jail spawn location selected." };
+						case "rand":
+						case "random":
+							plugin.SpawnRoom = "random";
+							return new[] { "Random spawn location selected." };
+						default:
+							return new[] { GetUsage() };
+					}
+				}
 				default:
 					return new[] { GetUsage() };
 			}

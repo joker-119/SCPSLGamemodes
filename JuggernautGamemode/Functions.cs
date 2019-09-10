@@ -43,7 +43,8 @@ namespace JuggernautGamemode
 
 		public bool IsJuggernaut(Player player)
 		{
-			if (plugin.Jugg == null) return false;
+			if (plugin.Jugg == null) 
+				return false;
 			
 			return player.Name == plugin.Jugg.Name || player.SteamId == plugin.Jugg.SteamId;
 		}

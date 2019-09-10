@@ -5,8 +5,8 @@ using Smod2.Attributes;
 
 namespace PeanutInfection
 {
-	[PluginDetails(author = "Joker119", name = "PeanutInfection", id = "joker.PeanutInfection", description = "", version = "2.3.0",
-		configPrefix = "", SmodMajor = 3, SmodMinor = 4, SmodRevision = 0)]
+	[PluginDetails(author = "Joker119", name = "PeanutInfection", id = "joker.PeanutInfection", description = "", version = "2.3.1",
+		configPrefix = "", SmodMajor = 3, SmodMinor = 5, SmodRevision = 1)]
 
 	public class PeanutInfection : Plugin
 	{
@@ -15,6 +15,7 @@ namespace PeanutInfection
 		public bool RoundStarted = false;
 		public Random Gen = new Random();
 		[ConfigOption] public string[] ValidRanks = new string[] { };
+		[ConfigOption] public bool RespawnOnKiller = true;
 
 		public override void Register()
 		{

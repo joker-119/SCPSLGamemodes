@@ -33,11 +33,11 @@ namespace JuggernautGamemode
 				case "enable":
 					plugin.Functions.EnableGamemode();
 
-					return new string[] { "Gungame gamemode will be Enabled for the next round!" };
+					return new string[] { "Juggernaut gamemode will be Enabled for the next round!" };
 				case "disable":
 					plugin.Functions.DisableGamemode();
 
-					return new string[] { "Gungame gamemode now disabled." };
+					return new string[] { "Juggernaut gamemode now disabled." };
 				case "select":
 					if (!plugin.Enabled || args.Length <= 1)
 						return new string[] { "A player name must be specified, and the gamemode must be Enabled!" };

@@ -46,10 +46,15 @@ namespace JuggernautGamemode
 
 		public void OnReload(PlayerReloadEvent ev)
 		{
-			if (!plugin.RoundStarted) return;
+			if (!plugin.RoundStarted) 
+				return;
 
-			if (!plugin.Functions.IsJuggernaut(ev.Player)) return;
-			
+			if (!plugin.Functions.IsJuggernaut(ev.Player))
+			{
+				plugin.Info($"{ev.Player.Name} is not the Juggernaut (reload)");
+				return;
+			}
+
 			ev.Player.SetAmmo(AmmoType.DROPPED_7, 2000);
 			ev.Player.SetAmmo(AmmoType.DROPPED_5, 2000);
 			ev.Player.SetAmmo(AmmoType.DROPPED_9, 2000);
@@ -59,7 +64,10 @@ namespace JuggernautGamemode
 		{
 			if (!plugin.RoundStarted) return;
 
-			if (ev.Player.SteamId == plugin.Jugg.SteamId && plugin.JuggInfiniteNades) ev.Player.GiveItem(ItemType.FRAG_GRENADE);
+			if (plugin.Functions.IsJuggernaut(ev.Player) && plugin.JuggInfiniteNades)
+				ev.Player.GiveItem(ItemType.FRAG_GRENADE);
+			else
+				plugin.Info($"{ev.Player.Name} is not the juggernaut (grenades)");
 		}
 
 		public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
@@ -69,8 +77,10 @@ namespace JuggernautGamemode
 
 		public void OnSetRole(PlayerSetRoleEvent ev)
 		{
-			if (!plugin.RoundStarted) return;
-			if (!plugin.Functions.IsJuggernaut(ev.Player)) return;
+			if (!plugin.RoundStarted) 
+				return;
+			if (!plugin.Functions.IsJuggernaut(ev.Player)) 
+				return;
 
 			if (ev.TeamRole.Team != Smod2.API.Team.CHAOS_INSURGENCY || ev.TeamRole.Team == Smod2.API.Team.SPECTATOR)
 				plugin.Functions.ResetJuggernaut();
@@ -112,11 +122,13 @@ namespace JuggernautGamemode
 						Timing.RunCoroutine(plugin.Functions.SpawnAsNtfCommander(player));
 					}
 			}
-			else if (plugin.SelectedJugg != null)
+			else
+			{
 				foreach (Player player in players)
-					if (plugin.SelectedJugg != null && (player.SteamId == plugin.SelectedJugg.SteamId || player.Name == plugin.SelectedJugg.Name))
+					if (player.SteamId == plugin.SelectedJugg.SteamId || player.Name == plugin.SelectedJugg.Name)
 					{
 						plugin.Info("Selected " + plugin.SelectedJugg.Name + " as the Juggernaut");
+						plugin.Jugg = player;
 						plugin.Functions.SpawnAsJuggernaut(player);
 						plugin.SelectedJugg = null;
 					}
@@ -126,12 +138,13 @@ namespace JuggernautGamemode
 						Timing.RunCoroutine(plugin.Functions.SpawnAsNtfCommander(player));
 					}
 
-			for (int i = 0; i < 4 && players.Count > 0; i++)
-				foreach (Player player in players)
-				{
-					if (player.SteamId == plugin.Jugg.SteamId) continue;
-					player.GiveItem(ItemType.MICROHID);
-				}
+				for (int i = 0; i < 4 && players.Count > 0; i++)
+					foreach (Player player in players)
+					{
+						if (player.SteamId == plugin.Jugg.SteamId) continue;
+						player.GiveItem(ItemType.MICROHID);
+					}
+			}
 		}
 
 		public void OnRoundEnd(RoundEndEvent ev)

@@ -1,3 +1,4 @@
+using System.Linq;
 using MEC;
 using Smod2.API;
 using Smod2.Events;
@@ -13,8 +14,10 @@ namespace FindersKeepersGamemode
 
 		public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
 		{
+			plugin.Winners.Clear();
 			if (!plugin.Enabled)
 				return;
+			
 			plugin.Server.Map.ClearBroadcasts();
 			plugin.Server.Map.Broadcast(20, "<color=green>Finder's Keepers</color> gamemode is starting!", false);
 		}
@@ -27,12 +30,19 @@ namespace FindersKeepersGamemode
 			plugin.RoundStarted = true;
 			plugin.Server.Map.ClearBroadcasts();
 			plugin.Scp079Rooms.Clear();
+			plugin.Winners.Clear();
+
 			foreach (Room room in plugin.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA))
 				if (room.ZoneType == ZoneType.HCZ)
 					plugin.Scp079Rooms.Add(room);
+			
 			foreach (Player player in plugin.Server.GetPlayers())
 				Timing.RunCoroutine(plugin.Functions.SpawnClassD(player));
-			Timing.RunCoroutine(plugin.Functions.SpawnCoin());
+			
+			for (int i = 0; i < plugin.CoinCount; i++)
+				Timing.RunCoroutine(plugin.Functions.SpawnCoin(plugin.StartTimer));
+			
+			Timing.RunCoroutine(plugin.Functions.CheckForWinner(plugin.StartTimer));
 			
 			string[] dList = new string[] { "CHECKPOINT_LCZ_A", "CHECKPOINT_LCZ_B", "CHECKPOINT_ENT", "173" };
 
@@ -78,16 +88,18 @@ namespace FindersKeepersGamemode
 			if (!plugin.RoundStarted)
 				return;
 
-			if (plugin.Server.Round.Duration < 30 || plugin.Functions.IsWinner() == null)
+			if (!plugin.Winners.Any() || plugin.Winners.Count < plugin.CoinCount)
 			{
 				ev.Status = ROUND_END_STATUS.ON_GOING;
 				return;
 			}
-			
+
 			plugin.Server.Map.ClearBroadcasts();
-			plugin.Server.Map.Broadcast(10, $"Winner, winner, chicken dinner! {plugin.Functions.IsWinner().Name} has found the lucky coin!", false);
+			string names = "";
+			foreach (Player player in plugin.Winners)
+				names += player.Name;
+			plugin.Server.Map.Broadcast(10, $"Winner, winner, chicken dinner! {names} have found the lucky coin(s)!", false);
 			ev.Status = ROUND_END_STATUS.MTF_VICTORY;
-			
 		}
 
 		public void OnPlayerJoin(PlayerJoinEvent ev)

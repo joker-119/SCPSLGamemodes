@@ -23,7 +23,7 @@ namespace LurkingGamemode
 			Server server = plugin.Server;
 
 			server.Map.ClearBroadcasts();
-			server.Map.Broadcast(25, "<color=#2D2B2B> Lurking in the dark</color> gamemode starting..", false);
+			server.Map.Broadcast(25, "<color=#2D2B2B>Lurking in the dark</color> gamemode starting..", false);
 		}
 
 		public void OnWaitingForPlayers(WaitingForPlayersEvent ev)

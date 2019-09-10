@@ -10,7 +10,7 @@ namespace PresidentialEscortGamemode
 		name = "Presidential Escort Gamemode",
 		description = "Scientist (VIP) has to escape from SCPs with help of NTF",
 		id = "presidential.gamemode",
-		version = "2.3.0",
+		version = "2.3.1",
 		SmodMajor = 3,
 		SmodMinor = 2,
 		SmodRevision = 2

@@ -19,11 +19,11 @@ namespace SCPRouletteGamemode
 				case "enable":
 					plugin.Functions.EnableGamemode();
 
-					return new string[] { "RisingLavaGamemode will be Enabled for the next round!" };
+					return new string[] { "SCP Roulette will be Enabled for the next round!" };
 				case "disable":
 					plugin.Functions.DisableGamemode();
 
-					return new string[] { "RisingLavaGamemode now disabled." };
+					return new string[] { "SCP Roulette now disabled." };
 				default:
 					return new[] { "Ya dun goofed, kid." };
 			}

@@ -32,11 +32,11 @@ namespace Mystery
                 case "enable":
                     plugin.Functions.EnableGamemode();
 
-                    return new string[] { "Mystery SCP gamemode will be Enabled for the next round!" };
+                    return new string[] { "Murder Mystery gamemode will be Enabled for the next round!" };
                 case "disable":
                     plugin.Functions.DisableGamemode();
 
-                    return new string[] { "Mystery gamemode now disabled." };
+                    return new string[] { "Murder Mystery gamemode now disabled." };
                 case "spawn":
                     if (!plugin.RoundStarted || args.Length <= 2) 
                         return new string[] { "This command must specify a player and role, and can only be used after the round has begun." };

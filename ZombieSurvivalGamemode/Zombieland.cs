@@ -12,7 +12,7 @@ namespace ZombielandGamemode
 		name = "Zombie Survival gamemode.",
 		description = "3 NTF vs a horde of zombies.",
 		id = "zombieland.gamemode",
-		version = "2.3.0",
+		version = "2.3.1",
 		SmodMajor = 3,
 		SmodMinor = 5,
 		SmodRevision = 1
@@ -78,7 +78,7 @@ namespace ZombielandGamemode
 
 			AddEventHandlers(new EventHandler(this));
 
-			AddCommands(new string[] { "zombiesurvival", "zland", "zs", "za" }, new ZombieCommand(this));
+			AddCommands(new string[] { "zombieland", "zland", "zl"}, new ZombieCommand(this));
 
 			Functions = new Methods(this);
 		}

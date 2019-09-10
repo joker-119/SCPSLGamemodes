@@ -23,7 +23,7 @@ namespace OutbreakGamemode
 			{
 				Server server = plugin.Server;
 				server.Map.ClearBroadcasts();
-				server.Map.Broadcast(25, "<color=#50c878>Outbreak Gamemode</color> is starting...", false);
+				server.Map.Broadcast(25, "<color=#760153>Outbreak Gamemode</color> is starting...", false);
 			}
 			else
 				((GameObject) ev.Player.GetGameObject()).GetComponent<WeaponManager>().NetworkfriendlyFire = true;

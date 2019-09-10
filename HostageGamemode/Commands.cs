@@ -16,11 +16,8 @@ namespace HostageGamemode
 
         public string GetUsage()
         {
-            return "GunGame Enabled : " + plugin.Enabled + "\n" +
-            "[gungame / gun] HELP \n" +
-            "gun ENABLE \n" +
-            "gun DISABLE \n" +
-            "gun SELECT [ZONETYPE]";
+            return "Hostage Situation Enabled : " + plugin.Enabled + "\n" + "[hostage] HELP \n" + "hostage ENABLE \n" +
+                   "hostage DISABLE \n";
         }
 
         public string[] OnCall(ICommandSender sender, string[] args)

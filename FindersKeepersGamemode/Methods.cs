@@ -39,16 +39,16 @@ namespace FindersKeepersGamemode
 			}
 		}
 
-		public IEnumerator<float> SpawnCoin()
+		public IEnumerator<float> SpawnCoin(float delay)
 		{
-			plugin.Server.Map.Broadcast(10, "The coin will spawn in 30 seconds!", false);
-			yield return Timing.WaitForSeconds(30f);
+			plugin.Server.Map.Broadcast(10, $"The coin(s) will spawn in 30 seconds! There will be {plugin.CoinCount} coins to collect!", false);
+			yield return Timing.WaitForSeconds(delay);
 			
 			int r = plugin.Gen.Next(plugin.Scp079Rooms.Count);
 			
 			plugin.Server.Map.SpawnItem(ItemType.COIN, plugin.Scp079Rooms[r].Position, Vector.Zero);
 			plugin.Info(plugin.Scp079Rooms[r].Position.ToString());
-			plugin.Server.Map.Broadcast(10, "The magic coin has spawned!", false);
+			plugin.Server.Map.Broadcast(10, "The magic coin(s) has spawned!", false);
 		}
 
 		public IEnumerator<float> SpawnClassD(Player player)
@@ -62,13 +62,27 @@ namespace FindersKeepersGamemode
 			player.GiveItem(ItemType.FLASHLIGHT);
 		}
 
-		public Player IsWinner()
+		public IEnumerator<float> CheckForWinner(float delay)
 		{
-			foreach (Player player in plugin.Server.GetPlayers())
-				foreach (Smod2.API.Item item in player.GetInventory())
+			yield return Timing.WaitForSeconds(delay);
+			
+			for (;;)
+			{
+				if (!plugin.Winners.Any())
+					yield break;
+				foreach (Player player in plugin.Server.GetPlayers())
+					foreach (Smod2.API.Item item in player.GetInventory())
 					if (item.ItemType == ItemType.COIN)
-						return player;
-			return null;
+					{
+						plugin.Winners.Add(player);
+						item.Remove();
+						player.ChangeRole(Role.TUTORIAL);
+						player.Teleport(new Vector(53, 1020, -44));
+						player.PersonalBroadcast(5, "You have found a coin!", false);
+					}
+
+				yield return Timing.WaitForSeconds(1f);
+			}
 		}
 		
 		public void EnableGamemode()

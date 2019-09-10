@@ -109,19 +109,15 @@ namespace SurvivalGamemode
 			List<Room> rooms = new List<Room>();
 
 			if (plugin.Zone == "lcz")
-			{
 				rooms.AddRange(PluginManager.Manager.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA)
 					.Where(room =>
 						room.ZoneType == ZoneType.LCZ && room.RoomType != RoomType.CHECKPOINT_A &&
 						room.RoomType != RoomType.CHECKPOINT_B && room.RoomType != RoomType.ENTRANCE_CHECKPOINT));
-			}
 			else
-			{
 				rooms.AddRange(PluginManager.Manager.Server.Map.Get079InteractionRooms(Scp079InteractionType.CAMERA)
 					.Where(room =>
 						room.ZoneType == ZoneType.HCZ && room.RoomType != RoomType.ENTRANCE_CHECKPOINT &&
 						room.RoomType != RoomType.CHECKPOINT_A && room.RoomType != RoomType.CHECKPOINT_B));
-			}
 
 			int randomNum = plugin.Gen.Next(rooms.Count);
 			Room randomRoom = rooms[randomNum];

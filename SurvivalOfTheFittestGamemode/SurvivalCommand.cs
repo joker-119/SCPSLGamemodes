@@ -39,7 +39,8 @@ namespace SurvivalGamemode
 
                     return new string[] { "Survival gamemode now disabled." };
                 case "zone":
-                    if (args.Length <= 1) return new string[] { "Invalid zone." };
+                    if (args.Length <= 1) 
+                        return new string[] { "Invalid zone." };
 
                     switch (args[1].ToLower())
                     {

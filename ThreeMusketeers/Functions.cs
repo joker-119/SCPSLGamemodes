@@ -37,18 +37,19 @@ namespace ThreeMusketeers
 		}
 		public IEnumerator<float> SpawnNtf(Player player)
 		{
-			player.ChangeRole(Role.NTF_COMMANDER, true, true, false, true);
-			yield return Timing.WaitForSeconds(2);
-
-			player.SetHealth(plugin.NtfHealth);
-
+			player.ChangeRole(Role.NTF_COMMANDER, true, true, false);
 			player.PersonalClearBroadcasts();
 			player.PersonalBroadcast(25, "You are a <color=#308ADA>Musketeer</color>. Enter the facility and eliminate all Class-D.", false);
+			
+			yield return Timing.WaitForSeconds(10f);
+
+			player.SetHealth(plugin.NtfHealth);
 		}
 		public IEnumerator<float> SpawnClassD(Player player)
 		{
-			player.ChangeRole(Role.CLASSD, true, true, false, true);
-			yield return Timing.WaitForSeconds(2);
+			player.ChangeRole(Role.CLASSD, false, true, false);
+			
+			yield return Timing.WaitForSeconds(1f);
 
 			player.SetHealth(plugin.ClassDHealth);
 

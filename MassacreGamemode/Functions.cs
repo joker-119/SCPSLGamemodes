@@ -15,20 +15,13 @@ namespace MassacreGamemode
 		
 		public bool IsAllowed(ICommandSender sender)
 		{
-			Player player = sender as Player;
+			if (!(sender is Player player)) 
+				return true;
+			List<string> roleList = plugin.ValidRanks != null && plugin.ValidRanks.Length > 0 ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
 
-			if (player != null)
-			{
-				List<string> roleList = (plugin.ValidRanks != null && plugin.ValidRanks.Length > 0) ? plugin.ValidRanks.Select(role => role.ToLower()).ToList() : new List<string>();
-
-				if (roleList != null && roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
-					return true;
-				else if (roleList == null || roleList.Count == 0)
-					return true;
-				else
-					return false;
-			}
-			return true;
+			if (roleList.Count > 0 && (roleList.Contains(player.GetUserGroup().Name.ToLower()) || roleList.Contains(player.GetRankName().ToLower())))
+				return true;
+			return roleList.Count == 0;
 		}
 
 		public void EnableGamemode()
@@ -112,13 +105,16 @@ namespace MassacreGamemode
 		}
 		public IEnumerator<float> SpawnDboi(Player player)
 		{
+			foreach (Item item in player.GetInventory()) 
+				item.Remove();
 			player.ChangeRole(Role.CLASSD, false, false, false, true);
 
 			player.Teleport(plugin.SpawnLoc);
 
-			yield return Timing.WaitForSeconds(2);
+			yield return Timing.WaitForSeconds(1f);
 
-			foreach (Item item in player.GetInventory()) item.Remove();
+			foreach (Item item in player.GetInventory()) 
+				item.Remove();
 
 			player.GiveItem(ItemType.FLASHLIGHT);
 			player.GiveItem(ItemType.CUP);

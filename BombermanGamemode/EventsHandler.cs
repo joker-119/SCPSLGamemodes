@@ -169,10 +169,12 @@ namespace Bomber
 						break;
 				}
 
-				if (Functions.IsAlive(player)) aliveCount++;
+				if (Functions.IsAlive(player)) 
+					aliveCount++;
 			}
 
-			if (ev.Server.GetPlayers().Count < 1) return;
+			if (ev.Server.GetPlayers().Count < 1) 
+				return;
 
 			if (plugin.Warmode)
 			{

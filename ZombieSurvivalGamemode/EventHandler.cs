@@ -20,7 +20,7 @@ namespace ZombielandGamemode
 			Server server = plugin.Server;
 
 			server.Map.ClearBroadcasts();
-			server.Map.Broadcast(25, "<color=#07A407>Zombie Survival</color> gamemode is starting..", false);
+			server.Map.Broadcast(25, "<color=#07A407>Zombieland</color> gamemode is starting..", false);
 		}
 
 		public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
@@ -36,7 +36,7 @@ namespace ZombielandGamemode
 
 			plugin.Server.Map.ClearBroadcasts();
 
-			plugin.Info("Zombie Survival round started.");
+			plugin.Info("Zombieland round started.");
 
 			Timing.RunCoroutine(plugin.Functions.LczDecon(10));
 			Timing.RunCoroutine(plugin.Functions.EndRound(plugin.RoundTimer));

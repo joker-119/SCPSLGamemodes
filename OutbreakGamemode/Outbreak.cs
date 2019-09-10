@@ -10,7 +10,7 @@ namespace OutbreakGamemode
 		name = "Outbreak Gamemode",
 		description = "Gamemode Template",
 		id = "outbreak.gamemode",
-		version = "2.3.0",
+		version = "2.3.1",
 		SmodMajor = 3,
 		SmodMinor = 5,
 		SmodRevision = 1

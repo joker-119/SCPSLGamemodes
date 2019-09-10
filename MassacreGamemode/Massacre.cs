@@ -12,7 +12,7 @@ namespace MassacreGamemode
 		name = "Massacre of the D-Bois Gamemode",
 		description = "Gamemode Template",
 		id = "massacre.gamemode",
-		version = "2.3.0",
+		version = "2.3.1",
 		SmodMajor = 3,
 		SmodMinor = 5,
 		SmodRevision = 1
@@ -28,9 +28,9 @@ namespace MassacreGamemode
 		public bool RoundStarted { get; internal set; }
 		public bool Enabled { get; internal set; }
 
-		public string SpawnRoom { get; private set; }
+		public string SpawnRoom { get; internal set; }
 
-		public Vector SpawnLoc { get; private set; }
+		public Vector SpawnLoc { get; internal set; }
 
 		public int NutHealth { get; private set; }
 		public int NutCount { get; private set; }

@@ -85,16 +85,22 @@ namespace Bomber
 
 		public IEnumerator<float> SpawnGrenades(float delay)
 		{
+			plugin.Info("Delayed..");
 			yield return Timing.WaitForSeconds(delay);
 
-			while (plugin.RoundStarted)
+			for (;;)
 			{
+				plugin.Info("Starting Grenade loop..");
 				int ran = plugin.Gen.Next(1, 100);
 				if (ran > 50)
-
+				{
+					plugin.Info("Delaying further..");
 					yield return Timing.WaitForSeconds(0.5f);
+				}
+
 				for (int i = 0; i < plugin.Count; i++)
 				{
+					plugin.Info("Dropping!");
 					DropGrenades();
 					yield return Timing.WaitForSeconds(0.5f);
 				}
@@ -106,13 +112,16 @@ namespace Bomber
 					min = 1;
 				if (max < 1)
 					max = 2;
-				yield return Timing.WaitForSeconds(GetTimer(min, max));
+				plugin.Info($"Min: {min} Max: {max}");
+				float time = GetTimer(min, max);
+				plugin.Info($"Time: {time}");
+				yield return Timing.WaitForSeconds(time);
 			}
 		}
 
 		public void BossWave()
 		{
-			plugin.Timer = plugin.Timer / 2;
+			plugin.Timer /= 2;
 		}
 
 		private float GetTimer(int min, int max)

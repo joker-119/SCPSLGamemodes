@@ -74,7 +74,9 @@ namespace PeanutInfection
 				return;
 
 			if (ev.Player.TeamRole.Team != Smod2.API.Team.SCP)
-				Timing.RunCoroutine(plugin.Functions.SpawnNut(ev.Player, 5));
+				Timing.RunCoroutine(plugin.RespawnOnKiller
+					? plugin.Functions.SpawnNut(ev.Player, 5, ev.Killer.GetPosition())
+					: plugin.Functions.SpawnNut(ev.Player, 5));
 		}
 
 		public void OnCheckEscape(PlayerCheckEscapeEvent ev)

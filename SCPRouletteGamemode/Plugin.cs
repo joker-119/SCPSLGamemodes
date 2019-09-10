@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SCPRouletteGamemode
 {
-	[PluginDetails(author = "Joker119", name = "SCPRouletteGamemode", id = "roulette.gamemode", description = "", version = "2.3.0",
+	[PluginDetails(author = "Joker119", name = "SCPRouletteGamemode", id = "roulette.gamemode", description = "", version = "2.3.1",
 		configPrefix = "roulette", SmodMajor = 3, SmodMinor = 5, SmodRevision = 1)]
 
 	public class ScpRouletteGamemode : Plugin

@@ -48,11 +48,14 @@ namespace PeanutInfection
 			plugin.Server.Round.EndRound();
 		}
 
-		public IEnumerator<float> SpawnNut(Player player, float delay)
+		public IEnumerator<float> SpawnNut(Player player, float delay, Vector pos = null)
 		{
 			yield return Timing.WaitForSeconds(delay);
 			
 			player.ChangeRole(Role.SCP_173);
+			
+			if (pos != null)
+				player.Teleport(pos + Vector.Up * 2);
 		}
 
 		public IEnumerator<float> SpawnDboi(Player player, float delay)

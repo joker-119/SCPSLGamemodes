@@ -12,7 +12,7 @@ namespace SurvivalGamemode
 		name = "Survival of the Fittest Gamemode",
 		description = "Gamemode Template",
 		id = "survival.gamemode",
-		version = "2.3.0",
+		version = "2.3.1",
 		SmodMajor = 3,
 		SmodMinor = 5,
 		SmodRevision = 1

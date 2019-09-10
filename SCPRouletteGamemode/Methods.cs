@@ -37,7 +37,7 @@ namespace SCPRouletteGamemode
 			if (!plugin.RoundStarted)
 			{
 				plugin.Server.Map.ClearBroadcasts();
-				plugin.Server.Map.Broadcast(10, "<color=#5D9AAC>GunGame Gamemode</color> is starting..", false);
+				plugin.Server.Map.Broadcast(10, "<color=#760101>SCP Roulette</color> is starting..", false);
 			}
 		}
 

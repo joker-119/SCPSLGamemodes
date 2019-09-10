@@ -38,7 +38,7 @@ namespace OutbreakGamemode
 			if (!plugin.RoundStarted)
 			{
 				plugin.Server.Map.ClearBroadcasts();
-				plugin.Server.Map.Broadcast(25, "<color=#50c878>Zombieland Gamemode</color> is starting..", false);
+				plugin.Server.Map.Broadcast(25, "<color=#760153>Outbreak Gamemode</color> is starting..", false);
 			}
 		}
 

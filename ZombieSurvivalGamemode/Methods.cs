@@ -29,7 +29,7 @@ namespace ZombielandGamemode
 			if (plugin.RoundStarted) return;
 			
 			plugin.Server.Map.ClearBroadcasts();
-			plugin.Server.Map.Broadcast(25, "<color=#07A407>Zombie Survival</color> gamemode is starting..", false);
+			plugin.Server.Map.Broadcast(25, "<color=#07A407>Zombieland</color> gamemode is starting..", false);
 		}
 		public void DisableGamemode()
 		{

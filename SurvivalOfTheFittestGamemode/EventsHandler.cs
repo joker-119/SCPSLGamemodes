@@ -33,7 +33,8 @@ namespace SurvivalGamemode
 
 		public void OnRoundStart(RoundStartEvent ev)
 		{
-			if (!plugin.Enabled) return;
+			if (!plugin.Enabled) 
+				return;
 			
 			Timing.RunCoroutine(plugin.Functions.TeleportNuts(plugin.NutDelay));
 			Timing.RunCoroutine(plugin.Functions.LczBlackout());
@@ -100,13 +101,19 @@ namespace SurvivalGamemode
 		{
 			if (!plugin.RoundStarted) return;
 
-			if (ev.Player.TeamRole.Role != Role.CLASSD) return;
+			if (ev.Player.TeamRole.Role != Role.CLASSD) 
+				return;
 			
 			plugin.Server.Map.ClearBroadcasts();
 			plugin.Server.Map.Broadcast(5, "There are now " + (plugin.Server.Round.Stats.ClassDAlive - 1) + " Class-D remaining.", false);
 
 			ev.Player.PersonalClearBroadcasts();
-			ev.Player.PersonalBroadcast(5, "Skiddaddle, skidacted, your neck is now [REDACTED]!", false);
+			string[] lines = new[]
+			{
+				"Skidaddle, skidacted, your neck is now [REDACTED]!",
+				"Skidaddle, skidoodle, your neck is now a noodle!", "Skidaddle, skidoken, your neck is now broken!"
+			};
+			ev.Player.PersonalBroadcast(5, lines[plugin.Gen.Next(lines.Length)], false);
 		}
 
 		public void OnCheckRoundEnd(CheckRoundEndEvent ev)

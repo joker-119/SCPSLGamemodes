@@ -11,9 +11,9 @@ namespace ZombielandGamemode
 
 		public string GetUsage() =>
 			"Zombie Survival Enabled : " + plugin.Enabled + "\n" +
-			"[zombiesurvival / zsurv / zs / za] HELP \n" +
-			"zsurv ENABLE \n" +
-			"zsurv DISABLE";
+			"[zombieland / zland / zl] HELP \n" +
+			"zland ENABLE \n" +
+			"zland DISABLE";
 
 		public string[] OnCall(ICommandSender sender, string[] args)
 		{
@@ -26,15 +26,15 @@ namespace ZombielandGamemode
 					return new string[]
 					{
 						"Zombie Survival Command List",
-						"zsurv enable - Enables the Zombie Survival Gamemode.",
-						"zsurv disable - Disables the Zombie Survival Gamemode."
+						"zland enable - Enables the Zombie Survival Gamemode.",
+						"zland disable - Disables the Zombie Survival Gamemode."
 					};
 				case "enable":
 					plugin.Functions.EnableGamemode();
-					return new string[] { "Zombie Survival gamemode now enabled." };
+					return new string[] { "Zombieland gamemode now enabled." };
 				case "disable":
 					plugin.Functions.DisableGamemode();
-					return new string[] { "Zombie Survival gamemode now disabled." };
+					return new string[] { "Zombieland gamemode now disabled." };
 				default:
 					return new string[] { GetUsage() };
 			}

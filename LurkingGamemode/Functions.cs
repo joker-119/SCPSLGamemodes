@@ -37,7 +37,7 @@ namespace LurkingGamemode
 			if (!plugin.RoundStarted)
 			{
 				plugin.Server.Map.ClearBroadcasts();
-				plugin.Server.Map.Broadcast(25, "<color=#2D2B2B> Lurking in the dark</color> gamemode starting..", false);
+				plugin.Server.Map.Broadcast(25, "<color=#2D2B2B>Lurking in the dark</color> gamemode starting..", false);
 			}
 		}
 

@@ -7,7 +7,7 @@ using Smod2.Attributes;
 
 namespace HostageGamemode
 {
-	[PluginDetails(author = "Joker119", name = "HostageGamemode", id = "hostage.gamemode", description = "", version = "2.3.0",
+	[PluginDetails(author = "Joker119", name = "HostageGamemode", id = "hostage.gamemode", description = "", version = "2.3.1",
 		configPrefix = "hostage", SmodMajor = 3, SmodMinor = 5, SmodRevision = 1)]
 
 	public class HostageGamemode : Plugin
@@ -34,7 +34,7 @@ namespace HostageGamemode
 		public override void Register()
 		{
 			AddEventHandlers(new EventHandlers(this));
-			AddCommands(new[] { "" }, new Commands(this));
+			AddCommands(new[] { "hostage" }, new Commands(this));
 
 			Functions = new Methods(this);
 		}
