@@ -1,4 +1,4 @@
-Zombieland
+Outbreak
 ======
 made by Joker 119
 ## Description
@@ -13,15 +13,15 @@ The round ends when all Zombies or Humans are eliminated.
 ### Config Settings
 Config option | Config Type | Default Value | Description
 :---: | :---: | :---: | :------
-zombieland_zombie_health | Int | 3000 | The amount of health Alpha Zombies have.
-zombieland_zombie_damage | Int | 75 | The amount of damage Alpha zombies inflict.
-zombieland_child_health | Int | 500 | The amount of health child zombies have.
-zombieland_child_damage | Int | 50 | The amount of damage child zombies inflict.
+outbreak_zombie_health | Int | 3000 | The amount of health Alpha Zombies have.
+outbreak_zombie_damage | Int | 75 | The amount of damage Alpha zombies inflict.
+outbreak_child_health | Int | 500 | The amount of health child zombies have.
+outbreak_child_damage | Int | 50 | The amount of damage child zombies inflict.
 
 ### Commands
   Command |  |  | Description
 :---: | :---: | :---: | :------
-**Aliases** | **zombieland** | **zombie**
-zombie Enable | ~~ | ~~ | Enable Zombieland for the next round
-zombie Disable | ~~ | ~~ | Disable Zombieland this and following rounds
+**Aliases** | **outbreak** | ****
+outbreak Enable | ~~ | ~~ | Enable Zombieland for the next round
+outbreak Disable | ~~ | ~~ | Disable Zombieland this and following rounds
 
