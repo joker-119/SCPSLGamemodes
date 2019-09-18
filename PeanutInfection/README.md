@@ -2,7 +2,7 @@ Peanut Infection
 ======
 made by Joker 119
 ## Description
-Normal round except all SCP's are Peanuts.
+All the SCP's spawn as 173, all humans as Class-D.
 If a peanut kills someone, that person is respawned as a peanut.
 
 ### Features
